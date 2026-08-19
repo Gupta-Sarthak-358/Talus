@@ -1,0 +1,87 @@
+# ── Environment / Secrets ─────────────────────────────────────────────
+.env
+.env.local
+*.env
+*.pem
+*.key
+*.p12
+
+# ── Python ────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+ENV/
+.python-version
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# ── Node / Frontend ───────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-store/
+dist/
+build/
+.vite/
+
+# ── IDE / OS ──────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ── Data: never commit large datasets ─────────────────────────────────
+# Raw/historical/sensor data should live outside git (LFS, Releases,
+# Drive, or Hugging Face). Keep only small samples or schemas in-repo.
+data/raw/*
+data/processed/*
+data/synthetic/*
+!data/raw/**/*.md
+!data/processed/**/*.md
+!data/synthetic/**/*.md
+!data/raw/**/*.schema.*
+!data/raw/**/*.meta.json
+!data/processed/**/*.sample.csv
+!data/synthetic/**/*.sample.csv
+
+# ── Models: never commit trained weights blindly ──────────────────────
+ml/models/*.pkl
+ml/models/*.joblib
+ml/models/*.onnx
+ml/models/*.pt
+ml/models/*.pth
+ml/models/*.safetensors
+!ml/models/**/*.md
+ml/training/*.log
+ml/training/runs/
+
+# ── CV artifacts ──────────────────────────────────────────────────────
+cv/runs/
+cv/weights/
+cv/datasets/
+
+# ── Logs / caches ─────────────────────────────────────────────────────
+*.log
+*.tmp
+*.bak
+*.cache
+wandb/
+runs/
+
+# ── Other build artifacts ─────────────────────────────────────────────
+*.pyc
+*.egg-info/
+*_cache/
+.coverage
+htmlcov/
+.eggs/
