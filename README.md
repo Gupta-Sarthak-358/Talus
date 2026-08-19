@@ -125,6 +125,11 @@ Owner ≠ "only person allowed to touch it." Owner = **if something breaks in th
 - [Assumptions](docs/07_ASSUMPTIONS.md)
 - [Limitations](docs/08_LIMITATIONS.md)
 - [ADR-001: MVP Scope](docs/decisions/ADR-001-mvp-scope.md)
+- [Contributing](CONTRIBUTING.md) — branch & commit rules
+- [Complete Project Context](docs/source/Complete_Context.md) — full project history
+- [Master Project Document](docs/source/Talus_Master_Project_Document.md) — research/original spec
+- [Data & Training Plan](docs/source/Talus_Data_Training_Plan.md) — research source
+- [Deep Research Report](docs/source/Talus_Deep_Research_Report.md) — research source
 
 **New to the project?** Start with the [Project Brief](docs/00_PROJECT_BRIEF.md) and [Requirements](docs/01_REQUIREMENTS.md). For the full project history and narrative (deck decisions, data honesty rules, differentiation story), read [Complete Project Context](docs/source/Complete_Context.md).
 
