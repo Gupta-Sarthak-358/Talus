@@ -128,6 +128,31 @@ Owner ≠ "only person allowed to touch it." Owner = **if something breaks in th
 
 **New to the project?** Start with the [Project Brief](docs/00_PROJECT_BRIEF.md) and [Requirements](docs/01_REQUIREMENTS.md). For the full project history and narrative (deck decisions, data honesty rules, differentiation story), read [Complete Project Context](docs/source/Complete_Context.md).
 
+## Navigating the Repository
+
+This repo is the **single source of truth**. If two people disagree about something, the repo decides.
+
+**Onboarding order (read these three first, ~10 min total):**
+
+1. `README.md` — what Talus is, who owns what (this page)
+2. `docs/00_PROJECT_BRIEF.md` — the scope firewall (what is / is not in the MVP)
+3. `docs/01_REQUIREMENTS.md` — what the software must actually do
+
+> If it's not in the Brief / Requirements, **don't build it**. Propose it, update the ADR, then build.
+
+**Then, by area:**
+
+| Your area | Read next |
+|---|---|
+| Everyone | `docs/02_ARCHITECTURE.md`, `docs/06_DEMO_SCENARIO.md` |
+| Data / ML | `docs/03_DATA_PLAN.md`, `docs/04_MODEL_PLAN.md` |
+| Backend / Frontend | `docs/05_API_SPEC.md` ← frozen contract, develop against it |
+| Everything | `CONTRIBUTING.md` ← branch & commit rules |
+
+**Full background (optional, for the story):** `docs/source/Complete_Context.md` (project history), `docs/source/Talus_Master_Project_Document.md`, `docs/source/Talus_Data_Training_Plan.md`, `docs/source/Talus_Deep_Research_Report.md`.
+
+**Git in one line:** branch off `dev` as `feature/<your-area>`, never push to `main`, conventional commits (`feat:` / `fix:` / `docs:` / `refactor:`), keep large datasets and trained models out of git.
+
 ---
 
 *Team Sangyan — College Internal Hackathon for SIH 2026.*
