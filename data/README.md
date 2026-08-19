@@ -2,9 +2,51 @@
 
 Raw, processed, and synthetic data for the Talus prototype.
 
-- `raw/` — source datasets (IMD rainfall, DEM, Crack-Seg). Data files are git-ignored; only schema/notes are committed.
-- `processed/` — engineered features (rainfall, terrain, crack features).
-- `synthetic/` — generated training data with versioned metadata.
+**Rule: datasets live outside git.** Data files under `data/` are git-ignored (`data/raw/*`, `data/processed/*`, `data/synthetic/*`). Only the following are committed:
 
-See `docs/03_DATA_PLAN.md` for the full plan and provenance table.
-See `data/README.md` (top-level) for usage rules.
+- `README.md` (this file)
+- Schemas / `.schema.*` files
+- `.meta.json` and `metadata.json` records
+- `.sample.csv` small sample rows
+
+Large raw datasets, feature stores, and trained-model inputs live outside normal git (Git LFS, Drive, Hugging Face, or internal storage).
+
+---
+
+## Layout
+
+```text
+data/
+├── raw/                  ← source datasets
+│   ├── imd/              → IMD gridded rainfall (0.25°, 1901–2024)
+│   ├── dem/              → ISRO Bhuvan CartoDEM / SRTM tiles
+│   └── crack_seg/        → Ultralytics Crack-Seg dataset (4,029 images)
+│
+├── processed/            ← engineered features
+│   ├── rainfall/         → rainfall features per zone/timestep
+│   ├── terrain/          → slope angle/height derived from DEM
+│   └── crack_features/   → crack length/density/orientation (CV output)
+│
+├── synthetic/            ← generated training data
+│   └── v1/               → train/validation/test CSVs + metadata.json
+│
+└── README.md
+```
+
+## Synthetic data versioning
+
+Each version directory under `synthetic/` must contain a `metadata.json`:
+
+```json
+{
+  "dataset": "talus_synthetic_v1",
+  "seed": 42,
+  "generator_version": "1.0",
+  "created": "2026-08-19",
+  "source_distributions": ["IMD rainfall", "literature-derived rock parameters"],
+  "label_method": "physics-informed FoS",
+  "synthetic": true
+}
+```
+
+This is how we know, six months later, where the numbers came from. See `data/synthetic/v1/metadata.json` and `docs/03_DATA_PLAN.md`.

@@ -51,6 +51,7 @@ data/synthetic/*
 !data/synthetic/**/*.md
 !data/raw/**/*.schema.*
 !data/raw/**/*.meta.json
+!data/synthetic/**/metadata.json
 !data/processed/**/*.sample.csv
 !data/synthetic/**/*.sample.csv
 
