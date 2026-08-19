@@ -58,12 +58,16 @@ talus/
 │   ├── 07_ASSUMPTIONS.md
 │   ├── 08_LIMITATIONS.md
 │   ├── decisions/            → ADR-001 MVP scope
-│   └── source/               → original research/plan documents
-│                             + Complete_Context.md (full project history)
+│   └── source/               → original research/plan documents:
+│                               Talus_Master_Project_Document.md
+│                               Talus_Data_Training_Plan.md
+│                               Talus_Deep_Research_Report.md
+│                               Complete_Context.md (full project history)
 │
 ├── research/            ← references & data sources index
 │   ├── references.md
-│   └── sources.md
+│   ├── sources.md
+│   └── papers/          ← citation-only policy (no copyright PDFs)
 │
 ├── data/                ← git-ignored datasets (small samples only)
 │   ├── raw/             → IMD rainfall, DEM, Crack-Seg

@@ -46,6 +46,14 @@ Thumbs.db
 data/raw/*
 data/processed/*
 data/synthetic/*
+!data/raw/imd/
+!data/raw/dem/
+!data/raw/crack_seg/
+!data/processed/rainfall/
+!data/processed/terrain/
+!data/processed/crack_features/
+!data/synthetic/v1/
+!data/**/.gitkeep
 !data/raw/**/*.md
 !data/processed/**/*.md
 !data/synthetic/**/*.md

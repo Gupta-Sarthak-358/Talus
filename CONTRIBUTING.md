@@ -18,6 +18,26 @@ feature/dashboard
 feature/routing
 ```
 
+Working flow:
+
+```text
+                         main
+                          │
+                          ▼
+                         dev
+            ┌─────────────┼──────────────┐
+            │             │              │
+            ▼             ▼              ▼
+      feature/ml    feature/backend   feature/frontend
+            │             │              │
+            └─────────────┼──────────────┘
+                          ▼
+                         dev
+                          │
+                          ▼
+                        main
+```
+
 ## Rules
 
 1. **Never push directly to `main`.**

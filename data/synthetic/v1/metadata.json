@@ -1,0 +1,16 @@
+{
+  "dataset": "talus_synthetic_v1",
+  "seed": 42,
+  "generator_version": "1.0",
+  "created": "2026-08-19",
+  "source_distributions": [
+    "IMD rainfall (mining-region grid cell)",
+    "literature-derived rock parameters",
+    "literature-derived blast/PPV ranges",
+    "DEM-derived slope geometry"
+  ],
+  "label_method": "physics-informed FoS (infinite-slope approximation)",
+  "risk_bands": ["Very Low", "Low", "Moderate", "High", "Critical"],
+  "synthetic": true,
+  "notes": "Every record in the CSVs is tagged synthetic:true. See docs/03_DATA_PLAN.md and docs/04_MODEL_PLAN.md."
+}
