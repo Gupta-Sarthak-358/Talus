@@ -59,6 +59,7 @@ talus/
 │   ├── 08_LIMITATIONS.md
 │   ├── decisions/            → ADR-001 MVP scope
 │   └── source/               → original research/plan documents
+│                             + Complete_Context.md (full project history)
 │
 ├── research/            ← references & data sources index
 │   ├── references.md
@@ -120,6 +121,8 @@ Owner ≠ "only person allowed to touch it." Owner = **if something breaks in th
 - [Assumptions](docs/07_ASSUMPTIONS.md)
 - [Limitations](docs/08_LIMITATIONS.md)
 - [ADR-001: MVP Scope](docs/decisions/ADR-001-mvp-scope.md)
+
+**New to the project?** Start with the [Project Brief](docs/00_PROJECT_BRIEF.md) and [Requirements](docs/01_REQUIREMENTS.md). For the full project history and narrative (deck decisions, data honesty rules, differentiation story), read [Complete Project Context](docs/source/Complete_Context.md).
 
 ---
 
