@@ -305,3 +305,10 @@ Format: Observation → Evidence → Interpretation → Decision → Version aff
 - **Interpretation:** The modular sampler split works — `generator_v1.py` orchestrates `rainfall/`, `terrain/`, `geology/` and stayed a thin 190-line coordinator. Rainfall varies in time (shared mine-wide weather); terrain and geology are static per zone (the mine does not respawn its geology every morning). Grounding survived zone-level generation.
 - **Decision:** Freeze Phase 1B; proceed to Phase 1C (GROUNDWATER + BLAST) when team has pulled. GENERATOR_VERSION 1.1.0. Known gap tracked: lignite geotech row incomplete → ZONE_C currently seam-host sediment, to be revisited when a grounded lignite table exists (or in 1D review).
 - **Version:** generator 1.1.0 / schema 1.0.
+
+### Entry 17 - Phase 1B rainfall validation scope (RECORDED)
+- **Observation:** 1B plots show structural seasonality (Oct rises strongly, Nov dominant, Dec high, dry-season months low) but seed-42 January/June sit above the 25-yr climatological means while November sits below; the synthetic wet-intensity curve carries ~1 yr of wet observations vs 2,561 historical.
+- **Evidence:** `plots/rainfall_monthly_1B.png`, `plots/rainfall_wet_intensity_1B.png`; single-year wet-day P99 150.7 vs 118.7, 7d P99 222.8 vs 323.5.
+- **Interpretation:** Phase 1B rainfall is validated as a **single-year stochastic realization, not yet a long-horizon climatological generator**. The empirical/Markov core reproduces seasonal structure and daily intensity behavior but NOT yet the 124-yr annual distribution or historical multi-day storm persistence. Do NOT "fix" January on a single seed; the multi-year ensemble test belongs to later rainfall refinement / stress-event layering. Daily intensity already produces strong events; temporal persistence remains the unresolved rainfall problem (v0 limitation L1, expected).
+- **Decision:** Accept 1B as-is; keep year-scale conditioning and storm-persistence templates as deliberately deferred mechanisms for the rainfall-refinement phase, not 1B defects. Track as a known limitation.
+- **Version:** generator 1.1.0 / schema 1.0.
