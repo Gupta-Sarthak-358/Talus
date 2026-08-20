@@ -257,6 +257,20 @@ def groundwater_check(seed, days):
         zlo, zhi = THRUST_RANGES_KPA[z]
         check(f"gw: {z} thrust in grounded band",
               float(zlo) <= float(thrust[z]) <= float(zhi), f"{thrust[z]:.1f} kPa")
+
+    # Semantic contract (documented in groundwater/sampler.py): thrust is the
+    # BASELINE of pore pressure, so ZONE_D is legitimately high/critical even
+    # in dry weather (confined-aquifer floor-heave condition, geology §3.4).
+    d_states = set(df[df["zone_id"] == "ZONE_D"]["groundwater_state"])
+    check("gw: ZONE_D permanently high/critical (confined aquifer baseline)",
+          d_states.issubset({"high", "critical"}), f"{sorted(d_states)}")
+    # ...but rainfall still modulates it upward (transient is additive).
+    d = df[df["zone_id"] == "ZONE_D"]
+    wet_d = d["rainfall_7d_mm"] > 30
+    dry_d = d["rainfall_7d_mm"] < 5
+    if wet_d.any() and dry_d.any():
+        check("gw: ZONE_D pore pressure still rises with rain (all-zones check is separate)",
+              bool(d.loc[wet_d, "pore_pressure_kpa"].quantile(0.9) > d.loc[dry_d, "pore_pressure_kpa"].median()))
     return ok
 
 
@@ -271,10 +285,16 @@ def blast_check(seed, days):
           set(staged["zone_id"]).issubset({"ZONE_A", "ZONE_B"}), f"{sorted(set(staged['zone_id']))}")
     check("blast: hold-off zones (C/D) never fire", not staged[staged["zone_id"].isin(["ZONE_C", "ZONE_D"])].shape[0])
 
+    # Interpretation A: mine-wide 14-28/wk allocated across A+B exactly.
+    rate_a = float(df[df["zone_id"] == "ZONE_A"]["blast_frequency_per_week"].iloc[0])
+    rate_b = float(df[df["zone_id"] == "ZONE_B"]["blast_frequency_per_week"].iloc[0])
+    check("blast: mine-wide rate 14-28/wk conserved (A+B)", 14.0 <= rate_a + rate_b <= 28.0,
+          f"A={rate_a:.2f} B={rate_b:.2f} sum={rate_a + rate_b:.2f}")
+    check("blast: neither zone holds the full mine rate", rate_a < rate_a + rate_b and rate_b < rate_a + rate_b)
+
     for z in ["ZONE_A", "ZONE_B"]:
         zsub = staged[staged["zone_id"] == z]
-        check(f"blast: {z} per-bench weekly rate (mine 14-28 partitioned /5)",
-              2.0 <= float(zsub["blast_frequency_per_week"].iloc[0]) <= 6.0)
+        check(f"blast: {z} weekly rate within mine-wide band", 5.0 <= float(zsub["blast_frequency_per_week"].iloc[0]) <= 25.0)
         check(f"blast: {z} charge per delay in 100-600 kg",
               bool(zsub["charge_per_delay_kg"].between(100, 600).all()),
               f"min={zsub['charge_per_delay_kg'].min():.0f} max={zsub['charge_per_delay_kg'].max():.0f}")

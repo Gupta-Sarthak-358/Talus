@@ -7,12 +7,29 @@ component (aquifer thrust) is sampled once per zone; the transient response is
 an exponential wetting memory of the mine-wide rainfall series, giving lag and
 persistence instead of same-day reaction.
 
+SEMANTIC CONTRACT (decided pre-1D, keep in force):
+    groundwater_thrust_kpa  = zone-static confined/semi-confined aquifer
+                              loading (kPa). At Neyveli the confined aquifer
+                              below lignite presses upward with 490-785 kPa
+                              (5-8 kg/cm2), driving floor heaving/bursting AND
+                              pit-wall pore pressure (geology.md §3.4). The
+                              thrust is therefore the BASELINE component of
+                              pore pressure, not a separate unknown.
+    pore_pressure_kpa       = groundwater_thrust_kpa (baseline) + rainfall
+                              wetting-memory transient. Both terms are real
+                              hydraulic pressure; the transient modifies the
+                              baseline, it does not replace it.
+    groundwater_proxy       = the wetting-memory transient (mm), the
+                              rainfall-driven ML-facing signal.
+Consequence: ZONE_D (confined aquifer below lignite) is legitimately in the
+high/critical state even in dry weather because 490-785 kPa baseline exceeds
+the state bands -- that is not a bug, it is the documented floor-heave
+condition. The rainfall transient still modulates it (higher, never lower).
+
 Zoning (grounded): ZONE_D sits on the confined aquifer below lignite
 (thrust 490-785 kPa -> floor heave); OB benches A/B receive semi-confined
 seepage; ZONE_C (mineral bench near seam) is intermediate.
 """
-from pathlib import Path
-
 import numpy as np
 import pandas as pd
 
