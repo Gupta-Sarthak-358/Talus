@@ -1,0 +1,22 @@
+flowchart TB
+    subgraph Frontend[React Frontend]
+        MM[MineMap]
+        RP[RiskPanel]
+        SP[SHAPPanel]
+        TC[TrendChart]
+        AP[AlertPanel]
+        RV[RouteView]
+        WI[WhatIfPanel]
+    end
+
+    subgraph Backend[FastAPI Backend]
+        ZA[Zone API]
+        RA[Risk API]
+        EA[Explanation API]
+        TA[Trend API]
+        DA[Decision API]
+        RTA[Route API]
+        SA[Simulation API]
+    end
+
+    MM & RP & SP & TC & AP & RV & WI -->|REST / JSON| ZA & RA & EA & TA & DA & RTA & SA

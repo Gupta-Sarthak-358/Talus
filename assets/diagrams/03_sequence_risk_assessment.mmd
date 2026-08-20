@@ -1,0 +1,15 @@
+sequenceDiagram
+    participant U as User / Dashboard
+    participant B as FastAPI
+    participant RE as Risk Engine
+    participant SH as SHAP
+    participant DE as Decision Engine
+
+    U->>B: GET zone risk
+    B->>RE: predict(features)
+    RE-->>B: score, confidence
+    B->>SH: explain(zone)
+    SH-->>B: SHAP contributions
+    B->>DE: decide(score, trend)
+    DE-->>B: role-specific actions
+    B-->>U: risk + confidence + explanation + actions

@@ -151,6 +151,13 @@ Prototype constraints:
 | CV (Tier 2+) | Ultralytics YOLO-seg on Crack-Seg dataset → structured features |
 | Data | SQLite default; PostgreSQL + PostGIS optional |
 
----
+## Diagram Files
 
-*Mermaid versions of the flow diagrams are kept under `assets/diagrams/` as needed.*
+Mermaid (`.mmd`) source for each diagram above lives in `assets/diagrams/`:
+
+| Diagram | File |
+|---|---|
+| System architecture (data flow) | `assets/diagrams/01_system_architecture.mmd` |
+| Component diagram | `assets/diagrams/02_components.mmd` |
+| Sequence (risk assessment) | `assets/diagrams/03_sequence_risk_assessment.mmd` |
+| Deployment (prototype) | `assets/diagrams/04_deployment.mmd` |

@@ -1,0 +1,19 @@
+flowchart TB
+    Br[Browser]
+    RF[React Frontend<br/>localhost:5173]
+    FA[FastAPI<br/>localhost:8000]
+    RM[Risk Model / Random Forest]
+    SH[SHAP]
+    TR[Trend]
+    DE[Decision]
+    RT[Routing / Dijkstra]
+    DB[Local Data / PostgreSQL<br/>SQLite default]
+
+    Br --> RF
+    RF -->|REST / JSON| FA
+    FA --> RM
+    FA --> SH
+    FA --> TR
+    FA --> DE
+    FA --> RT
+    FA --> DB
