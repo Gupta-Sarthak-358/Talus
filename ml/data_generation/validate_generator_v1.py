@@ -16,6 +16,7 @@ from generator_schema import (
     ML_PROJECTION,
     ZONES,
 )
+from groundwater.sampler import THRUST_RANGES_KPA
 from generator_v1 import build_internal_state, build_timeline
 
 VALIDATION_DIR = BASE_DIR / "data" / "processed" / "generator_v1" / "validation"
@@ -31,14 +32,17 @@ FIELDS_1B = [
     "parameter_regime",
 ]
 
-FIELDS_STAY_NAN = [
+FIELDS_1C = [
     "groundwater_state", "pore_pressure_kpa", "groundwater_thrust_kpa",
-    "blast_occurs", "blast_frequency_per_week", "charge_per_delay_kg",
-    "blast_distance_m", "dominant_frequency_hz", "blast_vibration_ppv_mms",
+    "groundwater_proxy", "blast_occurs", "blast_frequency_per_week",
+    "charge_per_delay_kg", "blast_distance_m", "dominant_frequency_hz",
+    "blast_vibration_ppv_mms",
+]
+
+FIELDS_STAY_NAN = [
     "crack_family", "crack_width_mm", "crack_depth_m", "crack_length_m",
     "crack_density", "water_filled", "crack_growth_rate_mm_day",
-    "crack_severity", "groundwater_proxy", "slope_condition",
-    "instability_score", "risk_label",
+    "crack_severity", "slope_condition", "instability_score", "risk_label",
 ]
 
 
@@ -87,9 +91,13 @@ def schema_check(seed, days):
         no_na = df[field].notna().all()
         check(f"Phase 1B field populated: {field}", no_na)
 
+    for field in FIELDS_1C:
+        no_na = df[field].notna().all()
+        check(f"Phase 1C field populated: {field}", no_na)
+
     for field in FIELDS_STAY_NAN:
         all_na = df[field].isna().all()
-        check(f"Phase 1B field stays NaN (1C/1D): {field}", all_na)
+        check(f"Phase 1D/1E field stays NaN: {field}", all_na)
 
     df_projected = pd.DataFrame(index=df.index)
     for ml_name, source in ML_PROJECTION.items():
@@ -201,6 +209,95 @@ def geology_check(seed, days):
     return ok
 
 
+def groundwater_check(seed, days):
+    timeline = build_timeline("2024-01-01", days)
+    df = build_internal_state(timeline, seed)
+    ok = True
+
+    valid = set(df["groundwater_state"])
+    check("gw: states within enum", valid.issubset(set(CATEGORY_ENUMS["groundwater_state"])), f"{sorted(valid)}")
+
+    rain7 = df["rainfall_7d_mm"].to_numpy()
+    pp = df["pore_pressure_kpa"].to_numpy()
+    # Lag/persistence: pore pressure must be more autocorrelated than daily rain
+    # (groundwater responds to accumulation, not same-day intensity).
+    def ac(d, lag=1):
+        d = d - d.mean()
+        return float(np.correlate(d[:-lag], d[lag:])[0] / max(np.sum(d * d), 1e-12))
+    ac_pp = ac(pp)
+    ac_rain = ac(df["rainfall_mm"].to_numpy())
+    check("gw: pore pressure more persistent than daily rain (lag 1 ac)",
+          ac_pp > ac_rain, f"ac_pp={ac_pp:.3f} ac_rain={ac_rain:.3f}")
+    # Pore pressure must track accumulated (7d) rainfall threshold. Because each
+    # zone carries a static aquifer-thrust offset, correlate WITHIN zone
+    # (demeaned) so the offsets do not dilute the response signal.
+    corrs = []
+    for z in ZONES:
+        m = df["zone_id"] == z
+        if m.sum() and rain7[m].std() > 0:
+            corrs.append(float(np.corrcoef(pp[m] - pp[m].mean(), rain7[m])[0, 1]))
+    corr = float(np.mean(corrs))
+    check("gw: within-zone pore pressure correlates with 7d rain accumulation", corr > 0.5, f"corr={corr:.3f}")
+
+    # Wetting memory decay => dry streaks pull pore pressure down below rain peaks.
+    wet_days = df["rainfall_7d_mm"] > 30
+    dry_days = df["rainfall_7d_mm"] < 5
+    if wet_days.any() and dry_days.any():
+        wet_med = float(df.loc[wet_days, "pore_pressure_kpa"].median())
+        dry_med = float(df.loc[dry_days, "pore_pressure_kpa"].median())
+        check("gw: wet spells raise pore pressure over dry spells (per zone pooled)",
+              wet_med > dry_med, f"wet={wet_med:.1f} dry={dry_med:.1f}")
+
+    # ZONE_D = confined aquifer below lignite -> highest thrust of all zones.
+    thrust = df.groupby("zone_id")["groundwater_thrust_kpa"].first()
+    check("gw: ZONE_D thrust highest (confined aquifer 490-785 kPa)",
+          float(thrust["ZONE_D"]) > float(thrust["ZONE_A"]) and 490.0 <= float(thrust["ZONE_D"]) <= 785.0,
+          f"D={thrust['ZONE_D']:.1f} A={thrust['ZONE_A']:.1f}")
+    for z in ZONES:
+        zlo, zhi = THRUST_RANGES_KPA[z]
+        check(f"gw: {z} thrust in grounded band",
+              float(zlo) <= float(thrust[z]) <= float(zhi), f"{thrust[z]:.1f} kPa")
+    return ok
+
+
+def blast_check(seed, days):
+    timeline = build_timeline("2024-01-01", days)
+    df = build_internal_state(timeline, seed)
+    ok = True
+
+    # Blast only occurs on OB benches (A, B); C/D never blast (lignite floor).
+    staged = df[df["blast_occurs"]]
+    check("blast: events only in blasted zones (A/B)",
+          set(staged["zone_id"]).issubset({"ZONE_A", "ZONE_B"}), f"{sorted(set(staged['zone_id']))}")
+    check("blast: hold-off zones (C/D) never fire", not staged[staged["zone_id"].isin(["ZONE_C", "ZONE_D"])].shape[0])
+
+    for z in ["ZONE_A", "ZONE_B"]:
+        zsub = staged[staged["zone_id"] == z]
+        check(f"blast: {z} per-bench weekly rate (mine 14-28 partitioned /5)",
+              2.0 <= float(zsub["blast_frequency_per_week"].iloc[0]) <= 6.0)
+        check(f"blast: {z} charge per delay in 100-600 kg",
+              bool(zsub["charge_per_delay_kg"].between(100, 600).all()),
+              f"min={zsub['charge_per_delay_kg'].min():.0f} max={zsub['charge_per_delay_kg'].max():.0f}")
+        check(f"blast: {z} has events across year", int(zsub.shape[0]) > 30, f"events={zsub.shape[0]}")
+        check(f"blast: {z} PPV > 0 when firing", bool((zsub["blast_vibration_ppv_mms"] > 0).all()))
+    # PPV is positive on blast days, zero (no disturbance) otherwise.
+    check("blast: PPV zero on non-blast days",
+          bool((df.loc[~df["blast_occurs"], "blast_vibration_ppv_mms"] == 0).all()))
+    # Frequency only within 5-27 Hz (NIRM Table 2.1); bins respected.
+    fz = staged["dominant_frequency_hz"]
+    check("blast: dominant frequency within 5-27 Hz", bool(fz.between(5, 27).all()), f"min={fz.min()} max={fz.max()}")
+    low8 = float((fz < 8).mean())
+    check("blast: ~40-55% of events below 8 Hz (left-skewed)", 0.30 <= low8 <= 0.65, f"P(<8Hz)={low8:.2f}")
+    # DGMS thresholds are regulatory reference only: they must NOT appear in ML regression labels.
+    dgms_columns = [c for c in df.columns if "dgms" in c or "limit" in c or "regulation" in c]
+    check("blast: DGMS limits never exported as columns", not dgms_columns, f"{dgms_columns}")
+    # Distance is structural (static per zone, from synthetic layout).
+    dist = df.groupby("zone_id")["blast_distance_m"].first()
+    check("blast: ZONE_A distance 300 m (village east)", float(dist["ZONE_A"]) == 300.0, f"{dist['ZONE_A']}")
+    check("blast: ZONE_B distance 150 m (Mine II boundary hutments)", float(dist["ZONE_B"]) == 150.0, f"{dist['ZONE_B']}")
+    return ok
+
+
 def structure_check(seed, days):
     timeline = build_timeline("2024-01-01", days)
     df = build_internal_state(timeline, seed)
@@ -226,11 +323,11 @@ def determinism_check(seed, days):
 def write_results(seed, days):
     VALIDATION_DIR.mkdir(parents=True, exist_ok=True)
     payload = {
-        "check": "generator_v1_phase_1B",
+        "check": "generator_v1_phase_1C",
         "seed": seed,
         "days": days,
         "generator_schema": "1.0",
-        "phases": ["1A", "1B"],
+        "phases": ["1A", "1B", "1C"],
         "results": RESULTS,
         "all_pass": all(r["pass"] for r in RESULTS.values()),
     }
@@ -239,7 +336,7 @@ def write_results(seed, days):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Talus Generator v1 Phase 1B validation")
+    parser = argparse.ArgumentParser(description="Talus Generator v1 Phase 1C validation")
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--days", type=int, default=365)
     args = parser.parse_args()
@@ -248,6 +345,8 @@ def main():
     rainfall_distribution_check(args.seed, args.days)
     terrain_check(args.seed, args.days)
     geology_check(args.seed, args.days)
+    groundwater_check(args.seed, args.days)
+    blast_check(args.seed, args.days)
     structure_check(args.seed, args.days)
     determinism_check(args.seed, args.days)
     write_results(args.seed, args.days)

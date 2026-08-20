@@ -3,10 +3,10 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parents[2]
 GEOTECH_CSV = BASE_DIR / "data" / "processed" / "geotech" / "neyveli_geotech_parameters.csv"
 
-GENERATOR_VERSION = "1.1.0"
+GENERATOR_VERSION = "1.2.0"
 SCHEMA_VERSION = "1.0"
 GROUNDING_VERSION = "2026-08-20"
-PHASES_COMPLETED = ["1A", "1B"]
+PHASES_COMPLETED = ["1A", "1B", "1C"]
 RESEARCH_FREEZE = True
 
 ZONES = {

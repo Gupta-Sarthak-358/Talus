@@ -1,8 +1,10 @@
-"""Phase 1B verification plots.
+"""Phase 1B+1C verification plots.
 
-Visual ground-truth for the Phase 1B definition of done:
+Visual ground-truth for the Phase 1B+1C definition of done:
 - rainfall: wet-day intensity curve and monthly means vs the 2000-2024 IMD grounding
 - terrain/geology: per-zone static engineering geometry and material properties
+- groundwater: rainfall -> pore-pressure lag/persistence; aquifer thrust per zone
+- blast: PPV-vs-charge scatter (locked NIRM constants) and frequency histogram
 Only called after the generator has produced real physics fields (1B+).
 """
 from pathlib import Path
@@ -89,11 +91,64 @@ def zone_plots(df, out_dir):
     plt.close(fig)
 
 
+def groundwater_plots(df, out_dir):
+    fig, axes = plt.subplots(1, 2, figsize=(13, 5))
+    gw = df[df["zone_id"] == "ZONE_D"].set_index("timestamp")  # confined-aquifer zone burst risk
+    rain = df.groupby("timestamp")["rainfall_mm"].first()
+
+    ax = axes[0]
+    ax.plot(rain.index, rain.values, label="daily rainfall (mm)", color="#4c72b0", alpha=0.5)
+    ax.plot(gw.index, gw["pore_pressure_kpa"], label="pore pressure (kPa, ZONE_D)", color="#c44e52")
+    ax.set_xlabel("Date")
+    ax.set_ylabel("mm / kPa")
+    ax.set_title("Groundwater: rainfall -> pore pressure (lag/persistence, 1C)")
+    ax.legend(fontsize=8)
+    ax.tick_params(axis="x", rotation=30, labelsize=8)
+
+    ax = axes[1]
+    zones = list(ZONES)
+    thrust = [df[df["zone_id"] == z]["groundwater_thrust_kpa"].iloc[0] for z in zones]
+    x = np.arange(len(zones))
+    ax.bar(x, thrust, color="#55a868")
+    ax.set_xticks(x)
+    ax.set_xticklabels(zones, rotation=15)
+    ax.set_ylabel("groundwater thrust (kPa)")
+    ax.set_title("Aquifer thrust per zone (D = confined below lignite, 1C)")
+    fig.tight_layout()
+    fig.savefig(out_dir / "groundwater_1C.png", dpi=150)
+    plt.close(fig)
+
+
+def blast_plots(df, out_dir):
+    fig, axes = plt.subplots(1, 2, figsize=(13, 5))
+    bl = df[df["blast_occurs"] & (df["zone_id"] == "ZONE_A")]
+
+    ax = axes[0]
+    ax.scatter(bl["charge_per_delay_kg"], bl["blast_vibration_ppv_mms"], s=6, alpha=0.4, color="#4c72b0")
+    ax.set_xlabel("charge per delay (kg)")
+    ax.set_ylabel("observed PPV (mm/s)")
+    ax.set_title("PPV vs charge (ZONE_A, D=300 m): PPV=858.9*(D/√W)^-1.58 + scatter, 1C")
+    ax.tick_params(axis="x", rotation=0, labelsize=8)
+
+    ax = axes[1]
+    ax.hist(bl["dominant_frequency_hz"], bins=30, color="#c44e52", alpha=0.8)
+    ax.axvline(8, color="k", ls="--", lw=0.8)
+    ax.axvline(25, color="k", ls="--", lw=0.8)
+    ax.set_xlabel("dominant frequency (Hz)")
+    ax.set_ylabel("events")
+    ax.set_title("Dominant frequency (5-27 Hz, P(<8Hz)=45%; DGMS bands marked)")
+    fig.tight_layout()
+    fig.savefig(out_dir / "blast_1C.png", dpi=150)
+    plt.close(fig)
+
+
 def make_plots(df, out_dir):
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     rain_plots(df, out_dir)
     zone_plots(df, out_dir)
+    groundwater_plots(df, out_dir)
+    blast_plots(df, out_dir)
 
 
 if __name__ == "__main__":

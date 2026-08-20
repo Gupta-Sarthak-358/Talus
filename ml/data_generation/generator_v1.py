@@ -21,6 +21,8 @@ from generator_schema import (
 from rainfall import generate_rainfall
 from terrain import generate_terrain
 from geology import generate_geology
+from groundwater import generate_groundwater
+from blast import generate_blast
 
 OUTPUT_DIR = BASE_DIR / "data" / "processed" / "generator_v1"
 DEFAULT_SEED = 42
@@ -30,7 +32,7 @@ INSPECTION_CADENCES = (7, 14, 21, 30)
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Talus Generator v1 -- Phases 1A (skeleton) + 1B (RAIN+TERRAIN+GEOLOGY)")
+    parser = argparse.ArgumentParser(description="Talus Generator v1 -- Phases 1A (skeleton) + 1B (RAIN+TERRAIN+GEOLOGY) + 1C (GROUNDWATER+BLAST)")
     parser.add_argument("--seed", type=int, default=DEFAULT_SEED)
     parser.add_argument("--start", default=DEFAULT_START, help="YYYY-MM-DD")
     parser.add_argument("--days", type=int, default=DEFAULT_DAYS)
@@ -51,8 +53,12 @@ def build_internal_state(timeline, seed):
         offset = int(rng.integers(0, cadence))
         terrain = generate_terrain(zone_id, seed)
         geology = generate_geology(zone_id, seed)
+        groundwater = generate_groundwater(rain["rainfall_mm"].to_numpy(), zone_id, seed)
+        blast = generate_blast(timeline, zone_id, seed)
         for idx, ts in enumerate(timeline):
             r = rain.loc[ts]
+            gw = groundwater.iloc[idx]
+            bl = blast.iloc[idx]
             rows.append(
                 {
                     "timestamp": ts,
@@ -74,6 +80,16 @@ def build_internal_state(timeline, seed):
                     "friction_angle_deg": geology["friction_angle_deg"],
                     "unit_weight_kn_m3": geology["unit_weight_kn_m3"],
                     "parameter_regime": geology["parameter_regime"],
+                    "groundwater_state": gw["groundwater_state"],
+                    "pore_pressure_kpa": gw["pore_pressure_kpa"],
+                    "groundwater_thrust_kpa": gw["groundwater_thrust_kpa"],
+                    "groundwater_proxy": gw["groundwater_proxy"],
+                    "blast_occurs": bool(bl["blast_occurs"]),
+                    "blast_frequency_per_week": bl["blast_frequency_per_week"],
+                    "charge_per_delay_kg": bl["charge_per_delay_kg"],
+                    "blast_distance_m": bl["blast_distance_m"],
+                    "dominant_frequency_hz": bl["dominant_frequency_hz"],
+                    "blast_vibration_ppv_mms": bl["blast_vibration_ppv_mms"],
                     "days_since_inspection": int((idx + offset) % cadence),
                     "prior_incident": False,
                     "synthetic": True,
@@ -134,14 +150,16 @@ def build_summary(timeline, seed, out_dir):
             "material_class", "cohesion_kpa", "friction_angle_deg", "unit_weight_kn_m3",
             "parameter_regime",
         ],
-        "phase_1B_still_nan": [
+        "phase_1C_populated": [
             "groundwater_state", "pore_pressure_kpa", "groundwater_thrust_kpa",
-            "blast_occurs", "blast_frequency_per_week", "charge_per_delay_kg",
-            "blast_distance_m", "dominant_frequency_hz", "blast_vibration_ppv_mms",
+            "groundwater_proxy", "blast_occurs", "blast_frequency_per_week",
+            "charge_per_delay_kg", "blast_distance_m", "dominant_frequency_hz",
+            "blast_vibration_ppv_mms",
+        ],
+        "phase_1C_still_nan": [
             "crack_family", "crack_width_mm", "crack_depth_m", "crack_length_m",
             "crack_density", "water_filled", "crack_growth_rate_mm_day",
-            "crack_severity", "groundwater_proxy", "slope_condition",
-            "instability_score", "risk_label",
+            "crack_severity", "slope_condition", "instability_score", "risk_label",
         ],
         "output_files": {
             "states": str(out_dir / "synthetic_mine_states.csv"),

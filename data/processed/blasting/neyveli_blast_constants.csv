@@ -4,7 +4,7 @@ ppv_model,b,1.58,unitless,NIRM_2005_MT134_02,mine_specific,high,Attenuation expo
 ppv_model,r,0.86,unitless,NIRM_2005_MT134_02,mine_specific,high,Correlation coefficient of the regression
 ppv_model,n_blasts,22,blasts,NIRM_2005_MT134_02,mine_specific,high,Monitored blasts
 ppv_model,n_obs,68,observations,NIRM_2005_MT134_02,mine_specific,high,Monitored vibration observations
-ppv_model,n_regression,84,data_sets,NIRM_2005_MT134_02,mine_specific,high,84 data sets (Mine I+II, mostly Mine II) used for regression
+ppv_model,n_regression,84,data_sets,NIRM_2005_MT134_02,mine_specific,high,"84 data sets (Mine I+II, mostly Mine II) used for regression"
 ppv_model,freq_range_hz,5-27,Hz,NIRM_2005_MT134_02,mine_specific,high,Dominant frequency range; <10 Hz usually present
 ppv_model,purpose,loosen_for_bwe,text,NIRM_2005_MT134_02,mine_specific,high,"No fragmentation/displacement required; loosening for BWE cost-effective operation"
 ppv_model,high_ppv_mechanism,low_specific_charge_plus_wet_ground,text,NIRM_2005_MT134_02,mine_specific,high,NIRM attribution for Neyveli being highest-PPV of studied mines
