@@ -23,6 +23,8 @@ from terrain import generate_terrain
 from geology import generate_geology
 from groundwater import generate_groundwater
 from blast import generate_blast
+from cracks import generate_cracks
+from instability import generate_instability
 
 OUTPUT_DIR = BASE_DIR / "data" / "processed" / "generator_v1"
 DEFAULT_SEED = 42
@@ -32,7 +34,7 @@ INSPECTION_CADENCES = (7, 14, 21, 30)
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Talus Generator v1 -- Phases 1A (skeleton) + 1B (RAIN+TERRAIN+GEOLOGY) + 1C (GROUNDWATER+BLAST)")
+    parser = argparse.ArgumentParser(description="Talus Generator v1 -- Phases 1A-1D (RAIN/TERRAIN/GEOLOGY/GROUNDWATER/BLAST/CRACKS)")
     parser.add_argument("--seed", type=int, default=DEFAULT_SEED)
     parser.add_argument("--start", default=DEFAULT_START, help="YYYY-MM-DD")
     parser.add_argument("--days", type=int, default=DEFAULT_DAYS)
@@ -55,10 +57,12 @@ def build_internal_state(timeline, seed):
         geology = generate_geology(zone_id, seed)
         groundwater = generate_groundwater(rain["rainfall_mm"].to_numpy(), zone_id, seed)
         blast = generate_blast(timeline, zone_id, seed)
+        cracks = generate_cracks(timeline, rain, groundwater, blast, terrain, geology, zone_cfg, seed, zone_id)
         for idx, ts in enumerate(timeline):
             r = rain.loc[ts]
             gw = groundwater.iloc[idx]
             bl = blast.iloc[idx]
+            cr = cracks.iloc[idx]
             rows.append(
                 {
                     "timestamp": ts,
@@ -90,12 +94,21 @@ def build_internal_state(timeline, seed):
                     "blast_distance_m": bl["blast_distance_m"],
                     "dominant_frequency_hz": bl["dominant_frequency_hz"],
                     "blast_vibration_ppv_mms": bl["blast_vibration_ppv_mms"],
+                    "crack_family": cr["crack_family"],
+                    "crack_width_mm": cr["crack_width_mm"],
+                    "crack_depth_m": cr["crack_depth_m"],
+                    "crack_length_m": cr["crack_length_m"],
+                    "crack_density": cr["crack_density"],
+                    "water_filled": bool(cr["water_filled"]),
+                    "crack_growth_rate_mm_day": cr["crack_growth_rate_mm_day"],
+                    "crack_severity": cr["crack_severity"],
                     "days_since_inspection": int((idx + offset) % cadence),
                     "prior_incident": False,
                     "synthetic": True,
                 }
             )
     df = pd.DataFrame(rows)
+    generate_instability(df)
     df = df.reindex(columns=[name for name, _ in INTERNAL_FIELDS])
     for name, dtype in INTERNAL_FIELDS:
         if name in df.columns:
@@ -156,11 +169,23 @@ def build_summary(timeline, seed, out_dir):
             "charge_per_delay_kg", "blast_distance_m", "dominant_frequency_hz",
             "blast_vibration_ppv_mms",
         ],
-        "phase_1C_still_nan": [
+        "phase_1D_populated": [
             "crack_family", "crack_width_mm", "crack_depth_m", "crack_length_m",
-            "crack_density", "water_filled", "crack_growth_rate_mm_day",
-            "crack_severity", "slope_condition", "instability_score", "risk_label",
+            "crack_density", "water_filled", "crack_growth_rate_mm_day", "crack_severity",
         ],
+        "phase_1E_populated": [
+            "fos", "slope_condition", "instability_score", "risk_label",
+        ],
+        "phase_1e_pinning_provenance": (
+            "Per-zone risk-label pinning is expected where frozen geometry and strength "
+            "anchors place a zone inside a single FoS band. In seed 42, ZONE_A's critical "
+            "pinning is primarily a consequence of the low-cohesion clayey_sandstone draw "
+            "(c=45 kPa within the grounded 29-157 kPa range), while ZONE_C remains very_low "
+            "because its short 6 m bench and c/phi draw produce FoS above the upper band. "
+            "This is not considered a generator defect. The continuous instability_score "
+            "retains within-band variation and is the preferred regression signal; multi-seed "
+            "generation should be used for classification studies."
+        ),
         "output_files": {
             "states": str(out_dir / "synthetic_mine_states.csv"),
             "summary": str(out_dir / "generator_summary.json"),

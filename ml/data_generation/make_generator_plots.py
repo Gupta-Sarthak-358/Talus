@@ -142,6 +142,52 @@ def blast_plots(df, out_dir):
     plt.close(fig)
 
 
+def crack_plots(df, out_dir):
+    fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+    colors = {"ZONE_A": "#4c72b0", "ZONE_B": "#c44e52", "ZONE_C": "#55a868", "ZONE_D": "#8172b2"}
+
+    ax = axes[0]
+    for z in ZONES:
+        zz = df[df["zone_id"] == z].set_index("timestamp")
+        ax.plot(zz.index, zz["crack_depth_m"], label=z, color=colors[z])
+    ax.set_ylabel("crack depth (m)")
+    ax.set_title("Crack depth ratchets with damage (memory, never resets), 1D")
+    ax.legend(fontsize=8)
+    ax.tick_params(axis="x", rotation=30, labelsize=8)
+
+    ax = axes[1]
+    for z in ZONES:
+        zz = df[df["zone_id"] == z].set_index("timestamp")
+        ax.plot(zz.index, zz["crack_growth_rate_mm_day"], label=z, color=colors[z], alpha=0.8)
+    ax.set_ylabel("growth rate (mm/day)")
+    ax.set_title("Growth rate: temporary spikes that feed cumulative damage, 1D")
+    ax.legend(fontsize=8)
+    ax.tick_params(axis="x", rotation=30, labelsize=8)
+
+    ax = axes[2]
+    fams = ["tension_crest", "blast_induced", "seepage", "desiccation", "floor_heave"]
+    widths = [int(df[(df["zone_id"] == z) & (df["crack_family"] == f)].shape[0]) for z, f in
+              [(z, f) for z in ZONES for f in fams]]
+    data = np.zeros((len(ZONES), len(fams)), dtype=int)
+    for i, z in enumerate(ZONES):
+        for j, f in enumerate(fams):
+            data[i, j] = int(df[(df["zone_id"] == z) & (df["crack_family"] == f)].shape[0])
+    im = ax.imshow(data, aspect="auto", cmap="Blues")
+    ax.set_xticks(np.arange(len(fams)))
+    ax.set_xticklabels(fams, rotation=25, ha="right", fontsize=8)
+    ax.set_yticks(np.arange(len(ZONES)))
+    ax.set_yticklabels(ZONES, fontsize=8)
+    ax.set_title("Crack family by zone (dominant driver), 1D")
+    for i in range(len(ZONES)):
+        for j in range(len(fams)):
+            if data[i, j]:
+                ax.text(j, i, str(data[i, j]), ha="center", va="center", fontsize=8)
+    fig.colorbar(im, ax=ax, shrink=0.8)
+    fig.tight_layout()
+    fig.savefig(out_dir / "cracks_1D.png", dpi=150)
+    plt.close(fig)
+
+
 def make_plots(df, out_dir):
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -149,6 +195,7 @@ def make_plots(df, out_dir):
     zone_plots(df, out_dir)
     groundwater_plots(df, out_dir)
     blast_plots(df, out_dir)
+    crack_plots(df, out_dir)
 
 
 if __name__ == "__main__":

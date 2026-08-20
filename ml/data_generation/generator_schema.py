@@ -3,10 +3,10 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parents[2]
 GEOTECH_CSV = BASE_DIR / "data" / "processed" / "geotech" / "neyveli_geotech_parameters.csv"
 
-GENERATOR_VERSION = "1.2.0"
+GENERATOR_VERSION = "1.4.0"
 SCHEMA_VERSION = "1.0"
 GROUNDING_VERSION = "2026-08-20"
-PHASES_COMPLETED = ["1A", "1B", "1C"]
+PHASES_COMPLETED = ["1A", "1B", "1C", "1D", "1E"]
 RESEARCH_FREEZE = True
 
 ZONES = {
@@ -69,7 +69,7 @@ GROUNDWATER_STATES = ["dry", "normal", "elevated", "high", "critical"]
 CRACK_FAMILIES = ["none", "tension_crest", "desiccation", "blast_induced", "seepage", "floor_heave"]
 CRACK_SEVERITIES = ["normal", "minor", "moderate", "severe", "critical"]
 SLOPE_CONDITIONS = ["stable", "marginal", "unstable", "failed"]
-RISK_LABELS = ["low", "moderate", "high", "critical"]
+RISK_LABELS = ["very_low", "low", "moderate", "high", "critical"]
 PARAMETER_REGIMES = ["total_undrained", "effective_stress"]
 
 INTERNAL_FIELDS = [
@@ -112,6 +112,7 @@ INTERNAL_FIELDS = [
     ("days_since_inspection", "int"),
     ("prior_incident", "bool"),
     ("groundwater_proxy", "float"),
+    ("fos", "float"),
     ("slope_condition", "category"),
     ("instability_score", "float"),
     ("risk_label", "category"),
@@ -192,6 +193,7 @@ PHYSICS_FIELDS_1A = [
     "crack_growth_rate_mm_day",
     "crack_severity",
     "groundwater_proxy",
+    "fos",
     "slope_condition",
     "instability_score",
     "risk_label",

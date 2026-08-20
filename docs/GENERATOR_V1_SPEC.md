@@ -110,8 +110,8 @@ Names and semantics per `docs/05_FEATURE_SCHEMA.md` §2. Output records also car
 Phase 1A  Skeleton     schema · configuration · seed handling · zone inventory · output plumbing
 Phase 1B  Environment  RAIN → TERRAIN → GEOLOGY
 Phase 1C  Operations   BLAST (weekly events, PPV) → GROUNDWATER
-Phase 1D  Instability  CRACKS → cross-track interactions → INSTABILITY score (FoS-based)
-Phase 1E  Validation   physics · distribution · provenance checks (gates; see §10)
+Phase 1D  Instability  CRACKS (cross-track damage process with memory)
+Phase 1E  Validation   INSTABILITY score (FoS-based) + risk labels · physics · provenance gates (see §10)
 ```
 
 No physics in 1A — get the skeleton and plumbing working first.
@@ -133,7 +133,7 @@ The spec **explicitly permits** Phase 1A to emit provisional placeholder values:
 Phase 1A   → generator_version 1.0.0   (schema_version 1.0 frozen)
 Phase 1B   → 1.1.0
 Phase 1C   → 1.2.0
-Phase 1D   → 1.3.0
+Phase 1D   → 1.3.0    (1.3.1 = pre-freeze audit: material-direction fix + acute-window policy)
 Phase 1E (final) → 1.0.0-final metadata (bump stays explicit in generator_summary.json)
 ```
 
@@ -148,6 +148,96 @@ Phase 1C populates the operation track. BLAST and GROUNDWATER are **not** indepe
 - **Regulatory boundary**: DGMS (Tech)(S&T) Circular 7/1997 PPV limits are stored in the constants CSV as **reference only**. They are never exported as columns and never become the risk label; risk is unaffected by statutory compliance limits (that is the crank/instability track).
 - No crack dynamics or risk logic may be implemented in 1C. Those are 1D/1E.
 
+### 7.4 Phase 1D instability policy (CRACKS)
+
+Phase 1D populates the crack track as a **time-evolving damage process with memory**, not a random column. Physics:
+
+- **Daily growth** is the sum of six physically-coupled terms: **tension** (slope steepness × material susceptibility × wetting factor × activity), **hydraulic** (wetting memory, amplified by material susceptibility and moisture-bearing clays), **blast-induced** (only on OB benches A/B, active above the locked 8 mm/s damage threshold, scaled by PPV), **seepage** (ZONE_B under high wetting), **desiccation** (clay-rich zones after prolonged dry spells), and **heave** (ZONE_D confined aquifer thrust, `thrust/490 − 1`). Growth is **never negative** — cracks do not shrink. **Material coupling direction is contractual:** every material-scaled term passes through `susceptibility(weakness)` and is MONOTONE NON-DECREASING in weakness (weakness up → crack growth up; cracks research "cracks concentrate in the weakest materials"). The 1D audit asserts this direction (audit item 2).
+- **Hydraulic rainfall chain (explicit dependency):** `rainfall → rainfall_7d → groundwater wetting memory (τ≈12 d) → pore pressure → hydraulic crack growth`. 1C already collapses rainfall into the groundwater memory variable; 1D's hydraulic term consumes **groundwater_proxy** (the wetting memory) — it does NOT re-read `rainfall_7d` directly (which is used only for the `water_filled` boolean). So `rainfall_7d` participates in the chain via groundwater, exactly as the causal arrow dictates, rather than as an independent second rainfall input.
+- **Memory / ratcheting:** `crack_depth_m` and `crack_width_mm` are cumulative state; each day's growth is added and never retracted (CRACK-01/02). Width cap 150 mm general, 60 mm on ZONE_D (floor panel); depth cap = ⅓–½ bench height on benches, 0.6–1.5 m on the floor panel (CRACK-02/03). ZONE_D (pit floor above confined aquifer) is *always* the `floor_heave` family — the documented confined-aquifer condition.
+- **Family** is the dominant-driver of the day among the six terms (`tension_crest`, `blast_induced`, `seepage`, `desiccation`, `floor_heave`; `none` before damage). Under Interpretation A, ZONE_B (150 m, high PPV) fires nearly daily ⇒ dominated by `blast_induced`.
+- **Severity (CRACK-04/05):** `crack_severity` is **cumulative state only** — crack depth as a fraction of the reserved bench layer (0.10/0.20/0.33/0.49 → normal/minor/moderate/severe/critical), so the rating rats with the crack and never downgrades. The transient **6–12 day failure-window signal** (>20 mm/day sustained growth, Leonardos & Terezopoulos 2002) is NOT folded into the rating; it is exposed as the ML feature `crack_growth_rate_mm_day` (long-run 7-day trend). Width (`crack_width_mm`) remains an independent ML feature.
+- **Failure-window coverage policy (audited):** the baseline coupling has a structural growth ceiling of ~10 mm/day (max PPV + peak wetting simultaneously), so a routine-operations synthetic year **does not** produce >20 mm/day pre-failure-window states (0/60 audit seeds, max ~10). This is by design — such losses mark the 6–12 day run-up to failure and are the domain of the 1E/1F stress-event layer, not the routine baseline. The 1D audit asserts the baseline *stays below* the window; acute states must be generated deliberately as stress events, never fabricated by the routine sampler.
+- No slope-stability score or risk label may be implemented in 1D (`slope_condition`, `instability_score`, `risk_label` stay NaN) — those are Phase 1E.
+
+### 7.5 Phase 1E instability & risk contract (FoS-based)
+
+Phase 1E converts the physical state built in 1B–1D into slope stability and risk. **It may not invent an independent random risk score.** The chain is strictly bottom-up:
+
+```text
+physical parameters (c, φ, γ, θ, h)
+      ↓
+factor of safety (infinite-slope, driven below by the 1B–1D state)
+      ↓
+stability interpretation (slope_condition)
+      ↓
+instability score (monotone in FoS)
+      ↓
+risk label (bands)
+```
+
+The generator outputs `fos`, `instability_score`, `risk_label`, and `slope_condition`; `risk_label` is the target for the ML model (kept separate from the 12 frozen ML-facing *features*).
+
+**FoS model (simplified infinite-slope, `docs/03_DATA_PLAN.md` §D, `docs/04_MODEL_PLAN.md` §2):**
+
+```text
+FoS ≈ (c_eff + (γ·h·cos²θ − u)·tanφ) / (γ·h·sinθ·cosθ)
+```
+
+- `c`, `φ`, `γ`: GEOLOGY material parameters consumed **unchanged from 1B** (never re-drawn in 1E).
+- `c_eff` = cohesion **degraded by crack density** (cracked mass loses effective cohesion; CRACKS research: "cracked mass = lower effective cohesion", so `c_eff = c·(1 − k·crack_density)` with the crack −10% FoS line forming the budget, Lu 2022).
+- `u` = pore-water pressure from 1C (`pore_pressure_kpa`) **amplified by water-filled cracks** (`water_filled`, CRACKS): a rain-filled crack adds hydrostatic wall pressure on top of aquifer pore pressure (USACE assumption).
+- `θ`, `h`: TERRAIN bench layer from 1B (bench face angle / height; `slope_angle_deg`, `slope_height_m`).
+- **Blast disturbance** modulates via the crack-state path (blast-induced crack growth lowers `c_eff`, is not an independent additive terror term).
+
+**CRACK-DENSITY CONTRACT (LOCKED):**
+
+```text
+crack_density is normalized to [0, 1].
+
+The 1E baseline crack-cohesion degradation is bounded so that ORDINARY crack
+presence cannot exceed the ~10% FoS budget derived from Lu (2022):
+
+    c_eff = c · (1 − k_crack · min(crack_density / D_REF, 1))     k_crack ≈ 0.10
+
+so even crack_density → 1 degrades c by at most ~10% on the ordinary path.
+
+The ~50% reduction is RESERVED for the explicitly identified steep engineered
+open-crack worst case (Michalowski 2013) and must NOT emerge merely because
+crack_density approaches 1. The −50% branch requires BOTH:
+    · an open crack state (critical severity + water_filled), AND
+    · a steep engineered slope (bench-layer face angle ≥ 60°).
+It is a distinct, auditable branch, not a continuous function of density.
+```
+
+**COUNTERFACTUAL FoS-ORDERING GATE (LOCKED):** for any fixed zone, the validator constructs four states that differ ONLY in the physical drivers and asserts, within tolerance:
+
+```text
+FoS(dry + intact + no blast)  ≥  FoS(wet + intact)  ≥  FoS(wet + cracked)  ≥  FoS(wet + cracked + blast damage)
+```
+
+This makes the causal contract `dry intact > wet > cracked > blast-damaged` mechanically enforceable (same physics as §10's sanity gate, now a deterministic counterfactual rather than a correlation).
+
+**Cap contract (spec §8, CRACKS):** FoS is bounded and physical. Crack presence is budgeted at ~−10% from dry-intact FoS (Lu 2022); the open-crack worst case is −50% and applies **only** on steep engineered slopes (Michalowski 2013), never as a global default. FoS is capped above at ~2.5 so the intact dry bench reads "Very Low" rather than unbounded; local spikes from benign dry geometry must not dominate.
+
+**Bands (prototype thresholds, `docs/08_LIMITATIONS.md` §7 — FoS is NEVER a safety certification, only an operational band):**
+
+```text
+FoS < 0.80                    → critical   (risk_label / risk_band)
+0.80 ≤ FoS < 1.00             → high
+1.00 ≤ FoS < 1.20             → moderate
+1.20 ≤ FoS < 1.50             → low
+FoS ≥ 1.50 (≤ ~2.5 cap)       → very_low
+```
+
+- `slope_condition` (stable/marginal/unstable/failed) mirrors FoS: ≥1.20 stable, 1.00–1.20 marginal, 0.80–1.00 unstable, <0.80 failed. It deliberately has **4 physical states**, while `risk_label` has **5 operational bands** (a "stable" slope can still be "low" operational risk — not a contradiction).
+- `instability_score`: 0–100, **monotone decreasing in FoS** (lower FoS → higher score), continuous for regression; mapped to the same bands for classification. **FoS is its only source** — no random noise, no feature-weight soup. Two states with the same FoS get the same score regardless of which driver (rain/groundwater/cracks/geometry) produced it.
+- `confidence_seed`, `provenance_tags` record that the label came from the FoS physics path, not a random draw.
+
+**Gates before training (§10):** FoS bounded (≤ ~2.5, ≥ 0); the **counterfactual FoS-ordering gate** (`dry intact ≥ wet ≥ cracked ≥ cracked+blast`) holds per zone; rainfall correlates positively with risk; steep + highly cracked zones dominate High/Critical; the 1E audit checks `risk_label` never downgrades relative to a stricter physical state and that an extreme synthetic zone (steep + heavy rain + deep crack + blast) lands in Critical.
+
+**Label-pinning provenance (expected, not a defect):** Per-zone risk-label pinning is expected where frozen geometry and strength anchors place a zone inside a single FoS band. In seed 42, ZONE_A's critical pinning is primarily a consequence of the low-cohesion clayey_sandstone draw (c=45 kPa within the grounded 29–157 kPa range), while ZONE_C remains very_low because its short 6 m bench and c/φ draw produce FoS above the upper band. This is not considered a generator defect. The continuous instability_score retains within-band variation and is the preferred regression signal; multi-seed generation should be used for classification studies.
+
 ## 8. Physical constraints (must hold, validated in 1E)
 
 | Constraint | Rule | Source |
@@ -159,6 +249,8 @@ Phase 1C populates the operation track. BLAST and GROUNDWATER are **not** indepe
 | Blast frequency | weekly Poisson ≈ 14–28/wk (broad prior); **not** NIRM's 22-blast sampling | BLAST |
 | Rainfall accumulations | reproduce seasonal structure, 7-day P99/P99.9 tail, and storm-templates when used | RAIN |
 | FoS | bounded, physical (FoS ≤ ~2.5 for activate-critical mapping; crack presence −10% line; open-crack worst case −50% only on steep engineered slopes) | CRACKS |
+| Crack growth rate | **baseline stays below the 20 mm/day failure window** (routine year never fabricates pre-failure states; acute window is stress-event/1F only) | CRACKS |
+| Material coupling | all material-scaled growth MONOTONE NON-DECREASING in `MATERIAL_WEAKNESS` (susceptibility contract) | CRACKS |
 | Slope angle | bench-layer values from fixed engineering inputs (45–75° faces, 6–25 m); DEM layer ≤ ~31° | TERRAIN |
 | Material regime | never silently convert drained ↔ undrained (regime = `total_undrained` for NLC table) | GEOLOGY |
 
