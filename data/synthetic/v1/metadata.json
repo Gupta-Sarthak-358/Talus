@@ -4,13 +4,14 @@
   "generator_version": "1.0",
   "created": "2026-08-19",
   "source_distributions": [
-    "IMD rainfall (mining-region grid cell)",
-    "literature-derived rock parameters",
-    "literature-derived blast/PPV ranges",
-    "DEM-derived slope geometry"
+    "IMD 0.25-deg daily gridded rainfall, grid 11.50N 79.50E, 1901-2024 (seasonal + year-conditioned + storm templates)",
+    "Copernicus GLO-30 DEM regional terrain + Neyveli mine-engineering bench layer",
+    "Neyveli lithological/material classes with measured geotechnical ranges (total/undrained)",
+    "NIRM 2005 attenuation model: PPV = 858.90*(D/sqrt(W))^(-1.58), freq 5-27 Hz",
+    "Crack-state model (tension/desiccation/blast/seepage/heave) with severity decision surface"
   ],
-  "label_method": "physics-informed FoS (infinite-slope approximation)",
+  "label_method": "physics-informed FoS (infinite-slope approximation) + crack/blast/rain modifiers",
   "risk_bands": ["Very Low", "Low", "Moderate", "High", "Critical"],
   "synthetic": true,
-  "notes": "Every record in the CSVs is tagged synthetic:true. See docs/03_DATA_PLAN.md and docs/04_MODEL_PLAN.md."
+  "notes": "Every record in the CSVs is tagged synthetic:true. See docs/03_DATA_PLAN.md, docs/04_MODEL_PLAN.md, docs/05_FEATURE_SCHEMA.md, docs/GENERATOR_V1_SPEC.md. Constants frozen in data/processed/{geotech,blasting,cracks}/*.csv."
 }

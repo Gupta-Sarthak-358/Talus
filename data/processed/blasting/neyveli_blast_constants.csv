@@ -1,0 +1,53 @@
+domain,key,value,unit,source_id,source_type,confidence,note
+ppv_model,K,858.90,unitless,NIRM_2005_MT134_02,mine_specific,high,"Site constant for PPV = K*(D/sqrt(W))^(-b); Neyveli Mine I+II combined"
+ppv_model,b,1.58,unitless,NIRM_2005_MT134_02,mine_specific,high,Attenuation exponent
+ppv_model,r,0.86,unitless,NIRM_2005_MT134_02,mine_specific,high,Correlation coefficient of the regression
+ppv_model,n_blasts,22,blasts,NIRM_2005_MT134_02,mine_specific,high,Monitored blasts
+ppv_model,n_obs,68,observations,NIRM_2005_MT134_02,mine_specific,high,Monitored vibration observations
+ppv_model,n_regression,84,data_sets,NIRM_2005_MT134_02,mine_specific,high,84 data sets (Mine I+II, mostly Mine II) used for regression
+ppv_model,freq_range_hz,5-27,Hz,NIRM_2005_MT134_02,mine_specific,high,Dominant frequency range; <10 Hz usually present
+ppv_model,purpose,loosen_for_bwe,text,NIRM_2005_MT134_02,mine_specific,high,"No fragmentation/displacement required; loosening for BWE cost-effective operation"
+ppv_model,high_ppv_mechanism,low_specific_charge_plus_wet_ground,text,NIRM_2005_MT134_02,mine_specific,high,NIRM attribution for Neyveli being highest-PPV of studied mines
+legacy_1994,safe_level_mms,12.5,mm/s,LAUBAG_NLC_masterplan_1995,mine_specific,medium,"Safe level adopted for 1994 NIRM study (USBM older-homes threshold)"
+legacy_1994,mine1_freq_range_hz,5-39,Hz,LAUBAG_NLC_masterplan_1995,mine_specific,medium,NIRM 1994 study of Mine I
+legacy_1994,mine2_freq_range_hz,5-28,Hz,LAUBAG_NLC_masterplan_1995,mine_specific,medium,NIRM 1994 study of Mine II
+legacy_1994,rec_scaled_distance_mine1,25.0,m/sqrt.kg,LAUBAG_NLC_masterplan_1995,mine_specific,medium,Recommended to keep PPV <= 12.5 mm/s
+legacy_1994,rec_scaled_distance_mine2,14.6,m/sqrt.kg,LAUBAG_NLC_masterplan_1995,mine_specific,medium,Recommended to keep PPV <= 12.5 mm/s
+legacy_1994,residential_natural_freq_hz,4-24,Hz,LAUBAG_NLC_masterplan_1995,literature,medium,Natural frequencies of 1-2 storey houses; resonance overlap with blast freq
+operational,ob_blasted_fraction,0.30,fraction,miningtech_2017_or_NLC,mine_specific,high,"~30% of total OB blasted; Surface+Top benches; Northern half hard Cuddalore sandstone"
+operational,explosive_consumption_mtpy,7300,mt/year,coalage_2015,mine_specific,high,Mainly site-mixed emulsion; used to fragment rock and protect bucketwheels
+operational,blasts_each_bench_practice,systematic,text,coalage_2015,mine_specific,high,NLC now drills and blasts each bench before stripping
+operational,hole_diameter_mm,200,mm,linkedin_NLC_DCE_2026,secondary_practitioner,medium,NLC drilling & blasting operation (Deputy Chief Engineer)
+operational,bench_height_m,15-22,m,linkedin_NLC_DCE_2026,secondary_practitioner,medium,Blasted bench height range
+operational,initiation,electronic_plus_nonel,text,linkedin_NLC_DCE_2026+IJEA_2013,mine_specific,medium,Electronic detonators + NONEL; bulk delivery system
+operational,strata_cutting_resistance_mpa,15-20,MPa,coalage_2015,mine_specific,high,"Vs 7-10 MPa German design basis; drives need for blasting"
+operational,ob_volume_m3yr,78000000,m3/year,coalage_2015,mine_specific,high,Mine II five stripping benches total capacity
+derived,powder_factor_kg_m3,0.31,kg/m3,derived_from_operational,derived,low,=7300 mtpy / (0.30*78 Mm3/yr); low specific charge consistent with NIRM mechanism
+derived,charge_per_hole_kg,170,kg,derived_from_operational,derived,low,"=545 m3/hole * 0.31 kg/m3 (200mm hole, B*S~5.5x5.5, H~18m)"
+derived,mcd_range_kg,100-600,kg,derived_from_operational,derived,low,"1-3 holes/delay; cross-checked vs rec scaled distances (14.6-25 m/sqrt.kg)"
+derived,mcd_mode_kg,300,kg,derived_from_operational,derived,low,Modal charge per delay for generator sampling
+derived,blast_frequency_per_week,14-28,blasts/week,derived_from_operational,derived,low,~43k holes/yr / (30-60 holes/blast) / 52; wide uncertainty
+structure,mine1_village_east_distance_m,300,m,LAUBAG_NLC_masterplan_1995,mine_specific,high,Nearest village east of Mine I blast site
+structure,mine1_village_south_distance_m,400,m,LAUBAG_NLC_masterplan_1995,mine_specific,high,Nearest village south of Mine I blast site
+structure,mine2_mandarakuppam_distance_m,300,m,LAUBAG_NLC_masterplan_1995,mine_specific,high,Mandarakuppam structures within 300 m radius of Mine II blast site
+structure,mine2_mandarakuppam_boundary_distance_m,150,m,LAUBAG_NLC_masterplan_1995,mine_specific,high,Hutments 150 m from Mine II boundary
+structure,mine2_site_office_road_distance_m,500,m,LAUBAG_NLC_masterplan_1995,mine_specific,high,Site office and Mandarakuppam-Valayamadevi road within 500 m
+regulation,dgms_domestic_A_lt8hz,5,mm/s,DGMS_CIRCULAR_7_1997,regulation,high,Category A structures not belonging to owner
+regulation,dgms_domestic_A_8to25hz,10,mm/s,DGMS_CIRCULAR_7_1997,regulation,high,Category A structures not belonging to owner
+regulation,dgms_domestic_A_gt25hz,15,mm/s,DGMS_CIRCULAR_7_1997,regulation,high,Category A structures not belonging to owner
+regulation,dgms_industrial_A_lt8hz,10,mm/s,DGMS_CIRCULAR_7_1997,regulation,high,Category A RCC/framed structures
+regulation,dgms_industrial_A_8to25hz,20,mm/s,DGMS_CIRCULAR_7_1997,regulation,high,Category A RCC/framed structures
+regulation,dgms_industrial_A_gt25hz,25,mm/s,DGMS_CIRCULAR_7_1997,regulation,high,Category A RCC/framed structures
+regulation,dgms_sensitive_A_lt8hz,2,mm/s,DGMS_CIRCULAR_7_1997,regulation,high,Category A historical/sensitive structures
+regulation,dgms_sensitive_A_8to25hz,5,mm/s,DGMS_CIRCULAR_7_1997,regulation,high,Category A historical/sensitive structures
+regulation,dgms_sensitive_A_gt25hz,10,mm/s,DGMS_CIRCULAR_7_1997,regulation,high,Category A historical/sensitive structures
+regulation,dgms_domestic_B_lt8hz,10,mm/s,DGMS_CIRCULAR_7_1997,regulation,high,Category B owner structures limited life
+regulation,dgms_domestic_B_8to25hz,15,mm/s,DGMS_CIRCULAR_7_1997,regulation,high,Category B owner structures limited life
+regulation,dgms_domestic_B_gt25hz,25,mm/s,DGMS_CIRCULAR_7_1997,regulation,high,Category B owner structures limited life
+regulation,dgms_industrial_B_lt8hz,15,mm/s,DGMS_CIRCULAR_7_1997,regulation,high,Category B owner structures limited life
+regulation,dgms_industrial_B_8to25hz,25,mm/s,DGMS_CIRCULAR_7_1997,regulation,high,Category B owner structures limited life
+regulation,dgms_industrial_B_gt25hz,50,mm/s,DGMS_CIRCULAR_7_1997,regulation,high,Category B owner structures limited life
+regulation,usbm_modern_homes_lt40hz,19.0,mm/s,LAUBAG_NLC_masterplan_1995_table351,literature,high,USBM safe level
+regulation,usbm_modern_homes_gt40hz,50.0,mm/s,LAUBAG_NLC_masterplan_1995_table351,literature,high,USBM safe level
+regulation,usbm_older_homes_lt40hz,12.5,mm/s,LAUBAG_NLC_masterplan_1995_table351,literature,high,USBM safe level; basis for Neyveli 12.5 mm/s study limit
+regulation,usbm_older_homes_gt40hz,50.0,mm/s,LAUBAG_NLC_masterplan_1995_table351,literature,high,USBM safe level

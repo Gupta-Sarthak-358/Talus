@@ -5,8 +5,9 @@ Single place for source URLs. Code and docs say "see `research/sources.md`" inst
 | Source | URL | Purpose |
 |---|---|---|
 | IMD gridded rainfall | https://www.imdpune.gov.in/cmpg/Griddata/Rainfall_25_Bin.html | Rainfall distribution for synthetic generation |
-| ISRO Bhuvan CartoDEM | https://bhuvan-app3.nrsc.gov.in/data/ | DEM → slope angle/height |
-| NASA/USGS SRTM | https://www.opendem.info/download_srtm.html | Global DEM fallback |
+| ISRO Bhuvan CartoDEM | https://bhuvan-app3.nrsc.gov.in/data/ | DEM → slope angle/height (candidate; not used) |
+| NASA/USGS SRTM | https://www.opendem.info/download_srtm.html | Global DEM fallback (candidate; not used) |
+| **Copernicus GLO-30 DEM (USED)** | https://portal.opentopography.org/datasets · `Copernicus_DSM_GLO30_N11_E079` via AWS open data | DEM → elevation/slope (regional context; bench geometry from engineering inputs) |
 | Ultralytics Crack-Seg | https://docs.ultralytics.com/datasets/segment/crack-seg | CV crack detection mechanism |
 | NASA COOLR / GLC | https://landslides.nasa.gov | Global event validation |
 | Susceptibility benchmark | https://www.sciencedirect.com/science/article/pii/S0012825224002551 | Sanity-check synthetic distributions |

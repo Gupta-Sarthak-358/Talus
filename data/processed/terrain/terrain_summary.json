@@ -1,0 +1,117 @@
+{
+  "tile": {
+    "crs": "EPSG:4326",
+    "width": 3600,
+    "height": 3600,
+    "bounds": [
+      78.99986111111112,
+      11.00013888888889,
+      79.99986111111112,
+      12.00013888888889
+    ]
+  },
+  "resolution_m": {
+    "x": 30.92,
+    "y": 30.71
+  },
+  "tiles_loaded": {
+    "context": {
+      "name": "context",
+      "n_cells": 1814400,
+      "min_m": -97.39,
+      "max_m": 172.043,
+      "mean_m": 34.736,
+      "median_m": 25.223,
+      "std_m": 29.736,
+      "range_m": 269.433,
+      "p50": 25.223,
+      "p90": 79.043,
+      "p95": 88.993,
+      "p99": 100.882,
+      "p99.9": 141.348,
+      "slope": {
+        "min_deg": 0.0,
+        "max_deg": 37.449,
+        "mean_deg": 1.412,
+        "median_deg": 0.863,
+        "std_deg": 1.966,
+        "p50_deg": 0.863,
+        "p90_deg": 3.034,
+        "p95_deg": 4.24,
+        "p99_deg": 9.254,
+        "p99.9_deg": 22.823,
+        "pct_area_over": {
+          "1deg": 44.4394,
+          "2deg": 20.0672,
+          "5deg": 3.4449,
+          "10deg": 0.8823,
+          "20deg": 0.1802,
+          "30deg": 0.0116,
+          "45deg": 0.0
+        }
+      },
+      "local_relief_3x3": {
+        "mean_m": 2.197,
+        "max_m": 57.823,
+        "p95_m": 5.796
+      },
+      "files": {
+        "elevation": "data\\processed\\terrain\\elevation_context.tif",
+        "slope": "data\\processed\\terrain\\slope_context.tif"
+      }
+    },
+    "mine_focus": {
+      "name": "mine_focus",
+      "n_cells": 134784,
+      "min_m": -97.39,
+      "max_m": 46.743,
+      "mean_m": 11.731,
+      "median_m": 15.394,
+      "std_m": 19.047,
+      "range_m": 144.133,
+      "p50": 15.394,
+      "p90": 22.186,
+      "p95": 26.262,
+      "p99": 33.696,
+      "p99.9": 40.751,
+      "slope": {
+        "min_deg": 0.0,
+        "max_deg": 31.289,
+        "mean_deg": 1.537,
+        "median_deg": 0.544,
+        "std_deg": 2.936,
+        "p50_deg": 0.544,
+        "p90_deg": 3.497,
+        "p95_deg": 6.498,
+        "p99_deg": 16.604,
+        "p99.9_deg": 24.984,
+        "pct_area_over": {
+          "1deg": 32.9542,
+          "2deg": 18.2366,
+          "5deg": 6.6521,
+          "10deg": 2.846,
+          "20deg": 0.4652,
+          "30deg": 0.0022,
+          "45deg": 0.0
+        }
+      },
+      "local_relief_3x3": {
+        "mean_m": 2.328,
+        "max_m": 46.484,
+        "p95_m": 9.414
+      },
+      "pit": {
+        "below_0m_pct": 8.2176,
+        "below_-20m_pct": 6.3835,
+        "below_-50m_pct": 3.3721,
+        "below_-75m_pct": 1.5677,
+        "area_km2": 127.985,
+        "pit_area_km2_below_0m": 10.517
+      },
+      "files": {
+        "elevation": "data\\processed\\terrain\\elevation_mine_focus.tif",
+        "slope": "data\\processed\\terrain\\slope_mine_focus.tif"
+      }
+    }
+  }
+}

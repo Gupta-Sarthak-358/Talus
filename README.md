@@ -53,11 +53,16 @@ talus/
 │   ├── 02_ARCHITECTURE.md    → how it is built
 │   ├── 03_DATA_PLAN.md       → data + provenance table
 │   ├── 04_MODEL_PLAN.md      → training & evaluation
+│   ├── 05_FEATURE_SCHEMA.md  → frozen ML-facing schema + internal vs ML boundary
 │   ├── 05_API_SPEC.md        → frozen API contract
 │   ├── 06_DEMO_SCENARIO.md   → known expected outputs
 │   ├── 07_ASSUMPTIONS.md
 │   ├── 08_LIMITATIONS.md
-│   ├── decisions/            → ADR-001 MVP scope
+│   ├── GENERATOR_V1_SPEC.md  → research→implementation bridge (Member 2)
+│   ├── observations.md       → research decision ledger (why we chose X)
+│   ├── research/             → grounded track artifacts:
+│   │                           neyveli_geology.md, neyveli_blasting.md, neyveli_cracks.md
+│   ├── decisions/            → ADR-001 MVP scope, ADR-002 Neyveli reference mine
 │   └── source/               → original research/plan documents:
 │                               Talus_Master_Project_Document.md
 │                               Talus_Data_Training_Plan.md
@@ -120,7 +125,9 @@ Owner ≠ "only person allowed to touch it." Owner = **if something breaks in th
 - [Architecture](docs/02_ARCHITECTURE.md) — diagrams
 - [Data Plan](docs/03_DATA_PLAN.md)
 - [Model Plan](docs/04_MODEL_PLAN.md)
+- [Feature Schema (ML-facing contract)](docs/05_FEATURE_SCHEMA.md)
 - [API Spec](docs/05_API_SPEC.md)
+- [Generator v1 Spec](docs/GENERATOR_V1_SPEC.md)
 - [Demo Scenario](docs/06_DEMO_SCENARIO.md)
 - [Assumptions](docs/07_ASSUMPTIONS.md)
 - [Limitations](docs/08_LIMITATIONS.md)

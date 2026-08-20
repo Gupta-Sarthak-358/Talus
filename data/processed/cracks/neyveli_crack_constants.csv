@@ -1,0 +1,35 @@
+domain,key,value,unit,source_id,source_type,confidence,note
+crack_geometry,tension_crack_width_mm,10-100,mm,literature_field_studies,literature,medium,Tension/crest crack aperture range
+crack_geometry,desiccation_crack_width_mm,1-20,mm,hydrology_2023_10040083,literature,medium,Desiccation crack aperture range
+crack_geometry,tension_crack_depth_frac_slope_height,0.333-0.5,fraction,usace_em1110_2_1902,literature,high,"Optimal <= 1/3 slope height (Lu 2022); hard max <= 1/2 (Terzaghi)"
+crack_geometry,practical_crack_depth_m,6-12,m,derived_talus,derived,medium,Neyveli cap: rankine zc (20-88 m) bounded by 18-25 m OB benches / 6 m mineral bench
+crack_geometry,tension_crack_length_m,20-200,m,literature_field_studies,literature,low,Length along crest
+crack_geometry,tension_segment_spacing_m,10-50,m,literature_field_studies,literature,low,Spacing of tension-crack segments along crest
+crack_geometry,tension_crack_distance_from_crest_m,0-30,m,literature_field_studies,literature,low,Offset behind crest; tension zone 0.3-0.8x slope height
+crack_geometry,tension_zone_frac_slope_height,0.3-0.8,fraction,literature_field_studies,literature,medium,Teal-pit case extends to 90 m behind crest
+crack_geometry,desiccation_crack_depth_m,0.05-0.3,m,hydrology_2023_10040083,literature,high,Surface clay cracking depth
+crack_geometry,desiccation_crack_spacing_m,1-3,m,hydrology_2023_10040083,literature,medium,Spacing on exposed clay surfaces
+crack_formula,rankine_tension_crack_depth_formula,zc=(2*c/gamma)*tan(45+phi_deg/2),formula,usace_em1110_2_1902,mine_specific,high,Rankine active tension-crack depth
+crack_formula,water_fill_assumption,true,text,usace_em1110_2_1902,mine_specific,high,Crack assumed to fill with water during rainfall -> hydrostatic wall pressure
+crack_formula,fos_reduction_percent,10,percent,mdpi_2022_app122412687,literature,medium,Typical FoS reduction from a crest tension crack
+crack_formula,open_crack_critical_height_reduction_percent,50,percent,michalowski_cgj_2013,literature,medium,Open-crack critical-height reduction on steep (60 deg) slopes
+crack_temporal,critical_movement_rate_mm_day,20,mm/day,leonardos_terezopoulos_2002,literature,medium,Sustained movement above this predicts failure in 6-12 days (lignite analog)
+crack_temporal,failure_latency_days_min,6,days,leonardos_terezopoulos_2002,literature,medium,Lower bound of failure window once 20 mm/day sustained
+crack_temporal,failure_latency_days_max,12,days,leonardos_terezopoulos_2002,literature,medium,Upper bound of failure window once 20 mm/day sustained
+crack_severity,normal_growth_mm_day,0-0.5,mm/day,derived_talus,derived,medium,Severity rank thresholds (tunable decision surface)
+crack_severity,minor_growth_mm_day,0.5-2,mm/day,derived_talus,derived,medium,Severity rank thresholds (tunable decision surface)
+crack_severity,moderate_growth_mm_day,2-10,mm/day,derived_talus,derived,medium,Severity rank thresholds (tunable decision surface)
+crack_severity,severe_growth_mm_day,10-20,mm/day,derived_talus,derived,medium,Severity rank thresholds (tunable decision surface)
+crack_severity,critical_growth_mm_day,gt20,mm/day,derived_talus,derived,medium,Matches critical movement-rate criterion
+crack_severity,severity_not_width_only,true,text,derived_talus,derived,high,Crack severity is a ranked function of measurable props; never aperture alone
+crack_mechanism,tension_crest_enabled,true,text,periyasamy_2019_jgsi,mine_specific,high,Stress relief + steep bench geometry; primary Neyveli mechanism
+crack_mechanism,desiccation_enabled,true,text,neyveli_geotech_mine_specific,mine_specific,high,Neyveli clay LL up to 90; shrink-swell prone
+crack_mechanism,blast_induced_enabled,true,text,neyveli_blast_constants,mine_specific,high,~30% OB blasted; every OB bench blasted before stripping
+crack_mechanism,seepage_induced_enabled,true,text,periyasamy_2019_jgsi,mine_specific,high,Water oozing from OB benches -> bench wall failure chain
+crack_mechanism,floor_heave_enabled,true,text,periyasamy_2019_jgsi,mine_specific,high,Confined aquifer thrust 490-785 kPa -> heaving/bursting
+neyveli_input,clay_liquid_limit_max,90,unitless,neyveli_geotech_mine_specific,mine_specific,high,Mottled clay LL upper bound
+neyveli_input,ob_bench_height_m,18-25,m,coaleage_nlc_bench_table,mine_specific,high,OB benches (25 m x4 + 18 m lowest)
+neyveli_input,mineral_bench_height_m,6,m,approved_mining_plan_2022,mine_specific,medium,Lignite mining bench height (user-provided, Medium confidence)
+neyveli_input,soil_gamma_kN_m3,20,kN/m3,neyveli_geotech_mine_specific,mine_specific,medium,Approximate bulk unit weight for zc computation
+neyveli_input,clay_cohesion_kPa,196-883,kPa,neyveli_geotech_mine_specific,mine_specific,high,Range used for tension-crack depth bounds
+neyveli_input,confined_aquifer_thrust_kPa,490-785,kPa,periyasamy_2019_jgsi,mine_specific,high,Upward thrust driving floor heave/bursting

@@ -1,0 +1,121 @@
+{
+  "analysis_label": "2000_2024",
+  "source_file": "C:\\Users\\satvi\\Desktop\\Talus\\data\\processed\\imd\\neyveli_rainfall_2000_2024.csv",
+  "target": "Neyveli IMD grid point 11.50N 79.50E",
+  "unit": "mm/day",
+  "integrity": {
+    "observations": 9132,
+    "start": "2000-01-01",
+    "end": "2024-12-31",
+    "missing_values": 0,
+    "duplicate_dates": 0,
+    "negative_values": 0,
+    "zero_rain_days": 6571,
+    "zero_rain_pct": 71.9558,
+    "wet_days": 2561,
+    "wet_day_pct": 28.0442
+  },
+  "distribution": {
+    "all_days": {
+      "p50": 0.0,
+      "p75": 0.3963,
+      "p90": 9.1122,
+      "p95": 21.1267,
+      "p99": 62.7517,
+      "p99_5": 92.3478,
+      "p99_9": 195.3552,
+      "maximum": 327.302,
+      "mean": 3.7233,
+      "std": 14.2342
+    },
+    "wet_days": {
+      "p50": 4.6817,
+      "p75": 14.8019,
+      "p90": 33.9633,
+      "p95": 52.4149,
+      "p99": 118.7288,
+      "p99_5": 152.743,
+      "p99_9": 225.896,
+      "maximum": 327.302,
+      "mean": 13.2765,
+      "std": 24.4057
+    }
+  },
+  "rolling_windows_mm": {
+    "1d": {
+      "p50": 0.0,
+      "p90": 9.1122,
+      "p95": 21.1267,
+      "p99": 62.7517,
+      "maximum": 327.302,
+      "mean": 3.7233,
+      "std": 14.2342
+    },
+    "3d": {
+      "p50": 0.0,
+      "p90": 30.0833,
+      "p95": 54.4836,
+      "p99": 166.3252,
+      "maximum": 536.7063,
+      "mean": 11.1721,
+      "std": 32.3977
+    },
+    "7d": {
+      "p50": 3.7842,
+      "p90": 69.7217,
+      "p95": 116.9494,
+      "p99": 323.5074,
+      "maximum": 772.8881,
+      "mean": 26.0773,
+      "std": 60.2273
+    }
+  },
+  "annual_mean_mm": 3.7233,
+  "annual_total_mm": 34001.0846,
+  "annual_min_mm": 276.8737,
+  "annual_max_mm": 2386.6051,
+  "annual_std_mm": 521.5818,
+  "annual_distribution_mm": {
+    "p05": 316.8599,
+    "p10": 427.3792,
+    "p25": 1227.1261,
+    "p50": 1418.5527,
+    "p75": 1646.3344,
+    "p90": 1856.9432,
+    "p95": 2032.1972,
+    "mean": 1360.0434,
+    "std": 521.5818,
+    "min": 276.8737,
+    "max": 2386.6051
+  },
+  "annual_year_counts": {
+    "below_500": 3,
+    "above_500": 22,
+    "below_750": 4,
+    "above_750": 21,
+    "below_1000": 4,
+    "above_1000": 21,
+    "below_1500": 14,
+    "above_1500": 11,
+    "below_2000": 23,
+    "above_2000": 2,
+    "below_2500": 25,
+    "above_2500": 0,
+    "total_years": 25
+  },
+  "heavy_rain_threshold_mm": 64.5,
+  "top_extremes_summary": {
+    "top1": {
+      "date": "2015-11-10",
+      "rain_1d_mm": 327.302,
+      "rain_3d_mm": 466.4196,
+      "rain_7d_mm": 525.8784
+    },
+    "top1_pct_of_years_total": 15.8208
+  },
+  "files": {
+    "monthly": "data\\processed\\imd\\analysis\\monthly_stats_2000_2024.csv",
+    "annual": "data\\processed\\imd\\analysis\\annual_stats_2000_2024.csv",
+    "extremes": "data\\processed\\imd\\analysis\\extremes_2000_2024.csv"
+  }
+}

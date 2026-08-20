@@ -10,6 +10,8 @@ This contract is the **seam** that lets the six-person team develop in parallel:
 
 **If this spec changes, update it and the architecture doc in the same PR.**
 
+> **Feature name source of truth:** every value under `features` and `overrides` below must match exactly the ML-facing schema in **`docs/05_FEATURE_SCHEMA.md`** — that document owns the 12 field names/types/enums. This file only shows their shape in JSON.
+
 ---
 
 ## Base

@@ -1,0 +1,10 @@
+material,role,density_kg_m3_min,density_kg_m3_max,cohesion_kPa_min,cohesion_kPa_max,friction_phi_deg_min,friction_phi_deg_max,UCS_kPa_min,UCS_kPa_max,perm_m_s_min,perm_m_s_max,parameter_regime,density_t_m3_orig,cohesion_kgcm2_orig,ucs_kgcm2_orig,perm_cms_orig,source_id,source_type,confidence,notes
+lateritic_soil,overburden_upper,1980,2100,588,883,18,30,1177,1765,1.0E-6,1.0E-7,total_undrained,1.98-2.10,6-9,12-18,1E-4-1E-5,neyveli_problems_needs,mine_specific,high,Top OB cap; crest of slope
+clayey_sandstone,overburden,2000,2400,29,157,25,40,588,3138,1.0E-6,1.0E-8,total_undrained,2.00-2.40,0.3-1.6,6-32,1E-4-1E-6,neyveli_problems_needs,mine_specific,medium_high,"Dominant OB unit; cohesion OCR-garbled (0.3-1.6 or alt 0.55 kg/cm2) which converts to 29-157 or ~54 kPa"
+clay,overburden,2000,2300,196,883,,,392,1961,,,total_undrained,2.00-2.30,2.0-9.0,4-20,n.r.,neyveli_problems_needs,mine_specific,medium,Mottled carbonaceous clay; phi not reported; LL up to 90
+variegated_sandy_clay,overburden,1900,2300,245,981,15,35,490,1961,1.0E-7,1.0E-9,total_undrained,1.90-2.30,2.5-10,5-20,1E-5-1E-7,neyveli_problems_needs,mine_specific,high,Major weak OB unit
+sandstone,carnotite_aquifer,2000,2400,29,157,25,40,588,3138,1.0E-6,1.0E-8,total_undrained,2.00-2.40,0.3-1.6,6-32,1E-4-1E-6,neyveli_problems_needs,mine_specific,medium_high,General argillaceous sandstone class
+lignite,mineral,1300,1450,,,,49,196,1.0E-9,1.0E-10,literature,1.30-1.45,,0.5-2,low,literature_lignite,literature,low,lignite literature; not in NLC geotech soil table
+aquifer_sand,groundwater,1900,2100,0,0,28,36,,,1.0E-4,1.0E-6,literature,1.90-2.10,0,0,n.r.,literature_aquifer,literature,medium,Unconfined/semi-confined sand above lignite; confined sand below carries 5-8 kg/cm2 upward thrust
+carbonaceous_clay,intercalation,2000,2300,196,883,,,392,1961,,,total_undrained,2.00-2.30,2.0-9.0,4-20,n.r.,neyveli_problems_needs,mine_specific,medium,Intercalations near seam; param assumed from clay
+overburden_mixed,overburden_mix,1900,2300,49,196,,,196,490,1.0E-6,1.0E-8,total_undrained,1.90-2.30,0.5-2.0,2-5,1E-5-1E-7,neyveli_problems_needs,mine_specific,medium,Generic OB mix for backfill/dumped benches
