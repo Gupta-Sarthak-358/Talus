@@ -269,3 +269,39 @@ Format: Observation → Evidence → Interpretation → Decision → Version aff
 - **Interpretation:** The output contract (internal schema + 12-field ML projection) is now mechanically enforced, not just doc'd. Fail-loud validator means Member 3 gets a stable contract.
 - **Decision:** Freeze Phase 1A; proceed to Phase 1B (RAIN + TERRAIN + GEOLOGY) when team has pulled. 1B bumps generator_version to 1.1.0.
 - **Version:** generator 1.0.0 / schema 1.0.
+
+## 15. Generator v1 Phase 1B (RAIN + TERRAIN + GEOLOGY) - COMPLETE
+
+- Code: `ml/data_generation/` modular — `rainfall/sampler.py`, `terrain/sampler.py`, `geology/sampler.py` under `generator_v1.py` orchestrator + `make_generator_plots.py`. Validator upgraded to Phase 1B (`validate_generator_v1.py`).
+- Outputs: `data/processed/generator_v1/` — `synthetic_mine_states.csv` (43 cols), `generator_summary.json`, `validation/schema_validation.json`, `plots/` (3 PNGs now that physics exist).
+- Version bump per GENERATOR_V1_SPEC.md 7.2: **1.0.0 → 1.1.0** (schema 1.0 frozen); `phases_completed: ["1A", "1B"]`.
+
+### RAIN (mine-wide daily weather, shared across zones)
+- **Architecture:** ported validated prototype_v0 core — monthly wet/dry Markov chain + monthly empirical intensity pools (`rainfall/sampler.py`), seeded stream `[seed, 1000]` so it never collides with per-zone rngs. Rainfall is ONE series for the whole mine: all 4 zones on the same grid cell receive identical daily rain (validator asserts `rainfall shared across zones per day`).
+- **Populated fields:** `rainfall_mm`, `rainfall_3d_mm`, `rainfall_7d_mm` (partial-window rolling, no NaN), `wet_day = rainfall > 0`, `rainfall_regime` (IMD boundaries: dry 0 / normal ≤35.5 / wet ≤64.5 / storm >64.5).
+- **Single-year stats vs grounding:** zero-rain 73.7% vs 71.96%; wet-day P99 150.7 vs 118.7; 7d P99 222.8 vs 323.5; Nov > Feb seasonality kept. Bands in validator are single-year-tuned (organic: empirical tail of a 1-yr draw is noisier than the 25-yr reference).
+- **NOT in 1B (deliberate):** year-scale conditioning (124-yr annual distribution) and storm-persistence templates (1902/1931/1935... templates) — the empirical core only; extreme-event machinery stays for the phase that layers it on.
+
+### TERRAIN (two provenance layers, static per zone)
+- **DEM layer (Copernicus GLO-30):** `elevation_m` drawn once per zone from bench-located ranges anchored to `terrain_summary.json` (ZONE_A near ground +10..+27 m → ZONE_D pit floor to −97 m); `regional_slope_deg` from the flat coastal-plain band 0.3–6°.
+- **Mine-engineering layer (NOT the DEM):** `slope_angle_deg` + `slope_height_m` drawn once per zone from the ZONES bench config (`face_angle_range_deg`, `bench_height_range_m`): A 25 m/45–75°, B 18 m/45–75°, C 6 m/75°, D 0–10°.
+- **Rule preserved:** regional terrain (≤6°) ≠ bench geometry (45–75°); validator asserts `regional_slope < bench slope` per bench zone and constant-over-time for all static fields. The 60°-from-DEM idea stays dead.
+
+### GEOLOGY (grounded table, static per zone)
+- Material drawn once per zone from grounded candidates (`geology/sampler.py` reads `neyveli_geotech_parameters.csv`); c/φ/γ sampled from the row min/max; `parameter_regime` taken verbatim from the row — total_undrained never silently mixed with effective_stress.
+- Seed-42 mapping: A clayey_sandstone (c 45 kPa, φ 27°), B clayey_sandstone (c 110, φ 32°), C clayey_sandstone (c 102, φ 38°), D variegated_sandy_clay (c 701, φ 23°).
+- **Lignite deliberately excluded in 1B:** its grounding row has no cohesion/friction and its regime label ("literature") is outside the frozen schema enum; ZONE_C (mineral bench) samples the dominant seam-host sediment until a grounded lignite geotech row exists. Documented here so it is a known gap, not a silent substitution.
+
+### GEN-1B Validation (all pass)
+- **Schema:** 43-col exact set, 12-field ML projection, all 14 Phase-1B fields populated (no NaN), the remaining 21 physics fields (groundwater/blast/crack/risk) still NaN (1C/1D), enums/types valid, row count 1,460.
+- **Distribution (rain):** zero-day %, wet-day P99, 7d>3d>daily accumulation structure, 7d P99 band, regime↔wet_day consistency, Nov>Feb seasonality — all pass vs grounding.
+- **Terrain:** engineering ranges, static-over-time, DEM≠bench separation (per bench zone), pit floor ≤10°.
+- **Geology:** material static per zone, c/φ within matched row range, regime == row regime (no mixing), enum-valid.
+- **Determinism:** same seed → byte-identical CSV (SHA-256); seed+1 → different. Validator exit code 0/1.
+
+### Entry 16 - Phase 1B: environment physics are live and zone-stable
+- **Observation:** 1A emitted a correct skeleton with 36 NaN physics fields. 1B needed to populate the RAIN/TERRAIN/GEOLOGY environment without violating the frozen 43-col schema, the phase boundary, or the no-silent-mixing rule.
+- **Evidence:** generator v1.1.0; 74 validation checks ALL PASS; plots `rainfall_wet_intensity_1B.png`, `rainfall_monthly_1B.png`, `zone_structure_1B.png`.
+- **Interpretation:** The modular sampler split works — `generator_v1.py` orchestrates `rainfall/`, `terrain/`, `geology/` and stayed a thin 190-line coordinator. Rainfall varies in time (shared mine-wide weather); terrain and geology are static per zone (the mine does not respawn its geology every morning). Grounding survived zone-level generation.
+- **Decision:** Freeze Phase 1B; proceed to Phase 1C (GROUNDWATER + BLAST) when team has pulled. GENERATOR_VERSION 1.1.0. Known gap tracked: lignite geotech row incomplete → ZONE_C currently seam-host sediment, to be revisited when a grounded lignite table exists (or in 1D review).
+- **Version:** generator 1.1.0 / schema 1.0.
