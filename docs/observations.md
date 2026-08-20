@@ -248,3 +248,24 @@ Format: Observation → Evidence → Interpretation → Decision → Version aff
 - **Interpretation:** Cracks physically cannot exceed the bench they sit on; free-field zc is theoretical upper bound only.
 - **Decision:** Enforce crack_depth <= 1/3-1/2 * bench height; practical Neyveli depth range 6-12 m.
 - **Version:** prototype_v1 design input.
+
+## 14. Generator v1 Phase 1A (skeleton) - COMPLETE
+
+- Code: `ml/data_generation/generator_v1.py` + `generator_schema.py` + `validate_generator_v1.py`.
+- Outputs: `data/processed/generator_v1/` - synthetic_mine_states.csv (43 cols), generator_summary.json, validation/schema_validation.json, plots/.
+- 4 synthetic zones (mine-engineering layer, NOT DEM): ZONE_A upper OB bench (25 m, 60 deg), ZONE_B middle OB bench (18 m, 55 deg), ZONE_C mineral/lignite bench (6 m, 75 deg - medium confidence), ZONE_D pit floor (low slope).
+- Generator versioning (GENERATOR_V1_SPEC.md 7.2): 1A=1.0.0, 1B=1.1.0, 1C=1.2.0, 1D=1.3.0, final=1.0.0-final. schema_version 1.0 frozen.
+- Phase 1A placeholder policy (GENERATOR_V1_SPEC.md 7.1): 36 physics fields NaN; ONLY time/zone/bench geometry + inspection scheduler + prior_incident=0 + synthetic=True populated. NO rainfall/terrain/geology/blast/crack/risk logic - that is 1B-1D.
+- Row = 1 zone x 1 day. seed 42, 2024-01-01, 365 days -> 1,460 rows. 10-year run -> 14,600 rows (smoke test).
+
+### GEN-1A Status
+- **Determinism (PASS):** same seed across separate process invocations -> byte-identical CSV (SHA-256 equal). Different seed -> different CSV. seed 42 -> A == B, seed 43 -> not equal.
+- **Schema (PASS, 60 checks):** exact internal column set (43), ML-facing projection (12 frozen fields from docs/05_FEATURE_SCHEMA.md) present via ML_PROJECTION map, timestamps valid datetime, zone_id in {A,B,C,D} never missing, categoricals within allowed enums, synthetic==True everywhere, row count == days x zones, physics fields NaN in 1A.
+- Validator exit code 0/1 (fail loudly). Generator bf4b64: fixed rng seeding (SeedSequence[seed, zone_idx]); fixed bool physics fields to nullable boolean dtype so they can be NaN in 1A.
+
+### Entry 15 - Generator v1 Phase 1A skeleton shipped
+- **Observation:** Before any physics, we needed proof the pipeline can deterministically emit a correctly structured synthetic mine state.
+- **Evidence:** same-seed byte-identical CSV across processes; 60 schema checks all PASS; 1,460-row canonical output.
+- **Interpretation:** The output contract (internal schema + 12-field ML projection) is now mechanically enforced, not just doc'd. Fail-loud validator means Member 3 gets a stable contract.
+- **Decision:** Freeze Phase 1A; proceed to Phase 1B (RAIN + TERRAIN + GEOLOGY) when team has pulled. 1B bumps generator_version to 1.1.0.
+- **Version:** generator 1.0.0 / schema 1.0.

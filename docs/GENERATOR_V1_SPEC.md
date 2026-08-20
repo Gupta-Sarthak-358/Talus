@@ -116,6 +116,29 @@ Phase 1E  Validation   physics · distribution · provenance checks (gates; see 
 
 No physics in 1A — get the skeleton and plumbing working first.
 
+### 7.1 Phase 1A placeholder policy (EXPLICIT AUTHORIZATION)
+
+The spec **explicitly permits** Phase 1A to emit provisional placeholder values:
+
+- **Physics-derived columns are NA in 1A** (rainfall, DEM terrain, sampled materials, groundwater, blast, cracks, instability). Their schema names/types/enums are still present so the CSV header is final; values fill in from Phase 1B onward.
+- **Risk fields are provisional in 1A** (`slope_condition`, `instability_score`, `risk_label`) — present as NA, never used for validation. They are NOT labels yet; they only become meaningful after Phase 1D.
+- **Scenario fields that are seed-scoped are permitted in 1A**: `days_since_inspection` is derived deterministically from the seed + zone (inspection-schedule scheduler; no physics). `prior_incident` = 0 in 1A.
+- `synthetic = True` on every row.
+- Schema validation is enforced by `ml/data_generation/validate_generator_v1.py` (fail loudly on missing/renamed/wrong-typed/enum-violating columns) — this runs in 1A on the header + nullable types, and after 1D on populated values.
+- No rainfall, terrain, geology sampling, blasting, crack dynamics, or risk logic may be implemented in 1A. Those are 1B–1D.
+
+### 7.2 Versioning convention
+
+```text
+Phase 1A   → generator_version 1.0.0   (schema_version 1.0 frozen)
+Phase 1B   → 1.1.0
+Phase 1C   → 1.2.0
+Phase 1D   → 1.3.0
+Phase 1E (final) → 1.0.0-final metadata (bump stays explicit in generator_summary.json)
+```
+
+`schema_version` (the 12 ML-facing fields, `docs/05_FEATURE_SCHEMA.md`) remains **1.0** throughout; any change to it requires the schema-change-rule path in `docs/05_FEATURE_SCHEMA.md` §4.
+
 ## 8. Physical constraints (must hold, validated in 1E)
 
 | Constraint | Rule | Source |
