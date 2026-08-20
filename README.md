@@ -125,6 +125,8 @@ Owner ≠ "only person allowed to touch it." Owner = **if something breaks in th
 - [Assumptions](docs/07_ASSUMPTIONS.md)
 - [Limitations](docs/08_LIMITATIONS.md)
 - [ADR-001: MVP Scope](docs/decisions/ADR-001-mvp-scope.md)
+- [ADR-002: Neyveli Reference Mine](docs/decisions/ADR-002-neyveli-reference-mine.md)
+- [Data Grounding Manifest](data/grounding_manifest.md) — what grounds the synthetic data
 - [Contributing](CONTRIBUTING.md) — branch & commit rules
 - [Complete Project Context](docs/source/Complete_Context.md) — full project history
 - [Master Project Document](docs/source/Talus_Master_Project_Document.md) — research/original spec
