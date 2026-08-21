@@ -53,6 +53,7 @@ export default function WhatIfDrawer() {
     kind: 'historical_rain', start_day: 550, duration_days: 31,
     params: { template_id: 'dec_1902' }, horizon_days: 1095,
   });
+  const [hoveredPreset, setHoveredPreset] = useState(null);
 
   useEffect(() => {
     getScenarioTemplates().then((r) => setTemplates(r.templates || [])).catch(() => {});
@@ -318,20 +319,37 @@ export default function WhatIfDrawer() {
           <div className="space-y-2">
             <div className="text-xs font-semibold text-slate-300 flex items-center justify-between">
               <span>Quick Demo Presets:</span>
-              <span className="text-[10px] text-talus-400">Click to load</span>
+              <span className="text-[10px] text-talus-400">Hover for details · Click to load</span>
             </div>
             <div className="grid grid-cols-2 gap-2">
               {WHAT_IF_PRESETS.map((preset) => (
                 <button
                   key={preset.id}
-                  onClick={() => handleApplyPreset(preset)}
-                  className="p-2 bg-mine-darker hover:bg-mine-dark border border-mine-border hover:border-talus-500/50 rounded-lg text-left transition-all"
+                  onClick={() => { handleApplyPreset(preset); setHoveredPreset(preset); }}
+                  onMouseEnter={() => setHoveredPreset(preset)}
+                  onFocus={() => setHoveredPreset(preset)}
+                  className={`p-2 border rounded-lg text-left transition-all ${
+                    hoveredPreset?.id === preset.id
+                      ? 'bg-mine-dark border-talus-500/60'
+                      : 'bg-mine-darker hover:bg-mine-dark border-mine-border hover:border-talus-500/50'
+                  }`}
                 >
                   <div className="text-[11px] font-bold text-slate-200">{preset.name}</div>
-                  <div className="text-[10px] text-slate-400 line-clamp-1 mt-0.5">{preset.expectedImpact}</div>
                 </button>
               ))}
             </div>
+
+            {/* Hover detail card: full description without truncation */}
+            {hoveredPreset && (
+              <div className="p-3 bg-mine-darker border border-talus-500/40 rounded-lg space-y-1.5">
+                <div className="text-[11px] font-bold text-white">{hoveredPreset.name}</div>
+                <p className="text-[10px] text-slate-300 leading-relaxed">{hoveredPreset.description}</p>
+                <div className="text-[10px] text-slate-500 leading-relaxed">
+                  <span className="font-semibold text-slate-400">Inputs applied: </span>
+                  {Object.entries(hoveredPreset.values).map(([k, v]) => `${k} = ${v}`).join(' · ')}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Interactive Parameter Sliders */}

@@ -29,17 +29,19 @@ export default function SimulationDiffCard({ simulationResult, baselineZone }) {
               : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
           }`}
         >
-          {delta > 0 ? '+' : ''}{delta} pts vs Baseline
+          Risk change: {delta > 0 ? '+' : ''}{delta} pts
         </span>
       </div>
       <p className="text-[10px] text-slate-500 -mt-1">
-        Baseline = frozen-RF prediction for this zone's current observed state, before overrides.
+        Same frozen model. Current inputs vs. overridden inputs. Delta = right minus left.
+        {Math.abs(delta) < 2 && ' Overrides barely move this zone -- its risk is dominated by static structure.'}
       </p>
 
       {/* Before / After Comparison */}
       <div className="grid grid-cols-2 gap-3 p-3 bg-mine-card/80 rounded-lg border border-mine-border/80 text-center">
         <div>
-          <div className="text-[10px] text-slate-400 uppercase font-semibold">Baseline Risk</div>
+          <div className="text-[10px] text-slate-400 uppercase font-semibold">Current State</div>
+          <div className="text-[9px] text-slate-500 -mt-0.5">Model prediction from observed inputs</div>
           <div className="text-xl font-bold font-mono text-slate-200 mt-1">{baseScore} / 100</div>
           <div className="mt-1">
             <RiskBadge band={baseBand} size="sm" />
@@ -47,7 +49,8 @@ export default function SimulationDiffCard({ simulationResult, baselineZone }) {
         </div>
 
         <div className="border-l border-mine-border/60 pl-2">
-          <div className="text-[10px] text-talus-400 uppercase font-semibold">Simulated Risk</div>
+          <div className="text-[10px] text-talus-400 uppercase font-semibold">What-If State</div>
+          <div className="text-[9px] text-slate-500 -mt-0.5">Model prediction with your overrides</div>
           <div className="text-xl font-bold font-mono text-orange-400 mt-1">{risk_score} / 100</div>
           <div className="mt-1">
             <RiskBadge band={risk_band} size="sm" />
