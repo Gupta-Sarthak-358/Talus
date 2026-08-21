@@ -1,0 +1,36 @@
+{
+  "random_split_within_seeds_42_45": {
+    "reg_rf": {
+      "mae_rmse_r2": [
+        0.352,
+        1.706,
+        0.998
+      ]
+    },
+    "note": "random split restricted to seeds 42-45; seed 46 excluded",
+    "clf_rf": {
+      "macroF1_balAcc_acc": [
+        0.985,
+        0.974,
+        0.997
+      ]
+    }
+  },
+  "random_split_ALL_7300_naive": {
+    "reg_rf": {
+      "mae_rmse_r2": [
+        1.16,
+        4.85,
+        0.984
+      ]
+    },
+    "note": "NAIVE reference: random split includes seed 46 rows in train -> band-leakage inflation",
+    "clf_rf": {
+      "macroF1_balAcc_acc": [
+        0.966,
+        0.986,
+        0.984
+      ]
+    }
+  }
+}

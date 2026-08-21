@@ -479,3 +479,9 @@ the committed result JSONs under ml/benchmark/results/ unless noted.
 
 ### SS23.8 Backend merge
 - PR #1 (devSaumitr): FastAPI scaffold accepted -- additive only, no frozen artifacts touched. Mock scoring replaced immediately after by real model integration (see SS21).
+
+## 24. Campaign artifacts promoted from scratch into the repo (Member 3 takeover)
+
+- **ml/experiments/**: archived as-run scripts for the full campaign (baseline leakage, A-D ladder, ANN probe, transfer study, extended 75-world study, directionality audit + verification, Experiment G) with raw metric JSONs under ml/experiments/results/. README documents contents, key results, and reproduction notes (scripts keep original scratch paths; intermediate corpora regenerate deterministically from frozen generator v1.4.0).
+- **ml/models/talus_rf_v1.joblib**: canonical trained Model v1 artifact, joblib compress=3, 39.1 MB (under GitHub limit; uncompressed was 144 MB). backend/app/model_service.py now loads this canonical path and regenerates it (compressed) if deleted; gitignore exception added. Backend suite re-verified 15/15 against the canonical artifact.
+- **Deliberately NOT committed:** bulk regenerable CSVs (internal states 32.7 MB, seeds_42_61 4.8 MB, seeds_42_116 18 MB) -- deterministic outputs of the frozen generator via committed scripts; repo convention keeps bulk datasets out of git.

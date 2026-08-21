@@ -1,0 +1,174 @@
+{
+  "summaries": [
+    {
+      "scenario": "A_storm_100mm",
+      "kind": "rainfall_storm",
+      "zone": "ZONE_C",
+      "start_day": 200,
+      "duration_days": 7,
+      "params": {
+        "peak_mm": 100
+      },
+      "seed": 42,
+      "horizon_days": 365,
+      "generator_version": "1.4.0",
+      "template_provenance": null,
+      "baseline_min_fos": 1.739,
+      "scenario_min_fos": 1.739,
+      "delta_min_fos": 0.0,
+      "baseline_peak_instability": 38.1,
+      "scenario_peak_instability": 38.1,
+      "delta_peak_instability": 0.0,
+      "baseline_days_high_or_critical": 0,
+      "scenario_days_high_or_critical": 0,
+      "peak_crack_growth_mm_day": 1.573,
+      "peak_pore_pressure_kpa": 498.0,
+      "max_groundwater_proxy_mm": 333.3,
+      "first_response_day": 237,
+      "worst_day": 299,
+      "worst_day_risk": "very_low"
+    },
+    {
+      "scenario": "B_prolonged_30d",
+      "kind": "prolonged_rain",
+      "zone": "ZONE_C",
+      "start_day": 200,
+      "duration_days": 30,
+      "params": {
+        "daily_mm": 20
+      },
+      "seed": 42,
+      "horizon_days": 365,
+      "generator_version": "1.4.0",
+      "template_provenance": null,
+      "baseline_min_fos": 1.739,
+      "scenario_min_fos": 1.739,
+      "delta_min_fos": 0.0,
+      "baseline_peak_instability": 38.1,
+      "scenario_peak_instability": 38.1,
+      "delta_peak_instability": 0.0,
+      "baseline_days_high_or_critical": 0,
+      "scenario_days_high_or_critical": 0,
+      "peak_crack_growth_mm_day": 1.573,
+      "peak_pore_pressure_kpa": 430.7,
+      "max_groundwater_proxy_mm": 265.9,
+      "first_response_day": 230,
+      "worst_day": 230,
+      "worst_day_risk": "very_low"
+    },
+    {
+      "scenario": "D_combined_ZONE_B",
+      "kind": "combined",
+      "zone": "ZONE_B",
+      "start_day": 200,
+      "duration_days": 14,
+      "params": {
+        "peak_mm": 120,
+        "ppv_mult": 2.0,
+        "extra_event_prob": 0.3
+      },
+      "seed": 42,
+      "horizon_days": 365,
+      "generator_version": "1.4.0",
+      "template_provenance": null,
+      "baseline_min_fos": 0.752,
+      "scenario_min_fos": 0.75,
+      "delta_min_fos": -0.003,
+      "baseline_peak_instability": 87.4,
+      "scenario_peak_instability": 87.5,
+      "delta_peak_instability": 0.1,
+      "baseline_days_high_or_critical": 365,
+      "scenario_days_high_or_critical": 365,
+      "peak_crack_growth_mm_day": 9.374,
+      "peak_pore_pressure_kpa": 676.2,
+      "max_groundwater_proxy_mm": 593.7,
+      "first_response_day": 201,
+      "worst_day": 205,
+      "worst_day_risk": "critical"
+    },
+    {
+      "scenario": "E_dec1902_1yr",
+      "kind": "historical_rain",
+      "zone": "ZONE_C",
+      "start_day": 200,
+      "duration_days": 31,
+      "params": {
+        "template_id": "dec_1902"
+      },
+      "seed": 42,
+      "horizon_days": 365,
+      "generator_version": "1.4.0",
+      "template_provenance": {
+        "template_id": "dec_1902",
+        "imd_window": [
+          "1902-12-01",
+          "1902-12-31"
+        ],
+        "source": "IMD 0.25deg Neyveli grid 11.5N 79.5E",
+        "window_total_mm": 1088.2,
+        "window_max_day_mm": 297.6,
+        "scale": 1.0
+      },
+      "baseline_min_fos": 1.739,
+      "scenario_min_fos": 1.739,
+      "delta_min_fos": 0.0,
+      "baseline_peak_instability": 38.1,
+      "scenario_peak_instability": 38.1,
+      "delta_peak_instability": 0.0,
+      "baseline_days_high_or_critical": 0,
+      "scenario_days_high_or_critical": 0,
+      "peak_crack_growth_mm_day": 1.573,
+      "peak_pore_pressure_kpa": 1003.3,
+      "max_groundwater_proxy_mm": 838.5,
+      "first_response_day": 227,
+      "worst_day": 227,
+      "worst_day_risk": "very_low"
+    },
+    {
+      "scenario": "F_dec1902_3yr",
+      "kind": "historical_rain",
+      "zone": "ZONE_C",
+      "start_day": 550,
+      "duration_days": 31,
+      "params": {
+        "template_id": "dec_1902"
+      },
+      "seed": 42,
+      "horizon_days": 1095,
+      "generator_version": "1.4.0",
+      "template_provenance": {
+        "template_id": "dec_1902",
+        "imd_window": [
+          "1902-12-01",
+          "1902-12-31"
+        ],
+        "source": "IMD 0.25deg Neyveli grid 11.5N 79.5E",
+        "window_total_mm": 1088.2,
+        "window_max_day_mm": 297.6,
+        "scale": 1.0
+      },
+      "baseline_min_fos": 1.739,
+      "scenario_min_fos": 1.739,
+      "delta_min_fos": 0.0,
+      "baseline_peak_instability": 38.1,
+      "scenario_peak_instability": 38.1,
+      "delta_peak_instability": 0.0,
+      "baseline_days_high_or_critical": 0,
+      "scenario_days_high_or_critical": 0,
+      "peak_crack_growth_mm_day": 1.573,
+      "peak_pore_pressure_kpa": 1005.5,
+      "max_groundwater_proxy_mm": 840.8,
+      "first_response_day": 550,
+      "worst_day": 299,
+      "worst_day_risk": "very_low"
+    }
+  ],
+  "edge_cases": {
+    "scale0_equals_baseline": true,
+    "start_day_zero_runs": true,
+    "overrun_clips_safely": true,
+    "blast_surge_nonblast_zone_noop": true,
+    "unknown_kind_raises": true,
+    "short_template_pads": true
+  }
+}

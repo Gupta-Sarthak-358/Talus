@@ -21,7 +21,7 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 REPO = Path(__file__).resolve().parents[2]
 CORPUS = REPO / "data" / "processed" / "generator_v1" / "ml_handoff" / "synthetic_ml_dataset_seeds_42_91.csv"
-ARTIFACT = Path(__file__).parent / "_model.joblib"
+ARTIFACT = REPO / "ml" / "models" / "talus_rf_v1.joblib"
 
 TRAIN_SEEDS = list(range(42, 82))
 FEATURES = ["rainfall_24h_mm", "rainfall_7d_mm", "slope_angle_deg", "slope_height_m",
@@ -61,7 +61,7 @@ class ModelService:
         else:
             blob = _train()
             ARTIFACT.parent.mkdir(parents=True, exist_ok=True)
-            joblib.dump(blob, ARTIFACT)
+            joblib.dump(blob, ARTIFACT, compress=3)
         self.pre = blob["pre"]
         self.model = blob["model"]
 

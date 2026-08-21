@@ -107,3 +107,6 @@ htmlcov/
 .eggs/
 # backend model artifact (regenerated from frozen corpus on startup)
 backend/app/_model.joblib
+
+# canonical trained Model v1 artifact (compressed; regenerated if deleted)
+!ml/models/talus_rf_v1.joblib

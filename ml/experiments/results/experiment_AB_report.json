@@ -1,0 +1,65 @@
+{
+  "A_singleseed_seed42_chrono": {
+    "train": {
+      "days": "0-272",
+      "rows": 1092,
+      "mean_y": 66.41,
+      "test_mean_y": 76.59
+    },
+    "val": {
+      "mae": 5.86,
+      "rmse": 14.111,
+      "r2": 0.815
+    },
+    "test": {
+      "mae": 7.981,
+      "rmse": 16.502,
+      "r2": 0.662
+    }
+  },
+  "A_seed42_chrono_per_zone": {
+    "ZONE_A": {
+      "mae": 0.193,
+      "rmse": 0.347,
+      "r2": 0.936,
+      "train_mean": 96.59,
+      "test_mean": 99.36
+    },
+    "ZONE_B": {
+      "mae": 0.862,
+      "rmse": 0.922,
+      "r2": 0.746,
+      "train_mean": 79.26,
+      "test_mean": 82.7
+    },
+    "ZONE_C": {
+      "mae": 30.103,
+      "rmse": 32.979,
+      "r2": -4.996,
+      "train_mean": 0.0,
+      "test_mean": 30.1
+    },
+    "ZONE_D": {
+      "mae": 0.661,
+      "rmse": 0.734,
+      "r2": 0.915,
+      "train_mean": 89.8,
+      "test_mean": 94.18
+    }
+  },
+  "B_unseenseed46_static_geometry_geology": {
+    "mae": 36.29,
+    "rmse": 49.572,
+    "r2": -0.552
+  },
+  "B_unseenseed46_dynamic_env_ops": {
+    "mae": 57.222,
+    "rmse": 64.683,
+    "r2": -1.642
+  },
+  "B_unseenseed46_all_features": {
+    "mae": 38.977,
+    "rmse": 49.254,
+    "r2": -0.532
+  }
+}

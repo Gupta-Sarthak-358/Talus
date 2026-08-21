@@ -1,0 +1,137 @@
+{
+  "gates": {
+    "1_baseline_replay_exact": true,
+    "2_pre_start_identical": true,
+    "3_dose_response": {
+      "min_fos_by_peak": [
+        0.3903104526043572,
+        0.3900803353095508,
+        0.3899571555003235
+      ],
+      "peak_inst_by_peak": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "monotone": true
+    },
+    "4_determinism": true,
+    "5_no_direct_score_writes": {
+      "ok": true,
+      "suspicious": []
+    },
+    "6_crack_continuity": {
+      "cum_growth_baseline": 0.9828,
+      "cum_growth_scenario": 1.0181,
+      "same_start": true,
+      "ok": true
+    }
+  },
+  "trajectories": {
+    "A_storm_100mm": {
+      "zone": "ZONE_C",
+      "baseline_peak_inst": 38.1,
+      "scenario_peak_inst": 38.1,
+      "delta_peak": 0.0,
+      "min_fos_baseline": 1.738837755312656,
+      "min_fos_scenario": 1.738837755312656,
+      "day_of_peak": 299,
+      "first_day_score_ge_75": null,
+      "days_above_75": 0,
+      "baseline_dominant_risk": "very_low",
+      "scenario_worst_risk": "very_low",
+      "max_gw_proxy": 333.26302609813985,
+      "max_crack_density": 0.7869561624510923
+    },
+    "A2_storm_250mm": {
+      "zone": "ZONE_C",
+      "baseline_peak_inst": 38.1,
+      "scenario_peak_inst": 38.1,
+      "delta_peak": 0.0,
+      "min_fos_baseline": 1.738837755312656,
+      "min_fos_scenario": 1.738837755312656,
+      "day_of_peak": 299,
+      "first_day_score_ge_75": null,
+      "days_above_75": 0,
+      "baseline_dominant_risk": "very_low",
+      "scenario_worst_risk": "very_low",
+      "max_gw_proxy": 804.8167414986146,
+      "max_crack_density": 0.7869561624510923
+    },
+    "B_prolonged_30d": {
+      "zone": "ZONE_C",
+      "baseline_peak_inst": 38.1,
+      "scenario_peak_inst": 38.1,
+      "delta_peak": 0.0,
+      "min_fos_baseline": 1.738837755312656,
+      "min_fos_scenario": 1.738837755312656,
+      "day_of_peak": 230,
+      "first_day_score_ge_75": null,
+      "days_above_75": 0,
+      "baseline_dominant_risk": "very_low",
+      "scenario_worst_risk": "very_low",
+      "max_gw_proxy": 265.94089464223794,
+      "max_crack_density": 0.7869561624510923
+    },
+    "C_blast_surge": {
+      "zone": "ZONE_B",
+      "baseline_peak_inst": 87.4,
+      "scenario_peak_inst": 87.4,
+      "delta_peak": 0.0,
+      "min_fos_baseline": 0.7522936865904589,
+      "min_fos_scenario": 0.7522936865904589,
+      "day_of_peak": 298,
+      "first_day_score_ge_75": 0,
+      "days_above_75": 365,
+      "baseline_dominant_risk": "high",
+      "scenario_worst_risk": "critical",
+      "max_gw_proxy": 222.76726,
+      "max_crack_density": 0.747273118317016
+    },
+    "D_combined": {
+      "zone": "ZONE_B",
+      "baseline_peak_inst": 87.4,
+      "scenario_peak_inst": 87.5,
+      "delta_peak": 0.1,
+      "min_fos_baseline": 0.7522936865904589,
+      "min_fos_scenario": 0.7497587266630868,
+      "day_of_peak": 205,
+      "first_day_score_ge_75": 0,
+      "days_above_75": 365,
+      "baseline_dominant_risk": "high",
+      "scenario_worst_risk": "critical",
+      "max_gw_proxy": 593.7389749748731,
+      "max_crack_density": 0.7619098692098438
+    },
+    "E_hist_dec1902": {
+      "zone": "ZONE_C",
+      "baseline_peak_inst": 38.1,
+      "scenario_peak_inst": 38.1,
+      "delta_peak": 0.0,
+      "min_fos_baseline": 1.738837755312656,
+      "min_fos_scenario": 1.738837755312656,
+      "day_of_peak": 227,
+      "first_day_score_ge_75": null,
+      "days_above_75": 0,
+      "baseline_dominant_risk": "very_low",
+      "scenario_worst_risk": "very_low",
+      "max_gw_proxy": 838.5467639616867,
+      "max_crack_density": 0.7869561624510923
+    },
+    "F_multiyear_dec1902_3yr_ZONE_C": {
+      "horizon_days": 1095,
+      "fos_divergence_min": -0.761,
+      "divergence_day": 553,
+      "days_diverging_gt_001": 51,
+      "critical_severity_days_scenario": 796,
+      "critical_plus_waterfilled_days": 448,
+      "open_crack_branch_fired": true,
+      "scenario_worst_risk": "very_low",
+      "worst_band_index": 0,
+      "baseline_dominant_risk": "very_low",
+      "min_fos_scenario": 1.738837755312656,
+      "max_gw_proxy": 840.7551757037052
+    }
+  },
+  "all_gates_pass": true
+}

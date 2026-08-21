@@ -1,0 +1,386 @@
+{
+  "row_count": 7300,
+  "features": [
+    "rainfall_24h_mm",
+    "rainfall_7d_mm",
+    "slope_angle_deg",
+    "slope_height_m",
+    "rock_type",
+    "crack_density",
+    "crack_severity",
+    "blast_frequency_per_week",
+    "blast_vibration_ppv_mms",
+    "days_since_inspection",
+    "prior_incident",
+    "groundwater_proxy"
+  ],
+  "seed_heldout": true,
+  "target_dist_reg": {
+    "min": 0.0,
+    "mean": 53.21634246575343,
+    "std": 38.170105273810286,
+    "max": 100.0,
+    "p25": 3.375,
+    "p50": 71.6,
+    "p75": 86.2
+  },
+  "target_dist_clf": {
+    "critical": 1858,
+    "high": 1484,
+    "low": 338,
+    "moderate": 726,
+    "very_low": 2894
+  },
+  "split": {
+    "train_rows": 5840,
+    "test_rows": 1460,
+    "rule": "train=seeds 42,43,44,45; test=seed 46. Rows within a seed are 4 zones x 365 days; no seed skips."
+  },
+  "results": {
+    "dummy_reg": {
+      "mae": 38.48397260273972,
+      "rmse": 43.84795424868973,
+      "r2": -0.21416248120296144,
+      "train_sec": 0.03
+    },
+    "rf_reg": {
+      "mae": 38.94978166000508,
+      "rmse": 49.24060735960157,
+      "r2": -0.5311753856561163,
+      "train_sec": 1.08
+    },
+    "gb_reg": {
+      "mae": 39.87723468341152,
+      "rmse": 50.55850154232512,
+      "r2": -0.6142341261751296,
+      "train_sec": 6.02
+    },
+    "xgb_reg": {
+      "mae": 39.41714071950837,
+      "rmse": 48.61089617971875,
+      "r2": -0.49226307290647764,
+      "train_sec": 1.41
+    },
+    "dummy_clf": {
+      "macro_f1": 0.16666666666666666,
+      "balanced_acc": 0.25,
+      "accuracy": 0.5,
+      "per_class": {
+        "very_low": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 381
+        },
+        "low": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 0
+        },
+        "moderate": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 312
+        },
+        "high": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 37
+        },
+        "critical": {
+          "precision": 0.5,
+          "recall": 1.0,
+          "f1": 0.667,
+          "support": 730
+        }
+      },
+      "confusion_matrix": [
+        [
+          0,
+          0,
+          0,
+          0,
+          381
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          312
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          37
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          730
+        ]
+      ],
+      "train_sec": 0.03
+    },
+    "rf_clf": {
+      "macro_f1": 0.4480383575174509,
+      "balanced_acc": 0.49030259438724005,
+      "accuracy": 0.7506849315068493,
+      "per_class": {
+        "very_low": {
+          "precision": 1.0,
+          "recall": 0.958,
+          "f1": 0.979,
+          "support": 381
+        },
+        "low": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 0
+        },
+        "moderate": {
+          "precision": 0.059,
+          "recall": 0.003,
+          "f1": 0.006,
+          "support": 312
+        },
+        "high": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 37
+        },
+        "critical": {
+          "precision": 0.677,
+          "recall": 1.0,
+          "f1": 0.808,
+          "support": 730
+        }
+      },
+      "confusion_matrix": [
+        [
+          365,
+          0,
+          16,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          311
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          37
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          730
+        ]
+      ],
+      "train_sec": 1.85
+    },
+    "gb_clf": {
+      "macro_f1": 0.29810436241330085,
+      "balanced_acc": 0.36530259438724005,
+      "accuracy": 0.5006849315068493,
+      "per_class": {
+        "very_low": {
+          "precision": 1.0,
+          "recall": 0.958,
+          "f1": 0.979,
+          "support": 381
+        },
+        "low": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 0
+        },
+        "moderate": {
+          "precision": 0.059,
+          "recall": 0.003,
+          "f1": 0.006,
+          "support": 312
+        },
+        "high": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 37
+        },
+        "critical": {
+          "precision": 0.512,
+          "recall": 0.5,
+          "f1": 0.506,
+          "support": 730
+        }
+      },
+      "confusion_matrix": [
+        [
+          365,
+          0,
+          16,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          311
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          37
+        ],
+        [
+          0,
+          365,
+          0,
+          0,
+          365
+        ]
+      ],
+      "train_sec": 32.11
+    },
+    "xgb_clf": {
+      "macro_f1": 0.2874115404806118,
+      "balanced_acc": 0.3632477998666921,
+      "accuracy": 0.4965753424657534,
+      "per_class": {
+        "very_low": {
+          "precision": 0.908,
+          "recall": 0.958,
+          "f1": 0.932,
+          "support": 381
+        },
+        "low": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 0
+        },
+        "moderate": {
+          "precision": 0.071,
+          "recall": 0.003,
+          "f1": 0.006,
+          "support": 312
+        },
+        "high": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 37
+        },
+        "critical": {
+          "precision": 0.506,
+          "recall": 0.492,
+          "f1": 0.499,
+          "support": 730
+        }
+      },
+      "confusion_matrix": [
+        [
+          365,
+          0,
+          13,
+          0,
+          3
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          311
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          37
+        ],
+        [
+          37,
+          328,
+          0,
+          6,
+          359
+        ]
+      ],
+      "train_sec": 3.33
+    },
+    "permutation_importance_reg": {
+      "rainfall_24h_mm": 0.0029,
+      "rainfall_7d_mm": 0.0053,
+      "slope_angle_deg": 0.3697,
+      "slope_height_m": -0.0113,
+      "rock_type": 0.2316,
+      "crack_density": 0.0198,
+      "crack_severity": -0.0254,
+      "blast_frequency_per_week": 0.0102,
+      "blast_vibration_ppv_mms": 0.0297,
+      "days_since_inspection": 0.0062,
+      "prior_incident": 0.0,
+      "groundwater_proxy": 0.0258
+    }
+  },
+  "label_order": [
+    "very_low",
+    "low",
+    "moderate",
+    "high",
+    "critical"
+  ]
+}

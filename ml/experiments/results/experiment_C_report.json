@@ -1,0 +1,39 @@
+{
+  "baselines": {
+    "ZONE_A": {
+      "fos": 2.5,
+      "instability": 0.0
+    },
+    "ZONE_B": {
+      "fos": 1.834,
+      "instability": 33.3
+    },
+    "ZONE_C": {
+      "fos": 2.5,
+      "instability": 0.0
+    },
+    "ZONE_D": {
+      "fos": 0.905,
+      "instability": 79.7
+    }
+  },
+  "C_target_abs_instability": {
+    "mae": 39.339,
+    "rmse": 49.951,
+    "r2": -0.576
+  },
+  "C_target_delta_instability": {
+    "mae": 23.961,
+    "rmse": 32.722,
+    "r2": 0.127,
+    "test_mean_delta": 10.234,
+    "train_mean_delta": 28.649
+  },
+  "C_target_delta_fos": {
+    "mae": 0.48,
+    "rmse": 0.655,
+    "r2": 0.125,
+    "test_mean_delta_fos": -0.204,
+    "train_mean_delta_fos": -0.574
+  }
+}

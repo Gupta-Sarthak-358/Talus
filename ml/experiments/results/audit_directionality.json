@@ -1,0 +1,352 @@
+{
+  "P1_physics_crack_density_sweep": {
+    "density_grid": [
+      0.02,
+      2.5
+    ],
+    "fos_first_last": [
+      0.6946,
+      0.6748
+    ],
+    "retention_first_last": [
+      0.998,
+      0.9
+    ],
+    "delta_fos": -0.0197,
+    "monotone_decreasing_fos": true,
+    "direction_physics": "crack_density UP -> retention DOWN -> FoS DOWN -> instability UP (monotone, <=10% cost)",
+    "comment": "uses frozen cohesion_retention + fos_bench directly; instability is a monotone transform of FoS."
+  },
+  "P1_severity_retention": {
+    "retention_by_severity": {
+      "normal": 0.9199999999999999,
+      "minor": 0.9199999999999999,
+      "moderate": 0.9199999999999999,
+      "severe": 0.9199999999999999,
+      "critical": 0.9199999999999999
+    },
+    "fos_by_severity": {
+      "normal": 0.6789,
+      "minor": 0.6789,
+      "moderate": 0.6789,
+      "severe": 0.6789,
+      "critical": 0.6789
+    }
+  },
+  "P1_open_crack_branch": {
+    "retention_critical_filled_steep75": 0.5,
+    "retention_critical_notfilled": 0.9199999999999999,
+    "branch_trigger": "critical AND water_filled AND bench_face_deg >= 60",
+    "interpretation": "the -50% branch is DISCRETE, not a continuous function of density; ordinary path is the -10% line."
+  },
+  "P1_blast_path": {
+    "ppv_grid": [
+      0.0,
+      10.0,
+      20.0,
+      40.0,
+      60.0,
+      80.0
+    ],
+    "blast_term_mm_per_day": [
+      0.0,
+      0.0,
+      0.64,
+      1.92,
+      3.2,
+      4.48
+    ],
+    "mechanism": "PPV -> blast_term -> growth (width/depth accumulator) -> crack_density -> retention -> FoS -> instability",
+    "note": "blast_term is bounded: only PPV > 10 mm/s contributes, and the term caps via clip((PPV-10)/12.5). It feeds a slowly-accumulating state, so the SAME-DAY effect on FoS is tiny."
+  },
+  "P2_ml_sweeps": {
+    "abs_instability": {
+      "crack_density": {
+        "mean_delta_over_sweep": -12.869,
+        "per_zone_deltas": {
+          "ZONE_A": 0.0,
+          "ZONE_B": 2.938,
+          "ZONE_C": -51.372,
+          "ZONE_D": -3.042
+        },
+        "direction_ok_count": 1,
+        "physics_expected_direction": "UP"
+      },
+      "blast_vibration_ppv_mms": {
+        "mean_delta_over_sweep": -0.404,
+        "per_zone_deltas": {
+          "ZONE_A": 0.0,
+          "ZONE_B": -0.0,
+          "ZONE_C": 0.0,
+          "ZONE_D": -1.617
+        },
+        "direction_ok_count": 0,
+        "physics_expected_direction": "UP (via crack state)"
+      },
+      "groundwater_proxy": {
+        "mean_delta_over_sweep": 6.784,
+        "per_zone_deltas": {
+          "ZONE_A": 0.0,
+          "ZONE_B": 7.748,
+          "ZONE_C": 10.776,
+          "ZONE_D": 8.613
+        },
+        "direction_ok_count": 3,
+        "physics_expected_direction": "UP"
+      }
+    },
+    "delta_instability": {
+      "crack_density": {
+        "mean_delta_over_sweep": -12.172,
+        "per_zone_deltas": {
+          "ZONE_A": 0.0,
+          "ZONE_B": 2.887,
+          "ZONE_C": -51.376,
+          "ZONE_D": -0.199
+        },
+        "direction_ok_count": 1,
+        "physics_expected_direction": "UP"
+      },
+      "blast_vibration_ppv_mms": {
+        "mean_delta_over_sweep": -0.29,
+        "per_zone_deltas": {
+          "ZONE_A": 0.0,
+          "ZONE_B": -0.525,
+          "ZONE_C": 0.0,
+          "ZONE_D": -0.635
+        },
+        "direction_ok_count": 0,
+        "physics_expected_direction": "UP (via crack state)"
+      },
+      "groundwater_proxy": {
+        "mean_delta_over_sweep": 6.679,
+        "per_zone_deltas": {
+          "ZONE_A": 0.0,
+          "ZONE_B": 7.796,
+          "ZONE_C": 12.085,
+          "ZONE_D": 6.833
+        },
+        "direction_ok_count": 3,
+        "physics_expected_direction": "UP"
+      }
+    },
+    "delta_fos": {
+      "crack_density": {
+        "mean_delta_over_sweep": 0.243,
+        "per_zone_deltas": {
+          "ZONE_A": 0.0,
+          "ZONE_B": -0.058,
+          "ZONE_C": 1.028,
+          "ZONE_D": 0.001
+        },
+        "direction_ok_count": 2,
+        "physics_expected_direction": "UP"
+      },
+      "blast_vibration_ppv_mms": {
+        "mean_delta_over_sweep": 0.004,
+        "per_zone_deltas": {
+          "ZONE_A": 0.0,
+          "ZONE_B": 0.007,
+          "ZONE_C": 0.0,
+          "ZONE_D": 0.011
+        },
+        "direction_ok_count": 2,
+        "physics_expected_direction": "UP (via crack state)"
+      },
+      "groundwater_proxy": {
+        "mean_delta_over_sweep": -0.151,
+        "per_zone_deltas": {
+          "ZONE_A": 0.0,
+          "ZONE_B": -0.156,
+          "ZONE_C": -0.27,
+          "ZONE_D": -0.18
+        },
+        "direction_ok_count": 0,
+        "physics_expected_direction": "UP"
+      }
+    }
+  },
+  "P3_crack_conditioning": {
+    "table": [
+      {
+        "zone": "ZONE_A",
+        "raw_corr_cd_inst": 0.08,
+        "partial_corr_cd_inst_ctl_rain_gw": 0.415,
+        "n": 18250
+      },
+      {
+        "zone": "ZONE_B",
+        "raw_corr_cd_inst": -0.255,
+        "partial_corr_cd_inst_ctl_rain_gw": 0.36,
+        "n": 18250
+      },
+      {
+        "zone": "ZONE_C",
+        "raw_corr_cd_inst": 0.155,
+        "partial_corr_cd_inst_ctl_rain_gw": 0.258,
+        "n": 18250
+      },
+      {
+        "zone": "ZONE_D",
+        "raw_corr_cd_inst": 0.467,
+        "partial_corr_cd_inst_ctl_rain_gw": 0.852,
+        "n": 18250
+      }
+    ],
+    "interpretation": "If raw corr is negative/mixed but PARTIAL corr (controlling rainfall_7d + groundwater_proxy) turns positive/stronger, the inversion is a wetting-confound masking the crack->instability coupling (class a). If it stays negative, the generator's crack_density -> instability path is weak/absent."
+  },
+  "P4_blast_conditioning": {
+    "blast_vs_nonblast_by_zone_gw_crack": [
+      {
+        "zone_id": "ZONE_A",
+        "gw_state": "dry",
+        "crack_state": "high",
+        "was_blast": false,
+        "count": 1,
+        "mean": 0.0
+      },
+      {
+        "zone_id": "ZONE_A",
+        "gw_state": "dry",
+        "crack_state": "high",
+        "was_blast": true,
+        "count": 2850,
+        "mean": 47.98
+      },
+      {
+        "zone_id": "ZONE_A",
+        "gw_state": "dry",
+        "crack_state": "low",
+        "was_blast": false,
+        "count": 94,
+        "mean": 56.26
+      },
+      {
+        "zone_id": "ZONE_A",
+        "gw_state": "dry",
+        "crack_state": "low",
+        "was_blast": true,
+        "count": 11271,
+        "mean": 40.56
+      },
+      {
+        "zone_id": "ZONE_A",
+        "gw_state": "wet",
+        "crack_state": "high",
+        "was_blast": false,
+        "count": 1,
+        "mean": 0.0
+      },
+      {
+        "zone_id": "ZONE_A",
+        "gw_state": "wet",
+        "crack_state": "high",
+        "was_blast": true,
+        "count": 1990,
+        "mean": 50.41
+      },
+      {
+        "zone_id": "ZONE_A",
+        "gw_state": "wet",
+        "crack_state": "low",
+        "was_blast": false,
+        "count": 8,
+        "mean": 68.4
+      },
+      {
+        "zone_id": "ZONE_A",
+        "gw_state": "wet",
+        "crack_state": "low",
+        "was_blast": true,
+        "count": 2035,
+        "mean": 42.62
+      },
+      {
+        "zone_id": "ZONE_B",
+        "gw_state": "dry",
+        "crack_state": "high",
+        "was_blast": false,
+        "count": 45,
+        "mean": 77.11
+      },
+      {
+        "zone_id": "ZONE_B",
+        "gw_state": "dry",
+        "crack_state": "high",
+        "was_blast": true,
+        "count": 10519,
+        "mean": 52.68
+      },
+      {
+        "zone_id": "ZONE_B",
+        "gw_state": "dry",
+        "crack_state": "low",
+        "was_blast": true,
+        "count": 3652,
+        "mean": 65.72
+      },
+      {
+        "zone_id": "ZONE_B",
+        "gw_state": "wet",
+        "crack_state": "high",
+        "was_blast": false,
+        "count": 19,
+        "mean": 81.04
+      },
+      {
+        "zone_id": "ZONE_B",
+        "gw_state": "wet",
+        "crack_state": "high",
+        "was_blast": true,
+        "count": 3939,
+        "mean": 63.78
+      },
+      {
+        "zone_id": "ZONE_B",
+        "gw_state": "wet",
+        "crack_state": "low",
+        "was_blast": true,
+        "count": 76,
+        "mean": 85.76
+      }
+    ],
+    "note": "PPV>0 mm/s marks a blast day in A/B. Compare mean instability of blast vs non-blast within the same zone/gw/crack stratum."
+  },
+  "P5_lag_analysis_zoneA_seed42": {
+    "table": {
+      "lag_0d": {
+        "ppv_t -> growth_t+lag": 0.55,
+        "growth_t -> inst_t+lag": 0.688,
+        "growth_t -> fos_t+lag": -0.8,
+        "ppv_t -> density_t+lag": 0.109,
+        "density_t -> inst_t+lag": 0.632
+      },
+      "lag_1d": {
+        "ppv_t -> growth_t+lag": 0.024,
+        "growth_t -> inst_t+lag": 0.638,
+        "growth_t -> fos_t+lag": -0.754,
+        "ppv_t -> density_t+lag": 0.026,
+        "density_t -> inst_t+lag": 0.619
+      },
+      "lag_3d": {
+        "ppv_t -> growth_t+lag": 0.025,
+        "growth_t -> inst_t+lag": 0.597,
+        "growth_t -> fos_t+lag": -0.666,
+        "ppv_t -> density_t+lag": 0.031,
+        "density_t -> inst_t+lag": 0.602
+      },
+      "lag_7d": {
+        "ppv_t -> growth_t+lag": -0.026,
+        "growth_t -> inst_t+lag": 0.452,
+        "growth_t -> fos_t+lag": -0.468,
+        "ppv_t -> density_t+lag": 0.033,
+        "density_t -> inst_t+lag": 0.561
+      }
+    },
+    "note": "positive growth->inst lag correlation means crack growth today foreshadows higher instability later (state memory, class b)."
+  },
+  "P6_diagnosis": {
+    "crack_density_inversion": "raw mean corr=+0.112, partial(ctl rain+GW) mean corr=+0.471 -> class (a): correct physical coupling masked by wetting confound",
+    "blast_inversion": "mean instability on blast days=50.4 vs non-blast=64.6 -> class (a)/(b): blast effect is lagged/accumulated (PPV->growth->density), not same-day; raw day-level mean does not isolate it"
+  }
+}
