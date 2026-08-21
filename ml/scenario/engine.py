@@ -101,6 +101,8 @@ def apply_rain_scenario(rain, sc):
 def apply_blast_scenario(blast, timeline, sc):
     if sc.kind not in ("blast_surge", "combined"):
         return blast
+    if sc.zone_id not in ("ZONE_A", "ZONE_B"):
+        return blast
     out = blast.copy()
     ppv_mult = float(sc.params.get("ppv_mult", 1.5))
     p_extra = float(sc.params.get("extra_event_prob", 0.25))
