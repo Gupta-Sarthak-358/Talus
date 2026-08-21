@@ -23,7 +23,7 @@ export default function RiskBadge({ band = 'LOW', size = 'md', showDot = true, c
       {showDot && (
         <span
           className={`rounded-full ${dotSizes[size] || dotSizes.md} ${
-            band === 'CRITICAL' ? 'animate-ping bg-red-500' : ''
+            band === 'CRITICAL' ? 'animate-ping bg-risk-critical' : ''
           }`}
           style={{ backgroundColor: meta.badgeColor }}
         />

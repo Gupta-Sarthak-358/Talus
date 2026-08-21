@@ -5,11 +5,11 @@
  */
 
 export const RISK_BANDS = {
-  VERY_LOW: { label: "VERY LOW", color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/30", badgeColor: "#10b981", range: [0, 20] },
-  LOW: { label: "LOW", color: "text-green-400", bg: "bg-green-500/10", border: "border-green-500/30", badgeColor: "#22c55e", range: [21, 40] },
-  MODERATE: { label: "MODERATE", color: "text-amber-400", bg: "bg-amber-500/10", border: "border-amber-500/30", badgeColor: "#f59e0b", range: [41, 65] },
-  HIGH: { label: "HIGH", color: "text-orange-400", bg: "bg-orange-500/10", border: "border-orange-500/30", badgeColor: "#f97316", range: [66, 84] },
-  CRITICAL: { label: "CRITICAL", color: "text-red-400", bg: "bg-red-500/10", border: "border-red-500/30", badgeColor: "#ef4444", range: [85, 100] },
+  VERY_LOW: { label: "VERY LOW", color: "text-[#5e7f3a]", bg: "bg-[#5e7f3a]/15", border: "border-[#5e7f3a]/30", badgeColor: "#5e7f3a", range: [0, 20] },
+  LOW: { label: "LOW", color: "text-[#a68a3c]", bg: "bg-[#a68a3c]/15", border: "border-[#a68a3c]/30", badgeColor: "#a68a3c", range: [21, 40] },
+  MODERATE: { label: "MODERATE", color: "text-[#d99a24]", bg: "bg-[#d99a24]/15", border: "border-[#d99a24]/30", badgeColor: "#d99a24", range: [41, 65] },
+  HIGH: { label: "HIGH", color: "text-[#d96b24]", bg: "bg-[#d96b24]/15", border: "border-[#d96b24]/30", badgeColor: "#d96b24", range: [66, 84] },
+  CRITICAL: { label: "CRITICAL", color: "text-[#c74732]", bg: "bg-[#c74732]/15", border: "border-[#c74732]/30", badgeColor: "#c74732", range: [85, 100] },
 };
 
 export const ROLES = [

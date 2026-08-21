@@ -10,51 +10,51 @@ export default function MissingEvidenceCard({
 
   if (!hasMissingEvidence) {
     return (
-      <div className="bg-mine-darker/90 border border-mine-border rounded-xl p-3.5 flex items-center justify-between text-xs">
-        <div className="flex items-center gap-2 text-slate-300">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+      <div className="bg-mine-darker border border-mine-border rounded-xl p-3.5 flex items-center justify-between text-xs">
+        <div className="flex items-center gap-2 text-mine-text">
+          <CheckCircle2 className="w-4 h-4 text-risk-verylow" />
           <span>Telemetry Evidence: <strong>Complete</strong> (All sensors operational)</span>
         </div>
-        <span className="font-mono text-emerald-400 font-bold">{confidence}% Confidence</span>
+        <span className="font-mono text-risk-verylow font-bold">{confidence}% Confidence</span>
       </div>
     );
   }
 
   return (
-    <div className="bg-amber-950/20 border border-amber-500/40 rounded-xl p-4 shadow-md space-y-2.5">
+    <div className="bg-mine-darker border border-risk-moderate/40 rounded-xl p-4 shadow-sm space-y-2.5">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1.5 text-amber-300">
-          <AlertTriangle className="w-4 h-4 text-amber-400" />
-          <h4 className="text-xs font-bold uppercase tracking-wider">
+        <div className="flex items-center gap-1.5 text-risk-moderate">
+          <AlertTriangle className="w-4 h-4 text-risk-moderate" />
+          <h4 className="text-xs font-bold uppercase tracking-wider text-mine-text">
             Evidence Quality & Uncertainty Warning
           </h4>
         </div>
-        <span className="text-[11px] font-mono font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">
+        <span className="text-[11px] font-mono font-bold text-risk-moderate bg-risk-moderate/15 px-2 py-0.5 rounded border border-risk-moderate/30">
           {confidence}% Confidence
         </span>
       </div>
 
-      <p className="text-xs text-amber-200/90 font-medium">
+      <p className="text-xs text-mine-text font-medium">
         {warningText}
       </p>
 
       <div className="space-y-1.5 pt-1">
-        <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+        <div className="text-[10px] uppercase font-bold text-mine-muted tracking-wider">
           Missing / Degraded Signals:
         </div>
         {missingEvidence.map((item, i) => (
           <div
             key={i}
-            className="flex items-start gap-2 text-[11px] bg-mine-card/80 p-2 rounded-lg border border-mine-border/80"
+            className="flex items-start gap-2 text-[11px] bg-mine-card p-2 rounded-lg border border-mine-border"
           >
-            <span className="text-amber-400 font-bold shrink-0">⚠</span>
+            <span className="text-risk-moderate font-bold shrink-0">⚠</span>
             <div className="space-y-0.5">
-              <div className="font-semibold text-slate-200">
+              <div className="font-semibold text-mine-text">
                 {typeof item === 'string' ? item : item.sensor}
               </div>
               {item.reason && (
-                <div className="text-[10px] text-slate-400">
-                  {item.reason} — <span className="text-slate-300">{item.impact}</span>
+                <div className="text-[10px] text-mine-muted">
+                  {item.reason} — <span className="text-mine-text">{item.impact}</span>
                 </div>
               )}
             </div>
@@ -62,7 +62,7 @@ export default function MissingEvidenceCard({
         ))}
       </div>
 
-      <div className="text-[10px] text-slate-400 border-t border-amber-500/20 pt-1.5">
+      <div className="text-[10px] text-mine-muted border-t border-mine-border pt-1.5">
         Talus ML Engine dynamically discounts risk confidence when critical geotechnical telemetry streams degrade.
       </div>
     </div>

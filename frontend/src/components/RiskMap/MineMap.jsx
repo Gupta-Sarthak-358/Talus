@@ -19,22 +19,22 @@ function createCustomIcon(htmlContent, className = '', size = [28, 28]) {
 }
 
 const assemblyIcon = createCustomIcon(
-  `<div class="w-7 h-7 rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center text-emerald-300 shadow-lg shadow-emerald-500/30 backdrop-blur-sm">
+  `<div class="w-7 h-7 rounded-full bg-[#5e7f3a]/20 border-2 border-[#5e7f3a] flex items-center justify-center text-[#5e7f3a] shadow-md backdrop-blur-sm">
     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
   </div>`,
   'assembly-point-pin'
 );
 
 const sensorIcon = createCustomIcon(
-  `<div class="w-6 h-6 rounded-full bg-cyan-500/20 border border-cyan-400 flex items-center justify-center text-cyan-300 shadow-md">
-    <div class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></div>
+  `<div class="w-6 h-6 rounded-full bg-[#664930]/20 border border-[#664930] flex items-center justify-center text-[#664930] shadow-md">
+    <div class="w-2 h-2 rounded-full bg-[#664930] animate-ping"></div>
   </div>`,
   'sensor-node-pin'
 );
 
 const criticalHazardIcon = createCustomIcon(
-  `<div class="w-9 h-9 rounded-full bg-red-600/30 border-2 border-red-500 flex items-center justify-center text-red-300 shadow-xl shadow-red-500/40 animate-pulse">
-    <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+  `<div class="w-9 h-9 rounded-full bg-[#c74732]/25 border-2 border-[#c74732] flex items-center justify-center text-[#c74732] shadow-lg animate-pulse">
+    <svg class="w-5 h-5 text-[#c74732]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
   </div>`,
   'hazard-pulse-pin'
 );
@@ -70,7 +70,7 @@ const BENCH_CONTOURS = [
       [23.7530, 86.4110],
       [23.7620, 86.4180],
     ],
-    color: '#334155',
+    color: '#997e67',
     dash: '6, 4',
   },
   // Mid Bench 04 (RL +180m)
@@ -86,7 +86,7 @@ const BENCH_CONTOURS = [
       [23.7535, 86.4145],
       [23.7595, 86.4205],
     ],
-    color: '#253554',
+    color: '#b8a695',
     dash: '4, 4',
   },
   // Lower Bench 08 (RL +120m)
@@ -102,7 +102,7 @@ const BENCH_CONTOURS = [
       [23.7550, 86.4180],
       [23.7575, 86.4220],
     ],
-    color: '#1e293b',
+    color: '#d2c3b3',
     dash: '3, 3',
   },
 ];
@@ -122,27 +122,27 @@ export default function MineMap() {
   // Zone colors lookup
   const getZoneFillColor = (band) => {
     const meta = RISK_BANDS[band];
-    return meta ? meta.badgeColor : '#22c55e';
+    return meta ? meta.badgeColor : '#5e7f3a';
   };
 
   return (
-    <div className="relative w-full h-full min-h-[480px] bg-mine-darkest rounded-2xl overflow-hidden border border-mine-border/80 shadow-2xl flex flex-col">
+    <div className="relative w-full h-full min-h-[480px] bg-mine-darkest rounded-2xl overflow-hidden border border-mine-border shadow-md flex flex-col">
       {/* Top Banner on Map */}
-      <div className="absolute top-3 left-3 z-[400] bg-mine-card/95 border border-mine-border rounded-lg px-3 py-1.5 backdrop-blur-md text-xs font-medium text-slate-200 flex items-center gap-2 shadow-lg">
-        <span className="w-2 h-2 rounded-full bg-talus-400 animate-pulse"></span>
+      <div className="absolute top-3 left-3 z-[400] bg-mine-card border border-mine-border rounded-lg px-3 py-1.5 text-xs font-medium text-mine-text flex items-center gap-2 shadow-sm">
+        <span className="w-2 h-2 rounded-full bg-talus-600 animate-pulse"></span>
         <span className="font-semibold">Open-Pit Mine GIS Layout</span>
-        <span className="text-slate-500 font-mono">|</span>
-        <span className="text-slate-400 text-[11px]">Click any zone polygon to inspect risk intelligence</span>
+        <span className="text-mine-muted font-mono">|</span>
+        <span className="text-mine-muted text-[11px]">Click any zone polygon to inspect risk intelligence</span>
       </div>
 
       {/* Top-Right Map Controls: Reset View / Basemap Mode */}
-      <div className="absolute top-3 right-3 z-[400] flex items-center gap-1.5 bg-mine-card/95 border border-mine-border rounded-lg p-1 backdrop-blur-md shadow-lg">
+      <div className="absolute top-3 right-3 z-[400] flex items-center gap-1.5 bg-mine-card border border-mine-border rounded-lg p-1 shadow-sm">
         <button
           onClick={() => setTileMode(tileMode === 'dark' ? 'osm' : tileMode === 'osm' ? 'vector' : 'dark')}
-          className="px-2 py-1 bg-mine-dark hover:bg-slate-700 text-slate-300 hover:text-white rounded text-[10px] font-mono font-semibold flex items-center gap-1 transition-colors"
+          className="px-2 py-1 bg-mine-darker hover:bg-mine-dark text-mine-text rounded text-[10px] font-mono font-semibold flex items-center gap-1 transition-colors"
           title="Switch Basemap Style"
         >
-          <Layers className="w-3 h-3 text-talus-400" />
+          <Layers className="w-3 h-3 text-talus-600" />
           <span>Layer: {tileMode.toUpperCase()}</span>
         </button>
       </div>
@@ -186,7 +186,7 @@ export default function MineMap() {
             }}
           >
             <Tooltip sticky direction="top">
-              <span className="text-[10px] font-mono text-slate-300">{contour.name}</span>
+              <span className="text-[10px] font-mono text-mine-text">{contour.name}</span>
             </Tooltip>
           </Polyline>
         ))}
@@ -205,7 +205,7 @@ export default function MineMap() {
                 pathOptions={{
                   fillColor: fillColor,
                   fillOpacity: isSelected ? 0.65 : 0.38,
-                  color: isSelected ? '#a855f7' : fillColor,
+                  color: isSelected ? '#664930' : fillColor,
                   weight: isSelected ? 3.5 : 1.8,
                   dashArray: isSelected ? '4, 4' : null,
                 }}
@@ -215,18 +215,18 @@ export default function MineMap() {
               >
                 <Tooltip direction="center" sticky offset={[0, 0]}>
                   <div className="p-1 space-y-0.5">
-                    <div className="font-bold text-slate-100 flex items-center gap-1">
+                    <div className="font-bold text-mine-text flex items-center gap-1">
                       <span>{zone.name}</span>
-                      {isSelected && <span className="text-[10px] text-talus-400 font-normal">(Selected)</span>}
+                      {isSelected && <span className="text-[10px] text-talus-600 font-normal">(Selected)</span>}
                     </div>
                     <div className="text-[11px] flex items-center gap-2">
                       <span className="font-mono font-bold" style={{ color: fillColor }}>
                         Risk: {zone.risk_score}/100 [{zone.risk_band}]
                       </span>
-                      <span className="text-slate-400">Conf: {zone.confidence}%</span>
+                      <span className="text-mine-muted">Conf: {zone.confidence}%</span>
                     </div>
                     {zone.shap && zone.shap[0] && (
-                      <div className="text-[10px] text-slate-400">
+                      <div className="text-[10px] text-mine-muted">
                         Primary: {zone.shap[0].feature} (+{zone.shap[0].value})
                       </div>
                     )}
@@ -239,14 +239,14 @@ export default function MineMap() {
                 <Marker position={zone.geometry.centroid} icon={criticalHazardIcon}>
                   <Popup>
                     <div className="p-1 space-y-1">
-                      <div className="flex items-center gap-1.5 text-red-400 font-bold text-xs">
+                      <div className="flex items-center gap-1.5 text-risk-critical font-bold text-xs">
                         <ShieldAlert className="w-4 h-4" />
                         <span>{zone.name} — Hazard Zone</span>
                       </div>
-                      <p className="text-[11px] text-slate-300">
-                        Risk Score: <strong className="text-red-400">{zone.risk_score}</strong> / 100 ({zone.risk_band})
+                      <p className="text-[11px] text-mine-text">
+                        Risk Score: <strong className="text-risk-critical">{zone.risk_score}</strong> / 100 ({zone.risk_band})
                       </p>
-                      <p className="text-[10px] text-slate-400">
+                      <p className="text-[10px] text-mine-muted">
                         Pore-pressure & crack density escalating. Immediate avoidance recommended.
                       </p>
                     </div>
@@ -263,16 +263,16 @@ export default function MineMap() {
             <Marker key={sensor.id} position={sensor.coordinates} icon={sensorIcon}>
               <Popup>
                 <div className="p-1 space-y-1">
-                  <div className="flex items-center gap-1 text-cyan-300 font-semibold text-xs">
+                  <div className="flex items-center gap-1 text-talus-600 font-semibold text-xs">
                     <Radio className="w-3.5 h-3.5" />
                     <span>{sensor.name}</span>
                   </div>
-                  <div className="text-[11px] text-slate-300 font-mono">{sensor.reading}</div>
-                  <div className="text-[10px] text-slate-400 flex items-center justify-between">
+                  <div className="text-[11px] text-mine-text font-mono">{sensor.reading}</div>
+                  <div className="text-[10px] text-mine-muted flex items-center justify-between">
                     <span>Type: {sensor.type}</span>
                     <span
                       className={`font-semibold ${
-                        sensor.status === 'online' ? 'text-emerald-400' : 'text-amber-400'
+                        sensor.status === 'online' ? 'text-risk-verylow' : 'text-risk-moderate'
                       }`}
                     >
                       [{sensor.status.toUpperCase()}]
@@ -289,14 +289,14 @@ export default function MineMap() {
             <Marker key={item.id} position={item.coordinates} icon={assemblyIcon}>
               <Popup>
                 <div className="p-1 space-y-1">
-                  <div className="flex items-center gap-1 text-emerald-300 font-semibold text-xs">
+                  <div className="flex items-center gap-1 text-risk-verylow font-semibold text-xs">
                     <Shield className="w-3.5 h-3.5" />
                     <span>{item.name}</span>
                   </div>
                   {item.capacity && (
-                    <div className="text-[11px] text-slate-300">Capacity: {item.capacity}</div>
+                    <div className="text-[11px] text-mine-text">Capacity: {item.capacity}</div>
                   )}
-                  <div className="text-[10px] text-slate-400">Status: {item.status}</div>
+                  <div className="text-[10px] text-mine-muted">Status: {item.status}</div>
                 </div>
               </Popup>
             </Marker>
@@ -310,7 +310,7 @@ export default function MineMap() {
               <Polyline
                 positions={activeRoutePlan.normalRoute.waypoints}
                 pathOptions={{
-                  color: '#ef4444',
+                  color: '#c74732',
                   weight: 3.5,
                   dashArray: '6, 6',
                   opacity: 0.85,
@@ -318,15 +318,15 @@ export default function MineMap() {
               >
                 <Tooltip sticky direction="top">
                   <div className="text-xs space-y-0.5">
-                    <div className="font-bold text-red-400 flex items-center gap-1">
+                    <div className="font-bold text-risk-critical flex items-center gap-1">
                       <AlertOctagon className="w-3.5 h-3.5" />
                       <span>{activeRoutePlan.normalRoute.name}</span>
                     </div>
-                    <div className="text-[11px] text-slate-300">
+                    <div className="text-[11px] text-mine-text">
                       Distance: {activeRoutePlan.normalRoute.distanceKm} km | Exposure: HIGH (
                       {activeRoutePlan.normalRoute.riskExposureScore})
                     </div>
-                    <div className="text-[10px] text-red-300">
+                    <div className="text-[10px] text-risk-critical">
                       ⚠ Direct rockfall hazard in {activeRoutePlan.normalRoute.passesThroughHazardZone}
                     </div>
                   </div>
@@ -339,22 +339,22 @@ export default function MineMap() {
               <Polyline
                 positions={activeRoutePlan.riskAwareRoute.waypoints}
                 pathOptions={{
-                  color: '#10b981',
+                  color: '#5e7f3a',
                   weight: 4.5,
                   opacity: 0.95,
                 }}
               >
                 <Tooltip sticky direction="top">
                   <div className="text-xs space-y-0.5">
-                    <div className="font-bold text-emerald-400 flex items-center gap-1">
+                    <div className="font-bold text-risk-verylow flex items-center gap-1">
                       <Navigation className="w-3.5 h-3.5" />
                       <span>{activeRoutePlan.riskAwareRoute.name}</span>
                     </div>
-                    <div className="text-[11px] text-slate-300">
+                    <div className="text-[11px] text-mine-text">
                       Distance: {activeRoutePlan.riskAwareRoute.distanceKm} km | Exposure: LOW (
                       {activeRoutePlan.riskAwareRoute.riskExposureScore})
                     </div>
-                    <div className="text-[10px] text-emerald-300">
+                    <div className="text-[10px] text-risk-verylow">
                       ✓ Safely bypasses unstable highwall sectors
                     </div>
                   </div>

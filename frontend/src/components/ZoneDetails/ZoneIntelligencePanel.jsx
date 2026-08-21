@@ -20,7 +20,7 @@ export default function ZoneIntelligencePanel() {
 
   if (!selectedZoneData && zoneLoading) {
     return (
-      <div className="bg-mine-card border border-mine-border rounded-2xl p-5 shadow-xl space-y-4">
+      <div className="bg-mine-card border border-mine-border rounded-2xl p-5 shadow-sm space-y-4">
         <LoadingSkeleton lines={8} />
       </div>
     );
@@ -28,7 +28,7 @@ export default function ZoneIntelligencePanel() {
 
   if (!selectedZoneData) {
     return (
-      <div className="bg-mine-card border border-mine-border rounded-2xl p-6 text-center text-slate-400">
+      <div className="bg-mine-card border border-mine-border rounded-2xl p-6 text-center text-mine-muted">
         Select a mine zone on the map or choose below to inspect risk intelligence.
       </div>
     );
@@ -37,15 +37,15 @@ export default function ZoneIntelligencePanel() {
   const zone = selectedZoneData;
 
   return (
-    <div className="bg-mine-card/95 border border-mine-border rounded-2xl p-4 sm:p-5 shadow-2xl space-y-4 backdrop-blur-md">
+    <div className="bg-mine-card border border-mine-border rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
       {/* Zone Selector Pills */}
       <div className="space-y-2">
-        <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+        <div className="flex items-center justify-between text-[11px] font-semibold text-mine-muted uppercase tracking-wider">
           <span className="flex items-center gap-1.5">
-            <MapPin className="w-3.5 h-3.5 text-talus-400" />
+            <MapPin className="w-3.5 h-3.5 text-talus-600" />
             <span>Select Pit Sector</span>
           </span>
-          <span className="text-[10px] text-slate-400 font-mono">5 Sectors Monitored</span>
+          <span className="text-[10px] text-mine-muted font-mono">5 Sectors Monitored</span>
         </div>
 
         <div className="grid grid-cols-5 gap-1.5">
@@ -59,26 +59,26 @@ export default function ZoneIntelligencePanel() {
                 onClick={() => selectZone(z.id)}
                 className={`py-1.5 px-2 rounded-lg text-xs font-bold font-mono transition-all flex flex-col items-center justify-center relative ${
                   isSelected
-                    ? 'bg-talus-600 text-white shadow-lg shadow-talus-500/20 border border-talus-400'
-                    : 'bg-mine-darker hover:bg-mine-dark text-slate-300 border border-mine-border'
+                    ? 'bg-talus-600 text-white shadow-sm border border-talus-700'
+                    : 'bg-mine-darker hover:bg-mine-dark text-mine-text border border-mine-border'
                 }`}
               >
                 <span>Zone {z.id}</span>
                 <span
                   className={`text-[9px] font-normal ${
                     z.risk_band === 'CRITICAL'
-                      ? 'text-red-400 font-bold'
+                      ? 'text-risk-critical font-bold'
                       : z.risk_band === 'HIGH'
-                      ? 'text-orange-400 font-bold'
+                      ? 'text-risk-high font-bold'
                       : z.risk_band === 'MODERATE'
-                      ? 'text-amber-400'
-                      : 'text-emerald-400'
+                      ? 'text-risk-moderate'
+                      : 'text-risk-verylow'
                   }`}
                 >
                   {z.risk_score}
                 </span>
                 {isCriticalOrHigh && (
-                  <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+                  <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-risk-critical animate-ping"></span>
                 )}
               </button>
             );
@@ -87,25 +87,25 @@ export default function ZoneIntelligencePanel() {
       </div>
 
       {/* Zone Header */}
-      <div className="border-t border-mine-border/80 pt-3 flex flex-wrap items-center justify-between gap-2">
+      <div className="border-t border-mine-border pt-3 flex flex-wrap items-center justify-between gap-2">
         <div>
-          <div className="text-[11px] text-talus-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
+          <div className="text-[11px] text-talus-600 font-bold uppercase tracking-wider flex items-center gap-1.5">
             <span>{zone.sector || 'Open-Pit Highwall'}</span>
-            <ChevronRight className="w-3 h-3 text-slate-500" />
-            <span className="text-slate-300">{zone.benches || 'Benches 05–08'}</span>
+            <ChevronRight className="w-3 h-3 text-mine-muted" />
+            <span className="text-mine-muted">{zone.benches || 'Benches 05–08'}</span>
           </div>
-          <h2 className="text-lg font-extrabold text-white tracking-tight mt-0.5">
+          <h2 className="text-lg font-extrabold text-mine-text tracking-tight mt-0.5">
             {zone.name}
           </h2>
         </div>
 
         <div className="text-right">
-          <div className="text-[10px] text-slate-400">Status</div>
+          <div className="text-[10px] text-mine-muted">Status</div>
           <div
             className={`text-xs font-bold uppercase ${
               zone.risk_band === 'CRITICAL' || zone.risk_band === 'HIGH'
-                ? 'text-red-400 animate-pulse'
-                : 'text-slate-200'
+                ? 'text-risk-critical animate-pulse'
+                : 'text-mine-text'
             }`}
           >
             {zone.status || 'Active Operations'}

@@ -5,7 +5,7 @@
 
 @layer base {
   body {
-    @apply font-sans bg-mine-darkest text-slate-100;
+    @apply font-sans bg-mine-darkest text-mine-text;
   }
 }
 
@@ -16,21 +16,21 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #0d131f;
+  background: #e5d8c9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #233354;
+  background: #d2c3b3;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #8b5cf6;
+  background: #997e67;
 }
 
-/* Leaflet map customizations for dark command center */
+/* Leaflet map customizations for command center */
 .leaflet-container {
-  background-color: #090d16 !important;
+  background-color: #ccbeb1 !important;
   font-family: inherit;
   width: 100% !important;
   height: 100% !important;
@@ -39,48 +39,48 @@
 
 /* Gracefully handle tile loading and prevent broken image boxes */
 .leaflet-tile {
-  filter: brightness(0.85) contrast(1.2) saturate(0.8);
+  filter: brightness(0.95) contrast(1.05) saturate(0.9);
 }
 
 .leaflet-tile-container img {
   /* Prevent browser broken image borders */
-  background-color: #090d16;
+  background-color: #ccbeb1;
 }
 
 /* Custom popups and tooltips */
 .leaflet-popup-content-wrapper {
-  background: #182238 !important;
-  color: #f1f5f9 !important;
-  border: 1px solid #2f426b !important;
+  background: #f3e9dd !important;
+  color: #2b2119 !important;
+  border: 1px solid #d2c3b3 !important;
   border-radius: 8px !important;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.6) !important;
+  box-shadow: 0 10px 25px -5px rgba(102, 73, 48, 0.2), 0 8px 10px -6px rgba(102, 73, 48, 0.15) !important;
 }
 
 .leaflet-popup-tip {
-  background: #182238 !important;
-  border: 1px solid #2f426b !important;
+  background: #f3e9dd !important;
+  border: 1px solid #d2c3b3 !important;
 }
 
 .leaflet-tooltip {
-  background-color: #131b2e !important;
-  color: #e2e8f0 !important;
-  border: 1px solid #2f426b !important;
+  background-color: #f3e9dd !important;
+  color: #2b2119 !important;
+  border: 1px solid #d2c3b3 !important;
   border-radius: 6px !important;
   font-size: 11px !important;
-  font-weight: 500 !important;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5) !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 6px -1px rgba(102, 73, 48, 0.15) !important;
 }
 
 /* Topographic Mine Pit Bench SVG Styling */
 .mine-bench-line {
-  stroke: #1e293b;
+  stroke: #997e67;
   stroke-width: 1.5;
   stroke-dasharray: 4, 3;
   fill: none;
 }
 
 .mine-contour-elevation {
-  fill: #475569;
+  fill: #6f6256;
   font-size: 9px;
   font-family: monospace;
 }
@@ -88,13 +88,13 @@
 /* Pulsing radar effect for critical zones */
 @keyframes pulse-critical {
   0% {
-    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    box-shadow: 0 0 0 0 rgba(199, 71, 50, 0.7);
   }
   70% {
-    box-shadow: 0 0 0 12px rgba(239, 68, 68, 0);
+    box-shadow: 0 0 0 12px rgba(199, 71, 50, 0);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    box-shadow: 0 0 0 0 rgba(199, 71, 50, 0);
   }
 }
 
@@ -104,17 +104,17 @@
 
 /* Glow effects */
 .glow-purple {
-  box-shadow: 0 0 15px rgba(139, 92, 246, 0.35);
+  box-shadow: 0 0 15px rgba(102, 73, 48, 0.25);
 }
 
 .glow-red {
-  box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+  box-shadow: 0 0 15px rgba(199, 71, 50, 0.3);
 }
 
 .glow-amber {
-  box-shadow: 0 0 15px rgba(245, 158, 11, 0.35);
+  box-shadow: 0 0 15px rgba(217, 154, 36, 0.25);
 }
 
 .glow-emerald {
-  box-shadow: 0 0 15px rgba(16, 185, 129, 0.35);
+  box-shadow: 0 0 15px rgba(94, 127, 58, 0.25);
 }

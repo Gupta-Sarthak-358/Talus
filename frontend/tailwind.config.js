@@ -8,32 +8,34 @@ export default {
     extend: {
       colors: {
         talus: {
-          50: '#f5f3ff',
-          100: '#ede9fe',
-          200: '#ddd6fe',
-          300: '#c4b5fd',
-          400: '#a78bfa',
-          500: '#8b5cf6', // Brand accent
-          600: '#7c3aed',
-          700: '#6d28d9',
-          800: '#5b21b6',
-          900: '#4c1d95',
-          950: '#2e1065',
+          50: '#faf6f0',
+          100: '#f3e9dd', // Card / panel background
+          200: '#e5d8c9', // Secondary background
+          300: '#d2c3b3', // Borders/dividers
+          400: '#b8a695',
+          500: '#997e67', // Secondary brown
+          600: '#664930', // Brand primary dark brown
+          700: '#523a25',
+          800: '#3e2b1b',
+          900: '#2b2119', // Primary text
+          950: '#1c1510',
         },
         risk: {
-          verylow: '#10b981', // Emerald 500
-          low: '#22c55e',     // Green 500
-          moderate: '#f59e0b',// Amber 500
-          high: '#f97316',    // Orange 500
-          critical: '#ef4444' // Red 500
+          verylow: '#5e7f3a', // Safe 500
+          low: '#a68a3c',     // Low 500
+          moderate: '#d99a24',// Moderate 500
+          high: '#d96b24',    // High 500
+          critical: '#c74732' // Critical 500
         },
         mine: {
-          darkest: '#090d16',
-          darker: '#0d131f',
-          dark: '#131b2e',
-          card: '#182238',
-          border: '#233354',
-          highlight: '#2f426b'
+          darkest: '#ccbeb1', // Primary background
+          darker: '#e5d8c9',  // Secondary background
+          dark: '#ddd0c1',    // Inner contrast surface
+          card: '#f3e9dd',    // Card / panel background
+          border: '#d2c3b3',  // Borders and dividers
+          highlight: '#997e67',// Secondary brown / hover
+          text: '#2b2119',    // Primary text
+          muted: '#6f6256',   // Secondary text
         }
       },
       fontFamily: {

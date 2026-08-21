@@ -203,7 +203,7 @@ export const PRECOMPUTED_ROUTES = {
       riskExposureBand: "HIGH",
       passesThroughHazardZone: "Zone B",
       hazardDescription: "Directly traverses active rockfall trajectory below East Highwall Toe",
-      color: "#ef4444",
+      color: "#c74732",
       dashArray: "6, 6",
       waypoints: [
         [23.7590, 86.4230], // Zone A origin
@@ -223,7 +223,7 @@ export const PRECOMPUTED_ROUTES = {
       riskExposureBand: "LOW",
       passesThroughHazardZone: "None",
       hazardDescription: "Safely diverts around hazardous Zone B highwall, adhering to reinforced benches",
-      color: "#10b981",
+      color: "#5e7f3a",
       dashArray: null,
       waypoints: [
         [23.7590, 86.4230], // Zone A origin
@@ -247,7 +247,7 @@ export const PRECOMPUTED_ROUTES = {
       riskExposureBand: "CRITICAL",
       passesThroughHazardZone: "Zone B Highwall",
       hazardDescription: "Runs along toe of unstable bench facing potential planar slide",
-      color: "#ef4444",
+      color: "#c74732",
       dashArray: "6, 6",
       waypoints: [
         [23.7555, 86.4320],
@@ -265,7 +265,7 @@ export const PRECOMPUTED_ROUTES = {
       riskExposureBand: "LOW",
       passesThroughHazardZone: "None",
       hazardDescription: "Routes up through stabilized secondary switchback",
-      color: "#10b981",
+      color: "#5e7f3a",
       dashArray: null,
       waypoints: [
         [23.7555, 86.4320],
