@@ -33,29 +33,29 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="bg-mine-darker/95 border-b border-mine-border/80 sticky top-0 z-40 backdrop-blur-md px-4 py-2.5">
+    <header className="bg-mine-darker border-b border-mine-border sticky top-0 z-40 px-4 py-2.5 shadow-sm">
       <div className="max-w-[1920px] mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
         {/* Left: Brand & Tagline */}
         <div className="flex items-center gap-3.5">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-talus-500 to-talus-700 flex items-center justify-center shadow-lg shadow-talus-500/20 border border-talus-400/30">
+            <div className="w-9 h-9 rounded-lg bg-talus-600 flex items-center justify-center shadow-md border border-talus-700">
               <Activity className="w-5 h-5 text-white animate-pulse" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-extrabold tracking-wider text-lg text-white font-mono flex items-center gap-1.5">
+                <span className="font-extrabold tracking-wider text-lg text-mine-text font-mono flex items-center gap-1.5">
                   TALUS
-                  <span className="text-[10px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded bg-talus-500/20 text-talus-300 border border-talus-500/30">
+                  <span className="text-[10px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded bg-talus-600/15 text-talus-600 border border-talus-600/30">
                     SIH 2026
                   </span>
                 </span>
                 {/* Demo mode badge */}
-                <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-800 text-[10px] font-medium text-slate-300 border border-slate-700">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-mine-card text-[10px] font-medium text-mine-muted border border-mine-border">
+                  <span className="w-1.5 h-1.5 rounded-full bg-risk-verylow animate-pulse"></span>
                   DEMO MODE — Synthetic / Historical Data
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 font-medium">
+              <p className="text-[11px] text-mine-muted font-medium">
                 Risk-Aware Decision Support for Open-Pit Mine Safety
               </p>
             </div>
@@ -69,35 +69,35 @@ export default function Header() {
             onClick={() => setIsWhatIfOpen(true)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
               activeSimulation
-                ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-lg shadow-amber-500/10 animate-pulse'
-                : 'bg-mine-card hover:bg-mine-dark text-slate-200 border-mine-border hover:border-talus-500/40'
+                ? 'bg-risk-moderate/20 text-mine-text border-risk-moderate shadow-md animate-pulse'
+                : 'bg-mine-card hover:bg-mine-dark text-mine-text border-mine-border hover:border-talus-500'
             }`}
             title="Open geotechnical condition simulator"
           >
-            <Sliders className="w-3.5 h-3.5 text-amber-400" />
+            <Sliders className="w-3.5 h-3.5 text-risk-moderate" />
             <span>What-If Simulator</span>
             {activeSimulation && (
-              <span className="w-2 h-2 rounded-full bg-amber-400 ml-0.5"></span>
+              <span className="w-2 h-2 rounded-full bg-risk-moderate ml-0.5"></span>
             )}
           </button>
 
           {/* Safe Routing Button */}
           <button
             onClick={() => setIsRouteModalOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-mine-card hover:bg-mine-dark text-slate-200 border border-mine-border hover:border-talus-500/40 transition-all"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-mine-card hover:bg-mine-dark text-mine-text border border-mine-border hover:border-talus-500 transition-all"
             title="Calculate and compare risk-aware evacuation & haulage routes"
           >
-            <Navigation className="w-3.5 h-3.5 text-emerald-400" />
+            <Navigation className="w-3.5 h-3.5 text-risk-verylow" />
             <span>Safe Route</span>
           </button>
 
           {/* CV Crack Inspector Button */}
           <button
             onClick={() => setIsCvModalOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-mine-card hover:bg-mine-dark text-slate-200 border border-mine-border hover:border-talus-500/40 transition-all"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-mine-card hover:bg-mine-dark text-mine-text border border-mine-border hover:border-talus-500 transition-all"
             title="Inspect drone-based highwall crack segmentation and feature extraction"
           >
-            <Eye className="w-3.5 h-3.5 text-talus-400" />
+            <Eye className="w-3.5 h-3.5 text-talus-600" />
             <span>CV Crack Analysis</span>
           </button>
 
@@ -105,10 +105,10 @@ export default function Header() {
           {activeSimulation && (
             <button
               onClick={resetSimulation}
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-red-500/10 hover:bg-red-500/20 text-red-300 border border-red-500/30 transition-all"
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-risk-critical/15 hover:bg-risk-critical/25 text-risk-critical border border-risk-critical/30 transition-all"
               title="Reset simulated conditions back to pit baseline telemetry"
             >
-              <RotateCcw className="w-3 h-3 text-red-400" />
+              <RotateCcw className="w-3 h-3 text-risk-critical" />
               <span>Reset Sim</span>
             </button>
           )}
@@ -119,12 +119,12 @@ export default function Header() {
           {/* Active Alerts Drawer Trigger */}
           <button
             onClick={() => setIsAlertsDrawerOpen(true)}
-            className="relative p-2 bg-mine-card hover:bg-mine-dark border border-mine-border hover:border-slate-600 rounded-lg text-slate-300 hover:text-white transition-all group"
+            className="relative p-2 bg-mine-card hover:bg-mine-dark border border-mine-border hover:border-talus-500 rounded-lg text-mine-muted hover:text-mine-text transition-all group"
             title="View Active Risk Escalation Alerts"
           >
-            <Bell className="w-4 h-4 group-hover:text-amber-400 transition-colors" />
+            <Bell className="w-4 h-4 group-hover:text-risk-moderate transition-colors" />
             {unacknowledgedAlertsCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white font-bold text-[10px] flex items-center justify-center ring-2 ring-mine-darkest animate-pulse">
+              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-risk-critical text-white font-bold text-[10px] flex items-center justify-center ring-2 ring-mine-card animate-pulse">
                 {unacknowledgedAlertsCount}
               </span>
             )}
@@ -134,14 +134,14 @@ export default function Header() {
           <RoleSelector />
 
           {/* Pit Telemetry & Clock */}
-          <div className="hidden lg:flex flex-col items-end pl-2 border-l border-mine-border/80 text-right font-mono">
-            <div className="flex items-center gap-1.5 text-[11px] text-slate-300">
-              <Clock className="w-3 h-3 text-slate-400" />
+          <div className="hidden lg:flex flex-col items-end pl-2 border-l border-mine-border text-right font-mono">
+            <div className="flex items-center gap-1.5 text-[11px] text-mine-text">
+              <Clock className="w-3 h-3 text-mine-muted" />
               <span>{currentTime.toLocaleTimeString('en-US', { hour12: false })}</span>
-              <span className="text-[9px] text-slate-400 font-sans">IST</span>
+              <span className="text-[9px] text-mine-muted font-sans">IST</span>
             </div>
-            <div className="flex items-center gap-1 text-[10px] text-emerald-400 font-sans">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <div className="flex items-center gap-1 text-[10px] text-risk-verylow font-sans">
+              <span className="w-1.5 h-1.5 rounded-full bg-risk-verylow animate-pulse"></span>
               Telemetry Live
             </div>
           </div>
