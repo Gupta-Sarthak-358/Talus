@@ -20,6 +20,7 @@ export async function calculateRoute({ start = { zone_id: 'A', lat: 20.51, lng: 
     const normalDist = normal.total_cost ?? 0;
     const awareRisk = aware.max_risk_exposed ?? 0;
     const normalRisk = normal.max_risk_exposed ?? 0;
+    // MineMap draws Polylines from `.waypoints` (lat-lng objects from the API)
     return {
       status: 'success',
       timestamp: new Date().toISOString(),
@@ -27,11 +28,13 @@ export async function calculateRoute({ start = { zone_id: 'A', lat: 20.51, lng: 
       destination: end,
       normalRoute: {
         path: normal.path || [],
+        waypoints: normal.path || [],
         distanceKm: +(normalDist).toFixed(2),
         riskExposureScore: normalRisk,
       },
       riskAwareRoute: {
         path: aware.path || [],
+        waypoints: aware.path || [],
         distanceKm: +(awareDist).toFixed(2),
         riskExposureScore: awareRisk,
       },
