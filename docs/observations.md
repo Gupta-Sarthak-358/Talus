@@ -409,3 +409,10 @@ Format: Observation → Evidence → Interpretation → Decision → Version aff
 - **Key finding -- compressed single-year response envelope:** under frozen physics, extreme single-year storms move groundwater massively (proxy 222->805mm) but barely move FoS: r_u saturates at 0.35-0.55, cohesion-dominated benches (ZONE_C) are water-immune, critical zones already saturated. Passive-generation band pinning extends to scenarios.
 - **Breakthrough -- multi-year cumulative exposure:** 3-year horizon with Dec-1902 replayed at day 550 lets crack damage accumulate until the DISCRETE open-crack branch (critical AND water-filled AND face>=60deg) fires naturally: ZONE_C reaches 796 critical-severity days, 448 critical+water-filled days, FoS diverges from baseline by **-0.761** across 51 days. A genuine regime response with ZERO physics changes.
 - **Decision:** What-If v1 ships trajectory outputs (day-by-day gw/crack/FoS/score) with honest score deltas; multi-year historical-replay is the flagship scenario class. ML (RF on V1) stays the prediction path; the engine is the simulation path -- responsibilities never mixed.
+
+## 20. Phase 19-20 close-out: summaries, edge cases, Member-2 audit
+
+- **Code:** ml/scenario/summaries.py -- compact scenario summaries (min FoS / peak score / days High+Critical / peak crack growth / peak pore pressure / first-response day / worst day), comparison tables, trajectory serialization with metadata sidecars, template provenance (IMD window totals).
+- **Edge cases: ALL PASS.** scale-0 == baseline; start-day-0; window overrun clips; blast-surge no-op on unblasted zones (ZONE_C/D invariant enforced); unknown kind raises; short templates pad.
+- **Audit:** docs/MEMBER2_AUDIT.md -- full evidence chain from leakage discovery to scenario engine; frozen artifacts list; known limitations shipped honestly.
+- **Member 2 COMPLETE.** Prediction path (V1 -> RF) and simulation path (Scenario -> engine) delivered as separate responsibilities. Handoff contract documented for Member 3 integration.
