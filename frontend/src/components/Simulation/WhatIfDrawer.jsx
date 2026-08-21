@@ -44,12 +44,7 @@ export default function WhatIfDrawer() {
     }
   }, [selectedZoneId, zones]);
 
-  if (!isWhatIfOpen) return null;
-
-  const handleApplyPreset = (preset) => {
-    setParams(preset.values);
-  };
-
+  // Causal mode state (hooks MUST run on every render -- keep above early return)
   const [mode, setMode] = useState('ml'); // 'ml' | 'causal'
   const [causalLoading, setCausalLoading] = useState(false);
   const [causalResult, setCausalResult] = useState(null);
@@ -62,6 +57,12 @@ export default function WhatIfDrawer() {
   useEffect(() => {
     getScenarioTemplates().then((r) => setTemplates(r.templates || [])).catch(() => {});
   }, []);
+
+  if (!isWhatIfOpen) return null;
+
+  const handleApplyPreset = (preset) => {
+    setParams(preset.values);
+  };
 
   const handleRunCausal = async () => {
     setCausalLoading(true);
