@@ -56,11 +56,15 @@ export async function simulateConditions({ zone_id = 'B', ...params }) {
     body: JSON.stringify({ zone_id, overrides: toOverrides(params) }),
   });
   const sim = res.simulated || {};
+  const base = res.baseline || {};
   const trend = await fetchTrend(zone_id);
+  const delta = res.delta ?? 0;
   return {
     risk_score: sim.risk_score,
     risk_band: bandUpper(sim.risk_band),
     confidence: Math.round((sim.confidence ?? 0) * 100),
+    baselineScore: base.risk_score,
+    baselineBand: bandUpper(base.risk_band),
     shap: (res.contributions || []).map((c) => ({
       feature: c.feature,
       value: c.shap_value,
@@ -69,7 +73,11 @@ export async function simulateConditions({ zone_id = 'B', ...params }) {
     explanationText:
       `ML counterfactual: baseline ${res.baseline?.risk_score} -> ` +
       `${sim.risk_score} (${sim.risk_band}). Delta ${res.delta}.`,
-    delta: res.delta,
+    delta,
+    isEscalated: delta > 0,
+    zone_id,
+    // QuickStatsBar reads activeSimulation.inputs.rainfall_24h
+    inputs: { rainfall_24h: params.rainfall_24h },
     mode: 'ml_counterfactual',
   };
 }

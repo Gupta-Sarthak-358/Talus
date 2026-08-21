@@ -3,7 +3,7 @@
  * Centered around an open-pit mine layout (coordinates relative to a synthetic mine bounding box)
  */
 
-export const MINE_CENTER = [23.7540, 86.4250]; // Open-cast mining belt coordinate center
+export const MINE_CENTER = [11.54, 79.49]; // Neyveli Mine-II anchor (IMD cell 11.50N 79.50E / NLC lease)
 export const MINE_ZOOM = 15;
 
 // Defined Mine Zones with realistic terraced polygons
@@ -14,12 +14,12 @@ export const MINE_ZONES_GEOJSON = [
     type: "Highwall Sector",
     benches: "Benches 01–04",
     coordinates: [
-      [23.7610, 86.4200],
-      [23.7615, 86.4270],
-      [23.7575, 86.4285],
-      [23.7565, 86.4215],
+      [11.547, 79.485],
+      [11.5475, 79.492],
+      [11.5435, 79.4935],
+      [11.5425, 79.4865],
     ],
-    centroid: [23.7591, 86.4242],
+    centroid: [11.5451, 79.4892],
     area_hectares: 14.2,
     sensorIds: ["INC-A01", "PZ-A02"],
   },
@@ -29,13 +29,13 @@ export const MINE_ZONES_GEOJSON = [
     type: "Critical Haulage & Slope",
     benches: "Benches 05–08",
     coordinates: [
-      [23.7575, 86.4285],
-      [23.7615, 86.4270],
-      [23.7580, 86.4350],
-      [23.7525, 86.4345],
-      [23.7535, 86.4280],
+      [11.5435, 79.4935],
+      [11.5475, 79.492],
+      [11.544, 79.5],
+      [11.5385, 79.4995],
+      [11.5395, 79.493],
     ],
-    centroid: [23.7565, 86.4315],
+    centroid: [11.5425, 79.4965],
     area_hectares: 18.6,
     sensorIds: ["SEIS-B01", "PZ-B02", "RADAR-01"],
   },
@@ -45,13 +45,13 @@ export const MINE_ZONES_GEOJSON = [
     type: "Pit Floor / Dewatering Sump",
     benches: "Pit Bottom Floor",
     coordinates: [
-      [23.7565, 86.4215],
-      [23.7575, 86.4285],
-      [23.7535, 86.4280],
-      [23.7505, 86.4230],
-      [23.7520, 86.4190],
+      [11.5425, 79.4865],
+      [11.5435, 79.4935],
+      [11.5395, 79.493],
+      [11.5365, 79.488],
+      [11.538, 79.484],
     ],
-    centroid: [23.7540, 86.4240],
+    centroid: [11.54, 79.489],
     area_hectares: 21.0,
     sensorIds: ["SUMP-C01", "FLOW-C02"],
   },
@@ -61,13 +61,13 @@ export const MINE_ZONES_GEOJSON = [
     type: "Access Ramp & Staging",
     benches: "Ramp System S",
     coordinates: [
-      [23.7520, 86.4190],
-      [23.7505, 86.4230],
-      [23.7535, 86.4280],
-      [23.7485, 86.4290],
-      [23.7460, 86.4210],
+      [11.538, 79.484],
+      [11.5365, 79.488],
+      [11.5395, 79.493],
+      [11.5345, 79.494],
+      [11.532, 79.486],
     ],
-    centroid: [23.7500, 86.4240],
+    centroid: [11.536, 79.489],
     area_hectares: 16.8,
     sensorIds: ["INC-D01"],
   },
@@ -77,14 +77,14 @@ export const MINE_ZONES_GEOJSON = [
     type: "Overburden Dump / Crusher Ridge",
     benches: "Dump Terraces 1-2",
     coordinates: [
-      [23.7610, 86.4200],
-      [23.7565, 86.4215],
-      [23.7520, 86.4190],
-      [23.7460, 86.4210],
-      [23.7480, 86.4140],
-      [23.7580, 86.4130],
+      [11.547, 79.485],
+      [11.5425, 79.4865],
+      [11.538, 79.484],
+      [11.532, 79.486],
+      [11.534, 79.479],
+      [11.544, 79.478],
     ],
-    centroid: [23.7545, 86.4165],
+    centroid: [11.5405, 79.4815],
     area_hectares: 26.4,
     sensorIds: ["WX-E01", "SEIS-E02"],
   },
@@ -96,7 +96,7 @@ export const MINE_INFRASTRUCTURE = [
     id: "AP-1",
     name: "Assembly Point 1 (South Safe Zone)",
     type: "assembly",
-    coordinates: [23.7455, 86.4200],
+    coordinates: [11.5315, 79.485],
     capacity: "120 Personnel",
     status: "Active / Clear",
   },
@@ -104,7 +104,7 @@ export const MINE_INFRASTRUCTURE = [
     id: "AP-2",
     name: "Assembly Point 2 (West Crusher Station)",
     type: "assembly",
-    coordinates: [23.7595, 86.4125],
+    coordinates: [11.5455, 79.4775],
     capacity: "80 Personnel",
     status: "Active / Clear",
   },
@@ -112,21 +112,21 @@ export const MINE_INFRASTRUCTURE = [
     id: "CRUSHER-01",
     name: "Primary In-Pit Crusher #1",
     type: "facility",
-    coordinates: [23.7585, 86.4145],
+    coordinates: [11.5445, 79.4795],
     status: "Operational",
   },
   {
     id: "WORKSHOP-01",
     name: "Heavy Equipment Maintenance Workshop",
     type: "facility",
-    coordinates: [23.7465, 86.4280],
+    coordinates: [11.5325, 79.493],
     status: "Operational",
   },
   {
     id: "EXC-04",
     name: "Electric Shovel / Excavator Site #4",
     type: "equipment",
-    coordinates: [23.7590, 86.4230],
+    coordinates: [11.545, 79.488],
     zone: "A",
     status: "Operating (2 Operators)",
   },
@@ -134,7 +134,7 @@ export const MINE_INFRASTRUCTURE = [
     id: "TRUCK-12",
     name: "Haul Truck #12 (CAT 793F)",
     type: "equipment",
-    coordinates: [23.7555, 86.4320],
+    coordinates: [11.5415, 79.497],
     zone: "B",
     status: "In Transit / High Risk Corridor",
   },
@@ -146,7 +146,7 @@ export const MINE_SENSORS = [
     id: "WX-E01",
     name: "Meteorological Station #01",
     type: "Weather / Rain Gauge",
-    coordinates: [23.7580, 86.4135],
+    coordinates: [11.544, 79.4785],
     zone: "E",
     status: "online",
     reading: "Rainfall: 42 mm/24h",
@@ -155,7 +155,7 @@ export const MINE_SENSORS = [
     id: "SEIS-B01",
     name: "Triaxial Seismograph #B01",
     type: "Blast Vibration (PPV)",
-    coordinates: [23.7550, 86.4330],
+    coordinates: [11.541, 79.498],
     zone: "B",
     status: "degraded", // Stale / degraded to highlight missing evidence
     reading: "PPV: 24.5 mm/s (Stale > 3h)",
@@ -164,7 +164,7 @@ export const MINE_SENSORS = [
     id: "RADAR-01",
     name: "Ground-Based SAR Slope Radar",
     type: "Displacement / Velocity",
-    coordinates: [23.7515, 86.4170],
+    coordinates: [11.5375, 79.482],
     zone: "E",
     status: "online",
     reading: "Velocity: 1.8 mm/day",
@@ -173,7 +173,7 @@ export const MINE_SENSORS = [
     id: "PZ-B02",
     name: "Vibrating Wire Piezometer PZ-02",
     type: "Pore Water Pressure",
-    coordinates: [23.7585, 86.4310],
+    coordinates: [11.5445, 79.496],
     zone: "B",
     status: "online",
     reading: "Pressure: 142 kPa",
@@ -182,7 +182,7 @@ export const MINE_SENSORS = [
     id: "INC-A01",
     name: "In-Place Inclinometer I-A01",
     type: "Subsurface Shear Strain",
-    coordinates: [23.7600, 86.4250],
+    coordinates: [11.546, 79.49],
     zone: "A",
     status: "online",
     reading: "Deflection: 0.4 mm",
@@ -206,12 +206,12 @@ export const PRECOMPUTED_ROUTES = {
       color: "#ef4444",
       dashArray: "6, 6",
       waypoints: [
-        [23.7590, 86.4230], // Zone A origin
-        [23.7580, 86.4280],
-        [23.7565, 86.4315], // Traverses dead center of risky Zone B
-        [23.7535, 86.4320], // Near unstable toe
-        [23.7490, 86.4290],
-        [23.7455, 86.4200], // Assembly Point 1
+        [11.545, 79.488], // Zone A origin
+        [11.544, 79.493],
+        [11.5425, 79.4965], // Traverses dead center of risky Zone B
+        [11.5395, 79.497], // Near unstable toe
+        [11.535, 79.494],
+        [11.5315, 79.485], // Assembly Point 1
       ]
     },
     riskAwareRoute: {
@@ -226,12 +226,12 @@ export const PRECOMPUTED_ROUTES = {
       color: "#10b981",
       dashArray: null,
       waypoints: [
-        [23.7590, 86.4230], // Zone A origin
-        [23.7565, 86.4215], // Diverts down through safe Zone C ramp
-        [23.7540, 86.4235],
-        [23.7510, 86.4210], // Follows protected Zone D haul corridor
-        [23.7475, 86.4200],
-        [23.7455, 86.4200], // Assembly Point 1
+        [11.545, 79.488], // Zone A origin
+        [11.5425, 79.4865], // Diverts down through safe Zone C ramp
+        [11.54, 79.4885],
+        [11.537, 79.486], // Follows protected Zone D haul corridor
+        [11.5335, 79.485],
+        [11.5315, 79.485], // Assembly Point 1
       ]
     }
   },
@@ -250,10 +250,10 @@ export const PRECOMPUTED_ROUTES = {
       color: "#ef4444",
       dashArray: "6, 6",
       waypoints: [
-        [23.7555, 86.4320],
-        [23.7525, 86.4310],
-        [23.7490, 86.4295],
-        [23.7465, 86.4280],
+        [11.5415, 79.497],
+        [11.5385, 79.496],
+        [11.535, 79.4945],
+        [11.5325, 79.493],
       ]
     },
     riskAwareRoute: {
@@ -268,11 +268,11 @@ export const PRECOMPUTED_ROUTES = {
       color: "#10b981",
       dashArray: null,
       waypoints: [
-        [23.7555, 86.4320],
-        [23.7540, 86.4260],
-        [23.7505, 86.4240],
-        [23.7475, 86.4260],
-        [23.7465, 86.4280],
+        [11.5415, 79.497],
+        [11.54, 79.491],
+        [11.5365, 79.489],
+        [11.5335, 79.491],
+        [11.5325, 79.493],
       ]
     }
   }

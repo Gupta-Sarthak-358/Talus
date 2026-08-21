@@ -36,7 +36,7 @@ export default function App() {
               </span>
               <span className="text-slate-500 font-mono">|</span>
               <span className="text-talus-400 font-mono">
-                React • Leaflet • Recharts • FastAPI Contract Ready
+                Frozen Model v1 · Generator v1.4.0 · Scenario Engine v1.5
               </span>
             </div>
           </div>

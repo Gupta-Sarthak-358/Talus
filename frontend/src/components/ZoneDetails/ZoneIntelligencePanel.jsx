@@ -45,7 +45,7 @@ export default function ZoneIntelligencePanel() {
             <MapPin className="w-3.5 h-3.5 text-talus-400" />
             <span>Select Pit Sector</span>
           </span>
-          <span className="text-[10px] text-slate-400 font-mono">5 Sectors Monitored</span>
+          <span className="text-[10px] text-slate-400 font-mono">{zones.length} Sectors Monitored</span>
         </div>
 
         <div className="grid grid-cols-5 gap-1.5">

@@ -24,7 +24,7 @@ export default function WhatIfDrawer() {
   const [params, setParams] = useState({
     rainfall_24h: 88,
     blast_vibration: 34,
-    crack_density: 16,
+    crack_density: 0.8,
     slope_angle: 64,
   });
 
@@ -37,7 +37,7 @@ export default function WhatIfDrawer() {
         setParams({
           rainfall_24h: z.telemetry.rainfall_24h || 50,
           blast_vibration: z.telemetry.blast_vibration_ppv || 15,
-          crack_density: z.telemetry.crack_density || 8,
+          crack_density: z.telemetry.crack_density || 0.5,
           slope_angle: z.telemetry.slope_angle || 50,
         });
       }
@@ -238,7 +238,17 @@ export default function WhatIfDrawer() {
                         gen v{causalResult.generator_version}
                       </span>
                     </div>
-                    <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-[11px]">
+                    <p className="text-[11px] text-slate-200 leading-relaxed mb-2">
+                      {causalResult.summary.open_crack_branch_fired
+                        ? 'Repeated extreme wetting degraded crack strength past its threshold — stability now diverges from baseline and recovers slowly.'
+                        : 'Scenario response contained within this horizon: no strength-threshold branch was triggered.'}
+                      {' '}Max wetting memory reached {causalResult.summary.max_groundwater_proxy_mm} mm.
+                    </p>
+                    <details className="text-[11px]">
+                      <summary className="cursor-pointer text-slate-400 hover:text-slate-200 select-none">
+                        Advanced trajectory metrics
+                      </summary>
+                      <div className="grid grid-cols-2 gap-x-3 gap-y-1 mt-2">
                       <span className="text-slate-400">Min FoS (baseline → scenario)</span>
                       <span className="text-right font-mono text-white">
                         {causalResult.summary.baseline_min_fos} → {causalResult.summary.scenario_min_fos}
@@ -256,8 +266,9 @@ export default function WhatIfDrawer() {
                       <span className="text-slate-400">Max groundwater proxy</span>
                       <span className="text-right font-mono text-white">{causalResult.summary.max_groundwater_proxy_mm} mm</span>
                       <span className="text-slate-400">First response day</span>
-                      <span className="text-right font-mono text-white">{causalResult.summary.first_response_day ?? '—'}</span>
+                      <span className="text-right font-mono text-white">{causalResult.summary.first_response_day ?? '-'}</span>
                     </div>
+                    </details>
                   </div>
 
                   {causalResult.provenance && (
@@ -385,7 +396,7 @@ export default function WhatIfDrawer() {
               <input
                 type="range"
                 min="0"
-                max="25"
+                max="2.5" step="0.05"
                 value={params.crack_density}
                 onChange={(e) => setParams({ ...params, crack_density: Number(e.target.value) })}
                 className="w-full accent-talus-500 cursor-pointer"

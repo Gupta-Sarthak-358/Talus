@@ -1,4 +1,5 @@
 import { apiRequest, isLiveApiEnabled, simulateLatency } from './api';
+import { MINE_ZONES_GEOJSON } from '../data/mineGeoData';
 
 /**
  * Risk-aware routing. Live contract: POST /api/routes/safe
@@ -7,8 +8,23 @@ import { apiRequest, isLiveApiEnabled, simulateLatency } from './api';
  * avoided_zones.
  */
 
-export async function calculateRoute({ start = { zone_id: 'A', lat: 20.51, lng: 80.115 },
-                                       end = { zone_id: 'D', lat: 20.58, lng: 80.165 } } = {}) {
+const ROUTE_PRESET_ZONES = {
+  worker_zoneA_to_ap1: { start: 'A', end: 'D' },
+  truck_zoneB_to_workshop: { start: 'B', end: 'C' },
+};
+
+function centroid(zoneId) {
+  const geo = MINE_ZONES_GEOJSON.find((g) => g.id === zoneId);
+  return geo?.centroid || null;
+}
+
+export async function calculateRoute({ originKey = 'worker_zoneA_to_ap1', avoidZoneIds = [] } = {}) {
+  const preset = ROUTE_PRESET_ZONES[originKey] || ROUTE_PRESET_ZONES['worker_zoneA_to_ap1'];
+  const sCenter = centroid(preset.start);
+  const eCenter = centroid(preset.end);
+  const start = { zone_id: preset.start, ...(sCenter ? { lat: sCenter[0], lng: sCenter[1] } : {}) };
+  const end = { zone_id: preset.end, ...(eCenter ? { lat: eCenter[0], lng: eCenter[1] } : {}) };
+
   if (isLiveApiEnabled()) {
     const res = await apiRequest('/routes/safe', {
       method: 'POST',

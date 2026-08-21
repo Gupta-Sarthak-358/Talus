@@ -74,14 +74,29 @@ export async function getZones() {
 
 export async function getZoneById(zoneId) {
   if (isLiveApiEnabled()) {
-    const [detail, explanation, features, trend] = await Promise.all([
+    const [detail, explanation, features, trend, decision] = await Promise.all([
       apiRequest(`/zones/${zoneId}`),
       apiRequest(`/zones/${zoneId}/explanation`).catch(() => null),
       apiRequest(`/zones/${zoneId}/features`).catch(() => null),
       apiRequest(`/zones/${zoneId}/trend`).catch(() => null),
+      apiRequest(`/zones/${zoneId}/decision`).catch(() => null),
     ]);
     const f = features?.features || {};
     const mock = MOCK_ZONES.find((z) => z.id === zoneId) || {};
+    // RoleActionCard expects role_actions keyed by role id (FR-06 live wiring)
+    const role_actions = {};
+    for (const d of decision?.decisions || []) {
+      role_actions[d.role] = {
+        header: `${d.role.replace(/_/g, ' ').toUpperCase()} — ${d.priority} priority`,
+        action: d.message,
+        caution: d.action,
+        routeRecommended: d.role === 'worker' || d.role === 'rescue_team',
+        urgency: d.priority === 'immediate' ? 'Immediate Action'
+               : d.priority === 'high' ? 'High Priority'
+               : d.priority === 'standby' ? 'Standby' : 'Operational',
+      };
+    }
+    const missing_evidence = features?.missing_features || [];
     const rich = {
       ...mock,
       id: detail.zone_id,
@@ -93,7 +108,9 @@ export async function getZoneById(zoneId) {
       status: bandUpper(detail.risk_band) === 'CRITICAL' ? 'Critical - active monitoring' : 'Normal Operations',
       geometry: detail.geometry,
       updated_at: detail.updated_at,
-      missingEvidence: features?.missing_features || [],
+      missingEvidence: missing_evidence,
+      missing_evidence,
+      role_actions,
       telemetry: {
         ...(mock.telemetry || {}),
         slope_angle: f.slope_angle_deg,

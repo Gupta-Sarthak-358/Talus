@@ -439,7 +439,7 @@ export const WHAT_IF_PRESETS = [
     values: {
       rainfall_24h: 95,
       blast_vibration: 20,
-      crack_density: 18,
+      crack_density: 1.8,
       slope_angle: 64,
     },
     expectedImpact: "Zone B escalates into CRITICAL (89/100); Zone C increases to HIGH (72/100)",
@@ -451,7 +451,7 @@ export const WHAT_IF_PRESETS = [
     values: {
       rainfall_24h: 40,
       blast_vibration: 42,
-      crack_density: 14,
+      crack_density: 1.4,
       slope_angle: 64,
     },
     expectedImpact: "Vibration contribution spikes (+22 pts SHAP), increasing dynamic instability",
@@ -463,7 +463,7 @@ export const WHAT_IF_PRESETS = [
     values: {
       rainfall_24h: 30,
       blast_vibration: 12,
-      crack_density: 24,
+      crack_density: 2.4,
       slope_angle: 68,
     },
     expectedImpact: "Crack density becomes primary SHAP contributor (+28 pts); imminent planar slip risk",

@@ -5,9 +5,12 @@ import { ArrowRight, TrendingUp, TrendingDown, Sparkles, ShieldAlert } from 'luc
 export default function SimulationDiffCard({ simulationResult, baselineZone }) {
   if (!simulationResult) return null;
 
-  const { risk_score, risk_band, confidence, delta, isEscalated, shap, explanationText } = simulationResult;
-  const baseScore = baselineZone ? baselineZone.risk_score : 82;
-  const baseBand = baselineZone ? baselineZone.risk_band : 'HIGH';
+  const { risk_score, risk_band, confidence, delta, isEscalated, shap, explanationText,
+          baselineScore, baselineBand } = simulationResult;
+  // Use the backend's pre-override prediction as baseline (falls back to the
+  // selected zone's current score only if the API didn't send one).
+  const baseScore = baselineScore ?? (baselineZone ? baselineZone.risk_score : 82);
+  const baseBand = baselineBand ?? (baselineZone ? baselineZone.risk_band : 'HIGH');
 
   return (
     <div className="bg-mine-darker/90 border border-talus-500/40 rounded-xl p-4 space-y-3 shadow-lg shadow-talus-500/5">
@@ -19,13 +22,14 @@ export default function SimulationDiffCard({ simulationResult, baselineZone }) {
           </h4>
         </div>
         <span
-          className={`text-xs font-bold font-mono px-2 py-0.5 rounded ${
+          title={`Simulated (${risk_score}) minus the pre-override prediction (${baseScore}). Positive = the model predicts higher risk under the changed inputs.`}
+          className={`text-xs font-bold font-mono px-2 py-0.5 rounded cursor-help ${
             isEscalated
               ? 'bg-red-500/20 text-red-300 border border-red-500/30'
               : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
           }`}
         >
-          {delta} pts vs Baseline
+          {delta > 0 ? '+' : ''}{delta} pts vs Baseline
         </span>
       </div>
 

@@ -95,8 +95,10 @@ export async function getAlerts() {
   await simulateLatency(200);
   return {
     alerts: [
-      { id: 'zone-b-critical', zoneId: 'B', severity: 'CRITICAL',
-        message: 'Zone B is critical risk', action: 'prioritize inspection',
+      { id: 'zone-b-critical', zoneId: 'B', zoneName: 'Zone B — East Haulage & Toe',
+        title: 'Critical risk detected in Zone B',
+        summary: 'Zone B is critical risk', severity: 'CRITICAL',
+        action: 'prioritize inspection', drivers: [], acknowledged: false,
         timestamp: new Date().toISOString() },
     ],
   };

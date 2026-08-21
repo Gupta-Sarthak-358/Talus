@@ -1,6 +1,8 @@
 import React from 'react';
 import { useMineContext } from '../../context/MineContext';
-import { AlertTriangle, ShieldAlert, CheckCircle2, Database, Users, TrendingUp } from 'lucide-react';
+import { AlertTriangle, ShieldAlert, CheckCircle2, Database, TrendingUp } from 'lucide-react';
+
+const idsOf = (zones) => zones.map((z) => z.id).join(', ') || '—';
 
 export default function RiskSummaryCards() {
   const { riskSummary, zones, selectZone, selectedZoneId } = useMineContext();
@@ -39,9 +41,9 @@ export default function RiskSummaryCards() {
             High / Critical Zone{riskSummary.criticalCount + riskSummary.highCount !== 1 ? 's' : ''}
           </span>
         </div>
-        <div className="mt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-mine-border/60 pt-1.5">
-          <span>Affected: {highZones.map((z) => z.name.split('—')[0]).join(', ') || 'Zone B'}</span>
-          <span className="text-red-400 font-semibold flex items-center gap-0.5">
+        <div className="mt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-mine-border/60 pt-1.5 gap-1">
+          <span className="truncate">Zones: {idsOf([...criticalZones, ...highZones])}</span>
+          <span className="text-red-400 font-semibold flex items-center gap-0.5 shrink-0">
             <TrendingUp className="w-3 h-3" /> Action req.
           </span>
         </div>
@@ -67,11 +69,13 @@ export default function RiskSummaryCards() {
           <span className="text-2xl font-extrabold text-white font-mono">
             {riskSummary.moderateCount}
           </span>
-          <span className="text-xs text-slate-400 font-medium">Moderate Zone (Zone C)</span>
+          <span className="text-xs text-slate-400 font-medium">
+            Moderate Zone{riskSummary.moderateCount !== 1 ? 's' : ''}
+          </span>
         </div>
-        <div className="mt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-mine-border/60 pt-1.5">
-          <span>Central Sump Drainage</span>
-          <span className="text-amber-400 font-medium">Monitoring</span>
+        <div className="mt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-mine-border/60 pt-1.5 gap-1">
+          <span className="truncate">Zones: {idsOf(moderateZones)}</span>
+          <span className="text-amber-400 font-medium shrink-0">Monitoring</span>
         </div>
       </div>
 
@@ -95,15 +99,17 @@ export default function RiskSummaryCards() {
           <span className="text-2xl font-extrabold text-white font-mono">
             {riskSummary.lowCount}
           </span>
-          <span className="text-xs text-slate-400 font-medium">Stable Zones (A, D, E)</span>
+          <span className="text-xs text-slate-400 font-medium">
+            Stable Zone{riskSummary.lowCount !== 1 ? 's' : ''}
+          </span>
         </div>
-        <div className="mt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-mine-border/60 pt-1.5">
-          <span>Safe Evacuation Corridors</span>
-          <span className="text-emerald-400 font-medium">Clear</span>
+        <div className="mt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-mine-border/60 pt-1.5 gap-1">
+          <span className="truncate">Zones: {idsOf(lowZones)}</span>
+          <span className="text-emerald-400 font-medium shrink-0">No escalation</span>
         </div>
       </div>
 
-      {/* Data Quality & Telemetry Confidence Card */}
+      {/* Data Quality & Model Confidence Card */}
       <div className="bg-mine-card border border-talus-500/30 rounded-xl p-3.5 transition-all shadow-md relative overflow-hidden">
         <div className="absolute top-0 right-0 w-24 h-24 bg-talus-500/5 rounded-full blur-xl"></div>
         <div className="flex items-center justify-between">
@@ -118,11 +124,11 @@ export default function RiskSummaryCards() {
           <span className="text-2xl font-extrabold text-white font-mono">
             {riskSummary.dataQualityConfidence}%
           </span>
-          <span className="text-xs text-slate-400 font-medium">Mean Model Confidence</span>
+          <span className="text-xs text-slate-400 font-medium">Mean Calibrated Confidence</span>
         </div>
-        <div className="mt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-mine-border/60 pt-1.5">
-          <span className="truncate">1 Sensor Stale (SEIS-B01)</span>
-          <span className="text-amber-400 font-medium shrink-0">Uncertainty flag</span>
+        <div className="mt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-mine-border/60 pt-1.5 gap-1">
+          <span className="truncate">3 provenance gaps (modeled PPV / GW proxy / no CV feed)</span>
+          <span className="text-amber-400 font-medium shrink-0">Flagged</span>
         </div>
       </div>
     </div>
