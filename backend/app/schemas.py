@@ -145,3 +145,65 @@ class WhatIfResponse(BaseModel):
     simulated: PredictResponse
     delta: int
     contributions: list[Contribution]
+
+
+# ---- causal physics What-If (Scenario Engine v1.5) -----------------------
+
+CAUSAL_KINDS = ["none", "rainfall_storm", "prolonged_rain", "blast_surge",
+                "combined", "historical_rain"]
+
+
+class CausalWhatIfRequest(BaseModel):
+    zone_id: Literal["A", "B", "C", "D"]
+    kind: Literal[*CAUSAL_KINDS]
+    start_day: int = Field(default=200, ge=0)
+    duration_days: int = Field(default=7, ge=1)
+    params: dict = Field(default_factory=dict)
+    horizon_days: int = Field(default=365, ge=30, le=1500)
+    seed: int = Field(default=42)
+
+
+class TrajectoryPoint(BaseModel):
+    day: int
+    fos: float
+    instability_score: float
+    risk_label: str
+    baseline_fos: float
+
+
+class ScenarioProvenance(BaseModel):
+    template_id: Optional[str] = None
+    imd_window: Optional[list[str]] = None
+    window_total_mm: Optional[float] = None
+    window_max_day_mm: Optional[float] = None
+    source: str = "IMD 0.25deg Neyveli grid 11.5N 79.5E"
+
+
+class TemplatesResponse(BaseModel):
+    templates: list[ScenarioProvenance]
+
+
+class CausalSummary(BaseModel):
+    baseline_min_fos: float
+    scenario_min_fos: float
+    delta_min_fos: float
+    baseline_peak_instability: float
+    scenario_peak_instability: float
+    delta_peak_instability: float
+    baseline_days_high_or_critical: int
+    scenario_days_high_or_critical: int
+    first_response_day: Optional[int] = None
+    worst_day: int
+    worst_day_risk: str
+    max_groundwater_proxy_mm: float
+    open_crack_branch_fired: bool
+
+
+class CausalWhatIfResponse(BaseModel):
+    zone_id: str
+    scenario_name: str
+    mode: str = "causal_physics"
+    generator_version: str
+    summary: CausalSummary
+    provenance: Optional[ScenarioProvenance] = None
+    trajectory: list[TrajectoryPoint]

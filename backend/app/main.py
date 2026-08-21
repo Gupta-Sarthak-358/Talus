@@ -8,6 +8,8 @@ from pydantic import ValidationError
 
 from . import data
 from .schemas import (
+    CausalWhatIfRequest,
+    CausalWhatIfResponse,
     DecisionResponse,
     ExplanationResponse,
     Features,
@@ -15,6 +17,7 @@ from .schemas import (
     PredictResponse,
     RouteRequest,
     RouteResponse,
+    TemplatesResponse,
     TrendResponse,
     WhatIfRequest,
     WhatIfResponse,
@@ -192,7 +195,10 @@ def safe_route(req: RouteRequest):
     return RouteResponse(risk_aware_route=aware, shortest_route=shortest, avoided_zones=avoided)
 
 
-@app.post("/api/simulation/what-if", response_model=WhatIfResponse)
+@app.post("/api/simulation/what-if", response_model=WhatIfResponse,
+          description="ML COUNTERFACTUAL: overrides observed features and re-predicts "
+                      "with the frozen RF. Not a causal simulation -- use "
+                      "/api/simulation/causal-what-if for physics-based trajectories.")
 def what_if(req: WhatIfRequest):
     _zone_or_404(req.zone_id)
     current = data.store.features[req.zone_id]
@@ -225,3 +231,26 @@ def what_if(req: WhatIfRequest):
         delta=simulated_score - baseline_score,
         contributions=contribs,
     )
+
+
+@app.get("/api/simulation/templates", response_model=TemplatesResponse)
+def list_scenario_templates():
+    from . import scenario_service
+    return TemplatesResponse(templates=scenario_service.list_templates())
+
+
+@app.post("/api/simulation/causal-what-if", response_model=CausalWhatIfResponse,
+          description="CAUSAL PHYSICS What-If (Scenario Engine v1.5): modifies causes "
+                      "(rain realization / blast schedule) and lets the frozen generator "
+                      "v1.4.0 chain propagate them into a day-by-day FoS/risk trajectory.")
+def causal_what_if(req: CausalWhatIfRequest):
+    _zone_or_404(req.zone_id)
+    from . import scenario_service
+    try:
+        result = scenario_service.run_causal(
+            zone_letter=req.zone_id, kind=req.kind, start_day=req.start_day,
+            duration_days=req.duration_days, params=req.params,
+            horizon_days=req.horizon_days, seed=req.seed)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+    return CausalWhatIfResponse(**result)
