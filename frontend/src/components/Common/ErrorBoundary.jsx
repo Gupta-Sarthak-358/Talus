@@ -1,0 +1,39 @@
+import React from 'react';
+
+/** Prevents a single render error from blanking the entire app. */
+export default class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { error };
+  }
+
+  componentDidCatch(error, info) {
+    // Surface in console so the Vite terminal/browser console shows the cause
+    console.error('TALUS UI crashed:', error, info?.componentStack);
+  }
+
+  render() {
+    if (this.state.error) {
+      return (
+        <div style={{ padding: 32, fontFamily: 'monospace', color: '#f87171' }}>
+          <h2 style={{ marginBottom: 12 }}>TALUS UI error</h2>
+          <pre style={{ whiteSpace: 'pre-wrap', fontSize: 12, color: '#cbd5e1' }}>
+            {String(this.state.error?.message || this.state.error)}
+          </pre>
+          <button
+            onClick={() => this.setState({ error: null })}
+            style={{ marginTop: 16, padding: '8px 16px', background: '#334155',
+                     color: 'white', border: 'none', borderRadius: 8, cursor: 'pointer' }}
+          >
+            Retry
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}

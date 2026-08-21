@@ -82,7 +82,8 @@ export async function getZoneById(zoneId) {
     ]);
     const f = features?.features || {};
     const mock = MOCK_ZONES.find((z) => z.id === zoneId) || {};
-    return {
+    const rich = {
+      ...mock,
       id: detail.zone_id,
       name: detail.name,
       sector: mock.sector || '',
@@ -94,6 +95,7 @@ export async function getZoneById(zoneId) {
       updated_at: detail.updated_at,
       missingEvidence: features?.missing_features || [],
       telemetry: {
+        ...(mock.telemetry || {}),
         slope_angle: f.slope_angle_deg,
         rock_type: f.rock_type,
         crack_density: f.crack_density,
@@ -114,6 +116,8 @@ export async function getZoneById(zoneId) {
         history: (trend?.history || []).map((p) => ({ time: p.t, risk: p.risk_score, label: p.t })),
       },
     };
+    // Context consumers read result.zone -- wrap while keeping fields at top level.
+    return { zone: rich, ...rich };
   }
 
   await simulateLatency(200);
