@@ -1,0 +1,5 @@
+{
+  "zones": [
+    {"zone_id": "A", "risk_score": 32, "risk_band": "Low", "confidence": 0.74, "trend": "stable"}
+  ]
+}
