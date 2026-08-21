@@ -428,3 +428,54 @@ Format: Observation → Evidence → Interpretation → Decision → Version aff
 - **New endpoints (backend):** GET /api/simulation/templates (IMD-provenance for Dec-1902/Apr-1931/Nov-2015/Dec-1996); POST /api/simulation/causal-what-if (Scenario Engine v1.5: modifies causes, frozen v1.4.0 chain propagates, returns day-by-day FoS/score/label trajectory + summary incl. open-crack-branch flag). Existing /api/simulation/what-if explicitly documented as ML counterfactual in its API description.
 - **Tests:** 8 new causal tests (determinism via identical summaries, template provenance, blast no-op on unblasted zones visible through the API, multi-year branch firing at 1095-day horizon, kind/zone validation) -- full suite 23/23 PASS.
 - **Member 2 COMPLETE.** Prediction path and causal simulation path are both live behind the API with the distinction made explicit.
+
+## 23. BACKFILL: ML campaign experiment log (recorded post-hoc, chronological)
+
+Entries for work performed between SS17 and SS18 that lived in scratch reports
+and docs/MEMBER2_AUDIT.md but was never given ledger states. Numbers are from
+the committed result JSONs under ml/benchmark/results/ unless noted.
+
+### SS23.1 Baseline + leakage discovery (5-seed corpus)
+- Naive random row split: R2=0.998 / macro-F1 0.985 -- INVALID (within-seed near-duplicates).
+- Honest unseen-seed split (train 42-45 -> test 46): R2=-0.53, worse than dummy. Cause: per-seed band pinning (test mean 38.5 vs train 56.9; seed 46 held 92% of all 'low' rows).
+- Verdict: random splitting banned; seed-intact splits become protocol law.
+
+### SS23.2 Experiments A-D (diagnostic ladder, 5-20 seeds)
+- A single-seed chronological (Jan-Sep -> Dec): R2=0.66 overall; per-zone 0.75-0.94 (ZONE_C -5.0 = rare-event miss). Dynamic signal EXISTS within a world.
+- B static-vs-dynamic on unseen seed: static -0.55, dynamic -1.64. Dynamics do not transfer across worlds.
+- C delta-targets (train-only zone baselines): R2 -0.58 -> +0.13 (both d-inst and d-fos agree).
+- D world expansion: 20 seeds -> d-fos 0.457 / abs 0.590. Coverage, not physics, was the bottleneck.
+- Artifacts: experiment_AB_report.json, experiment_C_report.json, experiment_D_report.json (scratch).
+
+### SS23.3 Formal 50-world benchmark (protocol v1 frozen)
+- Corpus: seeds 42-91, 73,000 rows. Splits 42-81 / 82-86 / 87-91, test touched once.
+- Default + GroupKFold-by-seed tuning (cheap-search then production refit).
+- Test R2: abs -- Ridge 0.898, RF 0.897, HistGB 0.901, XGB 0.902, LightGBM 0.901; delta targets 0.82-0.85.
+- Selection by VALIDATION only: RF winner on all three targets -> frozen as Model v1 (docs/ML_MODEL_CARD_V1.md). Boosting test scores recorded as comparative baselines only.
+- Artifacts: ml/benchmark/{baselines,tuning}.py, results/baselines_default.json, results/tuned_*.json.
+
+### SS23.4 Explainability + directionality audit
+- Permutation/SHAP: slope_angle + rock_type dominate; groundwater correct direction; days_since_inspection ~ 0 (no scheduler crutch).
+- Monotonicity sweeps: crack_density and blast PPV inverted in MODEL; raw-data check shows ZONE_B crack corr -0.26 flips to +0.36 controlling rain+GW.
+- Audit classification: (a) wetting confound, (b) lag/state-memory (PPV->growth 0.55 same-day; growth->inst persists 7d), (c) ML artifact mirroring confounds. NO class-(d) generator defect. Physics retention contract verified monotone counterfactually.
+- Artifact: results/explainability.json; audit script/report in scratch.
+
+### SS23.5 ANN probe (MLP + LSTM)
+- MLP R2=0.895 abs -- seventh model family inside the same band; ceiling is feature information.
+- LSTM-14day no gain over snapshots -> generator FoS confirmed Markovian in current state (third independent confirmation).
+- Artifact: ann_results.json (scratch).
+
+### SS23.6 Transfer learning study
+- Source domain: 120K cases from published geotech ranges through frozen FoS functions (stands in for Xu-et-al-style pretrained surrogate; no public checkpoint exists).
+- Zero-shot on Neyveli: R2=-0.97. Fine-tuned at 5 worlds: 0.906 vs scratch 0.886; parity by 20-40. TrAdaBoost.R2 simplified: 0.775 @5 worlds.
+- Conclusion: physics pretraining is a data-efficiency prior, not a replacement for target coverage.
+- Artifacts: transfer_probe.py, transfer_results.json (scratch).
+
+### SS23.7 Extended 75-world study (seeds 42-116)
+- Regression: same-test controlled comparison 40 vs 65 train seeds -> +0.001. Curve flat; 50-world benchmark stands. R2 not comparable across different test sets.
+- Classification at scale (first proper numbers): macro-F1 0.47, balanced acc 0.47, critical recall 0.87 (RF); 'moderate' band NEVER predicted -- formulation problem (ordinal recommended), not coverage.
+- Transitions: 6 strict safe->dangerous events in 109,500 zone-days; zones quantitatively pinned (ZONE_D 100% critical/high). Early-warning claims impossible on passive generation -> motivated Scenario Engine.
+- Artifacts: extended_study_results.json, diagnose_extended.py (scratch); corpus seeds_42_116.csv (scratch, not shipped).
+
+### SS23.8 Backend merge
+- PR #1 (devSaumitr): FastAPI scaffold accepted -- additive only, no frozen artifacts touched. Mock scoring replaced immediately after by real model integration (see SS21).
