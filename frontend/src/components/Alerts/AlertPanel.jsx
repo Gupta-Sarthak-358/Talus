@@ -159,7 +159,7 @@ export default function AlertPanel() {
                       }}
                       className="text-xs font-bold text-talus-400 hover:text-talus-300 flex items-center gap-1 transition-colors"
                     >
-                      <span>Inspect {alert.zoneName.split('—')[0]} on Map</span>
+                      <span>Inspect {(alert.zoneName || `Zone ${alert.zoneId}`).split('—')[0].trim()} on Map</span>
                       <ExternalLink className="w-3 h-3" />
                     </button>
                   </div>

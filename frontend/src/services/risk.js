@@ -11,6 +11,15 @@ function bandUpper(band) {
   return String(band || '').toUpperCase().replace(' ', '_');
 }
 
+function cap(s) {
+  return String(s || '').charAt(0).toUpperCase() + String(s || '').slice(1).toLowerCase();
+}
+
+const ZONE_DISPLAY = { A: 'North Highwall', B: 'East Haulage & Toe', C: 'SW bench', D: 'NE bench' };
+function mockName(id) {
+  return ZONE_DISPLAY[id] || 'bench';
+}
+
 export async function getRiskSummary() {
   if (isLiveApiEnabled()) {
     const { zones } = await getZones();
@@ -69,9 +78,13 @@ export async function getAlerts() {
         alerts.push({
           id: `zone-${z.id}-${band.toLowerCase()}`,
           zoneId: z.id,
+          zoneName: `Zone ${z.id} — ${mockName(z.id)}`,
+          title: `${cap(band)} risk detected in Zone ${z.id}`,
+          summary: decision?.message || `Zone ${z.id} is ${band.toLowerCase()} risk`,
           severity: band,
-          message: decision?.message || `Zone ${z.id} is ${band.toLowerCase()} risk`,
           action: decision?.action || 'monitor',
+          drivers: [],
+          acknowledged: false,
           timestamp: new Date().toISOString(),
         });
       }
