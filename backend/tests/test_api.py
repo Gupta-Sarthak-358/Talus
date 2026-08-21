@@ -3,6 +3,7 @@ from fastapi.testclient import TestClient
 
 from app.data import store
 from app.main import app
+from app.schemas import RouteResponse
 
 client = TestClient(app)
 
@@ -117,14 +118,22 @@ def test_decision_returns_four_roles():
 
 
 def test_safe_route_avoids_high_risk_zone():
-    client.post("/api/risk/predict", json={"zone_id": "B", "features": EVENT2})
+    store.risk["B"] = 100
     body = {
         "start": {"zone_id": "A", "lat": 20.51, "lng": 80.115},
         "end": {"zone_id": "D", "lat": 20.58, "lng": 80.165},
     }
     r = client.post("/api/routes/safe", json=body)
     assert r.status_code == 200
-    assert isinstance(r.json()["risk_aware_route"]["path"], list)
+    response = RouteResponse.model_validate(r.json())
+    assert response.risk_aware_route.path
+    assert response.shortest_route.path
+    assert response.avoided_zones == ["B"]
+    assert response.risk_aware_route.max_risk_exposed < response.shortest_route.max_risk_exposed
+    assert all(
+        set(point.model_dump()) == {"lat", "lng"}
+        for point in response.risk_aware_route.path
+    )
 
 
 def test_safe_route_requires_zone_id():

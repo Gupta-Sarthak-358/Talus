@@ -6,6 +6,9 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import ValidationError
 
+from routing.comparison import compare_routes
+from routing.graph import MineRoadGraph
+
 from . import data
 from .schemas import (
     CausalWhatIfRequest,
@@ -38,6 +41,10 @@ app.add_middleware(
 )
 
 RISK_WEIGHT = 3.0
+# Calibrated so that avoiding a Critical-adjacent detour outweighs the
+# +0.6% base-length difference on the canonical A->D corridor
+# (deterministic geometry; avoidance holds for alpha >= ~0.13).
+ROUTING_ALPHA = 0.2
 
 DECISIONS_BY_BAND = {
     "Critical": [
@@ -76,6 +83,31 @@ def _decisions(zone_id: str, score: int) -> list[dict]:
             item["message"] = item["message"].replace("Zone B", zone_id)
         out.append(item)
     return out
+
+
+def _mine_road_graph() -> MineRoadGraph:
+    """Adapt the demo topology and center distances to the routing domain."""
+    mine_road_graph = MineRoadGraph()
+    for zone_id in data.ZONE_CENTERS:
+        mine_road_graph.add_zone(zone_id)
+
+    for start_zone_id, neighbors in data.GRAPH.items():
+        for end_zone_id in neighbors:
+            if mine_road_graph.graph.has_edge(start_zone_id, end_zone_id):
+                continue
+            mine_road_graph.add_road(
+                start_zone_id,
+                end_zone_id,
+                length=data.distance(
+                    data.ZONE_CENTERS[start_zone_id], data.ZONE_CENTERS[end_zone_id]
+                ),
+                adjacent_zones=(start_zone_id, end_zone_id),
+            )
+
+    return mine_road_graph
+
+
+MINE_ROAD_GRAPH = _mine_road_graph()
 
 
 @app.get("/")
@@ -194,16 +226,32 @@ def predict(req: PredictRequest):
 def safe_route(req: RouteRequest):
     start = min(data.ZONE_CENTERS, key=lambda z: data.distance(req.start.model_dump(), data.ZONE_CENTERS[z]))
     end = min(data.ZONE_CENTERS, key=lambda z: data.distance(req.end.model_dump(), data.ZONE_CENTERS[z]))
-    risk = data.store.risk
-    shortest_path, shortest_cost, _ = data._dijkstra(start, end, risk, 0.0)
-    aware_path, aware_cost, aware_max = data._dijkstra(start, end, risk, RISK_WEIGHT)
-    _, shortest_max = shortest_path, max((risk.get(n, 0) for n in shortest_path), default=0)
-    shortest = {"path": data.interpolate([data.ZONE_CENTERS[z] for z in shortest_path]),
-                "total_cost": shortest_cost, "max_risk_exposed": shortest_max}
-    aware = {"path": data.interpolate([data.ZONE_CENTERS[z] for z in aware_path]),
-             "total_cost": aware_cost, "max_risk_exposed": aware_max}
-    avoided = [z for z in shortest_path if z not in aware_path]
-    return RouteResponse(risk_aware_route=aware, shortest_route=shortest, avoided_zones=avoided)
+    comparison = compare_routes(
+        MINE_ROAD_GRAPH,
+        start,
+        end,
+        data.store.risk,
+        ROUTING_ALPHA,
+    )
+    shortest = {
+        "path": data.interpolate(
+            [data.ZONE_CENTERS[zone_id] for zone_id in comparison.shortest_route.path]
+        ),
+        "total_cost": comparison.shortest_route.total_cost,
+        "max_risk_exposed": comparison.shortest_route.max_risk_exposed,
+    }
+    aware = {
+        "path": data.interpolate(
+            [data.ZONE_CENTERS[zone_id] for zone_id in comparison.risk_aware_route.path]
+        ),
+        "total_cost": comparison.risk_aware_route.total_cost,
+        "max_risk_exposed": comparison.risk_aware_route.max_risk_exposed,
+    }
+    return RouteResponse(
+        risk_aware_route=aware,
+        shortest_route=shortest,
+        avoided_zones=comparison.avoided_zones,
+    )
 
 
 @app.post("/api/simulation/what-if", response_model=WhatIfResponse,
