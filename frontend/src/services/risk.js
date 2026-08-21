@@ -1,27 +1,45 @@
 import { apiRequest, isLiveApiEnabled, simulateLatency } from './api';
-import { MOCK_ALERTS, MOCK_ZONES } from '../data/mockData';
+import { getZones } from './zones';
 
 /**
- * Fetch top-level risk metrics
- * Contract: GET /api/risk/summary
+ * Risk summary + alerts. Live mode derives both from the real /api/zones
+ * feed (frozen RF scores + calibrated confidence). Alerts are synthesized
+ * from zone states via the decision endpoint contract.
  */
-export async function getRiskSummary(zones = MOCK_ZONES) {
+
+function bandUpper(band) {
+  return String(band || '').toUpperCase().replace(' ', '_');
+}
+
+export async function getRiskSummary() {
   if (isLiveApiEnabled()) {
-    return apiRequest('/risk/summary');
+    const { zones } = await getZones();
+    return summarize(zones);
   }
 
   await simulateLatency(150);
+  return summarize(MOCK_FALLBACK_ZONES());
+}
 
-  const criticalCount = zones.filter((z) => z.risk_band === 'CRITICAL').length;
-  const highCount = zones.filter((z) => z.risk_band === 'HIGH').length;
-  const moderateCount = zones.filter((z) => z.risk_band === 'MODERATE').length;
-  const lowCount = zones.filter((z) => z.risk_band === 'LOW' || z.risk_band === 'VERY_LOW').length;
+function MOCK_FALLBACK_ZONES() {
+  // Offline fallback uses the real frozen-model outputs (seed-91 states).
+  return [
+    { id: 'A', risk_band: 'CRITICAL', confidence: 91, activePersonnel: 4 },
+    { id: 'B', risk_band: 'CRITICAL', confidence: 100, activePersonnel: 2 },
+    { id: 'C', risk_band: 'MODERATE', confidence: 44, activePersonnel: 6 },
+    { id: 'D', risk_band: 'CRITICAL', confidence: 95, activePersonnel: 0 },
+  ];
+}
 
-  // Average confidence across all zones
+function summarize(zones) {
+  const bands = zones.map((z) => ({ ...z, band: bandUpper(z.risk_band) }));
+  const criticalCount = bands.filter((z) => z.band === 'CRITICAL').length;
+  const highCount = bands.filter((z) => z.band === 'HIGH').length;
+  const moderateCount = bands.filter((z) => z.band === 'MODERATE').length;
+  const lowCount = bands.filter((z) => z.band === 'LOW' || z.band === 'VERY_LOW').length;
   const avgConfidence = Math.round(
-    zones.reduce((acc, z) => acc + (z.confidence || 80), 0) / zones.length
+    bands.reduce((acc, z) => acc + (z.confidence || 0), 0) / Math.max(zones.length, 1)
   );
-
   return {
     criticalCount,
     highCount,
@@ -29,41 +47,53 @@ export async function getRiskSummary(zones = MOCK_ZONES) {
     lowCount,
     totalZones: zones.length,
     dataQualityConfidence: avgConfidence,
-    activePersonnelInHazard: zones
-      .filter((z) => z.risk_band === 'HIGH' || z.risk_band === 'CRITICAL')
+    activePersonnelInHazard: bands
+      .filter((z) => z.band === 'HIGH' || z.band === 'CRITICAL')
       .reduce((acc, z) => acc + (z.activePersonnel || 0), 0),
     systemStatus: criticalCount > 0 ? 'CRITICAL_ALERT' : highCount > 0 ? 'HIGH_ALERT' : 'NORMAL_OPERATIONS',
   };
 }
 
-/**
- * Fetch active risk alerts
- * Contract: GET /api/alerts
- */
 export async function getAlerts() {
   if (isLiveApiEnabled()) {
-    return apiRequest('/alerts');
+    const { zones } = await getZones();
+    const alerts = [];
+    for (const z of zones) {
+      const band = bandUpper(z.risk_band);
+      if (band === 'CRITICAL' || band === 'HIGH') {
+        let decision = null;
+        try {
+          const d = await apiRequest(`/zones/${z.id}/decision`);
+          decision = d.decisions?.[0];
+        } catch { /* keep alert without decision text */ }
+        alerts.push({
+          id: `zone-${z.id}-${band.toLowerCase()}`,
+          zoneId: z.id,
+          severity: band,
+          message: decision?.message || `Zone ${z.id} is ${band.toLowerCase()} risk`,
+          action: decision?.action || 'monitor',
+          timestamp: new Date().toISOString(),
+        });
+      }
+    }
+    return { alerts };
   }
 
   await simulateLatency(200);
   return {
-    alerts: [...MOCK_ALERTS],
+    alerts: [
+      { id: 'zone-b-critical', zoneId: 'B', severity: 'CRITICAL',
+        message: 'Zone B is critical risk', action: 'prioritize inspection',
+        timestamp: new Date().toISOString() },
+    ],
   };
 }
 
-/**
- * Acknowledge or dismiss an alert
- * Contract: POST /api/alerts/{id}/acknowledge
- */
 export async function acknowledgeAlert(alertId) {
   if (isLiveApiEnabled()) {
-    return apiRequest(`/alerts/${alertId}/acknowledge`, { method: 'POST' });
+    // Acknowledgement is a UI concern in the prototype; no backend store yet.
+    return { status: 'success', acknowledgedId: alertId, timestamp: new Date().toISOString() };
   }
-
   await simulateLatency(100);
-  return {
-    status: 'success',
-    acknowledgedId: alertId,
-    timestamp: new Date().toISOString(),
-  };
+  return { status: 'success', acknowledgedId: alertId, timestamp: new Date().toISOString() };
 }

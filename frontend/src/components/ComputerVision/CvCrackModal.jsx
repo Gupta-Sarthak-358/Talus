@@ -6,6 +6,7 @@ import { Eye, X, Camera, ShieldCheck, Sparkles, Layers, ArrowRight, Info, AlertT
 export default function CvCrackModal() {
   const { isCvModalOpen, setIsCvModalOpen, selectedZoneId } = useMineContext();
   const [analysis, setAnalysis] = useState(null);
+  const [deferredMessage, setDeferredMessage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showMask, setShowMask] = useState(true);
 
@@ -13,12 +14,40 @@ export default function CvCrackModal() {
     if (isCvModalOpen) {
       setLoading(true);
       getCvCrackAnalysis(selectedZoneId || 'B')
-        .then((res) => setAnalysis(res.analysis))
+        .then((res) => {
+          if (res.deferred) {
+            setDeferredMessage(res.message);
+          } else {
+            setAnalysis(res.analysis);
+          }
+        })
         .finally(() => setLoading(false));
     }
   }, [isCvModalOpen, selectedZoneId]);
 
   if (!isCvModalOpen) return null;
+
+  if (deferredMessage) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
+        <div className="w-full max-w-lg bg-mine-card border border-mine-border rounded-2xl shadow-2xl overflow-hidden">
+          <div className="p-4 bg-mine-darker border-b border-mine-border flex items-center gap-2.5">
+            <AlertTriangle className="w-4 h-4 text-amber-400" />
+            <h3 className="text-sm font-bold text-white">Computer Vision — Deferred Capability</h3>
+          </div>
+          <div className="p-5 text-sm text-slate-300 leading-relaxed">{deferredMessage}</div>
+          <div className="px-5 pb-5">
+            <button
+              onClick={() => setIsCvModalOpen(false)}
+              className="px-3 py-1.5 rounded-lg bg-mine-border hover:bg-slate-600 text-xs font-semibold text-white transition-colors"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
