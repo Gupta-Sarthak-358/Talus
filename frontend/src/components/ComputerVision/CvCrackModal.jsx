@@ -35,11 +35,11 @@ export default function CvCrackModal() {
             <AlertTriangle className="w-4 h-4 text-amber-400" />
             <h3 className="text-sm font-bold text-white">Computer Vision — Deferred Capability</h3>
           </div>
-          <div className="p-5 text-sm text-slate-300 leading-relaxed">{deferredMessage}</div>
+          <div className="p-5 text-sm text-mine-text leading-relaxed">{deferredMessage}</div>
           <div className="px-5 pb-5">
             <button
               onClick={() => setIsCvModalOpen(false)}
-              className="px-3 py-1.5 rounded-lg bg-mine-border hover:bg-slate-600 text-xs font-semibold text-white transition-colors"
+              className="px-3 py-1.5 rounded-lg bg-mine-border hover:bg-mine-highlight text-xs font-semibold text-mine-text transition-colors"
             >
               Close
             </button>

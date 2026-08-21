@@ -301,7 +301,7 @@ export default function WhatIfDrawer() {
                             </div>
                             <ul className="mt-1 space-y-0.5">
                               {ev.causes.map((cause, j) => (
-                                <li key={j} className="text-[10px] text-amber-300/90">↳ {cause}</li>
+                                <li key={j} className="text-[10px] text-mine-text font-medium">↳ {cause}</li>
                               ))}
                             </ul>
                           </div>
