@@ -1,0 +1,109 @@
+{
+  "protocol": "v1",
+  "targets": {
+    "abs_instability": {
+      "random_forest": {
+        "best_params_search": {
+          "est__n_estimators": 150,
+          "est__min_samples_leaf": 1,
+          "est__max_depth": 12
+        },
+        "final_params_production": {
+          "est__n_estimators": 500,
+          "est__min_samples_leaf": 1,
+          "est__max_depth": 12
+        },
+        "valid_after_refit_train_val": {
+          "mae": 5.0738482514478855,
+          "rmse": 11.40839922815954,
+          "r2": 0.8990143570589402,
+          "r2_seed_boot_2.5": 0.6983454930767798,
+          "r2_seed_boot_97.5": 0.971387880762072
+        },
+        "test_after_refit_train_val": {
+          "mae": 8.508240221352342,
+          "rmse": 13.515601496965997,
+          "r2": 0.8967544929976184,
+          "r2_seed_boot_2.5": 0.8337480879751435,
+          "r2_seed_boot_97.5": 0.9509661837716318
+        },
+        "cv_search_sec": 273.43
+      }
+    },
+    "delta_instability": {
+      "random_forest": {
+        "best_params_search": {
+          "est__n_estimators": 150,
+          "est__min_samples_leaf": 1,
+          "est__max_depth": 12
+        },
+        "final_params_production": {
+          "est__n_estimators": 500,
+          "est__min_samples_leaf": 1,
+          "est__max_depth": 12
+        },
+        "valid_after_refit_train_val": {
+          "mae": 5.074900259060386,
+          "rmse": 10.775568652889241,
+          "r2": 0.9012202386236706,
+          "r2_seed_boot_2.5": 0.7586235761480355,
+          "r2_seed_boot_97.5": 0.9691845161729981
+        },
+        "test_after_refit_train_val": {
+          "mae": 8.282302127397779,
+          "rmse": 13.497938411884048,
+          "r2": 0.8229877341548276,
+          "r2_seed_boot_2.5": 0.6460384728459633,
+          "r2_seed_boot_97.5": 0.9189894181493824
+        },
+        "cv_search_sec": 257.29
+      }
+    },
+    "delta_fos": {
+      "random_forest": {
+        "best_params_search": {
+          "est__n_estimators": 150,
+          "est__min_samples_leaf": 1,
+          "est__max_depth": 12
+        },
+        "final_params_production": {
+          "est__n_estimators": 500,
+          "est__min_samples_leaf": 1,
+          "est__max_depth": 12
+        },
+        "valid_after_refit_train_val": {
+          "mae": 0.10264772514230815,
+          "rmse": 0.2159250280425903,
+          "r2": 0.9010259792179798,
+          "r2_seed_boot_2.5": 0.7576845986110072,
+          "r2_seed_boot_97.5": 0.9688444493272008
+        },
+        "test_after_refit_train_val": {
+          "mae": 0.16645702709903185,
+          "rmse": 0.27184230223773925,
+          "r2": 0.8205346522324488,
+          "r2_seed_boot_2.5": 0.6421127964522193,
+          "r2_seed_boot_97.5": 0.9193557814290289
+        },
+        "cv_search_sec": 244.03
+      }
+    }
+  },
+  "tuned_params": {
+    "abs_instability::random_forest": {
+      "est__n_estimators": 150,
+      "est__min_samples_leaf": 1,
+      "est__max_depth": 12
+    },
+    "delta_instability::random_forest": {
+      "est__n_estimators": 150,
+      "est__min_samples_leaf": 1,
+      "est__max_depth": 12
+    },
+    "delta_fos::random_forest": {
+      "est__n_estimators": 150,
+      "est__min_samples_leaf": 1,
+      "est__max_depth": 12
+    }
+  }
+}

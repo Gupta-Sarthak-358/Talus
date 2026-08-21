@@ -7,8 +7,13 @@ target fields so the next ML phase can consume the dataset directly.
 
 Outputs (ml_handoff/):
   seed_42_ml_features_targets.csv                       seed 42 only
-  synthetic_ml_dataset_seeds_42_46.csv                  combined, with `seed` col
+  synthetic_ml_dataset_seeds_42_46.csv                  seeds 42-46 (v1, 5)
+  synthetic_ml_dataset_seeds_42_91.csv                  seeds 42-91 (v2, 50)
   README.md                                            manifest
+
+The seed range is controlled by SEED_START/SEED_STOP below so the export
+can be re-run for any number of independent stochastic worlds without ever
+touching the frozen generator.
 
 Deliberately DEFERRED to the ML phase (nothing here):
   - train/validation/test splits
@@ -27,7 +32,10 @@ sys.path.insert(0, ".")
 from generator_v1 import build_timeline, build_internal_state, project_ml
 from generator_schema import BASE_DIR, GENERATOR_VERSION, SCHEMA_VERSION
 
-SEEDS = [42, 43, 44, 45, 46]
+SEED_START = 42
+SEED_STOP = 92  # exclusive -> seeds 42..91 (50 seeds)
+SEEDS = list(range(SEED_START, SEED_STOP))
+LEGACY_SEEDS = [42, 43, 44, 45, 46]  # v1 handoff (5 seeds), kept for historical provenance
 OUT_DIR = BASE_DIR / "data" / "processed" / "generator_v1" / "ml_handoff"
 TARGET_COLS = ["fos", "instability_score", "risk_label"]
 AUX_COLS = ["zone_id", "seed"]
@@ -45,15 +53,20 @@ produce this dataset.
 - Synthetic: True (all rows are generated -- NOT measured mine data)
 - Phases: 1A-1E complete
 - Reference mine: Neyveli Mine-II (11.50N, 79.50E); synthetic operational states
+- Generator FROZEN at v1.4.0 -- the v2 corpus is an EXPORT of more seeds from
+  the same frozen generator, not a physics change.
 
 ## Files
 - `seed_42_ml_features_targets.csv` -- seed 42 only, {rows_single} rows
-- `synthetic_ml_dataset_seeds_42_46.csv` -- seeds {seeds}, {rows_all} rows
-  (all seeds concatenated; `seed` column identifies the source draw)
+- `synthetic_ml_dataset_seeds_42_46.csv` -- v1 handoff, seeds 42-46 ({rows_v1} rows;
+  kept for historical provenance of Experiments A-D)
+- `synthetic_ml_dataset_seeds_42_91.csv` -- v2 official corpus, seeds 42-91
+  ({rows_v2} rows; 50 independent stochastic worlds)
 
 ## Row counts
 - per seed (single year, 4 zones x 365 days): {rows_single}
-- combined (5 seeds): {rows_all}
+- v1 combined (5 seeds): {rows_v1}
+- v2 corpus (50 seeds): {rows_v2}
 
 ## Feature columns (12, frozen ML-facing schema)
 {feature_desc}
@@ -132,19 +145,26 @@ def main():
         seed42.drop(columns=["seed"]).to_csv(index=False), encoding="utf-8"
     )
 
+    legacy = {s: frames[s] for s in LEGACY_SEEDS}
+    combined_v1 = pd.concat(legacy.values(), ignore_index=True)
+    v1_path = OUT_DIR / "synthetic_ml_dataset_seeds_42_46.csv"
+    v1_path.write_text(combined_v1.to_csv(index=False), encoding="utf-8")
+
     combined = pd.concat(frames.values(), ignore_index=True)
-    combined_path = OUT_DIR / "synthetic_ml_dataset_seeds_42_46.csv"
-    combined_path.write_text(combined.to_csv(index=False), encoding="utf-8")
+    v2_path = OUT_DIR / "synthetic_ml_dataset_seeds_42_91.csv"
+    v2_path.write_text(combined.to_csv(index=False), encoding="utf-8")
 
     rows_single = len(seed42.drop(columns=["seed"]))
-    rows_all = len(combined)
+    rows_v1 = len(combined_v1)
+    rows_v2 = len(combined)
 
     manifest = MANIFEST.format(
         script=Path(__file__).name,
         gen_version=GENERATOR_VERSION,
         schema_version=SCHEMA_VERSION,
         rows_single=rows_single,
-        rows_all=rows_all,
+        rows_v1=rows_v1,
+        rows_v2=rows_v2,
         seeds="-".join(str(s) for s in SEEDS),
         feature_desc="\n".join(f"  - {k}: {v}" for k, v in FEATURE_DESCS.items()),
         target_desc="\n".join(f"  - {k}: {v}" for k, v in TARGET_DESCS.items()),
@@ -153,11 +173,12 @@ def main():
     (OUT_DIR / "README.md").write_text(manifest, encoding="utf-8")
 
     print(f"seed 42            -> {seed42_path} ({rows_single} rows)")
-    print(f"combined 42-46     -> {combined_path} ({rows_all} rows)")
+    print(f"v1 42-46           -> {v1_path} ({rows_v1} rows)")
+    print(f"v2 42-91 (50 seed) -> {v2_path} ({rows_v2} rows)")
     print(f"manifest           -> {OUT_DIR / 'README.md'}")
     print(f"\nseed 42 target stats (regression target check):")
     print(seed42["instability_score"].describe().round(1).to_string())
-    print("\ncombined risk_label counts:")
+    print("\nv2 risk_label counts:")
     print(combined["risk_label"].value_counts().to_string())
 
 

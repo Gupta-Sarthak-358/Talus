@@ -390,3 +390,12 @@ Format: Observation → Evidence → Interpretation → Decision → Version aff
 - Combined-label mix across seeds: very_low 2,894 (39.6%), critical 1,858 (25.5%), high 1,484, moderate 726, low 338 — multi-seed coverage spans all bands (per the Entry 22 provenance note, single seeds are band-pinned; classification studies require the multi-seed set).
 - **Validation after export:** `validate_generator_v1.py --seed 42` re-run — ALL PASS (physics/ordering/schema unchanged).
 - **Decision:** record as handoff/export; generator remains frozen at 1.4.0. Next phase = reverse-engineering walkthrough + ML layer (features/targets/splits/leakage/baseline).
+## 18. Experiment F: temporal trend features (V2) -- hypothesis tested and REFUTED
+
+- **Code:** ml/features/temporal_features.py (V2 builder + causality selftest), ml/benchmark/experiment_f.py, ml/benchmark/experiment_f2_forecast.py.
+- **Hypothesis (roadmap Phase 2-5):** exposing temporal trends (rain accumulation, groundwater deltas, crack growth rates, blast history) improves ML prediction.
+- **Causality gate:** trailing windows only; selftest_causality() verifies features at t are invariant to deleting the future (PASS, 20 randomized truncation checks).
+- **Result (nowcasting, same frozen protocol 42-81/82-86/87-91):** V2 is consistently WORSE than V1. abs: 0.890 vs 0.915; d-inst: 0.812 vs 0.852; d-fos: 0.808 vs 0.853. No ablation group beats V1 beyond noise.
+- **Result (forecasting t+1 / t+7):** persistence baseline dominates everything (R2 0.998 / 0.991); learned models ~0.88-0.91 regardless of feature set.
+- **Diagnosis:** third independent confirmation that generator FoS is memoryless given the current state (after LSTM probe and directionality audit). Day-scale changes are tiny and driven by future stochastic weather, which no observable trend encodes. Trend features would matter only with hysteresis or longer-horizon seasonal forecasting.
+- **Decision:** V1 remains the frozen ML feature contract. "Understands changing conditions" is served by the Scenario Engine (physics simulation of causes), NOT by trend features in the nowcast model. ML Model v1 frozen per docs/ML_MODEL_CARD_V1.md (RF, validation-selected).

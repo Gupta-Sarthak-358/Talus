@@ -1,0 +1,666 @@
+{
+  "primary_model": "random_forest (validation-selected)",
+  "note": "test results from tuned_*.json are recorded evidence; NOT used for selection",
+  "targets": {
+    "abs_instability": {
+      "permutation_importance": {
+        "rainfall_24h_mm": 0.0016,
+        "rainfall_7d_mm": 0.0002,
+        "slope_angle_deg": 1.4231,
+        "slope_height_m": 0.1057,
+        "rock_type": 0.9543,
+        "crack_density": 0.0127,
+        "crack_severity": 0.0487,
+        "blast_frequency_per_week": 0.0283,
+        "blast_vibration_ppv_mms": -0.0002,
+        "days_since_inspection": 0.0043,
+        "prior_incident": 0.0,
+        "groundwater_proxy": 0.0017,
+        "zone_id": 0.001
+      },
+      "shap_mean_abs": {
+        "rainfall_24h_mm": 0.3067,
+        "rainfall_7d_mm": 0.5975,
+        "slope_angle_deg": 23.9169,
+        "slope_height_m": 5.2627,
+        "crack_density": 1.2941,
+        "blast_frequency_per_week": 3.3746,
+        "blast_vibration_ppv_mms": 0.1072,
+        "days_since_inspection": 0.2022,
+        "prior_incident": 0.0,
+        "groundwater_proxy": 1.7618,
+        "rock_type_clayey_sandstone": 21.4863,
+        "rock_type_lateritic_soil": 0.1467,
+        "rock_type_sandstone": 0.0993,
+        "rock_type_variegated_sandy_clay": 0.1423,
+        "crack_severity_critical": 1.5836,
+        "crack_severity_minor": 0.0423,
+        "crack_severity_moderate": 0.0901,
+        "crack_severity_normal": 0.1866,
+        "crack_severity_severe": 0.0061,
+        "zone_id_ZONE_A": 0.1988,
+        "zone_id_ZONE_B": 0.1583,
+        "zone_id_ZONE_C": 0.0284,
+        "zone_id_ZONE_D": 0.0975
+      },
+      "monotonicity_by_zone": {
+        "ZONE_A": {
+          "rainfall_24h_mm": {
+            "pred_min": 0.0,
+            "pred_max": 0.0,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          },
+          "rainfall_7d_mm": {
+            "pred_min": 0.0,
+            "pred_max": 0.0,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          },
+          "groundwater_proxy": {
+            "pred_min": 0.0,
+            "pred_max": 0.0,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          },
+          "crack_density": {
+            "pred_min": 0.0,
+            "pred_max": 0.0,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          },
+          "blast_vibration_ppv_mms": {
+            "pred_min": 0.0,
+            "pred_max": 0.0,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          },
+          "slope_angle_deg": {
+            "pred_min": 0.0,
+            "pred_max": 85.00148461920375,
+            "delta_over_sweep": -83.567,
+            "direction_ok": false
+          },
+          "slope_height_m": {
+            "pred_min": 0.0,
+            "pred_max": 0.0,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          }
+        },
+        "ZONE_B": {
+          "rainfall_24h_mm": {
+            "pred_min": 5.483694176396353,
+            "pred_max": 5.4902388304844045,
+            "delta_over_sweep": 0.002,
+            "direction_ok": true
+          },
+          "rainfall_7d_mm": {
+            "pred_min": 2.9502025523067426,
+            "pred_max": 5.7753119279921705,
+            "delta_over_sweep": 0.948,
+            "direction_ok": true
+          },
+          "groundwater_proxy": {
+            "pred_min": 2.949267224046085,
+            "pred_max": 11.963234702145751,
+            "delta_over_sweep": 8.752,
+            "direction_ok": true
+          },
+          "crack_density": {
+            "pred_min": 0.06051240654395108,
+            "pred_max": 3.0000549550572124,
+            "delta_over_sweep": 2.94,
+            "direction_ok": true
+          },
+          "blast_vibration_ppv_mms": {
+            "pred_min": 2.949267224046084,
+            "pred_max": 2.9492672240460855,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          },
+          "slope_angle_deg": {
+            "pred_min": 1.516494656310821,
+            "pred_max": 85.2693769634295,
+            "delta_over_sweep": -81.801,
+            "direction_ok": false
+          },
+          "slope_height_m": {
+            "pred_min": 0.0,
+            "pred_max": 2.9492672240460855,
+            "delta_over_sweep": -1.966,
+            "direction_ok": false
+          }
+        },
+        "ZONE_C": {
+          "rainfall_24h_mm": {
+            "pred_min": 8.76645325082812,
+            "pred_max": 13.47541107594208,
+            "delta_over_sweep": 2.88,
+            "direction_ok": true
+          },
+          "rainfall_7d_mm": {
+            "pred_min": 1.0651414938525605,
+            "pred_max": 8.947715305507927,
+            "delta_over_sweep": 2.81,
+            "direction_ok": true
+          },
+          "groundwater_proxy": {
+            "pred_min": 3.320281668836767,
+            "pred_max": 33.689004063124564,
+            "delta_over_sweep": 18.436,
+            "direction_ok": true
+          },
+          "crack_density": {
+            "pred_min": 0.010037435363084948,
+            "pred_max": 39.41270060756249,
+            "delta_over_sweep": -7.136,
+            "direction_ok": false
+          },
+          "blast_vibration_ppv_mms": {
+            "pred_min": 0.9034633474821261,
+            "pred_max": 0.9034633474821262,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          },
+          "slope_angle_deg": {
+            "pred_min": 0.9034633474821262,
+            "pred_max": 88.87979832294177,
+            "delta_over_sweep": -66.672,
+            "direction_ok": false
+          },
+          "slope_height_m": {
+            "pred_min": 0.9034633474821261,
+            "pred_max": 28.878179811553853,
+            "delta_over_sweep": 27.833,
+            "direction_ok": true
+          }
+        },
+        "ZONE_D": {
+          "rainfall_24h_mm": {
+            "pred_min": 92.7958087659696,
+            "pred_max": 92.80281197304032,
+            "delta_over_sweep": -0.002,
+            "direction_ok": false
+          },
+          "rainfall_7d_mm": {
+            "pred_min": 85.47696208332377,
+            "pred_max": 94.18099055373115,
+            "delta_over_sweep": 2.967,
+            "direction_ok": true
+          },
+          "groundwater_proxy": {
+            "pred_min": 85.47696208332377,
+            "pred_max": 96.48265513148861,
+            "delta_over_sweep": 9.894,
+            "direction_ok": true
+          },
+          "crack_density": {
+            "pred_min": 85.42736692146022,
+            "pred_max": 88.25380833299678,
+            "delta_over_sweep": -2.82,
+            "direction_ok": false
+          },
+          "blast_vibration_ppv_mms": {
+            "pred_min": 83.99785705165422,
+            "pred_max": 85.47696208332377,
+            "delta_over_sweep": -0.492,
+            "direction_ok": false
+          },
+          "slope_angle_deg": {
+            "pred_min": 0.9693576033333289,
+            "pred_max": 91.78233288007965,
+            "delta_over_sweep": -88.776,
+            "direction_ok": false
+          },
+          "slope_height_m": {
+            "pred_min": 84.27293538307408,
+            "pred_max": 85.47696208332377,
+            "delta_over_sweep": -0.977,
+            "direction_ok": false
+          }
+        }
+      }
+    },
+    "delta_instability": {
+      "permutation_importance": {
+        "rainfall_24h_mm": 0.0026,
+        "rainfall_7d_mm": 0.0029,
+        "slope_angle_deg": 0.2072,
+        "slope_height_m": 0.1704,
+        "rock_type": 1.7614,
+        "crack_density": 0.0245,
+        "crack_severity": 0.0892,
+        "blast_frequency_per_week": 0.0444,
+        "blast_vibration_ppv_mms": -0.0003,
+        "days_since_inspection": 0.008,
+        "prior_incident": 0.0,
+        "groundwater_proxy": 0.0047,
+        "zone_id": 0.0051
+      },
+      "shap_mean_abs": {
+        "rainfall_24h_mm": 0.2847,
+        "rainfall_7d_mm": 0.6505,
+        "slope_angle_deg": 7.7333,
+        "slope_height_m": 4.939,
+        "crack_density": 1.4012,
+        "blast_frequency_per_week": 3.6936,
+        "blast_vibration_ppv_mms": 0.075,
+        "days_since_inspection": 0.2204,
+        "prior_incident": 0.0,
+        "groundwater_proxy": 1.7952,
+        "rock_type_clayey_sandstone": 25.6286,
+        "rock_type_lateritic_soil": 0.7995,
+        "rock_type_sandstone": 0.092,
+        "rock_type_variegated_sandy_clay": 0.0127,
+        "crack_severity_critical": 1.7347,
+        "crack_severity_minor": 0.0608,
+        "crack_severity_moderate": 0.1181,
+        "crack_severity_normal": 0.1953,
+        "crack_severity_severe": 0.0085,
+        "zone_id_ZONE_A": 0.9944,
+        "zone_id_ZONE_B": 0.0442,
+        "zone_id_ZONE_C": 0.0567,
+        "zone_id_ZONE_D": 0.2755
+      },
+      "monotonicity_by_zone": {
+        "ZONE_A": {
+          "rainfall_24h_mm": {
+            "pred_min": 0.0,
+            "pred_max": 0.0,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          },
+          "rainfall_7d_mm": {
+            "pred_min": 0.0,
+            "pred_max": 0.0,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          },
+          "groundwater_proxy": {
+            "pred_min": 0.0,
+            "pred_max": 0.0,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          },
+          "crack_density": {
+            "pred_min": 0.0,
+            "pred_max": 0.0,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          },
+          "blast_vibration_ppv_mms": {
+            "pred_min": 0.0,
+            "pred_max": 0.0,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          },
+          "slope_angle_deg": {
+            "pred_min": 0.0,
+            "pred_max": 0.0,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          },
+          "slope_height_m": {
+            "pred_min": 0.0,
+            "pred_max": 0.0,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          }
+        },
+        "ZONE_B": {
+          "rainfall_24h_mm": {
+            "pred_min": 5.49037497645246,
+            "pred_max": 5.490374976452462,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          },
+          "rainfall_7d_mm": {
+            "pred_min": 2.9551740768164314,
+            "pred_max": 5.780637751435865,
+            "delta_over_sweep": 0.944,
+            "direction_ok": true
+          },
+          "groundwater_proxy": {
+            "pred_min": 2.954238748555774,
+            "pred_max": 12.01896599133712,
+            "delta_over_sweep": 8.808,
+            "direction_ok": true
+          },
+          "crack_density": {
+            "pred_min": 0.060344378034347355,
+            "pred_max": 2.954238748555774,
+            "delta_over_sweep": 2.894,
+            "direction_ok": true
+          },
+          "blast_vibration_ppv_mms": {
+            "pred_min": 2.954238748555773,
+            "pred_max": 3.479646591883631,
+            "delta_over_sweep": -0.218,
+            "direction_ok": false
+          },
+          "slope_angle_deg": {
+            "pred_min": 1.4364090075084632,
+            "pred_max": 10.088939939067096,
+            "delta_over_sweep": -7.786,
+            "direction_ok": false
+          },
+          "slope_height_m": {
+            "pred_min": 0.0,
+            "pred_max": 3.467631857288153,
+            "delta_over_sweep": -2.483,
+            "direction_ok": false
+          }
+        },
+        "ZONE_C": {
+          "rainfall_24h_mm": {
+            "pred_min": 9.071038724774102,
+            "pred_max": 13.783214488809644,
+            "delta_over_sweep": 2.774,
+            "direction_ok": true
+          },
+          "rainfall_7d_mm": {
+            "pred_min": 0.6372299827987776,
+            "pred_max": 8.815187578773054,
+            "delta_over_sweep": 2.899,
+            "direction_ok": true
+          },
+          "groundwater_proxy": {
+            "pred_min": 3.0437773011005747,
+            "pred_max": 37.95255574311926,
+            "delta_over_sweep": 20.642,
+            "direction_ok": true
+          },
+          "crack_density": {
+            "pred_min": 0.0071898939393939395,
+            "pred_max": 42.40702472150129,
+            "delta_over_sweep": -7.654,
+            "direction_ok": false
+          },
+          "blast_vibration_ppv_mms": {
+            "pred_min": 0.540355580754788,
+            "pred_max": 0.5403555807547881,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          },
+          "slope_angle_deg": {
+            "pred_min": 0.540355580754788,
+            "pred_max": 34.59385805278779,
+            "delta_over_sweep": -8.924,
+            "direction_ok": false
+          },
+          "slope_height_m": {
+            "pred_min": 0.540355580754788,
+            "pred_max": 25.324110573466946,
+            "delta_over_sweep": 24.668,
+            "direction_ok": true
+          }
+        },
+        "ZONE_D": {
+          "rainfall_24h_mm": {
+            "pred_min": 17.374814797752155,
+            "pred_max": 17.374814797752162,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          },
+          "rainfall_7d_mm": {
+            "pred_min": 13.08440294350278,
+            "pred_max": 19.0709616756592,
+            "delta_over_sweep": 1.996,
+            "direction_ok": true
+          },
+          "groundwater_proxy": {
+            "pred_min": 13.084402943502782,
+            "pred_max": 20.41012565065236,
+            "delta_over_sweep": 6.168,
+            "direction_ok": true
+          },
+          "crack_density": {
+            "pred_min": 13.078999589929358,
+            "pred_max": 13.086808353479494,
+            "delta_over_sweep": 0.002,
+            "direction_ok": true
+          },
+          "blast_vibration_ppv_mms": {
+            "pred_min": 12.572943902234316,
+            "pred_max": 13.084402943502782,
+            "delta_over_sweep": -0.214,
+            "direction_ok": false
+          },
+          "slope_angle_deg": {
+            "pred_min": 4.791604717280302,
+            "pred_max": 13.070073124842832,
+            "delta_over_sweep": -7.519,
+            "direction_ok": false
+          },
+          "slope_height_m": {
+            "pred_min": 0.0,
+            "pred_max": 13.084402943502782,
+            "delta_over_sweep": -8.882,
+            "direction_ok": false
+          }
+        }
+      }
+    },
+    "delta_fos": {
+      "permutation_importance": {
+        "rainfall_24h_mm": 0.0028,
+        "rainfall_7d_mm": 0.0032,
+        "slope_angle_deg": 0.0499,
+        "slope_height_m": 0.0847,
+        "rock_type": 1.8535,
+        "crack_density": 0.0235,
+        "crack_severity": 0.0886,
+        "blast_frequency_per_week": 0.019,
+        "blast_vibration_ppv_mms": -0.0002,
+        "days_since_inspection": 0.0079,
+        "prior_incident": 0.0,
+        "groundwater_proxy": 0.0066,
+        "zone_id": 0.2355
+      },
+      "shap_mean_abs": {
+        "rainfall_24h_mm": 0.0055,
+        "rainfall_7d_mm": 0.0125,
+        "slope_angle_deg": 0.0761,
+        "slope_height_m": 0.065,
+        "crack_density": 0.0271,
+        "blast_frequency_per_week": 0.0453,
+        "blast_vibration_ppv_mms": 0.0013,
+        "days_since_inspection": 0.0043,
+        "prior_incident": 0.0,
+        "groundwater_proxy": 0.0379,
+        "rock_type_clayey_sandstone": 0.529,
+        "rock_type_lateritic_soil": 0.016,
+        "rock_type_sandstone": 0.001,
+        "rock_type_variegated_sandy_clay": 0.001,
+        "crack_severity_critical": 0.0327,
+        "crack_severity_minor": 0.0012,
+        "crack_severity_moderate": 0.0023,
+        "crack_severity_normal": 0.0039,
+        "crack_severity_severe": 0.0002,
+        "zone_id_ZONE_A": 0.0196,
+        "zone_id_ZONE_B": 0.0017,
+        "zone_id_ZONE_C": 0.1542,
+        "zone_id_ZONE_D": 0.0043
+      },
+      "monotonicity_by_zone": {
+        "ZONE_A": {
+          "rainfall_24h_mm": {
+            "pred_min": 0.0,
+            "pred_max": 0.0,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          },
+          "rainfall_7d_mm": {
+            "pred_min": 0.0,
+            "pred_max": 0.0,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          },
+          "groundwater_proxy": {
+            "pred_min": 0.0,
+            "pred_max": 0.0,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          },
+          "crack_density": {
+            "pred_min": 0.0,
+            "pred_max": 0.0,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          },
+          "blast_vibration_ppv_mms": {
+            "pred_min": 0.0,
+            "pred_max": 0.0,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          },
+          "slope_angle_deg": {
+            "pred_min": 0.0,
+            "pred_max": 0.0,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          },
+          "slope_height_m": {
+            "pred_min": 0.0,
+            "pred_max": 0.0,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          }
+        },
+        "ZONE_B": {
+          "rainfall_24h_mm": {
+            "pred_min": -0.11005809273605431,
+            "pred_max": -0.11005809273605428,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          },
+          "rainfall_7d_mm": {
+            "pred_min": -0.11506773813238508,
+            "pred_max": -0.059019647976158225,
+            "delta_over_sweep": -0.019,
+            "direction_ok": false
+          },
+          "groundwater_proxy": {
+            "pred_min": -0.24021609390134951,
+            "pred_max": -0.05900133176605511,
+            "delta_over_sweep": -0.176,
+            "direction_ok": false
+          },
+          "crack_density": {
+            "pred_min": -0.05900133176605511,
+            "pred_max": -0.001209764445144731,
+            "delta_over_sweep": -0.058,
+            "direction_ok": false
+          },
+          "blast_vibration_ppv_mms": {
+            "pred_min": -0.06617350591829513,
+            "pred_max": -0.059001331766055105,
+            "delta_over_sweep": 0.003,
+            "direction_ok": true
+          },
+          "slope_angle_deg": {
+            "pred_min": -0.20629215681842303,
+            "pred_max": -0.027789216870808993,
+            "delta_over_sweep": 0.159,
+            "direction_ok": true
+          },
+          "slope_height_m": {
+            "pred_min": -0.06655535988209443,
+            "pred_max": 0.0,
+            "delta_over_sweep": 0.047,
+            "direction_ok": true
+          }
+        },
+        "ZONE_C": {
+          "rainfall_24h_mm": {
+            "pred_min": -0.2973665506587352,
+            "pred_max": -0.16912925734268808,
+            "delta_over_sweep": -0.077,
+            "direction_ok": false
+          },
+          "rainfall_7d_mm": {
+            "pred_min": -0.16201877140008716,
+            "pred_max": -0.013411300304105618,
+            "delta_over_sweep": -0.051,
+            "direction_ok": false
+          },
+          "groundwater_proxy": {
+            "pred_min": -0.7652342123506275,
+            "pred_max": -0.05863662808257929,
+            "delta_over_sweep": -0.422,
+            "direction_ok": false
+          },
+          "crack_density": {
+            "pred_min": -0.8480241943125169,
+            "pred_max": -0.00014386993171743479,
+            "delta_over_sweep": 0.153,
+            "direction_ok": true
+          },
+          "blast_vibration_ppv_mms": {
+            "pred_min": -0.010881512482999359,
+            "pred_max": -0.010881512482999359,
+            "delta_over_sweep": 0.0,
+            "direction_ok": false
+          },
+          "slope_angle_deg": {
+            "pred_min": -0.3004509484184032,
+            "pred_max": -0.010881512482999359,
+            "delta_over_sweep": 0.085,
+            "direction_ok": true
+          },
+          "slope_height_m": {
+            "pred_min": -0.23476079396591856,
+            "pred_max": -0.010881512482999359,
+            "delta_over_sweep": -0.223,
+            "direction_ok": false
+          }
+        },
+        "ZONE_D": {
+          "rainfall_24h_mm": {
+            "pred_min": -0.34555620845974583,
+            "pred_max": -0.3453600070162695,
+            "delta_over_sweep": -0.0,
+            "direction_ok": false
+          },
+          "rainfall_7d_mm": {
+            "pred_min": -0.3786093091615678,
+            "pred_max": -0.26316016120367236,
+            "delta_over_sweep": -0.038,
+            "direction_ok": false
+          },
+          "groundwater_proxy": {
+            "pred_min": -0.4992189944521009,
+            "pred_max": -0.2631601612036723,
+            "delta_over_sweep": -0.203,
+            "direction_ok": false
+          },
+          "crack_density": {
+            "pred_min": -0.26328458622264234,
+            "pred_max": -0.2631601612036723,
+            "delta_over_sweep": 0.0,
+            "direction_ok": true
+          },
+          "blast_vibration_ppv_mms": {
+            "pred_min": -0.2631601612036724,
+            "pred_max": -0.2541213830216464,
+            "delta_over_sweep": 0.004,
+            "direction_ok": true
+          },
+          "slope_angle_deg": {
+            "pred_min": -0.26316016120367236,
+            "pred_max": -0.08455132597027376,
+            "delta_over_sweep": 0.158,
+            "direction_ok": true
+          },
+          "slope_height_m": {
+            "pred_min": -0.2631601612036724,
+            "pred_max": 0.0,
+            "delta_over_sweep": 0.178,
+            "direction_ok": true
+          }
+        }
+      }
+    }
+  }
+}
