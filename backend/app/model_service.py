@@ -121,6 +121,31 @@ class ModelService:
                                else float(row[k])) for k in FEATURES}
         return out
 
+    _daily_cache: dict | None = None
+
+    def daily_history(self, zone_letter: str, seed: int = 91) -> list[dict]:
+        """Full deterministic daily instability series for one zone-world
+        from the frozen corpus (365 days). Cached after first load."""
+        if ModelService._daily_cache is None:
+            d = pd.read_csv(CORPUS)
+            d = d[d["seed"] == seed][["zone_id", "fos", "instability_score", "risk_label"]].copy()
+            ModelService._daily_cache = {z: g.reset_index(drop=True) for z, g in d.groupby("zone_id")}
+        zid = ZONE_MAP[zone_letter]
+        g = ModelService._daily_cache.get(zid)
+        if g is None:
+            return []
+        start = pd.Timestamp("2024-01-01")
+        out = []
+        for i, row in g.iterrows():
+            out.append({
+                "day": int(i),
+                "date": (start + pd.Timedelta(days=int(i))).strftime("%b %d"),
+                "score": round(float(row["instability_score"]), 1),
+                "fos": round(float(row["fos"]), 3),
+                "risk_label": str(row["risk_label"]),
+            })
+        return out
+
 
 _service: ModelService | None = None
 

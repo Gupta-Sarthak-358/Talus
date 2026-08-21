@@ -166,7 +166,52 @@ Live predictions reproduce generator structure independently: A=89 Critical, B=1
 5. **Routing:** safe route avoids B.
 6. Close with methodology slide: leakage caught (0.998→−0.53), coverage fixed (−0.58→0.92), two feature families killed honestly, calibration measured.
 
-## 12. Known Limitations (say these BEFORE judges find them)
+## 12. Frontend Dashboard — Running & Navigating
+
+### One-command launch (demo laptop)
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\start_demo.ps1
+```
+
+Starts FastAPI on :8000, health-checks it, prints live zone predictions, then starts Vite on **http://localhost:3000** (live-API mode via `frontend/.env.local`, gitignored). Close the two spawned windows to stop.
+
+Manual alternative: terminal 1 → `cd backend` + uvicorn; terminal 2 → `cd frontend` + `npm run dev`. Frontend runs in mock mode unless `VITE_USE_LIVE_API=true`.
+
+### Screen map (what you're looking at)
+
+| Region | Component | Content |
+|---|---|---|
+| Top bar | QuickStatsBar | rainfall chip, zones monitored, model status |
+| KPI row | RiskSummaryCards | Escalated / Surveillance / Nominal counts + Evidence Quality (mean calibrated confidence, provenance gaps) — all derived live |
+| Left | MineMap (Leaflet) | zone polygons centered on Neyveli Mine-II (11.54N 79.49E); red glow = high/critical; click to select |
+| Right | ZoneIntelligencePanel | risk gauge, RoleActionCard (FR-06), ShapChart (real Tree SHAP), RiskTrendChart (365-day deterministic series), MissingEvidenceCard |
+
+### The two What-If modes (WhatIfDrawer toggle)
+
+- **ML COUNTERFACTUAL** — overrides observed features, re-predicts with frozen RF. Columns: *Current State* vs *What-If State*, badge reads "Risk change: ±N pts". Caveat shown in-UI: single-feature overrides can move off-manifold.
+- **CAUSAL PHYSICS** — Scenario Engine v1.5. Pick kind/template (Dec-1902 etc.), horizon; returns trajectory summary (FoS divergence, open-crack branch flag), IMD provenance, and Evidence Timeline (state changes → causes). **This is the escalation demo**: Dec-1902 replay, 3-year horizon, Zone C/B.
+
+Zone D is **blocked for ML counterfactual** (422): its uplift failure mode is aquifer-driven and cannot be represented by surface-feature overrides — use causal scenarios.
+
+### Reading the numbers
+
+- Confidence = isotonic-calibrated P(score ≥ 75) — elevated synthetic risk, not rockfall probability.
+- Bands from FoS: <50 Very Low · <65 Low · <75 Moderate · <85 High · ≥85 Critical.
+- Trend chart draws the zone's deterministic 365-day series from the frozen corpus (world seed 91); threshold lines at 75/85.
+
+### Troubleshooting
+
+| Symptom | Meaning / fix |
+|---|---|
+| ErrorBoundary panel appears | read the message; Retry re-renders — report persistent ones |
+| Zone D what-if returns 422 | by design (see above) |
+| Page shows placeholder scores | live mode off — check `frontend/.env.local` |
+| Backend slow first response (~10 s) | SHAP import + artifact load; launcher waits for it |
+
+---
+
+## 13. Known Limitations (say these BEFORE judges find them)
 
 1. Synthetic-only evidence — no real mine telemetry; architecture validated, not field-calibrated.
 2. Dynamic-driver fidelity weak (crack/blast partially masked/confounded in generated data).
@@ -177,7 +222,7 @@ Live predictions reproduce generator structure independently: A=89 Critical, B=1
 7. Routing graph and zone geometry are schematic.
 8. Final decisions remain with qualified personnel — TALUS recommends, never commands.
 
-## 13. Panel Q&A Prep (hard questions, ready answers)
+## 14. Panel Q&A Prep (hard questions, ready answers)
 
 **"Is your data real?"** → "No public Indian mine sensor/incident dataset exists. Rainfall and terrain are real (IMD 124-year record, Copernicus DEM); geotech parameters are documented Neyveli ranges; the rest is physics-generated and tagged `synthetic: true`. The prototype validates the architecture; deployment requires a mining-partner data feed."
 
@@ -195,7 +240,7 @@ Live predictions reproduce generator structure independently: A=89 Critical, B=1
 
 **"What would production require?"** → "A mining-partner sensor/incident feed, site-specific recalibration, CV fine-tuning on real rock-face imagery, and certified thresholds under DGMS oversight."
 
-## 14. Repository Map
+## 15. Repository Map
 
 ```text
 ml/data_generation/   frozen generator v1.4.0 + validators + export

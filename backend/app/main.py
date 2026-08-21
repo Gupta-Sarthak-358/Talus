@@ -182,6 +182,17 @@ def get_explanation(zone_id: str):
     )
 
 
+@app.get("/api/zones/{zone_id}/history")
+def get_zone_history(zone_id: str, seed: int = 91):
+    """Deterministic daily instability series (365 days) for one zone-world,
+    straight from the frozen corpus. This is the real day-by-day signal the
+    trend chart should draw -- not session prediction logs."""
+    _zone_or_404(zone_id)
+    from . import model_service
+    hist = model_service.get_service().daily_history(zone_id, seed=seed)
+    return {"zone_id": zone_id, "seed": seed, "points": hist}
+
+
 @app.get("/api/zones/{zone_id}/decision", response_model=DecisionResponse)
 def get_decision(zone_id: str):
     _zone_or_404(zone_id)
@@ -243,8 +254,18 @@ def safe_route(req: RouteRequest):
 @app.post("/api/simulation/what-if", response_model=WhatIfResponse,
           description="ML COUNTERFACTUAL: overrides observed features and re-predicts "
                       "with the frozen RF. Not a causal simulation -- use "
-                      "/api/simulation/causal-what-if for physics-based trajectories.")
+                      "/api/simulation/causal-what-if for physics-based trajectories. "
+                      "Unavailable for ZONE_D (uplift failure mode is aquifer-driven; "
+                      "surface-feature overrides cannot represent it).")
 def what_if(req: WhatIfRequest):
+    _zone_or_404(req.zone_id)
+    if req.zone_id == "D":
+        raise HTTPException(
+            status_code=422,
+            detail=("ML counterfactual is not valid for ZONE_D: its failure mode is "
+                    "confined-aquifer floor heave (FoS = reference / pore pressure), which "
+                    "surface-feature overrides cannot represent. Use the causal Scenario "
+                    "Engine with groundwater scenarios instead."))
     _zone_or_404(req.zone_id)
     current = data.store.features[req.zone_id]
     try:
