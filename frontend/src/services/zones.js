@@ -74,12 +74,13 @@ export async function getZones() {
 
 export async function getZoneById(zoneId) {
   if (isLiveApiEnabled()) {
-    const [detail, explanation, features, trend, decision] = await Promise.all([
+    const [detail, explanation, features, trend, decision, history] = await Promise.all([
       apiRequest(`/zones/${zoneId}`),
       apiRequest(`/zones/${zoneId}/explanation`).catch(() => null),
       apiRequest(`/zones/${zoneId}/features`).catch(() => null),
       apiRequest(`/zones/${zoneId}/trend`).catch(() => null),
       apiRequest(`/zones/${zoneId}/decision`).catch(() => null),
+      apiRequest(`/zones/${zoneId}/history`).catch(() => null),
     ]);
     const f = features?.features || {};
     const mock = MOCK_ZONES.find((z) => z.id === zoneId) || {};
@@ -130,7 +131,13 @@ export async function getZoneById(zoneId) {
       trend: {
         direction: trend?.rapid_increase ? 'rapidly_increasing' : 'stable',
         rapid: !!trend?.rapid_increase,
-        history: (trend?.history || []).map((p) => ({ time: p.t, risk: p.risk_score, label: p.t })),
+        // Real daily series from the frozen corpus (365 days) when available;
+        // falls back to session prediction logs otherwise.
+        history: (history?.points || []).map((p) => ({
+          time: p.date, risk: p.score, label: `${p.date} (FoS ${p.fos})`,
+          fos: p.fos, risk_label: p.risk_label,
+        })),
+        historySource: (history?.points || []).length > 0 ? 'frozen_corpus_daily' : 'session_log',
       },
     };
     // Context consumers read result.zone -- wrap while keeping fields at top level.

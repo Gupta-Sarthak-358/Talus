@@ -51,7 +51,9 @@ export default function RiskTrendChart({ trend = {}, zoneName = 'Zone B' }) {
       </div>
 
       <p className="text-[11px] text-slate-400">
-        Temporal tracking over the active shift (09:00 – Present):
+        {trend.historySource === 'frozen_corpus_daily'
+          ? 'Deterministic daily instability series (365 days, frozen corpus world seed 91):'
+          : 'Temporal tracking over the active shift (09:00 – Present):'}
       </p>
 
       {/* Chart Canvas */}
@@ -65,6 +67,7 @@ export default function RiskTrendChart({ trend = {}, zoneName = 'Zone B' }) {
               fontSize={10}
               tickLine={false}
               axisLine={{ stroke: '#233354' }}
+              minTickGap={48}
             />
             <YAxis
               domain={[0, 100]}
@@ -75,18 +78,20 @@ export default function RiskTrendChart({ trend = {}, zoneName = 'Zone B' }) {
               ticks={[0, 40, 65, 85, 100]}
             />
             <Tooltip content={<CustomTooltip />} />
-            
-            {/* Risk Threshold Reference Lines */}
-            <ReferenceLine y={65} stroke="#f97316" strokeDasharray="3 3" opacity={0.6} />
-            <ReferenceLine y={85} stroke="#ef4444" strokeDasharray="3 3" opacity={0.6} />
+
+            {/* Frozen risk-band thresholds (FoS-derived) */}
+            <ReferenceLine y={75} stroke="#f97316" strokeDasharray="3 3" opacity={0.6}
+              label={{ value: 'High', position: 'insideTopRight', fontSize: 9, fill: '#f97316' }} />
+            <ReferenceLine y={85} stroke="#ef4444" strokeDasharray="3 3" opacity={0.6}
+              label={{ value: 'Critical', position: 'insideTopRight', fontSize: 9, fill: '#ef4444' }} />
 
             <Line
               type="monotone"
               dataKey="risk"
               stroke="#f97316"
-              strokeWidth={3}
-              dot={{ r: 4, fill: '#f97316', stroke: '#0d131f', strokeWidth: 2 }}
-              activeDot={{ r: 6, fill: '#ef4444', stroke: '#fff', strokeWidth: 2 }}
+              strokeWidth={2}
+              dot={history.length > 60 ? false : { r: 4, fill: '#f97316', stroke: '#0d131f', strokeWidth: 2 }}
+              activeDot={{ r: 5, fill: '#ef4444', stroke: '#fff', strokeWidth: 2 }}
             />
           </LineChart>
         </ResponsiveContainer>
@@ -94,7 +99,7 @@ export default function RiskTrendChart({ trend = {}, zoneName = 'Zone B' }) {
 
       <div className="flex items-center justify-between text-[10px] text-slate-400 border-t border-mine-border/60 pt-2 font-mono">
         <span className="flex items-center gap-1">
-          <span className="w-2 h-0.5 bg-orange-400 inline-block"></span> High Threshold (65)
+          <span className="w-2 h-0.5 bg-orange-400 inline-block"></span> High Threshold (75)
         </span>
         <span className="flex items-center gap-1">
           <span className="w-2 h-0.5 bg-red-500 inline-block"></span> Critical Threshold (85)
