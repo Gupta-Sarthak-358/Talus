@@ -442,7 +442,7 @@ export const WHAT_IF_PRESETS = [
       crack_density: 1.8,
       slope_angle: 64,
     },
-    expectedImpact: "Zone B escalates into CRITICAL (89/100); Zone C increases to HIGH (72/100)",
+    expectedImpact: "Applies severe 24h rainfall (95 mm) + elevated vibration to the selected zone. Read the resulting delta -- outcomes differ by zone susceptibility.",
   },
   {
     id: "blast",
@@ -454,7 +454,7 @@ export const WHAT_IF_PRESETS = [
       crack_density: 1.4,
       slope_angle: 64,
     },
-    expectedImpact: "Vibration contribution spikes (+22 pts SHAP), increasing dynamic instability",
+    expectedImpact: "Applies a high-yield production blast (PPV 42 mm/s) near the selected zone.",
   },
   {
     id: "cracking",
@@ -466,7 +466,7 @@ export const WHAT_IF_PRESETS = [
       crack_density: 2.4,
       slope_angle: 68,
     },
-    expectedImpact: "Crack density becomes primary SHAP contributor (+28 pts); imminent planar slip risk",
+    expectedImpact: "Applies dense tension cracking (density 2.4) to the selected zone.",
   },
   {
     id: "baseline",
@@ -478,7 +478,7 @@ export const WHAT_IF_PRESETS = [
       crack_density: 2,
       slope_angle: 45,
     },
-    expectedImpact: "All zones return to LOW / VERY LOW operational baseline risk",
+    expectedImpact: "Returns the selected zone to dry, intact reference conditions.",
   },
 ];
 

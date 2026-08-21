@@ -209,8 +209,18 @@ def safe_route(req: RouteRequest):
 @app.post("/api/simulation/what-if", response_model=WhatIfResponse,
           description="ML COUNTERFACTUAL: overrides observed features and re-predicts "
                       "with the frozen RF. Not a causal simulation -- use "
-                      "/api/simulation/causal-what-if for physics-based trajectories.")
+                      "/api/simulation/causal-what-if for physics-based trajectories. "
+                      "Unavailable for ZONE_D (uplift failure mode is aquifer-driven; "
+                      "surface-feature overrides cannot represent it).")
 def what_if(req: WhatIfRequest):
+    _zone_or_404(req.zone_id)
+    if req.zone_id == "D":
+        raise HTTPException(
+            status_code=422,
+            detail=("ML counterfactual is not valid for ZONE_D: its failure mode is "
+                    "confined-aquifer floor heave (FoS = reference / pore pressure), which "
+                    "surface-feature overrides cannot represent. Use the causal Scenario "
+                    "Engine with groundwater scenarios instead."))
     _zone_or_404(req.zone_id)
     current = data.store.features[req.zone_id]
     try:

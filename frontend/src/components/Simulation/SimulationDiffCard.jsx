@@ -32,6 +32,9 @@ export default function SimulationDiffCard({ simulationResult, baselineZone }) {
           {delta > 0 ? '+' : ''}{delta} pts vs Baseline
         </span>
       </div>
+      <p className="text-[10px] text-slate-500 -mt-1">
+        Baseline = frozen-RF prediction for this zone's current observed state, before overrides.
+      </p>
 
       {/* Before / After Comparison */}
       <div className="grid grid-cols-2 gap-3 p-3 bg-mine-card/80 rounded-lg border border-mine-border/80 text-center">
@@ -69,7 +72,9 @@ export default function SimulationDiffCard({ simulationResult, baselineZone }) {
               className="p-1.5 bg-mine-dark rounded border border-mine-border/60 text-[11px] flex justify-between"
             >
               <span className="text-slate-300 truncate">{s.feature.split('(')[0]}</span>
-              <span className="font-mono font-bold text-orange-400">+{s.value}</span>
+              <span className={`font-mono font-bold ${s.value >= 0 ? 'text-orange-400' : 'text-emerald-400'}`}>
+                {s.value >= 0 ? '+' : ''}{s.value}
+              </span>
             </div>
           ))}
         </div>
