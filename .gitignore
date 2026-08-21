@@ -105,3 +105,5 @@ runs/
 .coverage
 htmlcov/
 .eggs/
+# backend model artifact (regenerated from frozen corpus on startup)
+backend/app/_model.joblib

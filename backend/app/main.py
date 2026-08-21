@@ -77,7 +77,8 @@ def _decisions(zone_id: str, score: int) -> list[dict]:
 
 @app.get("/")
 def root():
-    return {"service": "Talus Risk API", "docs": "/docs", "status": "prototype with mock data"}
+    return {"service": "Talus Risk API", "docs": "/docs",
+            "status": "frozen ML Model v1 (RF, generator v1.4.0) + Scenario Engine v1.5"}
 
 
 @app.get("/api/zones", response_model=dict)
@@ -137,11 +138,14 @@ def get_trend(zone_id: str):
 @app.get("/api/zones/{zone_id}/explanation", response_model=ExplanationResponse)
 def get_explanation(zone_id: str):
     _zone_or_404(zone_id)
-    _, contribs = data.compute_risk(data.store.features[zone_id])
+    letter = zone_id.split("_")[-1]
+    _, contribs = data.compute_risk(letter, data.store.features[zone_id])
+    svc = data.model_service.get_service()
+    expl = svc.explain(letter, data.store.features[zone_id].model_dump())
     return ExplanationResponse(
         zone_id=zone_id,
         risk_score=data.store.risk[zone_id],
-        base_value=45.0,
+        base_value=expl["base_value"],
         contributions=contribs,
     )
 
@@ -199,7 +203,7 @@ def what_if(req: WhatIfRequest):
     except ValidationError as exc:
         raise HTTPException(status_code=422, detail=exc.errors(include_url=False))
     baseline_score = data.store.risk[req.zone_id]
-    simulated_score, contribs = data.compute_risk(merged)
+    simulated_score, contribs = data.compute_risk(req.zone_id, merged)
     baseline = PredictResponse(
         zone_id=req.zone_id,
         risk_score=baseline_score,

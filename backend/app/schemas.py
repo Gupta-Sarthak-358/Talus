@@ -27,13 +27,13 @@ class Features(BaseModel):
     slope_angle_deg: float = Field(ge=0)
     slope_height_m: float = Field(ge=0)
     rock_type: Literal[*ROCK_TYPES]
-    crack_density: float = Field(ge=0, le=1)
+    crack_density: float = Field(ge=0, le=2.5)
     crack_severity: Literal[*CRACK_SEVERITIES]
     blast_frequency_per_week: float = Field(ge=0)
     blast_vibration_ppv_mms: float = Field(ge=0)
     days_since_inspection: int = Field(ge=0)
     prior_incident: Literal[0, 1]
-    groundwater_proxy: float = Field(ge=0, le=1)
+    groundwater_proxy: float = Field(ge=0, le=1000)
 
 
 class ZoneSummary(BaseModel):

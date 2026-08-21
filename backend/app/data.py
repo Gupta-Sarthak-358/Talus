@@ -3,7 +3,8 @@ from __future__ import annotations
 import math
 from datetime import datetime, timezone
 
-from .schemas import CRACK_SEVERITIES, Features, RISK_BANDS
+from . import model_service
+from .schemas import Features
 
 ZONE_NAMES = {
     "A": "Zone A — SE bench",
@@ -26,51 +27,6 @@ ZONE_CENTERS = {
     "D": {"lat": 20.58, "lng": 80.165},
 }
 
-INITIAL_FEATURES = {
-    "A": {
-        "rainfall_24h_mm": 20.0, "rainfall_7d_mm": 90.0, "slope_angle_deg": 35.0,
-        "slope_height_m": 12.0, "rock_type": "lateritic_soil", "crack_density": 0.10,
-        "crack_severity": "normal", "blast_frequency_per_week": 1.0,
-        "blast_vibration_ppv_mms": 4.0, "days_since_inspection": 3,
-        "prior_incident": 0, "groundwater_proxy": 0.20,
-    },
-    "B": {
-        "rainfall_24h_mm": 35.0, "rainfall_7d_mm": 140.0, "slope_angle_deg": 58.0,
-        "slope_height_m": 45.0, "rock_type": "sandstone", "crack_density": 0.42,
-        "crack_severity": "moderate", "blast_frequency_per_week": 2.0,
-        "blast_vibration_ppv_mms": 9.5, "days_since_inspection": 12,
-        "prior_incident": 0, "groundwater_proxy": 0.35,
-    },
-    "C": {
-        "rainfall_24h_mm": 25.0, "rainfall_7d_mm": 110.0, "slope_angle_deg": 42.0,
-        "slope_height_m": 18.0, "rock_type": "clayey_sandstone", "crack_density": 0.22,
-        "crack_severity": "minor", "blast_frequency_per_week": 1.0,
-        "blast_vibration_ppv_mms": 5.5, "days_since_inspection": 7,
-        "prior_incident": 0, "groundwater_proxy": 0.28,
-    },
-    "D": {
-        "rainfall_24h_mm": 22.0, "rainfall_7d_mm": 95.0, "slope_angle_deg": 38.0,
-        "slope_height_m": 15.0, "rock_type": "lateritic_soil", "crack_density": 0.15,
-        "crack_severity": "normal", "blast_frequency_per_week": 1.0,
-        "blast_vibration_ppv_mms": 4.5, "days_since_inspection": 5,
-        "prior_incident": 0, "groundwater_proxy": 0.24,
-    },
-}
-
-INITIAL_RISK = {
-    "A": {"score": 22, "confidence": 0.81},
-    "B": {"score": 48, "confidence": 0.78},
-    "C": {"score": 35, "confidence": 0.79},
-    "D": {"score": 28, "confidence": 0.80},
-}
-
-INITIAL_HISTORY = {
-    "A": [("2026-08-19T08:00:00Z", 22)],
-    "B": [("2026-08-19T09:00:00Z", 48)],
-    "C": [("2026-08-19T08:00:00Z", 35)],
-    "D": [("2026-08-19T08:00:00Z", 28)],
-}
-
 GRAPH = {
     "A": ["B", "C"],
     "B": ["A", "D"],
@@ -78,44 +34,18 @@ GRAPH = {
     "D": ["B", "C"],
 }
 
-SEVERITY_WEIGHT = {"normal": 0.0, "minor": 3.0, "moderate": 6.0, "severe": 10.0, "critical": 14.0}
-
-SCALE = 0.735
-
-
-def mock_contributions(f: Features) -> dict[str, float]:
-    return {
-        "rainfall_24h_mm": min(1.0, f.rainfall_24h_mm / 80.0) * 40.0,
-        "rainfall_7d_mm": min(1.0, f.rainfall_7d_mm / 250.0) * 20.0,
-        "slope_angle_deg": min(1.0, max(0.0, (f.slope_angle_deg - 35.0) / 40.0)) * 20.0,
-        "crack_density": f.crack_density * 30.0,
-        "crack_severity": SEVERITY_WEIGHT[f.crack_severity],
-        "blast_frequency_per_week": min(1.0, f.blast_frequency_per_week / 8.0) * 6.0,
-        "blast_vibration_ppv_mms": min(1.0, f.blast_vibration_ppv_mms / 25.0) * 6.0,
-        "days_since_inspection": min(1.0, f.days_since_inspection / 30.0) * 6.0,
-        "prior_incident": 8.0 if f.prior_incident else 0.0,
-        "groundwater_proxy": f.groundwater_proxy * 8.0,
-    }
-
 
 def risk_band(score: int) -> str:
-    if score >= 80:
-        return "Critical"
-    if score >= 60:
-        return "High"
-    if score >= 40:
-        return "Moderate"
-    if score >= 15:
-        return "Low"
-    return "Very Low"
+    """Frozen FoS-derived thresholds (docs/ML_MODEL_CARD_V1.md)."""
+    return model_service.band_for_score(score)
 
 
-def compute_risk(f: Features) -> tuple[int, list[dict]]:
-    contribs = mock_contributions(f)
-    score = int(round(sum(contribs.values()) * SCALE))
-    score = max(0, min(100, score))
-    top = sorted(contribs.items(), key=lambda kv: kv[1], reverse=True)[:4]
-    return score, [{"feature": k, "shap_value": round(v, 1)} for k, v in top]
+def compute_risk(zone_letter: str, f: Features) -> tuple[int, list[dict]]:
+    svc = model_service.get_service()
+    payload = f.model_dump()
+    pred = svc.predict(zone_letter, payload)
+    expl = svc.explain(zone_letter, payload)
+    return pred["score"], expl["contributions"]
 
 
 def apply_overrides(current: Features, overrides: dict) -> Features:
@@ -194,24 +124,35 @@ def interpolate(points: list[dict]) -> list[dict]:
 
 
 class ZoneStore:
+    """Zone states bootstrapped from the frozen model on real corpus rows
+    (last day of held-out world seed 91), never hardcoded constants."""
+
     def __init__(self) -> None:
         self.reset()
 
     def reset(self) -> None:
-        self.features: dict[str, Features] = {z: Features(**INITIAL_FEATURES[z]) for z in INITIAL_FEATURES}
-        self.risk: dict[str, int] = {z: INITIAL_RISK[z]["score"] for z in INITIAL_RISK}
-        self.confidence: dict[str, float] = {z: INITIAL_RISK[z]["confidence"] for z in INITIAL_RISK}
-        self.history: dict[str, list[tuple[str, int]]] = {
-            z: [h for h in INITIAL_HISTORY[z]] for z in INITIAL_HISTORY
-        }
-        self.updated_at: dict[str, str] = {z: now_iso() for z in INITIAL_RISK}
+        svc = model_service.get_service()
+        states = svc.latest_zone_states(seed=91)
+        self.features: dict[str, Features] = {}
+        self.risk: dict[str, int] = {}
+        self.confidence: dict[str, float] = {}
+        self.history: dict[str, list[tuple[str, int]]] = {}
+        self.updated_at: dict[str, str] = {}
+        stamp = now_iso()
+        for z, f in states.items():
+            self.features[z] = Features(**f)
+            pred = svc.predict(z, f)
+            self.risk[z] = pred["score"]
+            self.confidence[z] = pred["confidence"]
+            self.history[z] = [(stamp, pred["score"])]
+            self.updated_at[z] = stamp
 
     def trend(self, zone_id: str) -> tuple[str, bool]:
         return detect_trend(self.history[zone_id])
 
     def recompute(self, zone_id: str, features: Features) -> None:
         self.features[zone_id] = features
-        score, _ = compute_risk(features)
+        score, _ = compute_risk(zone_id, features)
         self.risk[zone_id] = score
         self.history[zone_id].append((now_iso(), score))
         self.history[zone_id] = self.history[zone_id][-12:]
