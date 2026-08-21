@@ -53,8 +53,23 @@ def test_initial_scores_are_model_consistent():
     for zid, z in zones.items():
         assert 0 <= z["risk_score"] <= 100
         assert z["risk_band"] in BANDS
+        assert 0.0 <= z["confidence"] <= 1.0
         fresh = score_of(store.features[zid].model_dump(), zid)
         assert fresh == z["risk_score"], f"{zid}: store {z['risk_score']} != model {fresh}"
+
+
+def test_confidence_is_calibrated_probability():
+    """FR-03: confidence must be the isotonic-calibrated P(elevated risk),
+    not a heuristic -- verify it matches the frozen calibrator artifact."""
+    import joblib
+    from app import model_service
+    svc = model_service.get_service()
+    assert svc.calibrator is not None, "calibration artifact missing"
+    r = client.post("/api/risk/predict", json={"zone_id": "B", "features": VALID_FEATURES})
+    conf = r.json()["confidence"]
+    expected = float(svc.calibrator.predict([svc.predict("B", VALID_FEATURES)["raw_score"]])[0])
+    assert abs(conf - round(expected, 3)) < 1e-6
+    assert 0.0 <= conf <= 1.0
 
 
 def test_zone_detail_404():

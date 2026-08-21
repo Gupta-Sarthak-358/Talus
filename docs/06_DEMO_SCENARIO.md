@@ -1,104 +1,85 @@
-# Talus Demo Scenario
+# Talus Demo Scenario — v2 (re-frozen against real Model v1)
 
-**Status:** Frozen for MVP · Purpose: define a **known expected output** so the demo is a rehearsed test case, not a live dice roll.
+Status: FROZEN. Supersedes the v1 expectations (which were written against the
+mock scorer and are historically interesting but operationally wrong).
+Every number below is reproduced by the frozen RF Model v1 + isotonic
+calibration + Scenario Engine v1.5, all deterministic (fixed seeds).
 
-The demo runs on the deterministic synthetic dataset (fixed seed — see `data/synthetic/v1/metadata.json`). Every number below is the expected output the team should be able to reproduce.
+## Initial state (real corpus: last day of held-out world seed 91)
 
----
+| Zone | Risk | Band | Confidence* |
+|---|---|---|---|
+| A | 89 | Critical | 0.91 |
+| B | 100 | Critical | 1.00 |
+| C | 66 | Moderate | 0.44 |
+| D | 99 | Critical | 0.95 |
 
-## Scenario: "Zone B Escalation"
+\* confidence = isotonic-calibrated P(score >= 75) -- calibrated probability of
+elevated SYNTHETIC risk under the prototype target definition. Calibration fit
+on out-of-fold train-seed predictions; evaluated on validation seeds only
+(Brier 0.081 vs 0.116 naive; ECE 0.095 vs 0.157).
 
-### Mine Layout
+## Demo narrative (honest version)
 
-Four zones on an open-pit bench map: **A, B, C, D** with roads connecting them. Zone B is a NW bench (steep, rain-exposed) — the scenario's protagonist.
+### Screen 1 — Mine overview
+Zones colored by score/band above. A/B/D chronically critical, C moderate --
+independently reproduces the generator's known structure.
 
-### Initial State
+### Screen 2 — "Why?" (Zone C)
+Real Tree SHAP (base value 53.92):
 
-| Zone | Risk | Band | Confidence | Trend |
-|---|---|---|---|---|
-| A | 22 | Low | 0.81 | stable |
-| B | 48 | Moderate | 0.78 | stable |
-| C | 35 | Low | 0.79 | stable |
-| D | 28 | Low | 0.80 | stable |
-
----
-
-### Event 1 — Rainfall increases
-
-Rainfall in the 24h window rises (e.g. from 35 mm to 55 mm).
-
-**Expected:**
-- Zone B risk increases (target ≈ 48 → 58–63).
-- SHAP shows rainfall as the top positive contributor.
-- Other zones rise slightly or stay stable.
-
-### Event 2 — Crack density increases
-
-A new crack measurement is ingested; Zone B crack density increases.
-
-**Expected:**
-- Zone B risk increases further (target ≈ 58 → 68–74).
-- SHAP shows crack density as a dominant contributor alongside rainfall.
-- Confidence drops if the new reading is low-confidence or a feature goes missing.
-
-### Event 3 — Trend crosses to rapidly increasing
-
-Zone B trend flag becomes **rapidly increasing**.
-
-**Expected:**
-- **Escalation alert** fires for Zone B.
-- Trend endpoint reports `"rapid_increase": true`.
-
----
-
-### Decision — role-specific outputs (same event, different message)
-
-| Role | Expected message |
+| Feature | SHAP |
 |---|---|
-| Worker | Avoid Zone B — safe route guidance. |
-| Safety Officer | Prioritize inspection of Zone B (monitor → escalate). |
-| Mine Manager | Identify people at risk; coordinate evacuation of Zone B. |
-| Rescue Team | Standby with a safer approach route to Zone B. |
+| crack_severity_critical | +19.71 |
+| slope_angle_deg | -15.68 |
+| rock_type_clayey_sandstone | +11.47 |
+| slope_height_m | -8.40 |
 
-### Routing
+### Screen 3 — ML What-If (counterfactual) + its documented caveat
+Raising rainfall_24h to 150 mm on Zone C: score stays ~65-68 (Moderate).
+Raising groundwater_proxy stepwise 182 -> 500: score drifts DOWN to 58.
 
-- **Shortest route** between two points crosses Zone B.
-- **Risk-aware route** avoids Zone B (longer but safer), with `avoided_zones: ["B"]`.
+**Say this out loud:** "Single-feature overrides move the input off the
+manifold of realistically correlated states, so the ML counterfactual is not
+a causal answer. For causal questions, TALUS uses the Scenario Engine."
 
-### What-if
+### Screen 4 — Causal What-If (the showstopper)
+Historical template replay: Dec-1902 (1,088 mm/month, max day 297.6 mm --
+IMD provenance), Zone C, injected day 550 of a 3-year horizon.
 
-Increase rainfall to extreme (e.g. 80 mm) via the WhatIf panel.
+Expected outputs:
+- max groundwater proxy: **840.8 mm**
+- open-crack branch FIRES (critical AND water-filled AND face >= 60 deg):
+  **true**
+- **FoS divergence vs baseline: -0.761**, first at day ~553
+- **51 days** diverge by > 0.01 FoS
+- Evidence Timeline: >= 25 cause-attributed events, e.g.
+  "day 368: heavy rainfall (+74 mm/24h), groundwater proxy rose (+71 mm),
+  cracks became water-filled"
 
-**Expected:**
-- Zone B risk jumps further (target ≥ 80).
-- Map color changes to red.
-- SHAP rain contribution grows.
+Narrative: "A single extreme storm barely moves the score. Repeated extreme
+exposure accumulates crack damage until a physical threshold activates and
+stability drops. Acute shock is not accumulated deterioration -- TALUS knows
+the difference."
 
----
+### Screen 5 — Routing
+Risk-aware route A -> D avoids Zone B (`avoided_zones: ["B"]`); shortest route
+crosses it.
 
-### Final State
+## Rehearsal checklist
 
-| Zone | Risk | Band | Confidence | Trend |
-|---|---|---|---|---|
-| A | 24 | Low | 0.80 | stable |
-| **B** | **85+** | **Critical** | 0.82 | **rapidly increasing** |
-| C | 37 | Low | 0.79 | stable |
-| D | 30 | Low | 0.80 | stable |
+- [ ] Initial scores reproduce: 89 / 100 / 66 / 99 (deterministic, seed 91 states)
+- [ ] Zone C explanation returns real SHAP (base 53.92, values above)
+- [ ] Confidence values match calibrator artifact (talus_calibration_v1.joblib)
+- [ ] ML what-if on C: acknowledge off-manifold caveat before showing
+- [ ] Causal Dec-1902 3-year: branch fired = true, divergence -0.761
+- [ ] Evidence timeline events carry physical causes (not SHAP)
+- [ ] Routing avoids B
+- [ ] No network calls; everything local
 
----
+## Explicitly NOT claimed
 
-## Demo Rehearsal Checklist
-
-- [ ] Seeds/versions pinned in `data/synthetic/v1/metadata.json`.
-- [ ] Zone B initial state reproduced on first load.
-- [ ] Event 1 → risk increases; SHAP rainfall positive.
-- [ ] Event 2 → risk increases; SHAP crack positive.
-- [ ] Event 3 → escalation alert fires.
-- [ ] Four role messages render side by side.
-- [ ] Risk-aware route avoids Zone B; shortest route crosses it.
-- [ ] What-if pushes Zone B to Critical.
-- [ ] No network calls; everything local.
-
----
-
-*Optional strengthening: anchor the rainfall/geometry conditions to a real documented slope-failure weather event so the scenario is grounded, not abstract.*
+- Scores are not probability of failure; confidence is calibrated P(elevated
+  synthetic risk) under the prototype target definition.
+- No real mine telemetry was used; deployment requires a mining-partner feed.
+- Thresholds are prototype operational bands, not calibrated safety standards.

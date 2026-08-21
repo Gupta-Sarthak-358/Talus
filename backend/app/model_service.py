@@ -22,6 +22,7 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 REPO = Path(__file__).resolve().parents[2]
 CORPUS = REPO / "data" / "processed" / "generator_v1" / "ml_handoff" / "synthetic_ml_dataset_seeds_42_91.csv"
 ARTIFACT = REPO / "ml" / "models" / "talus_rf_v1.joblib"
+CALIBRATION = REPO / "ml" / "models" / "talus_calibration_v1.joblib"
 
 TRAIN_SEEDS = list(range(42, 82))
 FEATURES = ["rainfall_24h_mm", "rainfall_7d_mm", "slope_angle_deg", "slope_height_m",
@@ -64,6 +65,21 @@ class ModelService:
             joblib.dump(blob, ARTIFACT, compress=3)
         self.pre = blob["pre"]
         self.model = blob["model"]
+        self.calibrator = None
+        if CALIBRATION.exists():
+            cal = joblib.load(CALIBRATION)
+            self.calibrator = cal["isotonic"]
+            self.calibration_threshold = cal["threshold"]
+
+    def calibrated_confidence(self, raw_score: float) -> float:
+        """FR-03 confidence: isotonic-calibrated P(instability_score >= 75),
+        i.e. calibrated probability of elevated SYNTHETIC risk under the
+        prototype target definition (fit on train-seed OOF predictions,
+        evaluated on validation seeds -- never test)."""
+        if self.calibrator is None:
+            return round(float(max(0.0, min(raw_score / 100.0, 1.0))), 3)
+        p = float(self.calibrator.predict([raw_score])[0])
+        return round(float(min(max(p, 0.0), 1.0)), 3)
 
     def _frame(self, zone_letter: str, feats: dict) -> pd.DataFrame:
         row = {k: feats[k] for k in FEATURES}
@@ -72,13 +88,11 @@ class ModelService:
 
     def predict(self, zone_letter: str, feats: dict) -> dict:
         X = self.pre.transform(self._frame(zone_letter, feats))
-        per_tree = np.array([t.predict(X)[0] for t in self.model.estimators_])
-        score = float(per_tree.mean())
-        spread = float(per_tree.std())
-        confidence = round(float(max(0.5, 1.0 - min(spread / 25.0, 0.45))), 2)
-        return {"score": int(round(max(0.0, min(100.0, score)))),
+        score = float(self.model.predict(X)[0])
+        score = max(0.0, min(100.0, score))
+        return {"score": int(round(score)),
                 "raw_score": score,
-                "confidence": confidence,
+                "confidence": self.calibrated_confidence(score),
                 "band": band_for_score(score)}
 
     def explain(self, zone_letter: str, feats: dict) -> dict:

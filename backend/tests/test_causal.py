@@ -30,6 +30,21 @@ def test_causal_storm_returns_trajectory():
     assert body["trajectory"][0]["day"] == 0
 
 
+def test_causal_evidence_timeline_attributes_causes():
+    """FR-10: timeline events must carry physical causes from state changes,
+    distinct from SHAP (which explains the RF, not the simulation)."""
+    body = {"zone_id": "B", "kind": "combined", "start_day": 200, "duration_days": 14,
+            "params": {"peak_mm": 120, "ppv_mult": 2.0, "extra_event_prob": 0.3}}
+    r = client.post("/api/simulation/causal-what-if", json=body)
+    assert r.status_code == 200
+    tl = r.json()["evidence_timeline"]
+    assert len(tl) > 0
+    for ev in tl:
+        assert ev["causes"], f"day {ev['day']}: score moved with no attributed cause"
+        assert any(k in c for e in [ev] for c in ev["causes"] for k in
+                   ["rainfall", "groundwater", "crack", "blast"])
+
+
 def test_causal_determinism_same_request_same_summary():
     req = {"zone_id": "B", "kind": "combined", "start_day": 180, "duration_days": 10,
            "params": {"peak_mm": 80, "ppv_mult": 2.0, "extra_event_prob": 0.3},

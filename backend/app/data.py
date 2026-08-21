@@ -48,6 +48,22 @@ def compute_risk(zone_letter: str, f: Features) -> tuple[int, list[dict]]:
     return pred["score"], expl["contributions"]
 
 
+def missing_evidence(f: Features) -> list[str]:
+    """FR-03: evidence gaps derived from feature provenance (03_DATA_PLAN),
+    plus any fields that arrive null. PPV is modeled (NIRM attenuation), the
+    groundwater proxy is a wetting-memory transient, and crack features are
+    sampler states -- none are in-situ sensor telemetry."""
+    gaps = []
+    if f.blast_vibration_ppv_mms is None:
+        gaps.append("blast_vibration_ppv_mms")
+    gaps += [
+        "in_situ_vibration_telemetry (PPV is attenuation-modeled)",
+        "piezometer_groundwater_sensor (proxy is rainfall-derived)",
+        "crack_imagery_cv_feed (severity from inspection sampler)",
+    ]
+    return gaps
+
+
 def apply_overrides(current: Features, overrides: dict) -> Features:
     unknown = sorted(set(overrides) - set(Features.model_fields))
     if unknown:
@@ -152,9 +168,11 @@ class ZoneStore:
 
     def recompute(self, zone_id: str, features: Features) -> None:
         self.features[zone_id] = features
-        score, _ = compute_risk(zone_id, features)
-        self.risk[zone_id] = score
-        self.history[zone_id].append((now_iso(), score))
+        svc = model_service.get_service()
+        pred = svc.predict(zone_id, features.model_dump())
+        self.risk[zone_id] = pred["score"]
+        self.confidence[zone_id] = pred["confidence"]
+        self.history[zone_id].append((now_iso(), pred["score"]))
         self.history[zone_id] = self.history[zone_id][-12:]
         self.updated_at[zone_id] = now_iso()
 

@@ -123,7 +123,7 @@ def get_features(zone_id: str):
     return ZoneFeaturesResponse(
         zone_id=zone_id,
         features=data.store.features[zone_id],
-        missing_features=["vibration_sensor"],
+        missing_features=data.missing_evidence(data.store.features[zone_id]),
     )
 
 
@@ -175,7 +175,7 @@ def predict(req: PredictRequest):
         risk_score=score,
         risk_band=data.risk_band(score),
         confidence=data.store.confidence[req.zone_id],
-        missing_evidence=["vibration_sensor"],
+        missing_evidence=data.missing_evidence(req.features),
     )
 
 
@@ -215,14 +215,14 @@ def what_if(req: WhatIfRequest):
         risk_score=baseline_score,
         risk_band=data.risk_band(baseline_score),
         confidence=data.store.confidence[req.zone_id],
-        missing_evidence=["vibration_sensor"],
+        missing_evidence=data.missing_evidence(data.store.features[req.zone_id]),
     )
     simulated = PredictResponse(
         zone_id=req.zone_id,
         risk_score=simulated_score,
         risk_band=data.risk_band(simulated_score),
-        confidence=data.store.confidence[req.zone_id],
-        missing_evidence=["vibration_sensor"],
+        confidence=data.model_service.get_service().calibrated_confidence(simulated_score),
+        missing_evidence=data.missing_evidence(merged),
     )
     return WhatIfResponse(
         zone_id=req.zone_id,

@@ -1,0 +1,70 @@
+{
+  "threshold_score": 75.0,
+  "event_definition": "instability_score >= 75 (High/Critical bands, FoS < 1.0)",
+  "meaning": "calibrated probability of elevated SYNTHETIC risk under the prototype target definition",
+  "fit": {
+    "method": "isotonic",
+    "data": "out-of-fold predictions, train seeds 42-81",
+    "cv": "GroupKFold(k=5, groups=seed)",
+    "n_train": 58400
+  },
+  "validation": {
+    "seeds": [
+      82,
+      83,
+      84,
+      85,
+      86
+    ],
+    "n": 7300,
+    "base_rate": 0.4207,
+    "brier_isotonic": 0.0812,
+    "brier_naive_score_over_100": 0.1158,
+    "ece_isotonic": 0.0949,
+    "ece_naive": 0.1565,
+    "reliability_table": [
+      {
+        "bin": "[0.0,0.1]",
+        "n": 2896,
+        "mean_predicted": 0.013,
+        "observed_frequency": 0.023
+      },
+      {
+        "bin": "[0.3,0.4]",
+        "n": 561,
+        "mean_predicted": 0.337,
+        "observed_frequency": 0.027
+      },
+      {
+        "bin": "[0.4,0.5]",
+        "n": 250,
+        "mean_predicted": 0.453,
+        "observed_frequency": 0.048
+      },
+      {
+        "bin": "[0.5,0.6]",
+        "n": 104,
+        "mean_predicted": 0.562,
+        "observed_frequency": 0.115
+      },
+      {
+        "bin": "[0.7,0.8]",
+        "n": 933,
+        "mean_predicted": 0.781,
+        "observed_frequency": 0.55
+      },
+      {
+        "bin": "[0.8,0.9]",
+        "n": 424,
+        "mean_predicted": 0.817,
+        "observed_frequency": 0.858
+      },
+      {
+        "bin": "[0.9,1.0]",
+        "n": 2132,
+        "mean_predicted": 0.928,
+        "observed_frequency": 0.98
+      }
+    ]
+  }
+}

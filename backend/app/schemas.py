@@ -187,6 +187,9 @@ class CausalSummary(BaseModel):
     baseline_min_fos: float
     scenario_min_fos: float
     delta_min_fos: float
+    fos_divergence_min: float
+    divergence_day: int
+    days_diverging_gt_001: int
     baseline_peak_instability: float
     scenario_peak_instability: float
     delta_peak_instability: float
@@ -199,6 +202,14 @@ class CausalSummary(BaseModel):
     open_crack_branch_fired: bool
 
 
+class EvidenceEvent(BaseModel):
+    day: int
+    score_from: float
+    score_to: float
+    fos: float
+    causes: list[str]
+
+
 class CausalWhatIfResponse(BaseModel):
     zone_id: str
     scenario_name: str
@@ -206,4 +217,5 @@ class CausalWhatIfResponse(BaseModel):
     generator_version: str
     summary: CausalSummary
     provenance: Optional[ScenarioProvenance] = None
+    evidence_timeline: list[EvidenceEvent] = []
     trajectory: list[TrajectoryPoint]

@@ -61,6 +61,48 @@ def _trajectory(df: pd.DataFrame, base_fos: np.ndarray, max_points: int = 400) -
     return pts
 
 
+def evidence_timeline(df: pd.DataFrame, min_score_jump: float = 3.0,
+                      max_events: int = 25) -> list[dict]:
+    """FR-10 Risk Evidence Timeline: state changes + their causes.
+
+    Derived from the causal trajectory (NOT from SHAP): each event is a
+    day where instability moved >= min_score_jump, with causes attributed
+    from the physical state variables that changed that day.
+    """
+    events = []
+    for i in range(1, len(df)):
+        s_prev = float(df["instability_score"].iloc[i - 1])
+        s_cur = float(df["instability_score"].iloc[i])
+        if abs(s_cur - s_prev) < min_score_jump:
+            continue
+        causes = []
+        d_rain = float(df["rainfall_mm"].iloc[i]) - float(df["rainfall_mm"].iloc[i - 1])
+        if d_rain >= 10.0:
+            causes.append(f"heavy rainfall (+{d_rain:.0f} mm/24h)")
+        d_gw = float(df["groundwater_proxy"].iloc[i]) - float(df["groundwater_proxy"].iloc[i - 1])
+        if d_gw >= 15.0:
+            causes.append(f"groundwater proxy rose (+{d_gw:.0f} mm)")
+        sev_prev, sev_cur = str(df["crack_severity"].iloc[i - 1]), str(df["crack_severity"].iloc[i])
+        if sev_prev != sev_cur:
+            causes.append(f"crack severity {sev_prev} -> {sev_cur}")
+        if bool(df["blast_occurs"].iloc[i]):
+            causes.append(f"blast event (PPV {float(df['blast_vibration_ppv_mms'].iloc[i]):.1f} mm/s)")
+        wf_prev = bool(df["water_filled"].iloc[i - 1])
+        wf_cur = bool(df["water_filled"].iloc[i])
+        if wf_cur and not wf_prev:
+            causes.append("cracks became water-filled")
+        if not causes:
+            continue
+        events.append({"day": int(i),
+                       "score_from": round(s_prev, 1),
+                       "score_to": round(s_cur, 1),
+                       "fos": round(float(df["fos"].iloc[i]), 3),
+                       "causes": causes})
+        if len(events) >= max_events:
+            break
+    return events
+
+
 def run_causal(zone_letter: str, kind: str, start_day: int, duration_days: int,
                params: dict, horizon_days: int, seed: int) -> dict:
     zid = ZONE_MAP[zone_letter]
@@ -78,11 +120,15 @@ def run_causal(zone_letter: str, kind: str, start_day: int, duration_days: int,
     crit_m = (m["crack_severity"].astype(str) == "critical")
     filled_crit = int((crit_m & m["water_filled"].astype(bool)).sum())
 
+    diff_fos = m["fos"].values - b["fos"].values
     hi = ["high", "critical"]
     summary = {
         "baseline_min_fos": round(float(b["fos"].min()), 3),
         "scenario_min_fos": round(float(m["fos"].min()), 3),
         "delta_min_fos": round(float(m["fos"].min() - b["fos"].min()), 3),
+        "fos_divergence_min": round(float(diff_fos.min()), 3),
+        "divergence_day": int(np.argmin(diff_fos)),
+        "days_diverging_gt_001": int((np.abs(diff_fos) > 0.01).sum()),
         "baseline_peak_instability": float(b["instability_score"].max()),
         "scenario_peak_instability": float(m["instability_score"].max()),
         "delta_peak_instability": round(float(m["instability_score"].max()
@@ -101,4 +147,5 @@ def run_causal(zone_letter: str, kind: str, start_day: int, duration_days: int,
             "generator_version": GENERATOR_VERSION,
             "summary": summary,
             "provenance": template_provenance(params.get("template_id")),
+            "evidence_timeline": evidence_timeline(m),
             "trajectory": _trajectory(m, b["fos"].values)}
