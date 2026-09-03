@@ -1,0 +1,149 @@
+# TALUS v2 Architecture — SIH26001
+
+**Status:** Draft · **Trace to:** `01_REQUIREMENTS_SIH26001.md`,
+`docs/SIH26001_RESEARCH.md` §8
+
+v1 diagrams live in `docs/02_ARCHITECTURE.md` and stay authoritative for the
+mine track. This doc records the v2 mapping and deltas only.
+
+---
+
+## 1. System data flow (v2)
+
+```text
+Real NER sources
+  IMD rainfall │ ERA5/SMAP soil moisture │ SRTM DEM │ Sentinel-2 │ GSI geology
+  OSM roads/rivers │ landslide inventories │ IMD forecast API
+        ↓
+NGEN PIPELINE (replaces synthetic generator)
+  fetch → reproject → align grid → derive terrain → join → label → version
+        ↓
+Feature Processing
+  (17 NER features per spatial unit, with missingness + provenance)
+        ↓
+TALUS RISK ENGINE (same pattern, retrained)
+  RF + XGBoost (+LGBM) → calibrated probability → score 0–100 + confidence
+        ↓
+  Explainability (SHAP)        Trend / monsoon escalation
+        ↓
+Decision Engine
+  Role-based actions · Road-status + risk-aware routing · Rainfall what-if
+        ↓
+Field reports ↑↓ Alerts (SMS/app, multilingual, offline-sync)
+        ↓
+NER GIS Dashboard (React + Leaflet/Mapbox) + Field app (camera/GPS/offline)
+```
+
+## 2. Module mapping (v1 → v2)
+
+| v1 module | v2 module | Change |
+|---|---|---|
+| Generator (physics sim) | **NGEN** (NER data pipeline) | Complete rewrite — real data, not synthetic |
+| ML predictor | ML predictor | Retrain on 17 NER features; same RF/XGB pattern |
+| SHAP | SHAP | Same module, new feature names |
+| Calibration (isotonic) | Calibration | Same approach, new target (event / no-event) |
+| Trend / escalation | Trend / escalation | Same logic, monsoon temporal patterns |
+| Decision engine (4 mine roles) | Decision engine (4 NER roles) | New role matrix + message templates |
+| Routing (zone graph) | Routing (OSM road graph) | New graph source + segment risk weights |
+| Scenario engine (storm replay) | Scenario engine (rainfall thresholds) | New physics: Monga 2026 / Dahal–Hasegawa |
+| Evidence card | Evidence card | New provenance: satellite, reanalysis, crowd |
+| Alert system | Alert system | **Add:** SMS gateway, i18n, offline queue |
+| Dashboard (mine map) | Dashboard (GIS heatmap + roads + villages) | Rebuild views on same API pattern |
+| Backend API (FastAPI) | Backend API | Extend contract; keep v1 shapes where possible |
+| — | Field-reporting app | **New:** camera/GPS, offline tiles, officer queue |
+
+What survives unchanged: two-engine pattern (ML + physics scenario),
+isotonic calibration methodology, SHAP framework, role-escalation pattern,
+risk-weighted Dijkstra, missing-evidence transparency, test structure,
+offline-first philosophy.
+
+## 3. Component deltas
+
+### Backend (FastAPI) — new/proposed endpoints
+
+```text
+GET  /api/units[/{id}][/features|/trend|/explanation|/decision]
+POST /api/risk/predict
+POST /api/simulation/rainfall-what-if     (threshold scenarios)
+GET  /api/roads/status                     (open / at-risk / blocked)
+POST /api/routes/safe                      (over OSM graph)
+POST /api/reports                          (geo-tagged field report)
+GET  /api/reports/queue                    (officer review)
+POST /api/alerts/dispatch                  (SMS/app fixture in demo)
+GET  /api/forecast/rainfall                (IMD fixture in demo)
+```
+
+Endpoint paths are proposals until frozen in a v2 API spec. v1 endpoints
+must keep working on this branch until a migration ADR says otherwise.
+
+### Frontend
+
+```text
+GIS Dashboard
+  ├── RiskHeatmap   (5-band susceptibility, Leaflet/Mapbox)
+  ├── RoadOverlay   (status colors + closures)
+  ├── VillageLayer  (settlements + priority flags)
+  ├── RiskPanel     (score + confidence + missing evidence)
+  ├── SHAPPanel     (feature contributions)
+  ├── TrendChart    (monsoon trajectory)
+  ├── AlertPanel    (role-based, multilingual)
+  ├── RouteView     (shortest vs risk-aware)
+  └── ScenarioPanel (rainfall sliders + threshold presets)
+Field app (progressive web app first)
+  ├── Capture       (photo/video + GPS + timestamp, offline)
+  ├── Queue         (pending sync)
+  └── Alerts        (cached warnings, local language)
+```
+
+### NGEN (new — no v1 equivalent)
+
+```text
+ngen/
+  ├── fetch/        (IMD, CDS/ERA5, USGS/SRTM, Copernicus, Bhusanket, OSM, Zenodo)
+  ├── preprocess/   (reproject to pilot CRS, resample, cloud-mask, QA)
+  ├── terrain/      (slope, aspect, curvature, TWI, SPI, drain density)
+  ├── join/         (spatial join to unit grid + temporal join to events)
+  ├── label/        (positive = event location+date window; negative = >300 m buffer sampling)
+  └── version/      (manifest: source versions, dates, seeds, checksums)
+```
+
+Deterministic: fixed seeds, pinned source versions, manifest committed.
+Raw downloads stay out of git (see data rules in `03_DATA_PLAN_SIH26001.md`).
+
+## 4. Deployment (prototype)
+
+```text
+Browser / field device
+    │
+    ▼
+React GIS dashboard + PWA field app
+    │  REST / JSON
+    ▼
+FastAPI (local)
+    ├── Susceptibility model (RF + XGB)
+    ├── SHAP + calibration + trend + decisions + routing
+    ├── NGEN artifacts (feature matrix + manifest, local files)
+    └── Alert fixture (no live SMS in demo)
+    ▼
+Local data (SQLite default; PostGIS optional for GIS-heavy work)
+```
+
+Demo runs fully offline; live APIs appear as recorded fixtures.
+
+---
+
+## Tech stack deltas (proposed)
+
+| Layer | v1 | v2 delta |
+|---|---|---|
+| Frontend map | Leaflet | Leaflet or Mapbox GL (decide in ADR; heatmap + overlays needed) |
+| Backend | FastAPI | Same; new endpoints |
+| ML | RF + SHAP | RF + XGBoost (+LGBM candidate); SHAP stays |
+| Geo | — | rasterio / GDAL, geopandas, (GEE optional for prototyping, not demo) |
+| Alerts | in-app | SMS gateway adapter (fixture in demo) + i18n framework |
+| Mobile | — | PWA first; native deferred |
+| Data | synthetic CSV | NGEN outputs (Parquet/GeoPackage, git-ignored) |
+
+Decisions to freeze before build: spatial unit (pixel vs slope unit vs admin
+zone), map library, CRS + grid, SMS provider adapter, language matrix. Each
+gets an ADR or a line in `07_ASSUMPTIONS_SIH26001.md` promoted to decision.
