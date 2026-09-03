@@ -1,0 +1,16 @@
+{
+  "segments": [
+    { "id": "R1", "name": "Tathangchen link", "status": "blocked", "adjacent_slope": "S1" },
+    { "id": "R2", "name": "Ridge shortcut S1-S4", "status": "at-risk", "adjacent_slope": "S1" },
+    { "id": "R3", "name": "Valley road S3-S4", "status": "open", "adjacent_slope": "S3" },
+    { "id": "R4", "name": "Ranipool approach", "status": "open", "adjacent_slope": "S4" }
+  ],
+  "demo_route": {
+    "origin": "S1",
+    "destination": "S4",
+    "shortest_route": { "path": ["S1", "S4"], "via": ["R2"], "total_cost": 10.0, "max_risk_exposed": 89 },
+    "risk_aware_route": { "path": ["S1", "S3", "S4"], "via": ["R3", "R4"], "total_cost": 12.5, "max_risk_exposed": 66 },
+    "avoided_zones": ["S1"],
+    "avoided_segments": ["R2"]
+  }
+}

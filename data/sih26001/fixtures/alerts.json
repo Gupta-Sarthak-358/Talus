@@ -1,0 +1,12 @@
+{
+  "fixture": true,
+  "trigger": "S1 escalated to Critical (fixture)",
+  "queued": 3,
+  "languages": ["en", "hi", "ne"],
+  "messages": [
+    { "lang": "en", "text": "LANDSLIDE ALERT (S1 Tathangchen): Critical risk for 2 days. Avoid hillside road. Follow officer instructions." },
+    { "lang": "hi", "text": "भूस्खलन चेतावनी (S1): 2 दिन तक गंभीर खतरा। पहाड़ी सड़क से बचें। अधिकारी के निर्देश मानें। (फिक्सचर)" },
+    { "lang": "ne", "text": "पहिरो चेतावनी (S1): २ दिन गम्भीर जोखिम। डाँडा बाटो नजानुहोस्। अधिकारीको निर्देशन पालना गर्नुहोस्। (फिक्सचर)" }
+  ],
+  "offline_note": "Cached on device. Queued sync when network returns (fixture)."
+}

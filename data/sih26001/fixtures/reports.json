@@ -1,0 +1,16 @@
+{
+  "reports": [
+    {
+      "id": "REP-001",
+      "zone_id": "S2",
+      "type": "crack",
+      "text": "Fresh crack above Chandmari road-cut, ~5 m long.",
+      "lat": 27.3381,
+      "lon": 88.6121,
+      "captured_at": "2026-09-04T09:30:00+05:30",
+      "reporter": "field-officer-fixture",
+      "photo": "fixture-only (no binary in repo)",
+      "status": "queued"
+    }
+  ]
+}

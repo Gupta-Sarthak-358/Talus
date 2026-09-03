@@ -1,0 +1,27 @@
+{
+  "source": "IMD-fixture (recorded, no live call in demo)",
+  "station": "Gangtok (pilot)",
+  "daily_mm": [12, 45, 78, 132, 96, 34, 18],
+  "preset_ref": "monga-mdl",
+  "templates": [
+    { "id": "monga-mdl", "name": "Monga 2026 MDL curve", "formula": "E = -11.10 + 0.62*D (24<D<1440h)", "demo_effect": "S3 Moderate(66) -> High(78), S1 stays Critical" },
+    { "id": "dahal-144", "name": "Dahal-Hasegawa", "formula": ">144 mm/day -> high risk (Himalayas)", "demo_effect": "flags S1+S2 on peak day" }
+  ],
+  "causal_demo": {
+    "zone_id": "S3",
+    "divergence_note": "Saturation trajectory -> newly escalated S3 (fixture numbers, real model pending)",
+    "escalated_units": ["S3"],
+    "timeline": [
+      { "t": "day 0", "cause": "7-day rain +120 mm", "effect": "soil moisture saturated" },
+      { "t": "day 3", "cause": "24h rain 132 mm", "effect": "S3 66 -> 78 (High)" }
+    ]
+  },
+  "ml_whatif_demo": {
+    "zone_id": "S3",
+    "override": { "rainfall_24h_mm": 132 },
+    "baseline_score": 66,
+    "simulated_score": 74,
+    "delta": 8,
+    "caveat": "Counterfactual only — single-feature override breaks correlations. Causal questions use the threshold engine."
+  }
+}

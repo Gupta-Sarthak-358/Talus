@@ -1,0 +1,113 @@
+{
+  "pilot": "Gangtok cluster, Sikkim (27.3389, 88.6065, EPSG:4326 demo)",
+  "frozen": true,
+  "updated_at": "2026-09-03T00:00:00+05:30",
+  "provenance_footnote": "IMD rainfall + SRTM DEM + GSI Bhusanket + ERA5 soil moisture + Sentinel-2 NDVI/LULC + OSM roads/rivers. Soil = reanalysis proxy. Sensor = recorded fixture. Bands = prototype, not safety standard.",
+  "zones": [
+    {
+      "zone_id": "S1",
+      "name": "Tathangchen (upper)",
+      "geometry": { "lat": 27.345, "lon": 88.6 },
+      "risk_score": 89,
+      "risk_band": "Critical",
+      "confidence": 0.82,
+      "trend": "escalating",
+      "base_value": 55.0,
+      "contributions": [
+        { "feature": "distance_to_road", "shap": 12.5 },
+        { "feature": "rainfall_7d_mm", "shap": 9.0 },
+        { "feature": "slope_angle", "shap": 7.5 },
+        { "feature": "soil_moisture", "shap": 5.0 }
+      ],
+      "missing_evidence": ["soil_moisture:reanalysis-proxy", "event-date:approximate"]
+    },
+    {
+      "zone_id": "S2",
+      "name": "Chandmari (road-cut)",
+      "geometry": { "lat": 27.338, "lon": 88.612 },
+      "risk_score": 78,
+      "risk_band": "High",
+      "confidence": 0.74,
+      "trend": "escalating",
+      "base_value": 55.0,
+      "contributions": [
+        { "feature": "distance_to_road", "shap": 10.0 },
+        { "feature": "rainfall_24h_mm", "shap": 6.5 },
+        { "feature": "slope_angle", "shap": 4.0 },
+        { "feature": "ndvi", "shap": 2.5 }
+      ],
+      "missing_evidence": ["distance_to_road:osm-qa-unverified"]
+    },
+    {
+      "zone_id": "S3",
+      "name": "Tadong (mid)",
+      "geometry": { "lat": 27.325, "lon": 88.6065 },
+      "risk_score": 66,
+      "risk_band": "Moderate",
+      "confidence": 0.61,
+      "trend": "stable",
+      "base_value": 55.0,
+      "contributions": [
+        { "feature": "rainfall_7d_mm", "shap": 5.0 },
+        { "feature": "slope_angle", "shap": 3.5 },
+        { "feature": "soil_moisture", "shap": 2.5 }
+      ],
+      "missing_evidence": ["previous_landslide:inventory-incomplete"]
+    },
+    {
+      "zone_id": "S4",
+      "name": "Ranipool (valley)",
+      "geometry": { "lat": 27.315, "lon": 88.595 },
+      "risk_score": 42,
+      "risk_band": "Low",
+      "confidence": 0.58,
+      "trend": "stable",
+      "base_value": 55.0,
+      "contributions": [
+        { "feature": "elevation", "shap": -6.0 },
+        { "feature": "ndvi", "shap": -4.0 },
+        { "feature": "distance_to_river", "shap": -3.0 }
+      ],
+      "missing_evidence": []
+    }
+  ],
+  "decisions": {
+    "Critical": [
+      { "role": "villager", "message": "Avoid the S1 hillside road for 2 days. Use the valley route.", "action": "avoid-route guidance (Nepali/Hindi/English)", "priority": "immediate" },
+      { "role": "district_officer", "message": "Close the S1 stretch, evacuate Tathangchen upper first.", "action": "closure + evacuation coordination", "priority": "high" },
+      { "role": "state_manager", "message": "Prioritise S1 over S2–S4. Stage machines at Ranipool.", "action": "resource allocation", "priority": "high" },
+      { "role": "rescue_team", "message": "Approach S1 from the south. Do not use the short ridge road.", "action": "risk-aware approach", "priority": "standby" }
+    ],
+    "High": [
+      { "role": "villager", "message": "Avoid the Chandmari road-cut after heavy rain.", "action": "avoid-route guidance", "priority": "high" },
+      { "role": "district_officer", "message": "Inspect S2 today, restrict night movement.", "action": "inspection + restriction", "priority": "high" },
+      { "role": "state_manager", "message": "Hold one team for S2 if S1 stabilises.", "action": "reserve allocation", "priority": "medium" },
+      { "role": "rescue_team", "message": "Standby near S2.", "action": "standby", "priority": "standby" }
+    ],
+    "Moderate": [
+      { "role": "villager", "message": "Caution on Tadong paths during rain.", "action": "awareness", "priority": "normal" },
+      { "role": "district_officer", "message": "Schedule S3 inspection this week.", "action": "monitoring", "priority": "normal" },
+      { "role": "state_manager", "message": "Monitor S3 trend.", "action": "monitoring", "priority": "normal" },
+      { "role": "rescue_team", "message": "No action required.", "action": "none", "priority": "none" }
+    ],
+    "Low": [
+      { "role": "villager", "message": "No restriction for Ranipool.", "action": "none", "priority": "none" },
+      { "role": "district_officer", "message": "Routine watch on S4.", "action": "monitoring", "priority": "normal" },
+      { "role": "state_manager", "message": "No allocation for S4.", "action": "none", "priority": "none" },
+      { "role": "rescue_team", "message": "No action required.", "action": "none", "priority": "none" }
+    ]
+  },
+  "histories": {
+    "S1": [
+      { "t": "2026-06-01", "risk_score": 58 },
+      { "t": "2026-06-20", "risk_score": 66 },
+      { "t": "2026-07-10", "risk_score": 78 },
+      { "t": "2026-08-15", "risk_score": 89 }
+    ],
+    "S3": [
+      { "t": "2026-06-01", "risk_score": 52 },
+      { "t": "2026-07-01", "risk_score": 58 },
+      { "t": "2026-08-01", "risk_score": 66 }
+    ]
+  }
+}

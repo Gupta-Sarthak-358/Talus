@@ -1,0 +1,131 @@
+# TALUS v2 Project Brief — SIH26001
+
+**Status:** Draft (scope under team review) · **Context:** SIH 2026, SIH26001
+track · **Date:** 2026-09-03 · **Trace to:** `docs/SIH26001_RESEARCH.md` §1–§2
+
+This is the **scope firewall for the SIH26001 track**. If a proposal conflicts
+with this brief, this document wins until amended via ADR.
+
+---
+
+## Problem
+
+The North Eastern Region (8 states: Arunachal Pradesh, Assam, Manipur,
+Meghalaya, Mizoram, Nagaland, Sikkim, Tripura) faces frequent monsoon
+landslides, flash floods, road blockages, and slope failures from heavy
+rainfall, fragile terrain, and unplanned hill cutting. Incidents disrupt
+connectivity, damage infrastructure, delay emergency response, and isolate
+remote villages for days.
+
+The current state:
+
+- **Reactive monitoring** — dependent on manual reporting after events.
+- **Threshold-only forecasting** — GSI RLFS uses rainfall thresholds; no
+  AI/ML, no soil moisture, no satellite, no per-slope prediction.
+- **No decision layer** — no role-based emergency prioritisation, no road
+  connectivity tracking, no risk-aware routing, no offline support.
+
+GSI has publicly listed "integration of AI/ML as a decision-support layer" as
+their next advancement initiative. That gap is this project.
+
+## Problem Statement
+
+**AI-Based Early Warning and Landslide Risk Monitoring System in NER**
+(SIH26001, MDoNER, Disaster Management, Software).
+
+## Solution
+
+TALUS v2 converts scattered NER geospatial signals into **explainable
+susceptibility** and **actionable emergency decisions**.
+
+TALUS v2 produces a slope/zone-level susceptibility score with stated
+confidence, explains *why* (SHAP), tracks monsoon-driven escalation, and
+converts the result into **role-specific actions**:
+
+- Villager / community → early warning in local language, avoid-route guidance
+- District officer → intervention / evacuation coordination, road closure calls
+- State manager → resource allocation, emergency prioritisation across districts
+- Rescue team → risk-aware access routing, deployment sequencing
+
+It also computes **road-status-aware routes** (risk-weighted Dijkstra over the
+NER road graph instead of plain shortest path) and supports **rainfall-threshold
+what-if simulation** so an officer can test how forecast rain shifts risk, live.
+
+## Core Differentiation
+
+From:
+
+> "What is the risk?"
+
+To:
+
+> "What should we do now — which road to avoid, which village first, where to
+> send rescue, and what data are we missing?"
+
+Every susceptibility score carries **confidence** and a **list of missing
+evidence** — no bare black-box numbers. Who gets told what, in what words and
+language, and what action follows is part of the product, not an afterthought.
+
+## System Philosophy
+
+```text
+Detect → Understand → Escalate → Decide → Act
+```
+
+(Unchanged from v1. The pattern survives; the data and physics change.)
+
+## Core Modules
+
+1. **NGEN data pipeline** — IMD rainfall, ERA5/SMAP soil moisture, SRTM DEM
+   derivatives, Sentinel-2 NDVI/LULC, GSI lithology, OSM roads/rivers,
+   historical landslide inventories → unified feature matrix.
+2. **Feature processing** — 17 NER features per spatial unit, with missingness.
+3. **Risk engine** — susceptibility score + calibrated confidence.
+4. **Explainability** — SHAP feature contributions per prediction.
+5. **Trend detection** — monsoon-season escalation signals.
+6. **Decision engine** — role-specific recommendations (4 NER roles).
+7. **Risk-aware routing** — Dijkstra over road graph weighted by slope risk.
+8. **Rainfall scenario engine** — threshold-based what-if (Monga 2026,
+   Dahal & Hasegawa 2008).
+9. **Field reporting** — geo-tagged photo/video upload (camera + GPS, offline).
+10. **Alerts** — SMS/app, multilingual, offline-sync capable.
+11. **Dashboard** — NER GIS heatmap: risk bands, road status, villages,
+    weather-linked forecast, emergency priority.
+
+## MVP (proposed — freeze via ADR before build)
+
+- NGEN pipeline over at least 1 pilot district cluster
+- RF + XGBoost susceptibility model, isotonic calibration
+- SHAP explainability + confidence + missing-evidence reporting
+- Trend / escalation detection on monsoon temporal pattern
+- Role-based decisions (4 NER roles)
+- Risk-aware routing over OSM road graph
+- Rainfall-threshold scenario engine
+- React + Leaflet/Mapbox GIS dashboard
+- FastAPI backend (extend v1 contract, don't break it)
+- Training on **real historical landslide events** (not synthetic)
+
+## Explicitly Out of Scope
+
+- Physical IoT sensor deployment (prototype uses satellite/reanalysis proxies;
+  a sensor-ingestion adapter is API-ready — see `02_ARCHITECTURE_SIH26001.md` §5)
+- InSAR ground-deformation monitoring (requires hardware)
+- Flash-flood prediction (needs a hydrological routing model; rainfall here is
+  a landslide-trigger proxy only — road blockages are covered as a derived
+  road-status overlay, not flood mapping)
+- Exact location/time prediction of individual landslides (we predict
+  susceptibility, not specific events)
+- Hardware installation (PS is Software category)
+- Replacing GSI RLFS — we complement it with the AI/ML layer GSI asked for
+- Production-grade safety certification
+- Claiming field-validated production accuracy (prototype honesty rules apply)
+
+## Data Honesty (do not remove)
+
+Unlike v1 (synthetic-only), v2 trains on **real documented events**: GSI
+Bhusanket (37,903+ NER), NASA COOLR/GLC, ISRO Landslide Atlas (80,000+),
+published inventories (Dibang 537, Meghalaya 1,330+, NEH 490 with rainfall
+records), IMD 0.25° gridded rainfall (1901–present) + daily records at 8 NER
+stations (1980-2019). *The prototype validates the decision-support
+architecture on real data; it is not a production-calibrated warning system.
+Final operational decisions remain with qualified authorities.*

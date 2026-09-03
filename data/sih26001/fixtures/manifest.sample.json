@@ -1,0 +1,17 @@
+{
+  "ngen": "pilot-manifest-format (fill per run, commit alongside code)",
+  "pilot": "Gangtok cluster, Sikkim",
+  "crs": "EPSG:4326 (demo)",
+  "grid": "pilot-grid-v1 (freeze before training)",
+  "seeds": [42],
+  "sources": {
+    "imd_gridded": { "version": "IMD-0.25deg-1901-present", "clip": "pilot-bbox", "date": "FILL" },
+    "era5_soil": { "version": "ERA5-volumetric", "clip": "pilot-period", "date": "FILL", "proxy_tag": "reanalysis-proxy" },
+    "srtm_dem": { "version": "SRTM-30m", "tiles": ["FILL"], "date": "FILL" },
+    "sentinel2": { "version": "L2A-composite-FILL", "date": "FILL" },
+    "bhusanket": { "export": "FILL-date", "ner_filter": true },
+    "osm": { "extract": "geofabrik-sikkim-FILL-date", "qa": "osm-qa-unverified" }
+  },
+  "sampling": { "positive": "dated-event+window", "negative_buffer_m": 300, "ratio": "FILL", "cv": "spatial-cluster (no random split)" },
+  "checksums": { "feature_matrix": "FILL-sha256" }
+}
