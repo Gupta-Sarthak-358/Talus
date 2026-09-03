@@ -52,7 +52,9 @@ class ZoneDetail(ZoneSummary):
 
 class ZoneFeaturesResponse(BaseModel):
     zone_id: str
-    features: Features
+    # Sept-5 scaffold: NGEN 17-feature dict from feature_matrix.sample.csv
+    # (v1 Features model cannot hold NER fields; path/keys unchanged).
+    features: dict
     missing_features: list[str]
 
 
