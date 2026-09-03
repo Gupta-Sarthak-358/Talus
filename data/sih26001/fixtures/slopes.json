@@ -58,7 +58,7 @@
       "zone_id": "S4",
       "name": "Ranipool (valley)",
       "geometry": { "lat": 27.315, "lon": 88.595 },
-      "risk_score": 42,
+      "risk_score": 52,
       "risk_band": "Low",
       "confidence": 0.58,
       "trend": "stable",

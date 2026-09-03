@@ -299,6 +299,9 @@ def what_if(req: WhatIfRequest):
                     "surface-feature overrides cannot represent. Use the causal Scenario "
                     "Engine with groundwater scenarios instead."))
     _zone_or_404(req.zone_id)
+    if data.fixture_zone(req.zone_id) is not None:
+        # Scaffold: v1 model has no S-zones — serve the recorded demo.
+        return _fixture_what_if(req.zone_id)
     current = data.store.features[req.zone_id]
     try:
         merged = data.apply_overrides(current, req.overrides)
@@ -342,12 +345,16 @@ def list_scenario_templates():
     ])
 
 
-@app.post("/api/simulation/causal-what-if", response_model=CausalWhatIfResponse,
+@app.post("/api/simulation/causal-what-if",
           description="CAUSAL PHYSICS What-If (Scenario Engine v1.5): modifies causes "
-                      "(rain realization / blast schedule) and lets the frozen generator "
-                      "v1.4.0 chain propagate them into a day-by-day FoS/risk trajectory.")
+                      "and lets the frozen generator chain propagate them. Scaffold: "
+                      "S-zones serve the recorded forecast.json causal_demo fixture; "
+                      "v1 model path unchanged (response_model dropped so the fixture "
+                      "dict passes through; v1 still returns CausalWhatIfResponse).")
 def causal_what_if(req: CausalWhatIfRequest):
     _zone_or_404(req.zone_id)
+    if data.fixture_zone(req.zone_id) is not None:
+        return _FORECAST["causal_demo"]
     from . import scenario_service
     try:
         result = scenario_service.run_causal(
@@ -402,3 +409,38 @@ def dispatch_alerts():
 @app.get("/api/forecast/rainfall")
 def forecast_rainfall():
     return _FORECAST
+
+
+def _fixture_what_if(zone_id: str) -> WhatIfResponse:
+    """Sept-5 scaffold: recorded ML-counterfactual demo (forecast.json
+    ml_whatif_demo: S3 66 -> 74, delta 8). Baseline from the fixture-seeded
+    store; the caveat badge is frontend-side per contract Screen 3."""
+    demo = _FORECAST["ml_whatif_demo"]
+    base = data.store.risk[zone_id]
+    sim = int(demo["simulated_score"])
+    fx = data.fixture_zone(zone_id)
+    baseline = PredictResponse(
+        zone_id=zone_id,
+        risk_score=base,
+        risk_band=data.risk_band(base),
+        confidence=data.store.confidence[zone_id],
+        missing_evidence=data.fixture_missing_evidence(zone_id),
+    )
+    simulated = PredictResponse(
+        zone_id=zone_id,
+        risk_score=sim,
+        risk_band=data.risk_band(sim),
+        confidence=data.store.confidence[zone_id],
+        missing_evidence=data.fixture_missing_evidence(zone_id),
+    )
+    contribs = [
+        {"feature": c["feature"], "shap_value": c["shap"]}
+        for c in fx["contributions"]
+    ]
+    return WhatIfResponse(
+        zone_id=zone_id,
+        baseline=baseline,
+        simulated=simulated,
+        delta=sim - base,
+        contributions=contribs,
+    )

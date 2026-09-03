@@ -156,7 +156,9 @@ CAUSAL_KINDS = ["none", "rainfall_storm", "prolonged_rain", "blast_surge",
 
 
 class CausalWhatIfRequest(BaseModel):
-    zone_id: Literal["A", "B", "C", "D"]
+    # Sept-5 scaffold: S-zones serve the recorded forecast.json causal_demo
+    # fixture (v1 A-D path unchanged).
+    zone_id: Literal["A", "B", "C", "D", "S1", "S2", "S3", "S4"]
     kind: Literal[*CAUSAL_KINDS]
     start_day: int = Field(default=200, ge=0)
     duration_days: int = Field(default=7, ge=1)
