@@ -23,7 +23,7 @@ weakness) · **Source:** `docs/SIH26001_RESEARCH.md` §11.3–§11.4
    go unreported (community reporting is itself a mitigation we build).
 3. **Static model** — conditioning factors don't change; only rainfall + soil
    moisture are dynamic in the prototype.
-4. **No real-time sensor integration** in the prototype.
+4. **No live sensor integration** in the prototype — adapter fixture only.
 5. **Multilingual NER coverage needs community co-design** beyond the pilot
    language matrix.
 6. **Offline sync needs field testing** — demonstrated as architecture, not

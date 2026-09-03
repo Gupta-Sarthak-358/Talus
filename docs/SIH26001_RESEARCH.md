@@ -839,7 +839,7 @@ Negative samples (no landslide):
 2. Historical landslide inventories have spatial/temporal incompleteness
 3. The model is static (conditioning factors don't change) — only rainfall and
    soil moisture are dynamic
-4. No real-time sensor integration in prototype
+4. No live sensor integration in prototype — adapter fixture only
 5. Multilingual NLP for NER languages needs community co-design
 6. Offline sync architecture needs field testing
 
@@ -851,7 +851,7 @@ Negative samples (no landslide):
 
 | Task | Source | Priority |
 |---|---|---|
-| Download IMD 0.25° gridded daily rainfall for NER (1980-2024) | imdpune.gov.in | Critical |
+| Download IMD 0.25° gridded daily rainfall for NER (pilot period first, then full 1901–present record) | imdpune.gov.in | Critical |
 | Download SRTM DEM 30m for NER states | USGS Earth Explorer | Critical |
 | Compile GSI Bhusanket NER landslide inventory | bhukosh.gsi.gov.in | Critical |
 | Download ERA5 soil moisture for NER (2000-2024) | Copernicus CDS | High |
@@ -926,7 +926,7 @@ Dec 2026         : Grand Finale (if selected)
 ## Appendix B: Data Download Checklist
 
 ```
-[ ] IMD daily gridded rainfall (0.25°, 1980-2024) for NER bounding box
+[ ] IMD daily gridded rainfall (0.25°, pilot period first, then full 1901–present record) for NER bounding box
 [ ] SRTM DEM v3 30m for NER 8 states
 [ ] ERA5 soil moisture (volumetric water content, 1979-2024)
 [ ] Sentinel-2 L1C for NDVI computation (2023-2024, cloud-free composites)
