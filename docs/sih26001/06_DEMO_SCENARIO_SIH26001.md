@@ -71,6 +71,20 @@ multilingual test alert (2+ languages) and an offline-capture→sync pass.
 - [ ] No network calls; everything local/ recorded fixture
 - [ ] Limitations slide ready (see `08_LIMITATIONS_SIH26001.md`)
 
+## PS (a)–(g) traceability checklist
+
+| PS bullet | Covered in | Demo screen |
+|---|---|---|
+| (a) multi-source data (rain, moisture, satellite, terrain, history) | NGEN + FR-01 | Screen 1 (provenance footnote) |
+| (b) AI/ML high-risk prediction | FR-02/03/04 | Screens 1–2 |
+| (c) real-time alerts to admins + communities | FR-11 (+ FR-06 roles) | Screen 6 (fixture) |
+| (d) GIS mapping of roads, villages, infrastructure | FR-07/09 | Screens 1, 5 |
+| (e) geo-tagged citizen/field uploads | FR-10 | Screen 6 (officer queue) |
+| (f) dashboards: severity, roads, weather forecast, emergency priority | FR-09 | Screens 1, 5 |
+| (g) multilingual + offline | FR-12 | Screen 6 (2+ languages, sync pass) |
+| Expected Solution: IMD/satellite/sensor integration | Sensor adapter (02 §5, 03 §A) | Fixture noted Screen 1 |
+| Expected Solution: cloud + offline sync | Cloud path (02 §5) | Architecture slide, not live demo |
+
 ## Explicitly NOT claimed (carry into the frozen version)
 
 - Scores are not probability of a specific landslide; confidence is calibrated

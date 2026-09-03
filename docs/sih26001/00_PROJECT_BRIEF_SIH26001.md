@@ -107,8 +107,12 @@ Detect → Understand → Escalate → Decide → Act
 
 ## Explicitly Out of Scope
 
-- Real-time IoT sensor deployment (use satellite/reanalysis proxies)
+- Physical IoT sensor deployment (prototype uses satellite/reanalysis proxies;
+  a sensor-ingestion adapter is API-ready — see `02_ARCHITECTURE_SIH26001.md` §5)
 - InSAR ground-deformation monitoring (requires hardware)
+- Flash-flood prediction (needs a hydrological routing model; rainfall here is
+  a landslide-trigger proxy only — road blockages are covered as a derived
+  road-status overlay, not flood mapping)
 - Exact location/time prediction of individual landslides (we predict
   susceptibility, not specific events)
 - Hardware installation (PS is Software category)
@@ -121,6 +125,7 @@ Detect → Understand → Escalate → Decide → Act
 Unlike v1 (synthetic-only), v2 trains on **real documented events**: GSI
 Bhusanket (37,903+ NER), NASA COOLR/GLC, ISRO Landslide Atlas (80,000+),
 published inventories (Dibang 537, Meghalaya 1,330+, NEH 490 with rainfall
-records), 40+ years IMD rainfall. *The prototype validates the decision-support
+records), IMD 0.25° gridded rainfall (1901–present) + daily records at 8 NER
+stations (1980-2019). *The prototype validates the decision-support
 architecture on real data; it is not a production-calibrated warning system.
 Final operational decisions remain with qualified authorities.*

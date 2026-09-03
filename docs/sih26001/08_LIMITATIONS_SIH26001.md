@@ -10,6 +10,9 @@ weakness) · **Source:** `docs/SIH26001_RESEARCH.md` §11.3–§11.4
 - We are **not** deploying IoT sensors (A-LEWS/AmritaWNA's domain).
 - We do **not** predict exact landslide locations/times — we predict
   susceptibility.
+- We do **not** predict flash floods — rainfall is a landslide-trigger proxy,
+  not a hydrological flood model. Road blockages are covered as derived
+  road-status, not flood mapping.
 - We do **not** claim field-validated production accuracy — this is a prototype.
 
 ## Honest limitations (say before asked)

@@ -85,6 +85,23 @@ improves LEWS; we state the resolution limit openly.)
 | NASA LHASA 2.0 (github.com/nasa/LHASA) | Beat-the-global-model benchmark over NER |
 | ML-CASCADE / ILSM (IIT Delhi, Zenodo) | Closest published pipeline precedent; fallback prior for sparse pixels |
 
+### Sensor feeds (PS-required, adapter-ready)
+
+The PS Expected Solution explicitly lists sensor data alongside IMD and
+satellite feeds. Prototype position: no physical deployment, but a
+**Sensor Ingestion Adapter** is part of NGEN `fetch/` from day one:
+
+| Feed | Format | Maps to | Prototype status |
+|---|---|---|---|
+| AWS/ARG rain gauges | IMD/NEDRP feed format | `rainfall_24h_mm`, `rainfall_7d_mm` | Recorded fixture |
+| Soil-moisture probes | Probe telemetry → 0–1 volumetric | `soil_moisture` (overrides reanalysis where present) | Recorded fixture |
+
+Adapter contract: timestamped, geo-tagged observations → the same feature
+names as `05_FEATURE_SCHEMA_SIH26001.md`, tagged `source=sensor`. When live feeds exist, swap
+the fixture for a connector — no schema or model change. Sensor gaps fall
+back to gridded/reanalysis values and are listed in `missing_evidence`.
+See `02_ARCHITECTURE_SIH26001.md` §5.1.
+
 ---
 
 ## B. Feature provenance table
@@ -137,7 +154,7 @@ split) is mandatory — spatial autocorrelation makes random splits lie
 ## E. Phase-0 download checklist
 
 ```text
-[ ] IMD daily gridded rainfall (0.25°) for NER bbox — pilot period first, then 1980–2024
+[ ] IMD daily gridded rainfall (0.25°) for NER bbox — pilot period first, then full 1901–present record
 [ ] SRTM DEM 30m for pilot extent (then 8 states)
 [ ] GSI Bhusanket NER landslide inventory (filter + export)
 [ ] ERA5 soil moisture for NER (pilot period first)

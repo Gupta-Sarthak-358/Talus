@@ -44,9 +44,11 @@ What changes is the data layer and physics; the architecture survives intact.
 
 **Key finding:** Unlike the mine problem (where no public dataset existed), NER
 has real, documented landslide data from multiple sources — GSI Bhusanket
-(91,000+ mapped landslides), NASA COOLR, ISRO Landslide Atlas (80,000+),
-published academic inventories (490-1,330+ events with rainfall records), and
-40+ years of IMD rainfall data. This means we can train on real events, not
+(91,000+ mapped landslides India-wide, 37,903+ in NER), NASA COOLR, ISRO
+Landslide Atlas (80,000+), published academic inventories (490-1,330+ events
+with rainfall records), and IMD 0.25° gridded rainfall (1901–present) plus
+daily records at 8 NER stations (1980-2019). This means we can train on real
+events, not
 synthetic data — a stronger evidence base than TALUS v1.
 
 **Competitive gap:** GSI's Regional Landslide Forecasting System (RLFS) uses
@@ -138,9 +140,11 @@ data gets better. The domain gets more urgent.
 
 ### 2.3 What the PS does NOT require
 
-- Real-time IoT sensor deployment (we use satellite/reanalysis data as proxy)
+- Physical IoT sensor deployment in the prototype (satellite/reanalysis proxies;
+  a sensor-ingestion adapter is API-ready — see §A "Sensor feeds" of the v2 data plan)
 - InSAR ground deformation monitoring (requires hardware)
 - Exact location/time prediction of individual landslides (we predict susceptibility)
+- Flash-flood forecasting (needs hydrological routing; rainfall is a trigger proxy only)
 - Hardware installation (PS is Software category)
 
 ---
@@ -390,7 +394,7 @@ Aizawl 2026):
 | Soil moisture integration | A-LEWS (hardware only) | GSI RLFS, IIT Mandi | **Major** |
 | Satellite imagery analysis | NRSC/NESAC (raw data) | GSI RLFS (no analysis) | **Major** |
 | Terrain/slope-specific prediction | IIT Mandi (susceptibility) | GSI RLFS (regional only) | **Moderate** |
-| Historical landslide records | GSI Bhusanket (91,000+) | — | ✓ Available |
+| Historical landslide records | GSI Bhusanket (91,000+ India-wide; 37,903+ NER) | — | ✓ Available |
 | AI/ML risk prediction | Research (NEHU, Dibang), NASA LHASA (global) | GSI RLFS (thresholds only) | **Moderate** |
 | Real-time GIS dashboard | NDEM (basic), A-LEWS | GSI RLFS (bulletins only) | **Major** |
 | Field reporting (geo-tagged) | Bhooskhalan (basic) | No structured workflow | **Major** |
@@ -710,8 +714,8 @@ Unlike TALUS v1 (synthetic-only), TALUS v2 has real ground truth:
 - **490+ dated landslide events** with rainfall records (Monga 2026)
 - **537 inventoried landslides** in Dibang Valley (Mihu 2026)
 - **1,330+ landslides** in Meghalaya (NEHU/Agrawal 2021)
-- **91,000+ mapped landslides** in GSI Bhusanket
-- **40+ years of IMD rainfall** at 8 NER stations
+- **91,000+ mapped landslides India-wide (37,903+ in NER)** in GSI Bhusanket
+- **IMD 0.25° gridded rainfall (1901–present) + daily records at 8 NER stations (1980-2019)**
 - **Published benchmark results** (AUC 0.89-0.96) to validate against
 
 ### 9.2 Training data construction

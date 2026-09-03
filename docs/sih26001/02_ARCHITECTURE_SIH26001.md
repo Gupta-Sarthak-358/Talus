@@ -14,6 +14,7 @@ mine track. This doc records the v2 mapping and deltas only.
 Real NER sources
   IMD rainfall │ ERA5/SMAP soil moisture │ SRTM DEM │ Sentinel-2 │ GSI geology
   OSM roads/rivers │ landslide inventories │ IMD forecast API
+  Sensor feeds (AWS/ARG gauges, soil-moisture probes — via adapter; fixture in demo)
         ↓
 NGEN PIPELINE (replaces synthetic generator)
   fetch → reproject → align grid → derive terrain → join → label → version
@@ -99,7 +100,8 @@ Field app (progressive web app first)
 
 ```text
 ngen/
-  ├── fetch/        (IMD, CDS/ERA5, USGS/SRTM, Copernicus, Bhusanket, OSM, Zenodo)
+  ├── fetch/        (IMD, CDS/ERA5, USGS/SRTM, Copernicus, Bhusanket, OSM, Zenodo,
+  │                  sensor-adapter: AWS/ARG + soil-probe feed format — fixture in demo)
   ├── preprocess/   (reproject to pilot CRS, resample, cloud-mask, QA)
   ├── terrain/      (slope, aspect, curvature, TWI, SPI, drain density)
   ├── join/         (spatial join to unit grid + temporal join to events)
@@ -147,3 +149,44 @@ Demo runs fully offline; live APIs appear as recorded fixtures.
 Decisions to freeze before build: spatial unit (pixel vs slope unit vs admin
 zone), map library, CRS + grid, SMS provider adapter, language matrix. Each
 gets an ADR or a line in `07_ASSUMPTIONS_SIH26001.md` promoted to decision.
+
+---
+
+## 5. Production interfaces: sensor adapter + cloud path (PS compliance)
+
+The PS Expected Solution names three things the prototype does not run live:
+sensor data, production IMD/satellite feeds, and cloud architecture. This
+section records the interfaces so evaluators see they were designed, not
+ignored. Nothing here is built in the prototype beyond recorded fixtures.
+
+### 5.1 Sensor Ingestion Adapter
+
+```text
+AWS/ARG gauges ─┐
+                ├─▶ Sensor Adapter ─▶ NGEN fetch/ ─▶ rainfall_24h/7d, soil_moisture
+Soil probes ────┘   (validate → normalize → provenance-tag `source=sensor`)
+                         │ fixture in demo (recorded feed file, same parser)
+                         │ live later (connector swap, no schema/model change)
+```
+
+Contract: timestamped + geo-tagged observations → existing feature names in
+`05_FEATURE_SCHEMA_SIH26001.md`. Sensor-present values override
+gridded/reanalysis values; sensor gaps fall back silently in value but loudly
+in `missing_evidence`. See `03_DATA_PLAN_SIH26001.md` §A (Sensor feeds).
+
+### 5.2 Cloud scale path (prototype-local → cloud)
+
+```text
+PROTOTYPE (demo)                  PRODUCTION (designed, not built)
+FastAPI (local)              ─▶   API service (containerized, autoscaled)
+SQLite / local files         ─▶   Postgres/PostGIS + object store (rasters, models)
+Alert adapter (fixture)      ─▶   SMS gateway + push + multilingual templates
+Dashboard (localhost)        ─▶   CDN-cached map tiles + hosted frontend
+Field queue (local file)     ─▶   Cloud sync API, offline-first (queued uploads,
+                                   delta downloads, conflict = server-wins + flag)
+```
+
+Migration is config, not rewrite: schemas are PostGIS-ready, artifact paths
+are object-store URIs, the SMS path sits behind the adapter interface. Cloud
+build + field testing are post-hackathon work (see
+`08_LIMITATIONS_SIH26001.md`).

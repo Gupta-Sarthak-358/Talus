@@ -5,7 +5,25 @@
 
 These requirements define what the software **must** do. They are the
 feature-creep firewall. New requirements require updating this document and
-the ADR. IDs R1–R13 trace to the PS decomposition (research §2.2).
+the ADR. R1–R13 are PS order (research §2.2); FR-01…FR-13 are system-layer
+order — the map between them:
+
+| PS req | FR | Note |
+|---|---|---|
+| R1 multi-source ingest | FR-01 | |
+| R2 AI/ML prediction | FR-02 | |
+| R3 GIS dashboard | FR-09 | shares FR with R4 |
+| R4 severity levels | FR-09 | 5-band map |
+| R5 roads + connectivity | FR-07 | |
+| R6 weather forecasts | FR-05, FR-08 | trend + what-if |
+| R7 emergency prioritisation | FR-06 | |
+| R8 field reporting | FR-10 | |
+| R9 SMS/app alerts | FR-11 | |
+| R10 multilingual | FR-12 | shares FR with R11 |
+| R11 offline | FR-12 | |
+| R12 explainability | FR-04 | |
+| R13 calibrated confidence | FR-03 | |
+| — (Tier 2) | FR-13 | timeline, unmapped to PS bullets |
 
 ---
 
@@ -91,9 +109,11 @@ escalation events, with delivery status.
 ### FR-12: Multilingual + offline (R10, R11)
 
 The system shall support **multilingual notifications** (at minimum English +
-Hindi + pilot-district language; full NER language matrix deferred) and
-**low-network/offline functionality** (local-first cache, queued sync) for
-remote areas.
+Hindi + pilot-district language) and **low-network/offline functionality**
+(local-first cache, queued sync) for remote areas. Deferred to community
+co-design: Assamese, Bodo, Manipuri (Meitei), Khasi, Garo, Mizo, Nagamese,
+Nepali, Kokborok, Adi/Nyishi, Bhutia/Lepcha — prioritized with MDoNER and
+district partners post-pilot.
 
 ### FR-13: Evidence timeline (Tier 2)
 
@@ -120,6 +140,21 @@ committing.)*
 - **Reproducible environment** — dependency manifests committed.
 - **Traceable data** — every feature maps to a provenance entry in
   `03_DATA_PLAN_SIH26001.md`.
+
+### Real-time definition (prototype targets — freeze at build)
+
+The PS says "real-time" four times; the prototype is explicit about what that
+means without live sensors:
+
+- **Ingest cadence:** daily IMD/GPM batch ingest; optional 3-hourly GPM pass
+  during an active monsoon escalation.
+- **Escalation latency:** < 30 min from ingest completion to decision output +
+  alert-queue entry (local prototype target).
+- **Dashboard refresh:** on every ingest, plus push on any escalation event.
+- **SMS dispatch:** < 15 min from escalation (adapter fixture in demo; real
+  gateway is post-hackathon work).
+- **Not claimed:** continuous sensor streaming. "Real-time" in the prototype =
+  daily ingest + event-driven escalation, never a silent batch delay.
 
 ---
 
