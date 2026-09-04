@@ -35,8 +35,8 @@
         "N4"
       ],
       "file": "slopes.lachung.json",
-      "live": false,
-      "badge": "PREVIEW \u2014 fixtures"
+      "live": true,
+      "badge": "LIVE \u2014 NGEN"
     },
     {
       "id": "darjeeling",
@@ -54,8 +54,8 @@
         "D4"
       ],
       "file": "slopes.darjeeling.json",
-      "live": false,
-      "badge": "PREVIEW \u2014 fixtures"
+      "live": true,
+      "badge": "LIVE \u2014 NGEN"
     }
   ]
 }

@@ -1,3 +1,7 @@
+> **ARCHIVED — Mine V1 (SIH25071 open-pit). Active track is SIH26001 NER landslide — see docs/sih26001/. Do not use for new work.**
+
+---
+
 # Talus Feature Schema (Interface Contract)
 
 **Status:** Research Freeze · Owner: Member 2 (Data / Generator) · Consumers: Member 3+ (ML / UI)

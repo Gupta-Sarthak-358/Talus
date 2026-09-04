@@ -11,7 +11,7 @@ const ROLE_ICONS = {
 };
 
 export default function RoleSelector() {
-  const { role, setRole, currentRoleMeta } = useMineContext();
+  const { role, setRole, currentRoleMeta, t } = useMineContext();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -39,8 +39,8 @@ export default function RoleSelector() {
           <IconComponent className="w-3.5 h-3.5" />
         </div>
         <div className="text-left leading-none">
-          <div className="text-[10px] text-mine-muted font-normal">Active Role</div>
-          <div className="font-semibold text-mine-text mt-0.5">{currentRoleMeta.label}</div>
+          <div className="text-[10px] text-mine-muted font-normal">{t('role.active')}</div>
+          <div className="font-semibold text-mine-text mt-0.5">{t(`role.${role}`) || currentRoleMeta.label}</div>
         </div>
         <ChevronDown className={`w-3.5 h-3.5 text-mine-muted transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
@@ -48,7 +48,7 @@ export default function RoleSelector() {
       {isOpen && (
         <div className="absolute right-0 mt-2 w-72 bg-mine-card border border-mine-border rounded-xl shadow-xl z-50 overflow-hidden">
           <div className="px-3 py-2 bg-mine-darker border-b border-mine-border text-[11px] font-medium text-mine-muted uppercase tracking-wider">
-            Select Decision Perspective
+            {t('role.selectPerspective')}
           </div>
           <div className="p-1.5 space-y-1">
             {ROLES.map((r) => {
@@ -76,10 +76,10 @@ export default function RoleSelector() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
-                      <span className={`text-xs font-semibold ${isSelected ? 'text-white' : 'text-mine-text'}`}>{r.label}</span>
+                      <span className={`text-xs font-semibold ${isSelected ? 'text-white' : 'text-mine-text'}`}>{t(`role.${r.id}`)}</span>
                       {isSelected && <Check className="w-3.5 h-3.5 text-talus-100" />}
                     </div>
-                    <p className={`text-[11px] mt-0.5 leading-snug ${isSelected ? 'text-talus-100/90' : 'text-mine-muted'}`}>{r.description}</p>
+                    <p className={`text-[11px] mt-0.5 leading-snug ${isSelected ? 'text-talus-100/90' : 'text-mine-muted'}`}>{t(`role.${r.id}`) === r.label ? r.description : t(`role.${r.id}_desc`) || r.description}</p>
                   </div>
                 </button>
               );

@@ -49,13 +49,14 @@ export async function getZones(location = null) {
   return { status: 'success', timestamp: new Date().toISOString(), zones: merged, location: locKey };
 }
 
-export async function getZoneById(zoneId) {
+export async function getZoneById(zoneId, lang = null) {
+  const langQs = lang ? `?lang=${encodeURIComponent(lang)}` : '';
   const [detail, explanation, features, trend, decision, history] = await Promise.all([
     apiRequest(`/zones/${zoneId}`),
     apiRequest(`/zones/${zoneId}/explanation`).catch(() => null),
     apiRequest(`/zones/${zoneId}/features`).catch(() => null),
     apiRequest(`/zones/${zoneId}/trend`).catch(() => null),
-    apiRequest(`/zones/${zoneId}/decision`).catch(() => null),
+    apiRequest(`/zones/${zoneId}/decision${langQs}`).catch(() => null),
     apiRequest(`/zones/${zoneId}/history`).catch(() => null),
   ]);
   const f = features?.features || {};

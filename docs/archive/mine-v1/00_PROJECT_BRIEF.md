@@ -1,3 +1,7 @@
+> **ARCHIVED — Mine V1 (SIH25071 open-pit). Active track is SIH26001 NER landslide — see docs/sih26001/. Do not use for new work.**
+
+---
+
 # Talus Project Brief
 
 **Status:** Frozen (MVP scope) · **Context:** SIH 2026, College Internal Hackathon · **Today's date:** 2026-08-19

@@ -16,6 +16,7 @@ export default function ZoneIntelligencePanel() {
     selectZone,
     zoneLoading,
     activeSimulation,
+    t,
   } = useMineContext();
 
   if (!selectedZoneData && zoneLoading) {
@@ -29,7 +30,7 @@ export default function ZoneIntelligencePanel() {
   if (!selectedZoneData) {
     return (
       <div className="bg-mine-card border border-mine-border rounded-2xl p-6 text-center text-mine-muted">
-        Select a slope sector on the map or choose below to inspect risk intelligence.
+        {t('dashboard.selectSlope')} — {t('dashboard.slopesMonitored')}
       </div>
     );
   }
@@ -43,9 +44,9 @@ export default function ZoneIntelligencePanel() {
         <div className="flex items-center justify-between text-[11px] font-semibold text-mine-muted uppercase tracking-wider">
           <span className="flex items-center gap-1.5">
             <MapPin className="w-3.5 h-3.5 text-talus-600" />
-            <span>Select Slope Sector</span>
+            <span>{t('zone.selectSlope')}</span>
           </span>
-          <span className="text-[10px] text-mine-muted font-mono">{zones.length} Slopes Monitored (S1–S4)</span>
+          <span className="text-[10px] text-mine-muted font-mono">{zones.length} {t('dashboard.slopesMonitored')} ({zones.map(z=>z.id).join('–')})</span>
         </div>
 
         <div className="grid grid-cols-4 gap-2">

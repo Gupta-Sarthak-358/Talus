@@ -1,3 +1,7 @@
+> **ARCHIVED — Mine V1 (SIH25071 open-pit). Active track is SIH26001 NER landslide — see docs/sih26001/. Do not use for new work.**
+
+---
+
 # Talus Assumptions
 
 **Status:** Frozen for MVP · Distinction: an *assumption* is "we decided to do X." A *limitation* (see `docs/08_LIMITATIONS.md`) is "because of X, the system cannot claim Y."

@@ -1,3 +1,7 @@
+> **ARCHIVED — Mine V1 (SIH25071 open-pit). Active track is SIH26001 NER landslide — see docs/sih26001/. Do not use for new work.**
+
+---
+
 # Talus API Specification
 
 **Status:** Frozen for MVP · Trace to: `docs/01_REQUIREMENTS.md`, `docs/02_ARCHITECTURE.md`

@@ -104,7 +104,8 @@ export function MineProvider({ children }) {
   }, []);
 
   // Initial Data Load — live for Gangtok, preview for other corridors
-  const loadInitialData = useCallback(async () => {
+  const loadInitialData = useCallback(async (overrideLang = null) => {
+    const effectiveLang = overrideLang || lang;
     setLoading(true);
     setError(null);
     try {
@@ -170,10 +171,10 @@ export function MineProvider({ children }) {
       const summary = await getRiskSummary(zonesRes.zones);
       setRiskSummary(summary);
 
-      // Load initial selected slope for this corridor
+      // Load initial selected slope for this corridor (lang-aware for decisions)
       const firstLiveId = zonesRes.zones[0]?.id || 'S1';
       setSelectedZoneId(firstLiveId);
-      const initialZone = await getZoneById(firstLiveId);
+      const initialZone = await getZoneById(firstLiveId, lang);
       setSelectedZoneData(initialZone.zone || initialZone);
 
       // Preload default route plan (S1 -> S4 avoiding R2)

@@ -1,3 +1,7 @@
+> **ARCHIVED — Mine V1 (SIH25071 open-pit). Active track is SIH26001 NER landslide — see docs/sih26001/. Do not use for new work.**
+
+---
+
 # Talus Model Plan
 
 **Status:** Updated for Research Freeze · Trace to: `docs/02_ARCHITECTURE.md`, `docs/03_DATA_PLAN.md`, `docs/05_FEATURE_SCHEMA.md`

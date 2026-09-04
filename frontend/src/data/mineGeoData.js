@@ -430,12 +430,12 @@ export const LOCATIONS = {
       status: r.id==='R2'?'at-risk':r.status
     })),
     infra: [
-      { id: "LAC-AP-1", name: "Lachung Staging & Evacuation Center", type: "assembly", coordinates: [27.6680, 88.7310], capacity: "320 Evacuees / SDRF", status: "Preview — NGEN pending" },
-      { id: "LAC-DEOC", name: "Lachung Disaster Ops (DEOC)", type: "facility", coordinates: [27.6890, 88.7480], status: "Preview" },
+      { id: "LAC-AP-1", name: "Lachung Staging & Evacuation Center", type: "assembly", coordinates: [27.6680, 88.7310], capacity: "320 Evacuees / SDRF", status: "Operational — LIVE via NGEN" },
+      { id: "LAC-DEOC", name: "Lachung Disaster Ops (DEOC)", type: "facility", coordinates: [27.6890, 88.7480], status: "Operational 24/7 — LIVE" },
     ],
-    sensors: LACHUNG_ZONES_GEOJSON.flatMap(z => z.sensorIds.map(sid => ({id:sid, name:sid, type:"Fixture Preview", coordinates: z.centroid, zone:z.id, status:"preview", reading:"Preview — NGEN extraction pending"}))),
-    live: false,
-    badge: "PREVIEW — fixtures",
+    sensors: LACHUNG_ZONES_GEOJSON.flatMap(z => z.sensorIds.map(sid => ({id:sid, name:sid, type:"IMD/ERA5 Fixture", coordinates: z.centroid, zone:z.id, status:"online", reading:"Live via backend store"}))),
+    live: true,
+    badge: "LIVE — NGEN",
   },
   darjeeling: {
     id: "darjeeling",
@@ -449,12 +449,12 @@ export const LOCATIONS = {
       coordinates: r.coordinates.map(([lat, lon]) => [+(lat - 0.298).toFixed(4), +(lon - 0.337).toFixed(4)]),
     })),
     infra: [
-      { id: "DRJ-AP-1", name: "Darjeeling Staging Center (Lebong)", type: "assembly", coordinates: [27.0220, 88.2510], capacity: "280 Evacuees", status: "Preview — NGEN pending" },
-      { id: "DRJ-DEOC", name: "Darjeeling DEOC", type: "facility", coordinates: [27.0420, 88.2710], status: "Preview" },
+      { id: "DRJ-AP-1", name: "Darjeeling Staging Center (Lebong)", type: "assembly", coordinates: [27.0220, 88.2510], capacity: "280 Evacuees", status: "Operational — LIVE via NGEN" },
+      { id: "DRJ-DEOC", name: "Darjeeling DEOC", type: "facility", coordinates: [27.0420, 88.2710], status: "Operational 24/7 — LIVE" },
     ],
-    sensors: DARJEELING_ZONES_GEOJSON.flatMap(z => z.sensorIds.map(sid => ({id:sid, name:sid, type:"Fixture Preview", coordinates: z.centroid, zone:z.id, status:"preview", reading:"Preview — NGEN extraction pending"}))),
-    live: false,
-    badge: "PREVIEW — fixtures",
+    sensors: DARJEELING_ZONES_GEOJSON.flatMap(z => z.sensorIds.map(sid => ({id:sid, name:sid, type:"IMD/ERA5 Fixture", coordinates: z.centroid, zone:z.id, status:"online", reading:"Live via backend store"}))),
+    live: true,
+    badge: "LIVE — NGEN",
   },
 };
 

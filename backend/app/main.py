@@ -82,6 +82,62 @@ DECISIONS_BY_BAND = {
     ],
 }
 
+# Multilingual decisions — translations for hi/ne (en is base). Keys are band -> role -> message
+DECISIONS_TRANSLATIONS = {
+    "hi": {
+        "Critical": {
+            "villager": "S1 पहाड़ी सड़क 2 दिन तक न लें। घाटी मार्ग का उपयोग करें।",
+            "district_officer": "S1 खंड बंद करें, थाथांगचेन ऊपरी क्षेत्र को पहले खाली करें।",
+            "state_manager": "S1 को S2–S4 पर प्राथमिकता दें। रानीपूल में मशीनें तैनात करें।",
+            "rescue_team": "S1 के दक्षिण से पहुँचें। छोटी रिज सड़क का उपयोग न करें।",
+        },
+        "High": {
+            "villager": "भारी बारिश के बाद चंडमारी रोड-कट से बचें।",
+            "district_officer": "आज S2 का निरीक्षण करें, रात में आवाजाही सीमित करें।",
+            "state_manager": "यदि S1 स्थिर हो तो S2 के लिए एक टीम आरक्षित रखें।",
+            "rescue_team": "S2 के पास स्टैंडबाय रहें।",
+        },
+        "Moderate": {
+            "villager": "बारिश के दौरान ताडोंग पगडंडियों पर सावधानी बरतें।",
+            "district_officer": "इस सप्ताह S3 का निरीक्षण निर्धारित करें।",
+            "state_manager": "S3 के रुझान पर नजर रखें।",
+            "rescue_team": "कोई कार्रवाई आवश्यक नहीं।",
+        },
+        "Low": {
+            "villager": "रानीपूल के लिए कोई प्रतिबंध नहीं।",
+            "district_officer": "S4 पर सामान्य निगरानी रखें।",
+            "state_manager": "S4 के लिए कोई आवंटन नहीं।",
+            "rescue_team": "कोई कार्रवाई आवश्यक नहीं।",
+        },
+    },
+    "ne": {
+        "Critical": {
+            "villager": "S1 पहाडी बाटो २ दिन नजानुहोस्। उपत्यका बाटो प्रयोग गर्नुहोस्।",
+            "district_officer": "S1 खण्ड बन्द गर्नुहोस्, थाथाङचेन माथिल्लो क्षेत्र पहिले खाली गर्नुहोस्।",
+            "state_manager": "S1 लाई S2–S4 भन्दा प्राथमिकता दिनुहोस्। रानिपुलमा मेसिन तैनाथ गर्नुहोस्।",
+            "rescue_team": "S1 मा दक्षिणबाट पुग्नुहोस्। छोटो रिज बाटो प्रयोग नगर्नुहोस्।",
+        },
+        "High": {
+            "villager": "भारी वर्षा पछि चन्द्रमारी रोड-कटबाट जोगिनुहोस्।",
+            "district_officer": "आज S2 निरीक्षण गर्नुहोस्, राति आवतजावत सीमित गर्नुहोस्।",
+            "state_manager": "यदि S1 स्थिर भए S2 का लागि एक टोली आरक्षित राख्नुहोस्।",
+            "rescue_team": "S2 नजिक स्ट्यान्डबाइ बस्नुहोस्।",
+        },
+        "Moderate": {
+            "villager": "वर्षाको समयमा ताडोङ बाटोमा सावधानी अपनाउनुहोस्।",
+            "district_officer": "यो हप्ता S3 निरीक्षण तालिका बनाउनुहोस्।",
+            "state_manager": "S3 प्रवृत्ति निगरानी गर्नुहोस्।",
+            "rescue_team": "कुनै कार्य आवश्यक छैन।",
+        },
+        "Low": {
+            "villager": "रानिपुलका लागि कुनै प्रतिबन्ध छैन।",
+            "district_officer": "S4 मा नियमित निगरानी गर्नुहोस्।",
+            "state_manager": "S4 का लागि कुनै आवंटन छैन।",
+            "rescue_team": "कुनै कार्य आवश्यक छैन।",
+        },
+    },
+}
+
 
 def _location_for_zone(zone_id: str) -> str:
     if zone_id.startswith("N"):
@@ -101,12 +157,17 @@ def _zone_or_404(zone_id: str) -> None:
     raise HTTPException(status_code=404, detail=f"Zone {zone_id} not found")
 
 
-def _decisions(zone_id: str, score: int) -> list[dict]:
+def _decisions(zone_id: str, score: int, lang: str = "en") -> list[dict]:
     band = data.risk_band(score)
     rows = DECISIONS_BY_BAND.get(band, DECISIONS_BY_BAND["Moderate"])
+    trans = DECISIONS_TRANSLATIONS.get(lang, {}) if lang != "en" else {}
+    band_trans = trans.get(band, {}) if trans else {}
     out = []
     for row in rows:
         item = dict(row)
+        # Apply translation if available
+        if band_trans and row["role"] in band_trans:
+            item["message"] = band_trans[row["role"]]
         if zone_id in item["message"]:
             item["message"] = item["message"].replace("Zone B", zone_id)
         out.append(item)
@@ -258,15 +319,18 @@ def get_zone_history(zone_id: str, seed: int = 91):
 
 
 @app.get("/api/zones/{zone_id}/decision", response_model=DecisionResponse)
-def get_decision(zone_id: str):
+def get_decision(zone_id: str, lang: str = "en"):
     _zone_or_404(zone_id)
     store = _store_for_zone(zone_id)
     score = store.risk[zone_id]
+    # lang=en/hi/ne, fallback to en
+    if lang not in ("en", "hi", "ne"):
+        lang = "en"
     return DecisionResponse(
         zone_id=zone_id,
         risk_score=score,
         risk_band=data.risk_band(score),
-        decisions=_decisions(zone_id, score),
+        decisions=_decisions(zone_id, score, lang),
     )
 
 

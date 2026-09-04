@@ -1,3 +1,7 @@
+> **ARCHIVED — Mine V1 (SIH25071 open-pit). Active track is SIH26001 NER landslide — see docs/sih26001/. Do not use for new work.**
+
+---
+
 # Talus Demo Scenario — v2 (re-frozen against real Model v1)
 
 Status: FROZEN. Supersedes the v1 expectations (which were written against the
