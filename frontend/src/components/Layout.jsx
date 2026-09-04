@@ -3,16 +3,11 @@ import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import Header from './Header/Header';
 import { useTalusContext } from '../context/TalusContext';
 import { ShieldCheck, Info } from 'lucide-react';
-import { LayoutDashboard, Map, FileText, FlaskConical, Navigation, Users, Shield, Briefcase, Flame } from 'lucide-react';
+import { LayoutDashboard, Users, Shield, Briefcase, Flame } from 'lucide-react';
 
-const TABS = [
-  { to: '/', label: 'Overview', icon: LayoutDashboard, end: true },
-  { to: '/map', label: 'GIS Map', icon: Map },
-  { to: '/reports', label: 'Reports', icon: FileText },
-  { to: '/lab', label: 'Lab', icon: FlaskConical },
-  { to: '/routes', label: 'Routes', icon: Navigation },
-];
-
+// Role-first nav: each person sees only their page. Tool routes
+// (/map /reports /lab /routes) stay in the router for deep links
+// from role pages, but are hidden here to avoid 9-tab confusion.
 const ROLE_TABS = [
   { to: '/role/villager', label: 'Villager', icon: Users },
   { to: '/role/district_officer', label: 'District', icon: Shield },
@@ -58,23 +53,20 @@ export default function Layout() {
       {/* Tab bar — second nav, URL-shareable */}
       <nav className="bg-mine-darker border-b border-mine-border px-3 sm:px-4">
         <div className="max-w-[1920px] mx-auto flex items-center gap-1 py-1.5 overflow-x-auto">
-          {TABS.map(({ to, label, icon: Icon, end }) => (
-            <NavLink
-              key={to}
-              to={to}
-              end={end}
-              className={({ isActive }) =>
-                `flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all whitespace-nowrap ${
-                  isActive
-                    ? 'bg-talus-600 text-white border-talus-700 shadow-sm'
-                    : 'bg-mine-card text-mine-text border-mine-border hover:border-talus-500'
-                }`
-              }
-            >
-              <Icon className="w-3.5 h-3.5" />
-              <span>{label}</span>
-            </NavLink>
-          ))}
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) =>
+              `flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all whitespace-nowrap ${
+                isActive
+                  ? 'bg-talus-600 text-white border-talus-700 shadow-sm'
+                  : 'bg-mine-card text-mine-text border-mine-border hover:border-talus-500'
+              }`
+            }
+          >
+            <LayoutDashboard className="w-3.5 h-3.5" />
+            <span>Who are you?</span>
+          </NavLink>
           <span className="hidden md:block w-px h-5 bg-mine-border mx-1" />
           {ROLE_TABS.map(({ to, label, icon: Icon }) => (
             <NavLink

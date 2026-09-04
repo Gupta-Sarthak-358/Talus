@@ -1,51 +1,44 @@
 import React from 'react';
-import { useTalusContext } from '../context/TalusContext';
 import { Link } from 'react-router-dom';
-import RiskSummaryCards from '../components/RiskSummary/RiskSummaryCards';
-import QuickStatsBar from '../components/RiskSummary/QuickStatsBar';
-import RoadStatusCard from '../components/Routing/RoadStatusCard';
-import { Map, FileText, FlaskConical, Navigation, ArrowRight, ShieldAlert } from 'lucide-react';
+import { useTalusContext } from '../context/TalusContext';
+import { Users, Shield, Briefcase, Flame, ArrowRight } from 'lucide-react';
+
+const ROLES = [
+  { to: '/role/villager', icon: Users, title: 'Villager / Community', desc: 'Danger or safe? Which road to avoid, in your language.' },
+  { to: '/role/district_officer', icon: Shield, title: 'District Officer', desc: 'Close stretches, evacuate first, review field queue.' },
+  { to: '/role/state_manager', icon: Briefcase, title: 'State Manager (SSDMA)', desc: 'Triage across Gangtok / Lachung / Darjeeling.' },
+  { to: '/role/rescue_team', icon: Flame, title: 'Rescue Team (NDRF/SDRF)', desc: 'Safe ingress corridor — strictly bypass R2.' },
+];
 
 export default function Overview() {
-  const { zones, locationData, t } = useTalusContext();
-  const critical = zones.filter(z => z.risk_band === 'CRITICAL');
+  const { locationData } = useTalusContext();
   return (
-    <main className="max-w-[1920px] mx-auto px-3 sm:px-4 py-4 space-y-4">
-      <RiskSummaryCards />
-      <QuickStatsBar />
-      {/* Corridor picker + quick nav */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
-        <div className="lg:col-span-2 bg-mine-card border border-mine-border rounded-2xl p-4">
-          <h3 className="text-xs font-bold text-mine-text uppercase tracking-wider flex items-center gap-1.5">
-            <Map className="w-3.5 h-3.5 text-talus-600" />
-            Active Corridor — {locationData.label}
-          </h3>
-          <p className="text-[11px] text-mine-muted mt-1">Click GIS Map to inspect slopes, or jump to Reports/Lab/Routes. Zones: {zones.map(z=>`${z.id} ${z.risk_score}`).join(' · ')}</p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <Link to="/map" className="px-3 py-1.5 bg-talus-600 hover:bg-talus-500 text-white rounded-lg text-xs font-bold flex items-center gap-1">Open GIS Map <ArrowRight className="w-3 h-3" /></Link>
-            <Link to="/reports" className="px-3 py-1.5 bg-mine-darker hover:bg-mine-dark border border-mine-border rounded-lg text-xs font-semibold flex items-center gap-1"><FileText className="w-3 h-3" /> Reports</Link>
-            <Link to="/lab" className="px-3 py-1.5 bg-mine-darker hover:bg-mine-dark border border-mine-border rounded-lg text-xs font-semibold flex items-center gap-1"><FlaskConical className="w-3 h-3" /> Scenario Lab</Link>
-            <Link to="/routes" className="px-3 py-1.5 bg-mine-darker hover:bg-mine-dark border border-mine-border rounded-lg text-xs font-semibold flex items-center gap-1"><Navigation className="w-3 h-3" /> Routes</Link>
-          </div>
-          {critical.length > 0 && (
-            <div className="mt-3 p-2 bg-risk-critical/10 border border-risk-critical/30 rounded-lg text-xs flex items-center gap-2">
-              <ShieldAlert className="w-4 h-4 text-risk-critical" />
-              <span className="text-risk-critical font-bold">{critical.map(z=>z.id).join(', ')} — {t('alerts.critical')} — inspect on GIS Map</span>
-            </div>
-          )}
-        </div>
-        <div className="bg-mine-darker border border-mine-border rounded-2xl p-4">
-          <h4 className="text-xs font-bold text-mine-text">How to demo (URL-shareable)</h4>
-          <ul className="mt-2 space-y-1 text-[11px] text-mine-muted list-disc pl-4">
-            <li><code className="font-mono">/map?zone=S1&lang=ne</code> — share S1 Nepali view</li>
-            <li><code className="font-mono">/reports</code> — POST /api/reports demo</li>
-            <li><code className="font-mono">/lab</code> — ML vs Causal What-If</li>
-            <li><code className="font-mono">/routes</code> — R2 avoidance proof</li>
-          </ul>
-          <p className="mt-2 text-[11px] text-mine-muted">All screens use <code className="font-mono">useTalusContext</code> (formerly MineContext) + <code>LOCATIONS</code>.</p>
-        </div>
+    <main className="max-w-[900px] mx-auto px-3 sm:px-4 py-10 space-y-6 text-center">
+      <div>
+        <h1 className="text-2xl font-extrabold text-mine-text">Who are you?</h1>
+        <p className="text-sm text-mine-muted mt-1">
+          Talus shows each person only what they need — {locationData.label}. Pick your role to continue.
+        </p>
       </div>
-      <RoadStatusCard />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left">
+        {ROLES.map(({ to, icon: Icon, title, desc }) => (
+          <Link
+            key={to}
+            to={to}
+            className="p-5 bg-mine-card border border-mine-border rounded-2xl hover:border-talus-500 transition-all group"
+          >
+            <Icon className="w-6 h-6 text-talus-600" />
+            <div className="text-sm font-extrabold text-mine-text mt-2 flex items-center gap-1">
+              {title}
+              <ArrowRight className="w-3.5 h-3.5 text-mine-muted group-hover:text-talus-600 group-hover:translate-x-0.5 transition-all" />
+            </div>
+            <div className="text-xs text-mine-muted mt-1">{desc}</div>
+          </Link>
+        ))}
+      </div>
+      <p className="text-[11px] text-mine-muted">
+        Tool views (/map /reports /lab /routes) still exist as deep links from inside each role page — admin panel later.
+      </p>
     </main>
   );
 }
