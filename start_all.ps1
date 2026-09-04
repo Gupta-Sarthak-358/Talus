@@ -84,4 +84,4 @@ Write-Host "  API zones : http://127.0.0.1:8000/api/zones" -ForegroundColor Whit
 Write-Host ""
 Write-Host "Demo flow: map to S1 89 Critical to SHAP to What-If S3 66 to 74 to Causal monga-mdl S3 to High to Roads R2 avoided to Report S2 crack to queue to verify" -ForegroundColor Gray
 Write-Host "Logs: Get-Content backend.log -Tail 20; Get-Content frontend.log -Tail 20" -ForegroundColor DarkGray
-Write-Host "Stop: ./stop_all.sh or ./stop_all.bat or Remove-Item .backend.pid,.frontend.pid" -ForegroundColor DarkGray
+Write-Host "Stop: powershell -File ./stop_all.ps1  or  ./stop_all.sh  or  ./stop_all.bat" -ForegroundColor DarkGray

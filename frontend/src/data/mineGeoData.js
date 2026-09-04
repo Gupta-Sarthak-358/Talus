@@ -303,3 +303,12 @@ export const PRECOMPUTED_ROUTES = {
   }
 };
 
+// SIH26001 aliases — prefer GANGTOK_*/SIH_* names (MINE_* kept for backward compat)
+export const GANGTOK_CENTER = MINE_CENTER;
+export const GANGTOK_ZOOM = MINE_ZOOM;
+export const GANGTOK_ZONES_GEOJSON = MINE_ZONES_GEOJSON;
+export const GANGTOK_ROAD_SEGMENTS = ROAD_SEGMENTS;
+export const GANGTOK_INFRASTRUCTURE = MINE_INFRASTRUCTURE;
+export const GANGTOK_SENSORS = MINE_SENSORS;
+export const SIH_PRECOMPUTED_ROUTES = PRECOMPUTED_ROUTES;
+

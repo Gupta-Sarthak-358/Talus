@@ -8,7 +8,6 @@ import RoadStatusCard from '../components/Routing/RoadStatusCard';
 import ReportModal from '../components/Reports/ReportModal';
 import WhatIfDrawer from '../components/Simulation/WhatIfDrawer';
 import SafeRouteModal from '../components/Routing/SafeRouteModal';
-import CvCrackModal from '../components/ComputerVision/CvCrackModal';
 import AlertPanel from '../components/Alerts/AlertPanel';
 import { ErrorState } from '../components/Common/LoadingSkeleton';
 
@@ -47,11 +46,10 @@ export default function Dashboard() {
       {/* 4. Road Network Status (R1-R4) with R2 Avoidance */}
       <RoadStatusCard />
 
-      {/* Drawers & Modals */}
+      {/* Drawers & Modals — CvCrackModal hidden for NER (mine drone imagery, not Gangtok); ReportModal is Screen 6 live */}
       <WhatIfDrawer />
       <SafeRouteModal />
       <ReportModal />
-      <CvCrackModal />
       <AlertPanel />
     </main>
   );
