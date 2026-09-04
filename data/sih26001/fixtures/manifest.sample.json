@@ -117,7 +117,7 @@
     "darjeeling_ngen": {
       "version": "Darjeeling corridor D1-D4 (27.017-27.047N/88.258-88.275E, EPSG:4326)",
       "status": "available",
-      "file": "data/sih26001/processed/darjeeling_ngen.json",
+      "file": "data/processed/terrain/darjeeling_ngen.json",
       "extract_script": "scripts/extract_darjeeling_ngen.py (same methods as Gangtok S1-S4 pipeline, D coords from slopes.darjeeling.json)",
       "time_window": "2024-07-08 (Darjeeling-cell wettest trailing-7d of 2024; S rows stay 2024-06-16 — per-corridor honest windows)",
       "imd": "LOCAL ind2024_rfp25.nc nearest cell (27.00, 88.25), same-cell all D: 24h=20.4/7d=397.0/30d=1209.2 REAL",

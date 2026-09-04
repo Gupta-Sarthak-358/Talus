@@ -28,7 +28,7 @@ Pedigree per feature (same bars as Gangtok):
                  (INITIATION year-only, same rule as Sikkim)
 
 Outputs (committed, small):
-  data/sih26001/processed/darjeeling_ngen.json
+  data/processed/terrain/darjeeling_ngen.json
   data/sih26001/evidence/darjeeling_bbox_sample.csv (<=20 WB rows)
   data/sih26001/evidence/darjeeling_join.json
 Row values printed for the CSV freeze (review before freezing).
@@ -63,7 +63,7 @@ import numpy as np  # noqa: E402
 
 FIX = ROOT / "data" / "sih26001" / "fixtures"
 EVID = ROOT / "data" / "sih26001" / "evidence"
-PROC = ROOT / "data" / "sih26001" / "processed"
+PROC = ROOT / "data" / "processed" / "terrain"
 OUT_JSON = PROC / "darjeeling_ngen.json"
 
 SLOPES_FIX = json.loads((FIX / "slopes.darjeeling.json").read_text(encoding="utf-8"))

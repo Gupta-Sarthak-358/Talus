@@ -5,7 +5,7 @@ measured extracts, not S1 clones. Same methods as the Gangtok S1–S4 pipeline
 (`NGEN_PROVENANCE_S1.md`), new coordinates from `slopes.darjeeling.json`.
 
 Script: `scripts/extract_darjeeling_ngen.py` (`--only local` / `--only network`).
-Frozen output: `data/sih26001/processed/darjeeling_ngen.json`
+Frozen output: `data/processed/terrain/darjeeling_ngen.json`
 (sha256 `8a494f03ee30014b9d24407c03abe6abaae55f9c99a020371a60fdc28f0ec81c`).
 
 ## Zone points (single source: slopes.darjeeling.json geometry)

@@ -1,0 +1,286 @@
+{
+  "zones": [
+    "D1",
+    "D2",
+    "D3",
+    "D4"
+  ],
+  "queried_at": "2026-09-04T17:41:36Z",
+  "imd": {
+    "cell": [
+      27.0,
+      88.25
+    ],
+    "window_end": "2024-07-08",
+    "rainfall_24h_mm": 20.4,
+    "rainfall_7d_mm": 397.0,
+    "rainfall_30d_mm": 1209.2,
+    "tag": "REAL (IMD 0.25-deg nearest cell, same-cell all D, stated)"
+  },
+  "usgs": {
+    "D1": {
+      "elevation": 2019.0,
+      "slope_angle": 18.9,
+      "aspect": 238.0,
+      "curvature": 0.0026,
+      "twi": 5.08,
+      "spi": 18.9,
+      "drain_density": 0.0,
+      "catchment_cells": 2
+    },
+    "D2": {
+      "elevation": 1715.0,
+      "slope_angle": 29.8,
+      "aspect": 43.0,
+      "curvature": 0.0066,
+      "twi": 5.48,
+      "spi": 78.7,
+      "drain_density": 0.0,
+      "catchment_cells": 5
+    },
+    "D3": {
+      "elevation": 1970.0,
+      "slope_angle": 27.0,
+      "aspect": 145.0,
+      "curvature": -0.0013,
+      "twi": 5.38,
+      "spi": 56.0,
+      "drain_density": 0.0,
+      "catchment_cells": 4
+    },
+    "D4": {
+      "elevation": 2306.0,
+      "slope_angle": 40.6,
+      "aspect": 126.0,
+      "curvature": -0.0211,
+      "twi": 4.57,
+      "spi": 70.9,
+      "drain_density": 0.0,
+      "catchment_cells": 3
+    }
+  },
+  "soil": {
+    "D1": {
+      "soil_moisture": 0.297,
+      "valid_days": "7/7",
+      "cell": [
+        27.125,
+        88.375
+      ],
+      "flags_seen": [
+        0
+      ]
+    },
+    "D2": {
+      "soil_moisture": 0.297,
+      "valid_days": "7/7",
+      "cell": [
+        27.125,
+        88.375
+      ],
+      "flags_seen": [
+        0
+      ]
+    },
+    "D3": {
+      "soil_moisture": 0.297,
+      "valid_days": "7/7",
+      "cell": [
+        27.125,
+        88.375
+      ],
+      "flags_seen": [
+        0
+      ]
+    },
+    "D4": {
+      "soil_moisture": 0.297,
+      "valid_days": "7/7",
+      "cell": [
+        27.125,
+        88.375
+      ],
+      "flags_seen": [
+        0
+      ]
+    }
+  },
+  "labels": {
+    "D1": {
+      "previous_landslide": 0,
+      "event": 0,
+      "evidence_quality": "dated-only-negative"
+    },
+    "D2": {
+      "previous_landslide": 1,
+      "event": 0,
+      "evidence_quality": "approximate"
+    },
+    "D3": {
+      "previous_landslide": 1,
+      "event": 0,
+      "evidence_quality": "approximate"
+    },
+    "D4": {
+      "previous_landslide": 0,
+      "event": 0,
+      "evidence_quality": "dated-only-negative"
+    }
+  },
+  "static": {
+    "lithology": {
+      "D1": "darjeeling_gneiss",
+      "D2": "darjeeling_gneiss",
+      "D3": "darjeeling_gneiss",
+      "D4": "darjeeling_gneiss"
+    },
+    "lithology_basis": "Gangtok DRAP p71/p118 names Darjeeling Gneiss as the regional unit alongside Lingste/Chungthang; Darjeeling town stands on Darjeeling Gneiss per GSI regional geology. PROXY-published-map, not a Bhukosh vector clip.",
+    "lineament_density": {
+      "D1": 0.8,
+      "D2": 0.8,
+      "D3": 0.8,
+      "D4": 0.8
+    },
+    "lineament_basis": "Same Himalayan-50K literature basis as Gangtok (0.3-1.4, conservative 0.8); Darjeeling figure NOT consulted. PROXY-regional; Bhuvan WB-clip is the upgrade path."
+  },
+  "osm": {
+    "D1": {
+      "distance_to_road": 71,
+      "distance_to_river": 234,
+      "nearest_road": {
+        "osm_id": 447557444,
+        "name": null,
+        "highway": "unclassified",
+        "waterway": null,
+        "dist_m": 71.0
+      },
+      "nearest_river": {
+        "osm_id": 248096455,
+        "name": null,
+        "highway": null,
+        "waterway": "stream",
+        "dist_m": 234.0
+      },
+      "endpoint": "https://overpass-api.de/api/interpreter"
+    },
+    "D2": {
+      "distance_to_road": 29,
+      "distance_to_river": 520,
+      "nearest_road": {
+        "osm_id": 579355725,
+        "name": null,
+        "highway": "unclassified",
+        "waterway": null,
+        "dist_m": 28.7
+      },
+      "nearest_river": {
+        "osm_id": 579594574,
+        "name": null,
+        "highway": null,
+        "waterway": "stream",
+        "dist_m": 519.7
+      },
+      "endpoint": "https://overpass-api.de/api/interpreter"
+    },
+    "D3": {
+      "distance_to_road": 354,
+      "distance_to_river": 314,
+      "nearest_road": {
+        "osm_id": 336913981,
+        "name": null,
+        "highway": "unclassified",
+        "waterway": null,
+        "dist_m": 353.9
+      },
+      "nearest_river": {
+        "osm_id": 579594576,
+        "name": null,
+        "highway": null,
+        "waterway": "stream",
+        "dist_m": 314.4
+      },
+      "endpoint": "https://overpass-api.de/api/interpreter"
+    },
+    "D4": {
+      "distance_to_road": 6,
+      "distance_to_river": 326,
+      "nearest_road": {
+        "osm_id": 267262525,
+        "name": null,
+        "highway": "unclassified",
+        "waterway": null,
+        "dist_m": 6.5
+      },
+      "nearest_river": {
+        "osm_id": 543213041,
+        "name": null,
+        "highway": null,
+        "waterway": "river",
+        "dist_m": 325.8
+      },
+      "endpoint": "https://overpass-api.de/api/interpreter"
+    }
+  },
+  "worldcover": {
+    "D1": {
+      "lulc": "FOREST",
+      "wc_mode": 10,
+      "wc_centre": 10,
+      "agree": 9,
+      "centre_agrees": true
+    },
+    "D2": {
+      "lulc": "FOREST",
+      "wc_mode": 10,
+      "wc_centre": 10,
+      "agree": 9,
+      "centre_agrees": true
+    },
+    "D3": {
+      "lulc": "FOREST",
+      "wc_mode": 10,
+      "wc_centre": 10,
+      "agree": 9,
+      "centre_agrees": true
+    },
+    "D4": {
+      "lulc": "FOREST",
+      "wc_mode": 10,
+      "wc_centre": 10,
+      "agree": 9,
+      "centre_agrees": true
+    }
+  },
+  "sentinel": {
+    "scene": {
+      "product_id": "S2B_45RXK_20241129_0_L2A",
+      "date": "2024-11-29",
+      "cloud_cover_pct": 0.019721,
+      "tile": "MGRS-45RXK"
+    },
+    "D1": {
+      "ndvi": 0.688,
+      "dn_red": 107.0,
+      "dn_nir": 578.0,
+      "scl": 4
+    },
+    "D2": {
+      "ndvi": 0.848,
+      "dn_red": 319.0,
+      "dn_nir": 3875.0,
+      "scl": 4
+    },
+    "D3": {
+      "ndvi": 0.88,
+      "dn_red": 185.0,
+      "dn_nir": 2911.0,
+      "scl": 4
+    },
+    "D4": {
+      "ndvi": 0.821,
+      "dn_red": 272.0,
+      "dn_nir": 2775.0,
+      "scl": 4
+    }
+  }
+}
