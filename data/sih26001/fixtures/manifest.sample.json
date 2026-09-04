@@ -27,10 +27,15 @@
       "proxy_tag": "reanalysis-proxy"
     },
     "srtm_dem": {
-      "version": "SRTM-30m",
-      "tiles": [],
-      "status": "not_available",
-      "date": null
+      "version": "Terrarium-mirror (SRTM-derived ~30m, PROXY — USGS tile N27E088 not yet fetched)",
+      "tiles": ["terrarium-z15 x24447-24449/y13793-13795 (S1 tile 24448/13794)"],
+      "status": "available",
+      "file": "data/processed/terrain/s1_dem_window.csv",
+      "extract_script": "scripts/extract_s1_dem.py",
+      "method": "Horn-1981 slope/aspect + Laplacian curvature on 4.24m Web-Mercator grid; bilinear elevation at S1",
+      "crosscheck": "Gangtok centre (27.3389,88.6065) reads 1509m vs ~1600-1650 nominal — grid trusted within SRTM steep-terrain limits",
+      "limit": "mirror resampling smooths micro-relief; slopes may understate true slope; replace with USGS tile when landed",
+      "date": "2026-09-04"
     },
     "sentinel2": {
       "version": null,
@@ -43,8 +48,14 @@
       "ner_filter": true
     },
     "osm": {
-      "extract": null,
-      "status": "not_available",
+      "extract": "data/processed/terrain/s1_osm_nearest.json",
+      "extract_script": "scripts/extract_s1_osm.py",
+      "status": "available",
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "query": "way[highway] minus footway|path|steps|bridleway|cycleway|pedestrian + way[waterway=river|stream]; full QL in extract JSON",
+      "radius_m": {"roads": 1200, "rivers": 4000},
+      "ways_examined": {"roads": 48, "rivers": 12},
+      "date": "2026-09-04",
       "qa": "osm-qa-unverified"
     }
   },
@@ -55,6 +66,8 @@
     "cv": "spatial-cluster (no random split)"
   },
   "checksums": {
-    "gangtok_rainfall_2024.csv": "sha256:2FA66C6F268F6A62B8744215FA650AFEADDF3D84840D74E0D3CA0CE5BB575735"
+    "gangtok_rainfall_2024.csv": "sha256:2FA66C6F268F6A62B8744215FA650AFEADDF3D84840D74E0D3CA0CE5BB575735",
+    "s1_osm_nearest.json": "sha256:09370F4C8CBA6FD2EB6C5AD755A94ED7221ED66DC1A986DCC9B2334CB73BE8B4",
+    "s1_dem_window.csv": "sha256:9DF0B708FB6F25753EC45F4B753E5948CA1E5694B941AED33A4ADA7CE618377F"
   }
 }
