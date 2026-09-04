@@ -171,7 +171,7 @@ class TestValidateNGENSample(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             p = Path(tmp) / "bad.json"
             data = json.loads(REAL_MANIFEST.read_text(encoding="utf-8"))
-            data["sources"]["srtm_dem"]["date"] = "2024-01-01"  # claims real date while not_available
+            data["sources"]["era5_soil"]["date"] = "2024-01-01"  # claims real date while not_available
             p.write_text(json.dumps(data), encoding="utf-8")
             errors: list[str] = []
             v.validate_manifest(p, errors)

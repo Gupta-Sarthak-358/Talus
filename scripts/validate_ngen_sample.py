@@ -250,11 +250,13 @@ def main() -> int:
     # 14: always print STUB/demo warning — never hide that this is not scientific data
     print()
     print("=" * 72)
-    print("WARNING: This sample is PARTLY stub: S1 rainfall (24h/7d/30d) is")
-    print("REAL-verified from the IMD archive, but all other science features")
-    print("are STUB/demo until a real source file (SRTM tile, ERA5 request,")
-    print("Bhusanket export, OSM extract) is committed and checksummed.")
-    print("See docs/sih26001/NGEN_PROVENANCE_S1.md for per-feature status.")
+    print("WARNING: This sample is PARTLY stub: S1 rainfall (24h/7d/30d),")
+    print("S1-S4 road/river distances and S1 NDVI are REAL-verified, S1 DEM")
+    print("derivatives + drain density are PROXY (open mirror / measured")
+    print("window, not USGS/Bhusanket-grade), and all other science features")
+    print("are STUB/demo until a real source file (USGS SRTM tile, ERA5")
+    print("request, Bhusanket export, classifier LULC) is committed and")
+    print("checksummed. See docs/sih26001/NGEN_PROVENANCE_S1.md.")
     print("=" * 72)
     print()
 

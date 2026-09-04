@@ -1,0 +1,142 @@
+{
+  "slopes": {
+    "S2": {
+      "slope": {
+        "zone_id": "S2",
+        "lat": 27.338,
+        "lon": 88.612
+      },
+      "queried_at": "2026-09-04T10:23:09Z",
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "overpass_query": {
+        "roads": "[out:json][timeout:90];\n(\n  way[\"highway\"](around:1200,27.338,88.612);\n);\nout geom;\n",
+        "rivers": "[out:json][timeout:90];\n(\n  way[\"waterway\"~\"^(river|stream)$\"](around:4000,27.338,88.612);\n);\nout geom;\n"
+      },
+      "radius_m": {
+        "roads": 1200,
+        "rivers": 4000
+      },
+      "road_filter": "highway=* except bridleway|cycleway|footway|path|pedestrian|steps",
+      "ways_examined": {
+        "roads": 127,
+        "rivers": 14
+      },
+      "nearest_road": {
+        "osm_id": 84696777,
+        "name": null,
+        "highway": "residential",
+        "waterway": null,
+        "dist_m": 5.9
+      },
+      "nearest_river": {
+        "osm_id": 1084683258,
+        "name": null,
+        "highway": null,
+        "waterway": "stream",
+        "dist_m": 183.0
+      },
+      "row_values": {
+        "distance_to_road": 6,
+        "distance_to_river": 183
+      },
+      "qa": "osm-qa-unverified"
+    },
+    "S3": {
+      "slope": {
+        "zone_id": "S3",
+        "lat": 27.325,
+        "lon": 88.6065
+      },
+      "queried_at": "2026-09-04T10:23:48Z",
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "overpass_query": {
+        "roads": "[out:json][timeout:90];\n(\n  way[\"highway\"](around:1200,27.325,88.6065);\n);\nout geom;\n",
+        "rivers": "[out:json][timeout:90];\n(\n  way[\"waterway\"~\"^(river|stream)$\"](around:4000,27.325,88.6065);\n);\nout geom;\n"
+      },
+      "radius_m": {
+        "roads": 1200,
+        "rivers": 4000
+      },
+      "road_filter": "highway=* except bridleway|cycleway|footway|path|pedestrian|steps",
+      "ways_examined": {
+        "roads": 81,
+        "rivers": 13
+      },
+      "nearest_road": {
+        "osm_id": 349554354,
+        "name": null,
+        "highway": "trunk",
+        "waterway": null,
+        "dist_m": 126.3
+      },
+      "nearest_river": {
+        "osm_id": 416534058,
+        "name": "Rongbe Chu",
+        "highway": null,
+        "waterway": "river",
+        "dist_m": 1093.3
+      },
+      "row_values": {
+        "distance_to_road": 126,
+        "distance_to_river": 1093
+      },
+      "qa": "osm-qa-unverified"
+    },
+    "S4": {
+      "slope": {
+        "zone_id": "S4",
+        "lat": 27.315,
+        "lon": 88.595
+      },
+      "queried_at": "2026-09-04T10:24:25Z",
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "overpass_query": {
+        "roads": "[out:json][timeout:90];\n(\n  way[\"highway\"](around:1200,27.315,88.595);\n);\nout geom;\n",
+        "rivers": "[out:json][timeout:90];\n(\n  way[\"waterway\"~\"^(river|stream)$\"](around:4000,27.315,88.595);\n);\nout geom;\n"
+      },
+      "radius_m": {
+        "roads": 1200,
+        "rivers": 4000
+      },
+      "road_filter": "highway=* except bridleway|cycleway|footway|path|pedestrian|steps",
+      "ways_examined": {
+        "roads": 61,
+        "rivers": 12
+      },
+      "nearest_road": {
+        "osm_id": 47416222,
+        "name": null,
+        "highway": "trunk",
+        "waterway": null,
+        "dist_m": 66.1
+      },
+      "nearest_river": {
+        "osm_id": 416534058,
+        "name": "Rongbe Chu",
+        "highway": null,
+        "waterway": "river",
+        "dist_m": 460.0
+      },
+      "row_values": {
+        "distance_to_road": 66,
+        "distance_to_river": 460
+      },
+      "qa": "osm-qa-unverified"
+    }
+  },
+  "row_values": {
+    "S2": {
+      "distance_to_road": 6,
+      "distance_to_river": 183
+    },
+    "S3": {
+      "distance_to_road": 126,
+      "distance_to_river": 1093
+    },
+    "S4": {
+      "distance_to_road": 66,
+      "distance_to_river": 460
+    }
+  },
+  "qa": "osm-qa-unverified"
+}

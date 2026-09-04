@@ -24,28 +24,62 @@
       "clip": "pilot-period",
       "status": "not_available",
       "date": null,
-      "proxy_tag": "reanalysis-proxy"
+      "proxy_tag": "reanalysis-proxy",
+      "attempt": "2026-09-04 Person-3: no ~/.cdsapirc, no cdsapi on either python; CDS account wall stands. Logged skip per handoff."
     },
     "srtm_dem": {
-      "version": "SRTM-30m",
-      "tiles": [],
-      "status": "not_available",
-      "date": null
+      "version": "Terrarium-mirror (SRTM-derived ~30m, PROXY — USGS tile N27E088 not yet fetched)",
+      "tiles": ["terrarium-z15 x24447-24449/y13793-13795 (S1 tile 24448/13794)"],
+      "status": "available",
+      "file": "data/processed/terrain/s1_dem_window.csv",
+      "extract_script": "scripts/extract_s1_dem.py",
+      "method": "Horn-1981 slope/aspect + Laplacian curvature on 4.24m Web-Mercator grid; bilinear elevation at S1",
+      "crosscheck": "Gangtok centre (27.3389,88.6065) reads 1509m vs ~1600-1650 nominal — grid trusted within SRTM steep-terrain limits",
+      "limit": "mirror resampling smooths micro-relief; slopes may understate true slope; replace with USGS tile when landed",
+      "date": "2026-09-04"
     },
     "sentinel2": {
-      "version": null,
-      "status": "not_available",
-      "date": null
+      "version": "S2B_45RXL_20241129_0_L2A",
+      "status": "available",
+      "scene_date": "2024-11-29",
+      "cloud_cover_pct": 0.02,
+      "stac": "https://earth-search.aws.element84.com/v1/search (no account)",
+      "file": "data/processed/terrain/s1_sentinel2.json",
+      "extract_script": "scripts/extract_s1_sentinel2.py (rasterio /vsicurl/ B04+B08+SCL, system py311)",
+      "method": "ndvi=(NIR-R)/(NIR+R) at exact S1; DN red=390 nir=2380 scl=4 (vegetation); lulc from OSM landuse PROXY (none in 300m, stays STUB)",
+      "ndvi_date_note": "scene 2024-11-29 post-monsoon vs row time_window 2024-06-16; NDVI treated as quasi-static state",
+      "date": "2026-09-04"
     },
     "bhusanket": {
       "export": null,
       "status": "not_available",
-      "ner_filter": true
+      "ner_filter": true,
+      "attempt": "2026-09-04 Person-3: portal reachable (HTTP 200) but dashboard JS exposes no export endpoint; NASA COOLR FeatureServer 404 on both URL forms; ILSM Zenodo 10085272 hosts 6.6GB rasters only, no points file. Labels stay STUB (see provenance §3)."
+    },
+    "bhukosh": {
+      "export": null,
+      "status": "not_available",
+      "date": null,
+      "attempt": "2026-09-04 Person-3: https://bhukosh.gsi.gov.in/Bhukosh/Public unreachable from here (connection fail); same GSI infra as Bhusanket timeouts. Lithology stays STUB."
     },
     "osm": {
-      "extract": null,
-      "status": "not_available",
-      "qa": "osm-qa-unverified"
+      "extract": "data/processed/terrain/s1_osm_nearest.json",
+      "extract_script": "scripts/extract_s1_osm.py",
+      "status": "available",
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "query": "way[highway] minus footway|path|steps|bridleway|cycleway|pedestrian + way[waterway=river|stream]; full QL in extract JSON",
+      "radius_m": {"roads": 1200, "rivers": 4000},
+      "ways_examined": {"roads": 48, "rivers": 12},
+      "date": "2026-09-04",
+      "qa": "osm-qa-unverified",
+      "s234_extract": "data/processed/terrain/s234_osm_nearest.json",
+      "s234_script": "scripts/extract_s234_osm.py (drives extract_s1_osm.py per slope, split queries after 504s)",
+      "s234_row_values": {
+        "S2": {"distance_to_road": 6, "distance_to_river": 183},
+        "S3": {"distance_to_road": 126, "distance_to_river": 1093},
+        "S4": {"distance_to_road": 66, "distance_to_river": 460}
+      },
+      "s234_date": "2026-09-04"
     }
   },
   "sampling": {
@@ -55,6 +89,11 @@
     "cv": "spatial-cluster (no random split)"
   },
   "checksums": {
-    "gangtok_rainfall_2024.csv": "sha256:2FA66C6F268F6A62B8744215FA650AFEADDF3D84840D74E0D3CA0CE5BB575735"
+    "gangtok_rainfall_2024.csv": "sha256:2FA66C6F268F6A62B8744215FA650AFEADDF3D84840D74E0D3CA0CE5BB575735",
+    "s1_osm_nearest.json": "sha256:09370F4C8CBA6FD2EB6C5AD755A94ED7221ED66DC1A986DCC9B2334CB73BE8B4",
+    "s1_dem_window.csv": "sha256:9DF0B708FB6F25753EC45F4B753E5948CA1E5694B941AED33A4ADA7CE618377F",
+    "s234_osm_nearest.json": "sha256:8638F6DC15C71169BA13109C0A0A685FD0CD7BA21450E9AD95D6A21F2E254C66",
+    "s1_sentinel2.json": "sha256:E5E6F8B0FD4B2A1FE39B48456BF51FE051BEB2FC7D5EDAB2D827D44306D7EEC6",
+    "s1_drain_window.json": "sha256:0A5D19154B4C28B40ED81ECED2A497076B859E7A165BF966A04F9E33A826E67C"
   }
 }
