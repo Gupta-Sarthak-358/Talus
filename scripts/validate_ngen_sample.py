@@ -251,11 +251,12 @@ def main() -> int:
     print()
     print("=" * 72)
     print("NOTE: All 17 science features are REAL/PROXY-verified (no STUBs remain):")
-    print("S1-S4 rainfall (24h/7d/30d), road/river distances, NDVI, LULC, all six")
-    print("DEM derivatives, soil moisture, lithology, lineament and labels are")
+    print("S1-S4 + D1-D4 rainfall (24h/7d/30d), road/river distances, NDVI, LULC,")
+    print("all six DEM derivatives, soil moisture, lithology, lineament and labels are")
     print("REAL/PROXY-verified (IMD/Overpass/Sentinel-2/WorldCover/USGS/CCI/")
-    print("NESAC/Bhuvan/Bhusanket); drain density is PROXY-window (measured).")
-    print("See docs/sih26001/NGEN_PROVENANCE_S1.md for per-feature pedigree.")
+    print("NESAC/Bhuvan/Bhusanket/GSI-WB); drain density is PROXY-window (measured).")
+    print("S rows: window 2024-06-16. D rows: window 2024-07-08 (per-corridor windows).")
+    print("See docs/sih26001/NGEN_PROVENANCE_S1.md + NGEN_PROVENANCE_DARJEELING.md.")
     print("=" * 72)
     print()
 
@@ -267,7 +268,7 @@ def main() -> int:
         print("Fix the issues above, then re-run: python scripts/validate_ngen_sample.py")
         return 1
 
-    print("NGEN SAMPLE OK: schema 22 cols, S1-S4 present, <=20 rows, honest manifest, no FILL.")
+    print("NGEN SAMPLE OK: schema 22 cols, S1-S4 present (+D1-D4), <=20 rows, honest manifest, no FILL.")
     print("Next: run tests with  python -m unittest discover -s tests -p \"test_*.py\"")
     return 0
 

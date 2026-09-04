@@ -1,0 +1,68 @@
+{
+  "bbox": [
+    88.15,
+    88.35,
+    26.95,
+    27.1
+  ],
+  "buffer_m": 300.0,
+  "join": {
+    "D1": {
+      "slide_no": "WB/DAR/78A08/2015/102",
+      "name": "Hermitage slope. Below Saradeswari Girls High School",
+      "district": "Darjeeling",
+      "lon": 88.268,
+      "lat": 27.05,
+      "initiation": "2009",
+      "triggering": "Rainfall",
+      "dist_m": 597.0,
+      "previous_landslide": 0,
+      "event": 0,
+      "evidence_quality": "dated-only-negative",
+      "reason": "nearest slide WB/DAR/78A08/2015/102 at 597.0 m, outside 300 m"
+    },
+    "D2": {
+      "slide_no": "WB/DAR/78A08/2015/78",
+      "name": "Pokhridara",
+      "district": "Darjeeling",
+      "lon": 88.27581,
+      "lat": 27.03794,
+      "initiation": "2007",
+      "triggering": "Rainfall",
+      "dist_m": 242.7,
+      "previous_landslide": 1,
+      "event": 0,
+      "evidence_quality": "approximate",
+      "reason": "nearest slide WB/DAR/78A08/2015/78 at 242.7 m (INIT 2007, year-only, not in-window)"
+    },
+    "D3": {
+      "slide_no": "WB/DAR/78A08/2015/59",
+      "name": "Alubari",
+      "district": "Darjeeling",
+      "lon": 88.27096,
+      "lat": 27.02863,
+      "initiation": "2007",
+      "triggering": "Rainfall",
+      "dist_m": 231.9,
+      "previous_landslide": 1,
+      "event": 0,
+      "evidence_quality": "approximate",
+      "reason": "nearest slide WB/DAR/78A08/2015/59 at 231.9 m (INIT 2007, year-only, not in-window)"
+    },
+    "D4": {
+      "slide_no": "WB/DARJ/78B01/2015/67",
+      "name": "",
+      "district": "Darjeeling",
+      "lon": 88.258722,
+      "lat": 27.010139,
+      "initiation": "0",
+      "triggering": "",
+      "dist_m": 766.3,
+      "previous_landslide": 0,
+      "event": 0,
+      "evidence_quality": "dated-only-negative",
+      "reason": "nearest slide WB/DARJ/78B01/2015/67 at 766.3 m, outside 300 m"
+    }
+  },
+  "queried_at": "2026-09-04T17:41:47Z"
+}

@@ -1,8 +1,9 @@
 {
-  "pilot": "Darjeeling Hills, W Bengal (27.041, 88.263, EPSG:4326 preview)",
+  "pilot": "Darjeeling Hills, W Bengal (27.041, 88.263, EPSG:4326)",
   "frozen": true,
   "updated_at": "2026-09-03T00:00:00+05:30",
-  "provenance_footnote": "IMD rainfall + SRTM DEM + GSI Bhusanket + ERA5 soil moisture + Sentinel-2 NDVI/LULC + OSM roads/rivers. Soil = reanalysis proxy. Sensor = recorded fixture. Bands = prototype, not safety standard.",
+  "ngen_measured": "2026-09-04 (scripts/extract_darjeeling_ngen.py; see NGEN_PROVENANCE_DARJEELING.md; time_window 2024-07-08)",
+  "provenance_footnote": "IMD rainfall + USGS SRTM DEM-6 + GSI Bhusanket (WB rows) + CCI soil moisture + Sentinel-2 NDVI + WorldCover LULC + OSM roads/rivers. Soil = CCI satellite. Sensor = recorded fixture. Bands = prototype, not safety standard.",
   "zones": [
     {
       "zone_id": "D1",
@@ -35,7 +36,6 @@
         }
       ],
       "missing_evidence": [
-        "soil_moisture:reanalysis-proxy",
         "event-date:approximate"
       ]
     },
@@ -99,9 +99,7 @@
           "shap": 2.5
         }
       ],
-      "missing_evidence": [
-        "previous_landslide:inventory-incomplete"
-      ]
+      "missing_evidence": []
     },
     {
       "zone_id": "D4",

@@ -1,6 +1,6 @@
 {
   "ngen": "pilot-manifest-format (fill per run, commit alongside code)",
-  "pilot": "Gangtok cluster, Sikkim",
+  "pilot": "Gangtok cluster, Sikkim + Darjeeling corridor, W Bengal (D1-D4 rows 5-8, same 22-col schema)",
   "crs": "EPSG:4326 (demo)",
   "grid": "pilot-grid-v1 (freeze before training)",
   "seeds": [42],
@@ -114,6 +114,25 @@
       "layer": "lineament:SK_LN50K_0506",
       "date": "2026-09-04"
     },
+    "darjeeling_ngen": {
+      "version": "Darjeeling corridor D1-D4 (27.017-27.047N/88.258-88.275E, EPSG:4326)",
+      "status": "available",
+      "file": "data/sih26001/processed/darjeeling_ngen.json",
+      "extract_script": "scripts/extract_darjeeling_ngen.py (same methods as Gangtok S1-S4 pipeline, D coords from slopes.darjeeling.json)",
+      "time_window": "2024-07-08 (Darjeeling-cell wettest trailing-7d of 2024; S rows stay 2024-06-16 — per-corridor honest windows)",
+      "imd": "LOCAL ind2024_rfp25.nc nearest cell (27.00, 88.25), same-cell all D: 24h=20.4/7d=397.0/30d=1209.2 REAL",
+      "usgs_dem6": "LOCAL n27_e088_1arc_v3.tif (Darjeeling inside 88-89E/27-28N): bilinear elev, Horn anisotropic slope/aspect, Laplacian curv, D8 priority-flood TWI/SPI + channel drain density on Darjeeling window lat 27.00-27.07/lon 88.23-88.29 REAL",
+      "cci_soil": "LOCAL C3S June 10-16 2024, same flag-mask: per-D-cell mean 0.297, 7/7 valid, cell (27.125, 88.375) REAL",
+      "worldcover": "SAME tile N27E087 (covers Darjeeling): all D FOREST WC-10 9/9 REAL",
+      "sentinel2": "Element84 STAC least-cloudy 2024 scene covering all D: S2B_45RXK_20241129_0_L2A (sibling granule of Gangtok scene, same date, cloud 0.02%), NDVI D1 0.688/D2 0.848/D3 0.880/D4 0.821 scl=4 REAL post-monsoon quasi-static",
+      "sentinel_note": "Gangtok granule 45RXL did NOT cover D3/D4 — picker now requires single-scene full-D coverage (documented in script)",
+      "osm": "Overpass same filters/radii: D1 road=71/river=234, D2 29/520, D3 354/314, D4 6/326 (osm-qa-unverified; retries for rate-limit)",
+      "lithology": "darjeeling_gneiss PROXY-published-map (Gangtok DRAP p71/p118 names Darjeeling Gneiss as regional unit; not a Bhukosh vector)",
+      "lineament": "0.8 PROXY-regional (Himalayan-50K literature basis; Darjeeling figure NOT consulted; Bhuvan WB-clip is upgrade path)",
+      "labels": "GSI shapefile WEST BENGAL rows (1862): D2 prev=1 (WB/DAR/78A08/2015/78 @242.7m, INIT 2007), D3 prev=1 (WB/DAR/78A08/2015/59 @231.9m, INIT 2007), D1/D4 prev=0; event=0 all (year-only INITIATION); evidence/darjeeling_join.json + darjeeling_bbox_sample.csv (164 rows)",
+      "row_values": {"D1": "18.9/2019m/238, twi 5.08 spi 18.9, prev 0", "D2": "29.8/1715m/43, twi 5.48 spi 78.7, prev 1", "D3": "27.0/1970m/145, twi 5.38 spi 56.0, prev 1", "D4": "40.6/2306m/126, twi 4.57 spi 70.9, prev 0"},
+      "date": "2026-09-04"
+    },
     "osm": {
       "extract": "data/processed/terrain/s1_osm_nearest.json",
       "extract_script": "scripts/extract_s1_osm.py",
@@ -141,6 +160,9 @@
     "cv": "spatial-cluster (no random split)"
   },
   "checksums": {
+    "darjeeling_ngen.json": "sha256:8a494f03ee30014b9d24407c03abe6abaae55f9c99a020371a60fdc28f0ec81c",
+    "darjeeling_join.json": "sha256:2aa7d92f36795999bb73ce3ebb885bbc7dedb37b56189bdcfd829a317e1f790b",
+    "darjeeling_bbox_sample.csv": "sha256:6cfaf0af0b91d7b2abb062f0c5344df5398cbd4b2162a73d12ab018f752a7b13",
     "gangtok_rainfall_2024.csv": "sha256:2FA66C6F268F6A62B8744215FA650AFEADDF3D84840D74E0D3CA0CE5BB575735",
     "s1_osm_nearest.json": "sha256:09370F4C8CBA6FD2EB6C5AD755A94ED7221ED66DC1A986DCC9B2334CB73BE8B4",
     "s1_dem_window.csv": "sha256:9DF0B708FB6F25753EC45F4B753E5948CA1E5694B941AED33A4ADA7CE618377F",
