@@ -55,10 +55,17 @@ shortest path crosses it. Road-status panel lists at-risk/blocked segments.
 
 *Freeze later: origin/destination, avoided segments.*
 
-## Screen 6 — Field report + alert (if committed)
+## Screen 6 — Field report + alert (LIVE: geo-tagged reporting, officer review, offline outbox)
 
-Officer queue shows a geo-tagged test report; escalation fixture triggers a
-multilingual test alert (2+ languages) and an offline-capture→sync pass.
+*   **Submit:** ReportForm (Screen 6 / field app) → `POST /api/reports` with validated `ReportIn`:
+    `zone_id` S1–S4 (frozen), `type` crack | slope_movement | blocked_road | other, `text` 10–500,
+    `lat/lon` inside pilot bbox 27.20–27.40 / 88.40–88.70 (rejected outside), `captured_at` ISO (honest timestamp, future >1h rejected),
+    `reporter_role` villager | field_officer, `photo` metadata-only `{filename,mime,size_bytes,sha256,exif_lat,exif_lon}` (no binary in repo per contract §4 + `.gitignore:46`; bytes never committed, SHA256 + EXIF GPS read client-side), `consent: true` required. EXIF vs claimed >200m → `flagged` with reason; bad mime → `flagged`; text/type/zone validation → 422; per-boot rate cap 20 (demo guard).
+*   **Queue:** `GET /api/reports/queue` (`?status=queued|verified|dismissed|flagged`) renders OfficerQueue (newest first, status pills + flagged reason) + Leaflet markers (click → popup with details + status). Fixture `data/sih26001/fixtures/reports.json` ships one `REP-001` (S2 crack, photo meta with SHA256 + matching EXIF, consent true).
+*   **Review:** `PATCH /api/reports/{id}` `{status: verified|dismissed|flagged, reviewer_role, reason}` — only `queued|flagged → verified|dismissed|flagged`; `verified|dismissed` are terminal (409 on re-transition). Demo header `reviewer_role` is role-toggle only (real auth post-hackathon per limitations).
+*   **Offline outbox (FR-12 demo beat):** pending reports in `localStorage talus_report_outbox` (frontend, no service worker per `08_LIMITATIONS:6` — out of scope) — auto-retry on `online` + manual "Sync now"; header/queue sync badge (`synced ✓ / N pending`) is the offline proof.
+*   **Candidate label linkage — honesty-critical:** `verified` does NOT auto-flip `event`/`previous_landslide` (same rule as inventory joins — no invented dates). Verified reports append to a `candidate_labels` sidecar (in-review JSON, git-ignored or fixture-capped) with `crowd-verified` + officer ID + photo SHA256, surfaced in missing-evidence/provenance UI. `event=1` still requires a dated, in-window occurrence.
+*   **Rehearsal script (exact):** (1) submit S2 crack report live → appears in queue + map marker, (2) queue filter `?status=queued` shows it, (3) toggle offline → submit → pending badge `1 pending`, (4) reconnect → auto-sync → `synced ✓`, (5) officer verify `PATCH → verified`, (6) dispatch alert fixture with 3-language preview (`en/hi/ne`).
 
 ## Rehearsal checklist (activate at freeze)
 

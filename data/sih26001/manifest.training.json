@@ -1,0 +1,286 @@
+{
+  "lane": "model-training Phase 1 (inventory-scale susceptibility prototype)",
+  "spec": "docs/sih26001/MODEL_TRAINING_HANDOFF.md",
+  "defaults": "season-window proxy target; tile-bounded study area (no n28 fetch); Phase 1",
+  "study_area": {
+    "lon": [
+      88.06,
+      88.96
+    ],
+    "lat": [
+      27.08,
+      27.999
+    ],
+    "crs": "EPSG:4326",
+    "note": "inside USGS tile n27_e088 (88-89E/27-28N); Sikkim-extent inset"
+  },
+  "seeds": [
+    42
+  ],
+  "dedupe_m": 50.0,
+  "negative_buffer_m": 300.0,
+  "negative_ratio": 1.0,
+  "target": "event: 1=inventoried slide in season-window proxy (tagged approximate), 0=background negative",
+  "features": {
+    "dem6": "USGS SRTMGL1 v3 tile n27_e088 (LOCAL ONLY): bilinear elev, Horn-1981 anisotropic slope/aspect (per-point dx), Laplacian curvature",
+    "twi_spi": "D8 + priority-flood + descending accumulation per 0.1-deg block (+0.03 margin); TWI=ln(a/tanB) SPI=a*tanB tanB-floor 1e-4; channel>=~1km2",
+    "drain_density": "channel-cell length within 300m / pi*0.09 km2 (same accumulation grids)",
+    "distance_to_river": "Overpass bulk out-center nearest (fallback: DEM channel EDT); osm-qa-unverified",
+    "distance_to_road": "Overpass bulk out-center nearest, pilot highway filter; CENTER-APPROX delta vs pilot geometry (logged)",
+    "rain": "IMD 0.25deg 1991-2020 climatology at nearest cell: June-total mean->30d, max-7d-in-JJAS mean->7d, max-daily-in-JJAS mean->24h (PROXY season-window, tagged)",
+    "soil": "CCI COMBINED TCDR v202505 June-10-16-2024 window-mean grid, kill-bits masked (QUASI-STATIC proxy, tagged)",
+    "ndvi": "Sentinel-2 pinned scene S2B_45RXL_20241129 (+SCL gate; median-imputed if outside/cloud, rate logged) (QUASI-STATIC, tagged)",
+    "lulc": "ESA WorldCover 2021 v200 3x3-mode + repo mapping (REAL)",
+    "lithology": "UNIFORM lingtse_granite_gneiss (PROXY-published-map, pilot value) \u2014 OMITTED from trainer X, delta logged",
+    "lineament": "UNIFORM 0.8 km/km2 (PROXY-published-map, pilot value) \u2014 OMITTED from trainer X, delta logged",
+    "previous_landslide": "nearest-OTHER-slide<=300m (sample rows only) \u2014 OMITTED from trainer X (leakage), delta logged"
+  },
+  "stats": {
+    "started": "2026-09-04T13:25:35Z",
+    "seed": 42,
+    "positives_deduped": 764,
+    "positives_in_study": 764,
+    "negatives": 764,
+    "ndvi_missing_imputed": 107,
+    "ndvi_outside_scene": 0,
+    "ndvi_cloud_masked": 107,
+    "lulc_missing_mode": 71,
+    "lulc_mix": {
+      "AGRI": 164,
+      "BARREN": 95,
+      "FOREST": 1082,
+      "BUILT": 61,
+      "WATER": 121,
+      "WETLAND": 5
+    },
+    "matrix_shape": [
+      1528,
+      22
+    ],
+    "prev_rate_pos": 0.4372,
+    "river_dem_fallback_pts": 0,
+    "matrix_sha256": "fb5cb8f7005e57b1e7aa03e135a227b52a8b9505b33c7aa6d5ac77a9e4e0567e",
+    "sidecar_sha256": "082df4edc5b2f4cebb45d5c4bab6b91c574c640ceb0da4115e402945c2045371",
+    "sample_sha256": "4a559b103db2c048a2c50ef6e023f33b9e5b12f1753a5725ba8da25f84c594d6",
+    "finished": "2026-09-04T13:29:13Z"
+  },
+  "sources": {
+    "shapefile": "data/raw/gsi/GSI_Landslide_Inventory.shp.zip (LOCAL ONLY)",
+    "pdf": "data/raw/landslide_report.pdf p659-676 (LOCAL ONLY)",
+    "dem": "data/raw/dem/n27_e088_1arc_v3.tif (LOCAL ONLY)",
+    "imd": "data/raw/imd/ind1991-2020_rfp25.nc (LOCAL ONLY)",
+    "soil": "data/raw/soil/C3S-SOILMOISTURE-*-DAILY-202406*.nc (LOCAL ONLY)",
+    "ndvi_scene": "S2B_45RXL_20241129_0_L2A via Element84/AWS COGs (remote, pinned hrefs)",
+    "lulc": "ESA WorldCover 2021 v200 N27E087 via AWS Open Data (remote)",
+    "osm": "Overpass bulk out-center, study bbox (remote, cached git-ignored)"
+  },
+  "honesty": "INITIATION year-or-0 + PDF month/year histories cannot support per-event 24h windows \u2014 all rain/soil/ndvi time-varying inputs are climatology/quasi-static proxies, tagged; year used only for temporal-split bookkeeping + evidence tags; never invented dates.",
+  "training": {
+    "seed": 42,
+    "clusters": 8,
+    "started": "2026-09-04T13:33:36Z",
+    "n": 1528,
+    "n_pos": 764,
+    "metrics": {
+      "lr_oof": {
+        "auc": 0.8895,
+        "brier": 0.1363,
+        "ece10": 0.0686,
+        "acc50": 0.8037
+      },
+      "rf_oof": {
+        "auc": 0.921,
+        "brier": 0.1111,
+        "ece10": 0.0688,
+        "acc50": 0.8495
+      },
+      "naive_prevalence": {
+        "brier": 0.25,
+        "ece10": 0.0
+      },
+      "per_cluster_auc": {
+        "cluster_0": {
+          "lr": 0.9207,
+          "rf": 0.9296
+        },
+        "cluster_1": {
+          "lr": 0.7624,
+          "rf": 0.8188
+        },
+        "cluster_2": {
+          "lr": 0.9871,
+          "rf": 1.0
+        },
+        "cluster_3": {
+          "lr": 0.9269,
+          "rf": 0.9337
+        },
+        "cluster_4": {
+          "lr": 0.6646,
+          "rf": 0.7996
+        },
+        "cluster_5": {
+          "lr": 0.9879,
+          "rf": 0.9958
+        },
+        "cluster_6": {
+          "lr": "n/a",
+          "rf": "n/a"
+        },
+        "cluster_7": {
+          "lr": 0.8525,
+          "rf": 0.8333
+        }
+      },
+      "rf_calibrated_oof": {
+        "brier": 0.1019,
+        "ece10": 0.0
+      },
+      "calibration_caveat": "isotonic fit on the same OOF predictions it is evaluated on (optimistic); clean check is the temporal holdout below (when feasible)"
+    },
+    "temporal": {
+      "rule": ">= 30 dated positives per side",
+      "n_train_pos_dated": 21,
+      "n_test_pos_dated": 71,
+      "negatives_split": "seeded 50/50 (timeless background)",
+      "done": false,
+      "reason": "only 21 dated positives <=2018 / 71 >=2019 (672/764 positives undated) \u2014 below rule; skipped, not fudged"
+    },
+    "threshold_screen": {
+      "june_total_separator_mm": 390.0,
+      "frac_points_above_separator": 1.0,
+      "median_split_mm": 484.0,
+      "mean_oof_p_above_median": 0.5119,
+      "mean_oof_p_below_median": 0.351,
+      "frac_pos_dailymax_ge_144": 0.1047,
+      "note": "Dahal 144mm is an event-intensity threshold; our 24h proxy is a JJAS-daily-max climatology, so this fraction is a consistency screen, not a threshold validation"
+    },
+    "importance": [
+      {
+        "feature": "elevation",
+        "perm_auc_drop": 0.0641,
+        "impurity": 0.2024
+      },
+      {
+        "feature": "distance_to_road",
+        "perm_auc_drop": 0.0479,
+        "impurity": 0.2462
+      },
+      {
+        "feature": "ndvi",
+        "perm_auc_drop": 0.012,
+        "impurity": 0.0848
+      },
+      {
+        "feature": "slope_angle",
+        "perm_auc_drop": 0.0021,
+        "impurity": 0.0565
+      },
+      {
+        "feature": "aspect",
+        "perm_auc_drop": 0.0006,
+        "impurity": 0.0457
+      },
+      {
+        "feature": "soil_moisture",
+        "perm_auc_drop": 0.0001,
+        "impurity": 0.0791
+      },
+      {
+        "feature": "distance_to_river",
+        "perm_auc_drop": 0.0,
+        "impurity": 0.0483
+      },
+      {
+        "feature": "rainfall_24h_mm",
+        "perm_auc_drop": 0.0,
+        "impurity": 0.045
+      },
+      {
+        "feature": "twi",
+        "perm_auc_drop": 0.0,
+        "impurity": 0.0323
+      },
+      {
+        "feature": "spi_log",
+        "perm_auc_drop": 0.0,
+        "impurity": 0.0338
+      },
+      {
+        "feature": "curvature",
+        "perm_auc_drop": 0.0,
+        "impurity": 0.0332
+      },
+      {
+        "feature": "rainfall_30d_mm",
+        "perm_auc_drop": 0.0,
+        "impurity": 0.0264
+      },
+      {
+        "feature": "drain_density",
+        "perm_auc_drop": 0.0,
+        "impurity": 0.019
+      },
+      {
+        "feature": "rainfall_7d_mm",
+        "perm_auc_drop": -0.0,
+        "impurity": 0.0252
+      },
+      {
+        "feature": "lulc_BUILT",
+        "perm_auc_drop": -0.0,
+        "impurity": 0.0087
+      },
+      {
+        "feature": "lulc_FOREST",
+        "perm_auc_drop": -0.0,
+        "impurity": 0.0081
+      },
+      {
+        "feature": "lulc_BARREN",
+        "perm_auc_drop": -0.0,
+        "impurity": 0.0011
+      },
+      {
+        "feature": "lulc_WATER",
+        "perm_auc_drop": -0.0,
+        "impurity": 0.0037
+      },
+      {
+        "feature": "lulc_WETLAND",
+        "perm_auc_drop": -0.0,
+        "impurity": 0.0003
+      }
+    ],
+    "lulc_classes": [
+      "AGRI",
+      "BARREN",
+      "BUILT",
+      "FOREST",
+      "WATER",
+      "WETLAND"
+    ],
+    "dropped_from_X": {
+      "uniform_proxy": [
+        "lithology",
+        "lineament_density"
+      ],
+      "leakage": [
+        "previous_landslide"
+      ],
+      "keys": [
+        "zone_id",
+        "time_window",
+        "evidence_quality"
+      ]
+    },
+    "deferred": [
+      "xgboost",
+      "lightgbm",
+      "shap (TreeSHAP per-prediction deferred; permutation+impurity reported instead)"
+    ],
+    "finished": "2026-09-04T13:33:50Z",
+    "clean": true
+  },
+  "demo_touch": "none \u2014 zero fixture/score/contract changes by this lane (frozen scores are validator-guarded; training is upside, not a demo blocker)"
+}

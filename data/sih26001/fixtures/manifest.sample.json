@@ -19,13 +19,16 @@
       "window_rule": "wettest trailing-7d spell of 2024 at pilot cell",
       "date": "2026-09-04"
     },
-    "era5_soil": {
-      "version": "ERA5-volumetric",
-      "clip": "pilot-period",
-      "status": "not_available",
-      "date": null,
-      "proxy_tag": "reanalysis-proxy",
-      "attempt": "2026-09-04 Person-3: no ~/.cdsapirc, no cdsapi on either python; CDS account wall stands. Logged skip per handoff."
+    "cci_soil": {
+      "version": "ESA CCI SM COMBINED TCDR v202505 (DOI 10.24381/cds.d7782f18)",
+      "status": "available",
+      "source": "CDS user download 2026-09-04 (user-selected: volumetric, combined, daily, June 10-16 2024)",
+      "raw": "data/raw/soil/C3S-SOILMOISTURE-*-DAILY-*.nc, 7 daily global files (LOCAL ONLY per .gitignore)",
+      "file": "data/processed/soil/gangtok_soil_cci.csv",
+      "extract_script": "scripts/extract_soil_cci.py (xarray, system py311)",
+      "method": "nearest 0.25-degree cell (27.375,88.625) per slope per day; reliability-killer flag bits 4|8|16|32 masked (none hit: 7/7 valid, flags=[0]); window-mean per slope = 0.271 all slopes (same-cell consequence, stated)",
+      "note": "satellite-observed (stronger than ERA5 reanalysis); CDS-request path for ERA5 proper was never needed",
+      "date": "2026-09-04"
     },
     "srtm_dem": {
       "version": "USGS SRTM 1 Arc-Second Global v3 (SRTMGL1.003) — REAL, mirror superseded 2026-09-04",
@@ -50,20 +53,66 @@
       "ndvi_date_note": "scene 2024-11-29 post-monsoon vs row time_window 2024-06-16; NDVI treated as quasi-static state",
       "s234_file": "data/processed/terrain/s234_ndvi.json",
       "s234_script": "scripts/extract_s234_ndvi.py (same pinned scene: S2 ndvi 0.139 scl=bare, S3 0.817 veg, S4 0.468 veg)",
-      "lulc_attempt": "OSM landuse round 2026-09-04 (scripts/extract_landuse.py -> s234_landuse.json): nothing mappable within 300m of any slope (S3 residential 324m-to-centre noted, not used). lulc stays STUB.",
+      "lulc_attempt": "SUPERSEDED 2026-09-04 by WorldCover (below): OSM landuse round found nothing mappable ≤300 m; WC 10m map gives direct reads.",
+      "date": "2026-09-04"
+    },
+    "worldcover": {
+      "version": "ESA WorldCover 2021 v200 (10m, overall accuracy 76.7%)",
+      "status": "available",
+      "tile": "N27E087 (27-30N/87-90E, EPSG:4326, 36000x36000; bounds verified in-repo, all 4 slopes inside)",
+      "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N27E087_Map.tif",
+      "access": "AWS Open Data, no sign-in (Terrascope login NOT needed)",
+      "file": "data/processed/terrain/s234_lulc.json",
+      "extract_script": "scripts/extract_s234_lulc.py (rasterio /vsicurl/ range reads, 3x3-window mode per slope, system py311)",
+      "method": "3x3 mode class + centre agreement (9/9 all slopes); mapping 10->FOREST, 50->BUILT (full table in extract JSON)",
+      "row_values": {"S1": "FOREST (WC-10)", "S2": "BUILT (WC-50)", "S3": "FOREST (WC-10)", "S4": "BUILT (WC-50)"},
+      "crosscheck": "consistent with NDVI (S1 0.718/S3 0.817 veg vs S2 0.139 bare road-cut); S4 BUILT matches Ranipool settlement",
       "date": "2026-09-04"
     },
     "bhusanket": {
       "export": null,
-      "status": "not_available",
+      "status": "available",
+      "source": "user-supplied GSI_Landslide_Inventory.shp.zip (30,842 point slides, all-India, LOCAL ONLY per .gitignore)",
+      "sample": "data/sih26001/evidence/sikkim_gangtok_sample.csv (6 Gangtok-bbox rows)",
+      "join": "data/sih26001/evidence/sikkim_join.json (per-slope haversine join over all 693 Sikkim points)",
+      "extract_script": "scripts/extract_sikkim_labels.py (struct+numpy, no gis libs)",
+      "method": "previous_landslide=1 iff slide within 300m (ID cited); event=1 only if dated in-window (INITIATION is year-or-0, so 0 with reason); S2 hit SK/ESK/78A11/2019/02 at 286.7m",
       "ner_filter": true,
-      "attempt": "2026-09-04 Person-3: portal reachable (HTTP 200) but dashboard JS exposes no export endpoint; NASA COOLR FeatureServer 404 on both URL forms; ILSM Zenodo 10085272 hosts 6.6GB rasters only, no points file; DesInventar DI_export pattern confirmed but code 033 = Tamil Nadu (7.9MB, wrong state) — Sikkim state code needs portal-index lookup. Labels stay STUB (see provenance §3)."
+      "date": "2026-09-04"
+    },
+    "gsi_report": {
+      "version": "landslide_report.pdf Sikkim block p659-676 (904 pp, producer pypdf, no TOC)",
+      "status": "available",
+      "source": "user-supplied data/raw/landslide_report.pdf (LOCAL ONLY per .gitignore)",
+      "sample": "data/sih26001/evidence/sikkim_report_gangtok.csv (7 Gangtok District rows: Sl.26782/26787/26804/26808/26809/26812/26813)",
+      "join_note": "corroboration only in sikkim_join.json report_pdf block; shapefile join outcomes unchanged (S2 prev=1 now with second ID SI/GTK/78A11/2025/03 Upper Sichey @259 m; S1/S3/S4 stay 0; all events 0, histories Mar 2023..Jul 2025 outside 2024-06-10/16 window)",
+      "extract_script": "scripts/extract_sikkim_report.py (pymupdf, Sl.No.-anchored parse + hand-verified asserts)",
+      "method": "DISTRICT == Gangtok District filter over pp. 659-676 (first SK Sl.26052 p659 foot; p677 Tripura); haversine corroboration join, same 300 m rule",
+      "date": "2026-09-04"
     },
     "bhukosh": {
       "export": null,
-      "status": "not_available",
-      "date": null,
-      "attempt": "2026-09-04 Person-3: https://bhukosh.gsi.gov.in/Bhukosh/Public unreachable from here (connection fail, retried 2x); same GSI infra as Bhusanket timeouts. Lithology stays STUB."
+      "status": "available",
+      "source": "data/raw/docs/Gangtok_Disaster_Resilience_Action_Plan.pdf (230 pp, Figure 25/48 Lithology Map Gangtok, Source: NESAC; SSDMA+GSI) + CGWB Gangtok 2025 corroboration — LOCAL ONLY per .gitignore",
+      "file": "data/processed/terrain/s234_lithology.json",
+      "extract_script": "scripts/extract_lithology.py (pymupdf phrase check p71/p118)",
+      "method": "digitized published NESAC map: all 4 central-Gangtok pilot points (27.315-27.345N/88.595-88.612E, Fig 9-25 town extent) lie on 'lingtse_granite_gneiss' (intrusive, highly weathered, soil <1-10m); Chungthang/Darjeeling/Phyllite noted as nearby units not at pilot points",
+      "tag": "PROXY-published-map (digitized figure, not Bhukosh vector)",
+      "limit": "50K figure resolution; Chungthang subgroup (biotite gneiss etc.) is immediate country rock per CGWB; replace with Bhukosh vector clip when reachable",
+      "date": "2026-09-04"
+    },
+    "lineament": {
+      "version": "Bhuvan Lineament 50K 2005-06 Sikkim, layer lineament:SK_LN50K_0506 (NRSC, in association with GSI) + NMHS Figure 24/47 context — VERIFIED LIVE 2026-09-04",
+      "status": "available",
+      "source": "ISRO/NRSC Bhuvan WMS GetCapabilities https://bhuvan-vec2.nrsc.gov.in/bhuvan/wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.1.1 (5.2 MB, bbox 88.035/27.073-88.892/28.061) lists lineament:SK_LN50K_0506 queryable=1 + Thematic portal bhuvan-app1.nrsc.gov.in/mines/mines.php Sikkim listed + nwdp.nwic.in/dataset/lineament ('in association with GSI') + data/raw/docs/Gangtok_Disaster_Resilience_Action_Plan.pdf Figures 24/47",
+      "file": "data/processed/terrain/s234_lineament.json",
+      "extract_script": "scripts/extract_lineament.py (pymupdf figure-index check + literature value; WMS probe logged in JSON)",
+      "method": "Bhuvan WMS GetCapabilities verified layer exists and covers Gangtok; WFS disabled (ServiceUnavailable), GetMap KML forbidden (ForbiddenFormat), GetFeatureInfo at Gangtok AOI + state centre returned 0 features — WMS renders but vector not exposed via GetFeatureInfo from this client, so literature proxy 0.8 km/km2 for all 4 points (conservative <1.5 on density map, literature 0.3-1.4, uniform because 50K figure not per-slope digitized; stronger than DEM-edge fabrication)",
+      "tag": "PROXY-published-map + Bhuvan-availability (verified layer SK_LN50K_0506, not a vector clip)",
+      "limit": "50K scale; vector not exposed via GetFeatureInfo; replace via Bhuvan Thematic portal → Sikkim Lineament 50K → clip Gangtok AOI (88.58-88.63E/27.30-27.36N) → export KML/Shapefile (GWC demo lists KML) → QGIS length/area → km/km2 in projected CRS per published Sikkim method",
+      "wms_endpoint": "https://bhuvan-vec2.nrsc.gov.in/bhuvan/wms",
+      "layer": "lineament:SK_LN50K_0506",
+      "date": "2026-09-04"
     },
     "osm": {
       "extract": "data/processed/terrain/s1_osm_nearest.json",
@@ -99,6 +148,14 @@
     "s1_sentinel2.json": "sha256:E5E6F8B0FD4B2A1FE39B48456BF51FE051BEB2FC7D5EDAB2D827D44306D7EEC6",
     "s1_drain_window.json": "sha256:0A5D19154B4C28B40ED81ECED2A497076B859E7A165BF966A04F9E33A826E67C",
     "usgs_s234.json": "sha256:B456C95E51DB747FB9A73CAC92F882F645476E20E2C331FE08A7BBA07C15DC",
+    "gangtok_soil_cci.csv": "sha256:BBFBE01B40905176081A3BB60F79F62E18820D958DC454201F483FB7F8E98272",
+    "gangtok_soil_cci.meta.json": "sha256:595390CB7846750B2AFB38FC65443D0DB89138A2880DA5711556FBF1DFF6EB63",
+      "sikkim_gangtok_sample.csv": "sha256:89123FB43C11067FBD06B1719744626D1A5F2AFB018B8F6D23419B7CE7C0D9AE",
+      "sikkim_join.json": "sha256:A545989A2C93B0466B0ABC2D570FF1BA76089DA9A86F92626F1788047322E4B6",
+      "sikkim_report_gangtok.csv": "sha256:487354959DFB0F92755E3002945DDDFA39DE7BD98C97BA1E3C46B9E9CA003FF1",
+    "s234_lulc.json": "sha256:d90bb22c14542e943102e69daaa07e6ba48fb62391eff9624906524ff2754a01",
+    "s234_lithology.json": "sha256:a3c412fead0dea6fc110f35d4bbe91173858f95d22d9a0de692bbbcf3383266e",
+    "s234_lineament.json": "sha256:078572B648356A65D05772936A23C826B9B322B5E02C84CFB7964E156FDDB04E",
     "catchment_s234.json": "sha256:59005868617CC248964EBA25977B4D563B9BA8A6359EAB77C54EBD392C630E70",
     "s234_ndvi.json": "sha256:8BACD19C3113314AFD60893690C7A82995FDABB2F07276E26CDD8E7E278",
     "s234_landuse.json": "sha256:3654269AE5B6BDED8A8846112FDE017A80F48417A4FA93D00DF85177A514",

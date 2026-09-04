@@ -56,12 +56,15 @@ data/synthetic/*
 !data/processed/blasting/
 !data/processed/cracks/
 !data/processed/crack_features/
+!data/processed/soil/
 !data/synthetic/v1/
 
 # re-ignore bulk dataset files (they stay out of git)
 data/raw/imd/*
 data/raw/dem/*
 data/raw/crack_seg/*
+data/raw/soil/*
+data/raw/gsi/*
 
 # whitelist only small metadata/docs/schema/sample files inside data dirs
 !data/**/.gitkeep
@@ -110,6 +113,14 @@ backend/app/_model.joblib
 
 # canonical trained Model v1 artifact (compressed; regenerated if deleted)
 !ml/models/talus_rf_v1.joblib
+
+# ── SIH26001 training lane (hackathon Sept 5) ──────────────────────────
+# Inventory-scale training matrix + caches stay out of git; only the
+# ≤20-row *.training.sample.csv + manifest.training.json + reports are committed.
+data/sih26001/processed/
+!data/sih26001/processed/.gitkeep
+ml/sih26001/models/
+ml/sih26001/runs/
 
 # private presenter script — never commit (personal briefing, stays local)
 docs/PILOT_BRIEFING.md

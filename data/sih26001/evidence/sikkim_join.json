@@ -1,0 +1,120 @@
+{
+  "bbox": [
+    88.58,
+    88.63,
+    27.3,
+    27.36
+  ],
+  "buffer_m": 300.0,
+  "window": [
+    "2024-06-10",
+    "2024-06-16"
+  ],
+  "join": {
+    "S1": {
+      "slide_no": "SKM/ES/78A11/2015/46",
+      "name": "Sichey",
+      "district": "East Sikkim",
+      "lon": 88.600556,
+      "lat": 27.348722,
+      "initiation": "0",
+      "triggering": "Rainfall",
+      "dist_m": 417.5,
+      "previous_landslide": 0,
+      "event": 0,
+      "evidence_quality": "dated-only-negative",
+      "reason": "nearest slide SKM/ES/78A11/2015/46 at 417.5 m, outside 300 m"
+    },
+    "S2": {
+      "slide_no": "SK/ESK/78A11/2019/02",
+      "name": "Palzor Stadium road, Gangtok",
+      "district": "East District",
+      "lon": 88.609111,
+      "lat": 27.33825,
+      "initiation": "2019",
+      "triggering": "Rainfall",
+      "dist_m": 286.7,
+      "previous_landslide": 1,
+      "event": 0,
+      "evidence_quality": "approximate",
+      "reason": "nearest slide SK/ESK/78A11/2019/02 at 286.7 m (INIT 2019, year-only, not in-window)"
+    },
+    "S3": {
+      "slide_no": "SK/ESK/78A11/2018/001",
+      "name": "Upper Syari, Deorali, Gangtok",
+      "district": "East Sikkim",
+      "lon": 88.606667,
+      "lat": 27.315833,
+      "initiation": "0",
+      "triggering": "Rainfall.",
+      "dist_m": 1019.5,
+      "previous_landslide": 0,
+      "event": 0,
+      "evidence_quality": "dated-only-negative",
+      "reason": "nearest slide SK/ESK/78A11/2018/001 at 1019.5 m, outside 300 m"
+    },
+    "S4": {
+      "slide_no": "SK/ESK/78A11/2018/001",
+      "name": "Upper Syari, Deorali, Gangtok",
+      "district": "East Sikkim",
+      "lon": 88.606667,
+      "lat": 27.315833,
+      "initiation": "0",
+      "triggering": "Rainfall.",
+      "dist_m": 1156.4,
+      "previous_landslide": 0,
+      "event": 0,
+      "evidence_quality": "dated-only-negative",
+      "reason": "nearest slide SK/ESK/78A11/2018/001 at 1156.4 m, outside 300 m"
+    }
+  },
+  "queried_at": "2026-09-04T11:49:39Z",
+  "report_pdf": {
+    "source": "data/raw/landslide_report.pdf (LOCAL ONLY per .gitignore, 904 pp)",
+    "pages": "p659-676 Sikkim block (first SK Sl.26052 p659; p677 Tripura)",
+    "extract_script": "scripts/extract_sikkim_report.py",
+    "extract_csv": "data/sih26001/evidence/sikkim_report_gangtok.csv",
+    "window": [
+      "2024-06-10",
+      "2024-06-16"
+    ],
+    "buffer_m": 300.0,
+    "corroboration": {
+      "S1": {
+        "pdf_slide_no": "SI/GTK/78A11/2025/03",
+        "pdf_sl_no": "26813",
+        "pdf_name": "Upper Sichey Landslide",
+        "dist_m": 1219.2,
+        "prev_stays": 0,
+        "verdict": "stays 0 (nearest PDF row Sl.26813 at 1219.2 m, outside 300 m)"
+      },
+      "S2": {
+        "pdf_slide_no": "SI/GTK/78A11/2025/03",
+        "pdf_sl_no": "26813",
+        "pdf_name": "Upper Sichey Landslide",
+        "dist_m": 259.5,
+        "prev_stays": 1,
+        "verdict": "corroborates prev=1 (second ID SI/GTK/78A11/2025/03 Sl.26813)"
+      },
+      "S3": {
+        "pdf_slide_no": "SKM/Gangtok/78A11/2022",
+        "pdf_sl_no": "26787",
+        "pdf_name": "Lumsay Slide",
+        "dist_m": 1102.2,
+        "prev_stays": 0,
+        "verdict": "stays 0 (nearest PDF row Sl.26787 at 1102.2 m, outside 300 m)"
+      },
+      "S4": {
+        "pdf_slide_no": "SKM/Gangtok/78A11/2022",
+        "pdf_sl_no": "26787",
+        "pdf_name": "Lumsay Slide",
+        "dist_m": 1261.0,
+        "prev_stays": 0,
+        "verdict": "stays 0 (nearest PDF row Sl.26787 at 1261.0 m, outside 300 m)"
+      }
+    },
+    "event_note": "all seven histories (Jun 2022, Aug/Oct 2022, Mar 2023, Aug 2024, Jun 2024, Jul 2025 x2) lie outside 2024-06-10/16 -> event stays 0 with reason logged",
+    "join_unchanged": true,
+    "extracted_at": "2026-09-04T12:02:08Z"
+  }
+}

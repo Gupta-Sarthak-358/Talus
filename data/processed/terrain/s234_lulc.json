@@ -1,0 +1,106 @@
+{
+  "tile": "N27E087 (27-30N/87-90E, EPSG:4326, 36000x36000, bounds verified 2026-09-04)",
+  "url": "https://https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N27E087_Map.tif",
+  "mapping": {
+    "10": "FOREST",
+    "20": "FOREST",
+    "30": "AGRI",
+    "40": "AGRI",
+    "50": "BUILT",
+    "60": "BARREN",
+    "70": "WATER",
+    "80": "WETLAND",
+    "90": "WETLAND",
+    "95": "BARREN"
+  },
+  "slopes": {
+    "S1": {
+      "lat": 27.345,
+      "lon": 88.6,
+      "row": 31860,
+      "col": 19200,
+      "window_3x3": [
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10
+      ],
+      "mode": 10,
+      "centre": 10,
+      "agree": 9,
+      "label": "FOREST",
+      "centre_agrees": true
+    },
+    "S2": {
+      "lat": 27.338,
+      "lon": 88.612,
+      "row": 31944,
+      "col": 19344,
+      "window_3x3": [
+        50,
+        50,
+        50,
+        50,
+        50,
+        50,
+        50,
+        50,
+        50
+      ],
+      "mode": 50,
+      "centre": 50,
+      "agree": 9,
+      "label": "BUILT",
+      "centre_agrees": true
+    },
+    "S3": {
+      "lat": 27.325,
+      "lon": 88.6065,
+      "row": 32100,
+      "col": 19278,
+      "window_3x3": [
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10
+      ],
+      "mode": 10,
+      "centre": 10,
+      "agree": 9,
+      "label": "FOREST",
+      "centre_agrees": true
+    },
+    "S4": {
+      "lat": 27.315,
+      "lon": 88.595,
+      "row": 32220,
+      "col": 19140,
+      "window_3x3": [
+        50,
+        50,
+        50,
+        50,
+        50,
+        50,
+        50,
+        50,
+        50
+      ],
+      "mode": 50,
+      "centre": 50,
+      "agree": 9,
+      "label": "BUILT",
+      "centre_agrees": true
+    }
+  }
+}

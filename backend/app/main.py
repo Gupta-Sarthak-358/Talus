@@ -18,8 +18,12 @@ from .schemas import (
     DecisionResponse,
     ExplanationResponse,
     Features,
+    PhotoMeta,
     PredictRequest,
     PredictResponse,
+    ReportIn,
+    ReportOut,
+    ReportReviewIn,
     RouteRequest,
     RouteResponse,
     TemplatesResponse,
@@ -378,9 +382,85 @@ def _load_fixture(name: str):
 
 
 _ROADS = _load_fixture("roads.json")
-_REPORTS: list[dict] = _load_fixture("reports.json")["reports"]
 _ALERTS = _load_fixture("alerts.json")
 _FORECAST = _load_fixture("forecast.json")
+
+
+# ---- field reporting state (PS e -> FR-10, Screen 6) -----------------------
+# Seed from fixtures/reports.json (kept compatible with new schema). In-memory
+# per contract §4; candidate-label promotion is explicit, never auto (see docs).
+import math as _math
+
+_REPORTS_SEED: list[dict] = _load_fixture("reports.json")["reports"]
+
+def _normalize_report_seed(raw: dict) -> dict:
+    """Upgrade legacy fixture shape (lat/lon + photo string) to ReportOut shape."""
+    rec = dict(raw)
+    # legacy keys: lat/lon -> normalize, photo string -> dropped, reporter -> reporter_role
+    if "lat" in rec and "lon" not in rec:
+        rec["lon"] = rec.pop("lat")
+    # map legacy lat/lon already correct; ensure new keys present with defaults for old fixture
+    rec.setdefault("type", rec.get("type", "crack"))
+    rec.setdefault("text", rec.get("text", "Field report"))
+    rec.setdefault("captured_at", rec.get("captured_at", data.now_iso()))
+    rec.setdefault("reporter_role", rec.get("reporter_role", rec.get("reporter", "field_officer")))
+    rec.pop("reporter", None)
+    # photo legacy was a string placeholder; normalize to PhotoMeta or None
+    photo = rec.get("photo")
+    if isinstance(photo, str):
+        rec["photo"] = None
+    # ensure consent true for fixture (honest consent)
+    rec.setdefault("consent", True)
+    # ensure lat/lon present (fixture has them)
+    rec.setdefault("status", "queued")
+    rec.setdefault("created_at", rec.get("captured_at", data.now_iso()))
+    rec.setdefault("flagged_reason", None)
+    # validate through schema to enforce types, then dump
+    try:
+        # allow legacy flagged field
+        if "lat" in rec and "lon" in rec:
+            # ensure floats
+            rec["lat"] = float(rec["lat"])
+            rec["lon"] = float(rec["lon"])
+        out = ReportOut.model_validate(rec)
+        return out.model_dump()
+    except Exception:
+        # fallback: keep raw but ensure required keys for demo
+        rec["id"] = rec.get("id", "REP-001")
+        return rec
+
+_REPORTS: list[dict] = [_normalize_report_seed(r) for r in _REPORTS_SEED]
+
+# Simple per-process rate cap (demo-sized abuse guard): 20 reports per boot
+_REPORT_RATE_LIMIT = 20
+
+def _haversine_m(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    r = 6371000.0
+    p1, p2 = _math.radians(lat1), _math.radians(lat2)
+    dphi = _math.radians(lat2 - lat1)
+    dlam = _math.radians(lon2 - lon1)
+    a = _math.sin(dphi / 2) ** 2 + _math.cos(p1) * _math.cos(p2) * _math.sin(dlam / 2) ** 2
+    return 2 * r * _math.asin(_math.sqrt(a))
+
+def _report_flagged_reason(rep: dict) -> tuple[str, str] | None:
+    """Return (status, reason) if report should be flagged, else None."""
+    photo = rep.get("photo") or {}
+    ex_lat = photo.get("exif_lat") if isinstance(photo, dict) else None
+    ex_lon = photo.get("exif_lon") if isinstance(photo, dict) else None
+    if ex_lat is not None and ex_lon is not None:
+        try:
+            dist = _haversine_m(float(rep["lat"]), float(rep["lon"]), float(ex_lat), float(ex_lon))
+            if dist > 200:
+                return ("flagged", f"EXIF GPS {dist:.0f}m from claimed location (>200m) — flagged for officer check")
+        except Exception:
+            pass
+    # mime whitelist check (if provided)
+    mime = photo.get("mime") if isinstance(photo, dict) else None
+    if mime is not None:
+        allowed = {"image/jpeg", "image/png", "image/webp", "video/mp4"}
+        if mime not in allowed:
+            return ("flagged", f"Unsupported media type {mime} — flagged")
+    return None
 
 
 @app.get("/api/roads/status")
@@ -388,17 +468,83 @@ def roads_status():
     return {"segments": _ROADS["segments"]}
 
 
-@app.post("/api/reports")
-def create_report(body: dict):
+@app.post("/api/reports", response_model=ReportOut)
+def create_report(body: ReportIn):
+    if len(_REPORTS) >= _REPORT_RATE_LIMIT:
+        raise HTTPException(status_code=429, detail="Report rate limit reached for this session (demo cap 20)")
+    if body.consent is not True:
+        raise HTTPException(status_code=422, detail="consent must be true — you must consent to sharing photo + location with authorities")
+    # captured_at honesty: must parse as ISO, not in far future (>24h ahead)
+    try:
+        # allow both with and without timezone; normalize
+        from datetime import datetime, timezone as _tz
+        ts = body.captured_at.replace("Z", "+00:00")
+        dt = datetime.fromisoformat(ts)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=_tz.utc)
+        now = datetime.now(_tz.utc)
+        if dt > now:
+            # allow up to 1h clock skew, else flag
+            delta = (dt - now).total_seconds()
+            if delta > 3600:
+                raise HTTPException(status_code=422, detail="captured_at is in the future")
+    except HTTPException:
+        raise
+    except Exception:
+        raise HTTPException(status_code=422, detail="captured_at must be ISO-8601 (e.g. 2026-09-04T09:30:00+05:30)")
+
+    # zone validation: zone must exist (contract S1-S4)
+    if body.zone_id not in data.ZONE_CENTERS:
+        raise HTTPException(status_code=422, detail=f"zone_id must be one of {sorted(data.ZONE_CENTERS)}")
+
+    # build record
     rid = f"REP-{len(_REPORTS) + 1:03d}"
-    rec = {"id": rid, "status": "queued", **body}
-    _REPORTS.append(rec)
-    return {"id": rid, "status": "queued"}
+    rec = body.model_dump()
+    # keep lat/lon as floats for storage
+    rec["id"] = rid
+    rec["created_at"] = data.now_iso()
+
+    # EXIF / mime flagging (honesty-critical, per plan §3A)
+    flagged = _report_flagged_reason(rec)
+    if flagged:
+        status, reason = flagged
+        rec["status"] = status
+        rec["flagged_reason"] = reason
+    else:
+        rec["status"] = "queued"
+        rec["flagged_reason"] = None
+
+    # validate full ReportOut before storing (ensures expiry of any bad coercion)
+    out = ReportOut.model_validate(rec)
+    dump = out.model_dump()
+    _REPORTS.append(dump)
+    return dump
 
 
 @app.get("/api/reports/queue")
-def reports_queue():
-    return {"reports": _REPORTS}
+def reports_queue(status: str | None = None):
+    if status is not None and status not in {"queued", "verified", "dismissed", "flagged"}:
+        raise HTTPException(status_code=422, detail="status filter must be one of queued|verified|dismissed|flagged")
+    if status is None:
+        return {"reports": _REPORTS}
+    return {"reports": [r for r in _REPORTS if r.get("status") == status]}
+
+
+@app.patch("/api/reports/{report_id}")
+def review_report(report_id: str, body: ReportReviewIn):
+    for r in _REPORTS:
+        if r.get("id") == report_id:
+            # simple state machine: only queued or flagged can transition; verified/dismissed are terminal for demo
+            if r.get("status") in {"verified", "dismissed"} and body.status != r.get("status"):
+                raise HTTPException(status_code=409, detail=f"Report {report_id} already {r.get('status')} — cannot transition to {body.status}")
+            r["status"] = body.status
+            if body.reason:
+                r["flagged_reason"] = body.reason
+            # record reviewer (demo; real auth is post-hackathon per limitations)
+            if body.reviewer_role:
+                r["reviewer_role"] = body.reviewer_role
+            return r
+    raise HTTPException(status_code=404, detail=f"Report {report_id} not found")
 
 
 @app.post("/api/alerts/dispatch")
