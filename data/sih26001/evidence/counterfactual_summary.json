@@ -1,0 +1,277 @@
+{
+  "generated": "2026-09-04T20:37:47Z",
+  "model": "ml/models/sih26001_rf_v1.joblib + isotonic (frozen bundle)",
+  "bands": "<50 Very Low, <65 Low, <75 Moderate, <85 High, else Critical (backend FROZEN_BANDS)",
+  "cases": [
+    {
+      "id": "mangan-jun2024",
+      "title": "Mangan district disaster, 12-13 June 2024",
+      "site": "Mangan town (Pakshep/Ambhithang slide cluster)",
+      "event_date": "2024-06-13",
+      "event_date_fuzzy": null,
+      "event_note": "Slide nights of June 12-13; 9 dead statewide (6 Mangan + 3 Namchi Jun 10); ~1,500-2,000 tourists stranded; NH-10 blocked, North Sikkim isolated; Mangan station >220 mm/24h (IMD); red alert only on Jun 13.",
+      "sources": [
+        "Reuters 2024-06-14",
+        "Indian Express 2024-06-13",
+        "HT 2024-06-13",
+        "ET 2024-06-15",
+        "livemint 2024-06-16 (IMD red-alert text)"
+      ],
+      "terrain_analogue_row": "T0056",
+      "analogue_distance_m": 842.3,
+      "analogue_lulc": "FOREST",
+      "analogue_was_training_positive": true,
+      "soil_source": "daily CCI [27.625, 88.625]",
+      "ndvi_source": "S2 2024-05-03",
+      "ndvi_value": 0.753,
+      "imd_cell": [
+        27.5,
+        88.5
+      ],
+      "first_moderate": {
+        "date": "2024-05-14",
+        "score": 68.2
+      },
+      "first_high": {
+        "date": "2024-05-31",
+        "score": 82.6
+      },
+      "first_critical": {
+        "date": null,
+        "score": null
+      },
+      "peak": {
+        "date": "2024-05-31",
+        "score": 82.6,
+        "band": "High"
+      },
+      "event_day": {
+        "date": "2024-06-13",
+        "rain_24h": 60.8,
+        "rain_7d": 246.7,
+        "rain_30d": 553.9,
+        "soil_moisture": 0.2679,
+        "ndvi": 0.753,
+        "p_raw": 0.764,
+        "p_cal": 0.8264,
+        "score": 82.6,
+        "band": "High"
+      }
+    },
+    {
+      "id": "dipudara-aug2024",
+      "title": "Dipudara (Teesta-V) slide, 20 Aug 2024 07:30",
+      "site": "Dipudara, Balutar, Singtam-Dikchu road (SI/GAN/78A07/2024/48)",
+      "event_date": "2024-08-20",
+      "event_date_fuzzy": null,
+      "event_note": "GIS building of 510 MW Teesta-V destroyed; 6 houses damaged; Singtam-Dikchu road cut. ZERO casualties ONLY because 7 days of precursor slides triggered manual evacuation (Sikkim Govt PR 20-Aug-2024).",
+      "sources": [
+        "sikkim.gov.in PR 20-Aug-2024",
+        "The Hindu 2024-08-20",
+        "Indian Express 2024-08-20",
+        "Down To Earth 2024-08-20/24",
+        "SANDRP 2024-08-21 (coords 27.2515, 88.4594)"
+      ],
+      "terrain_analogue_row": "T1448",
+      "analogue_distance_m": 0.0,
+      "analogue_lulc": "FOREST",
+      "analogue_was_training_positive": true,
+      "soil_source": "daily CCI [27.375, 88.375]",
+      "ndvi_source": "S2 2024-08-16",
+      "ndvi_value": 0.852,
+      "imd_cell": [
+        27.25,
+        88.5
+      ],
+      "first_moderate": {
+        "date": "2024-07-21",
+        "score": 68.2
+      },
+      "first_high": {
+        "date": "2024-07-22",
+        "score": 80.0
+      },
+      "first_critical": {
+        "date": null,
+        "score": null
+      },
+      "peak": {
+        "date": "2024-07-22",
+        "score": 80.0,
+        "band": "High"
+      },
+      "event_day": {
+        "date": "2024-08-20",
+        "rain_24h": 5.9,
+        "rain_7d": 69.4,
+        "rain_30d": 556.1,
+        "soil_moisture": 0.2835,
+        "ndvi": 0.852,
+        "p_raw": 0.642,
+        "p_cal": 0.6912,
+        "score": 69.1,
+        "band": "Moderate"
+      }
+    },
+    {
+      "id": "lumsay-jun2022",
+      "title": "Lumsay Slide, Adampul road, June 2022 (month-known)",
+      "site": "Lumsay Slide (SKM/Gangtok/78A11/2022), ~1.1 km from S3 Tadong",
+      "event_date": "2022-06-30",
+      "event_date_fuzzy": "month-only in GSI report; analysed against the wettest June spell, flagged",
+      "event_note": "Debris slide on Adampul road; site later selected for the National Landslide Mitigation Project (SSDMA/NDMA consultation Jan 2026) \u2014 chronic hazard. June 2022 also killed 5 statewide with 40 vehicles stranded in North Sikkim (HT 17-Jun-2022).",
+      "sources": [
+        "GSI landslide_report.pdf p675 (Sl.26787)",
+        "HT 2022-06-17",
+        "Sikkim Chronicle 2026-01-08"
+      ],
+      "terrain_analogue_row": "T1428",
+      "analogue_distance_m": 0.0,
+      "analogue_lulc": "BUILT",
+      "analogue_was_training_positive": true,
+      "soil_source": "matrix quasi-static",
+      "ndvi_source": "S2 2022-04-24",
+      "ndvi_value": 0.271,
+      "imd_cell": [
+        27.25,
+        88.5
+      ],
+      "first_moderate": {
+        "date": "2022-05-31",
+        "score": 73.7
+      },
+      "first_high": {
+        "date": "2022-06-03",
+        "score": 78.0
+      },
+      "first_critical": {
+        "date": "2022-06-08",
+        "score": 95.5
+      },
+      "peak": {
+        "date": "2022-06-08",
+        "score": 95.5,
+        "band": "Critical"
+      },
+      "event_day": {
+        "date": "2022-06-30",
+        "rain_24h": 25.0,
+        "rain_7d": 224.3,
+        "rain_30d": 993.0,
+        "soil_moisture": 0.271,
+        "ndvi": 0.271,
+        "p_raw": 0.792,
+        "p_cal": 0.8264,
+        "score": 82.6,
+        "band": "High"
+      }
+    },
+    {
+      "id": "sichey-jun2021",
+      "title": "Sichey house-burial, ~8 June 2021 (date-fuzzy)",
+      "site": "Sichey near Tamang Gumpa, Gangtok (Upper Sichey slide footprint)",
+      "event_date": "2021-06-08",
+      "event_date_fuzzy": "article 09-Jun-2021 reports slide 'around 7 PM' after 'last few days' of heavy rain; analysed at 08-Jun, flagged",
+      "event_note": "Landslide buried a house kitchen at ~7 PM; 1 dead (40-yr woman), 70-yr mother injured; Gangtok water project damaged -> city water crisis; NH-31A commuters stranded 4 hrs. Same Upper Sichey footprint that slid again 31-Jul-2025.",
+      "sources": [
+        "The Sikkim Today 2021-06-09",
+        "Sikkim NOW May-2011 (Upper Sichey chronic slides, 8cm rain precedent)"
+      ],
+      "terrain_analogue_row": "T0110",
+      "analogue_distance_m": 49.8,
+      "analogue_lulc": "FOREST",
+      "analogue_was_training_positive": true,
+      "soil_source": "matrix quasi-static",
+      "ndvi_source": "S2 2021-04-14",
+      "ndvi_value": 0.322,
+      "imd_cell": [
+        27.25,
+        88.5
+      ],
+      "first_moderate": {
+        "date": "2021-05-09",
+        "score": 73.7
+      },
+      "first_high": {
+        "date": "2021-06-07",
+        "score": 80.0
+      },
+      "first_critical": {
+        "date": null,
+        "score": null
+      },
+      "peak": {
+        "date": "2021-06-07",
+        "score": 80.0,
+        "band": "High"
+      },
+      "event_day": {
+        "date": "2021-06-08",
+        "rain_24h": 4.2,
+        "rain_7d": 147.5,
+        "rain_30d": 470.2,
+        "soil_moisture": 0.271,
+        "ndvi": 0.322,
+        "p_raw": 0.694,
+        "p_cal": 0.7797,
+        "score": 78.0,
+        "band": "High"
+      }
+    },
+    {
+      "id": "nh10-oct2022",
+      "title": "NH-10 19/20 Mile blockade, 9 Oct 2022",
+      "site": "NH-10 19/20 Mile, Singtam-Rangpo (14th Mile one-way, 32 Mile blocked)",
+      "event_date": "2022-10-09",
+      "event_date_fuzzy": null,
+      "event_note": "Boulders jammed NH-10 at 19/20 Mile + 32 Mile; Sikkim cut off from India; hundreds stranded 3+ hrs; 200 tourists stranded statewide by Oct 12; Rateychu pipeline burst -> Greater Gangtok water crisis. Post-monsoon (October) case.",
+      "sources": [
+        "Economic Times 2022-10-09",
+        "IndiaTodayNE 2022-10-09",
+        "The Hindu 2022-10-12",
+        "Outlook 2022-10-12",
+        "HT 2022-10-13 (600+ rescued, IMD red alert had been issued)"
+      ],
+      "terrain_analogue_row": "T1025",
+      "analogue_distance_m": 448.7,
+      "analogue_lulc": "FOREST",
+      "analogue_was_training_positive": true,
+      "soil_source": "matrix quasi-static",
+      "ndvi_source": "S2 2022-10-01",
+      "ndvi_value": 0.891,
+      "imd_cell": [
+        27.25,
+        88.5
+      ],
+      "first_moderate": {
+        "date": "2022-09-24",
+        "score": 68.2
+      },
+      "first_high": {
+        "date": null,
+        "score": null
+      },
+      "first_critical": {
+        "date": null,
+        "score": null
+      },
+      "peak": {
+        "date": "2022-09-24",
+        "score": 68.2,
+        "band": "Moderate"
+      },
+      "event_day": {
+        "date": "2022-10-09",
+        "rain_24h": 68.8,
+        "rain_7d": 146.0,
+        "rain_30d": 455.0,
+        "soil_moisture": 0.271,
+        "ndvi": 0.891,
+        "p_raw": 0.508,
+        "p_cal": 0.6817,
+        "score": 68.2,
+        "band": "Moderate"
+      }
+    }
+  ]
+}
