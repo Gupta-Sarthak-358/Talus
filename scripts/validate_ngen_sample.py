@@ -7,7 +7,7 @@ What it checks (beginner-friendly):
 - Required fields are not empty, numeric fields are numbers, categorical fields are text.
 - No uppercase FILL placeholder remains (honesty check).
 - Manifest is valid JSON, declares Gangtok pilot + EPSG:4326, and does not claim not_available sources as real.
-- Always warns that non-IMD values are STUB/demo (S1 rainfall is REAL-verified, see NGEN_PROVENANCE_S1.md).
+- Prints verification note: all 17 science features are REAL/PROXY-verified (no STUBs remain); drain density is PROXY-window (measured), see NGEN_PROVENANCE_S1.md.
 
 Usage:
   python scripts/validate_ngen_sample.py
@@ -247,15 +247,15 @@ def main() -> int:
     validate_csv(args.csv, errors)
     validate_manifest(args.manifest, errors)
 
-    # 14: always print STUB/demo warning — never hide that this is not scientific data
+    # 14: verification note — STUBs are now closed (no STUBs remain)
     print()
     print("=" * 72)
-    print("WARNING: This sample is PARTLY stub: S1-S4 rainfall (24h/7d/30d),")
-    print("road/river distances, NDVI, LULC, all six DEM derivatives, soil")
-    print("moisture, lithology, lineament and labels are REAL/PROXY-verified")
-    print("(IMD/Overpass/Sentinel-2/WorldCover/USGS/CCI/NESAC/Bhuvan/Bhusanket);")
-    print("drain density is PROXY (measured window).")
-    print("See docs/sih26001/NGEN_PROVENANCE_S1.md.")
+    print("NOTE: All 17 science features are REAL/PROXY-verified (no STUBs remain):")
+    print("S1-S4 rainfall (24h/7d/30d), road/river distances, NDVI, LULC, all six")
+    print("DEM derivatives, soil moisture, lithology, lineament and labels are")
+    print("REAL/PROXY-verified (IMD/Overpass/Sentinel-2/WorldCover/USGS/CCI/")
+    print("NESAC/Bhuvan/Bhusanket); drain density is PROXY-window (measured).")
+    print("See docs/sih26001/NGEN_PROVENANCE_S1.md for per-feature pedigree.")
     print("=" * 72)
     print()
 
