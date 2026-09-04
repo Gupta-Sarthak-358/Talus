@@ -6,17 +6,10 @@ import { Navigation, X, Play, MapPin, Compass, ShieldAlert } from 'lucide-react'
 const ROUTE_PRESETS = [
   {
     key: 'worker_zoneA_to_ap1',
-    label: 'Zone A Crew → Assembly Point 1',
-    origin: 'Zone A (Excavator Site 4)',
-    destination: 'Assembly Point 1 (South Safe Zone)',
-    threatAvoided: 'Zone B Highwall Hazard',
-  },
-  {
-    key: 'truck_zoneB_to_workshop',
-    label: 'Zone B Hauler → Maintenance Workshop',
-    origin: 'Zone B (Haul Truck #12)',
-    destination: 'Maintenance Workshop',
-    threatAvoided: 'Zone B Unstable Toe Corridor',
+    label: 'S1 Tathangchen → S4 Ranipool Staging',
+    origin: 'S1 Tathangchen (Upper Hillside)',
+    destination: 'S4 Ranipool (Valley Staging & Egress)',
+    threatAvoided: 'At-Risk Ridge Segment R2 & S1 Slope',
   },
 ];
 

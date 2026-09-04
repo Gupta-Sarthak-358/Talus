@@ -58,6 +58,17 @@ export default function SimulationDiffCard({ simulationResult, baselineZone }) {
         </div>
       </div>
 
+      {/* Required Caveat Badge (Contract Screen 3) */}
+      <div className="p-2.5 bg-amber-500/15 border border-amber-500/30 rounded-xl text-amber-300 flex items-start gap-2">
+        <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+        <div className="text-[11px] leading-snug">
+          <span className="font-bold uppercase tracking-wider text-[10px] block text-amber-400">
+            ML Counterfactual Caveat Badge:
+          </span>
+          {simulationResult.caveat || 'Counterfactual only — single-feature override breaks correlations. Causal questions use the threshold engine.'}
+        </div>
+      </div>
+
       {/* Explanation Text */}
       <p className="text-[11px] text-mine-text leading-relaxed">
         {explanationText}

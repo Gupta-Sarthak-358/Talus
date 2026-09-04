@@ -15,9 +15,14 @@ function cap(s) {
   return String(s || '').charAt(0).toUpperCase() + String(s || '').slice(1).toLowerCase();
 }
 
-const ZONE_DISPLAY = { A: 'North Highwall', B: 'East Haulage & Toe', C: 'SW bench', D: 'NE bench' };
+const ZONE_DISPLAY = {
+  S1: 'Tathangchen (upper)',
+  S2: 'Chandmari (road-cut)',
+  S3: 'Tadong (mid)',
+  S4: 'Ranipool (valley)'
+};
 function mockName(id) {
-  return ZONE_DISPLAY[id] || 'bench';
+  return ZONE_DISPLAY[id] || 'slope';
 }
 
 export async function getRiskSummary() {
@@ -31,12 +36,12 @@ export async function getRiskSummary() {
 }
 
 function MOCK_FALLBACK_ZONES() {
-  // Offline fallback uses the real frozen-model outputs (seed-91 states).
+  // Frozen SIH26001 contract scores & bands
   return [
-    { id: 'A', risk_band: 'CRITICAL', confidence: 91, activePersonnel: 4 },
-    { id: 'B', risk_band: 'CRITICAL', confidence: 100, activePersonnel: 2 },
-    { id: 'C', risk_band: 'MODERATE', confidence: 44, activePersonnel: 6 },
-    { id: 'D', risk_band: 'CRITICAL', confidence: 95, activePersonnel: 0 },
+    { id: 'S1', risk_score: 89, risk_band: 'CRITICAL', confidence: 82, activePersonnel: 0 },
+    { id: 'S2', risk_score: 78, risk_band: 'HIGH', confidence: 74, activePersonnel: 0 },
+    { id: 'S3', risk_score: 66, risk_band: 'MODERATE', confidence: 61, activePersonnel: 0 },
+    { id: 'S4', risk_score: 52, risk_band: 'LOW', confidence: 58, activePersonnel: 0 },
   ];
 }
 
@@ -56,9 +61,7 @@ function summarize(zones) {
     lowCount,
     totalZones: zones.length,
     dataQualityConfidence: avgConfidence,
-    activePersonnelInHazard: bands
-      .filter((z) => z.band === 'HIGH' || z.band === 'CRITICAL')
-      .reduce((acc, z) => acc + (z.activePersonnel || 0), 0),
+    activePersonnelInHazard: 0,
     systemStatus: criticalCount > 0 ? 'CRITICAL_ALERT' : highCount > 0 ? 'HIGH_ALERT' : 'NORMAL_OPERATIONS',
   };
 }
@@ -78,9 +81,9 @@ export async function getAlerts() {
         alerts.push({
           id: `zone-${z.id}-${band.toLowerCase()}`,
           zoneId: z.id,
-          zoneName: `Zone ${z.id} — ${mockName(z.id)}`,
-          title: `${cap(band)} risk detected in Zone ${z.id}`,
-          summary: decision?.message || `Zone ${z.id} is ${band.toLowerCase()} risk`,
+          zoneName: `${z.id} — ${mockName(z.id)}`,
+          title: `${cap(band)} risk detected on ${z.id} (${mockName(z.id)})`,
+          summary: decision?.message || `${z.id} is ${band.toLowerCase()} risk`,
           severity: band,
           action: decision?.action || 'monitor',
           drivers: [],
@@ -93,14 +96,9 @@ export async function getAlerts() {
   }
 
   await simulateLatency(200);
+  const { MOCK_ALERTS } = await import('../data/mockData');
   return {
-    alerts: [
-      { id: 'zone-b-critical', zoneId: 'B', zoneName: 'Zone B — East Haulage & Toe',
-        title: 'Critical risk detected in Zone B',
-        summary: 'Zone B is critical risk', severity: 'CRITICAL',
-        action: 'prioritize inspection', drivers: [], acknowledged: false,
-        timestamp: new Date().toISOString() },
-    ],
+    alerts: MOCK_ALERTS,
   };
 }
 

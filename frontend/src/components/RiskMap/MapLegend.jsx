@@ -4,10 +4,16 @@ import { Layers, ChevronUp, ChevronDown, CheckSquare, Square } from 'lucide-reac
 
 const RISK_BAND_KEYS = [
   { label: 'CRITICAL (85–100)', color: '#c74732', border: 'border-[#c74732]', bg: 'bg-[#c74732]' },
-  { label: 'HIGH (66–84)', color: '#d96b24', border: 'border-[#d96b24]', bg: 'bg-[#d96b24]' },
-  { label: 'MODERATE (41–65)', color: '#d99a24', border: 'border-[#d99a24]', bg: 'bg-[#d99a24]' },
-  { label: 'LOW (21–40)', color: '#a68a3c', border: 'border-[#a68a3c]', bg: 'bg-[#a68a3c]' },
-  { label: 'VERY LOW (0–20)', color: '#5e7f3a', border: 'border-[#5e7f3a]', bg: 'bg-[#5e7f3a]' },
+  { label: 'HIGH (75–84)', color: '#d96b24', border: 'border-[#d96b24]', bg: 'bg-[#d96b24]' },
+  { label: 'MODERATE (65–74)', color: '#d99a24', border: 'border-[#d99a24]', bg: 'bg-[#d99a24]' },
+  { label: 'LOW (50–64)', color: '#a68a3c', border: 'border-[#a68a3c]', bg: 'bg-[#a68a3c]' },
+  { label: 'VERY LOW (<50)', color: '#5e7f3a', border: 'border-[#5e7f3a]', bg: 'bg-[#5e7f3a]' },
+];
+
+const ROAD_LEGEND = [
+  { label: 'R1 Blocked (Debris)', color: '#c74732', dash: 'dotted' },
+  { label: 'R2 At-Risk (Avoided)', color: '#d97706', dash: 'dashed' },
+  { label: 'R3 / R4 Open', color: '#5e7f3a', dash: 'solid' },
 ];
 
 export default function MapLegend() {
@@ -23,7 +29,7 @@ export default function MapLegend() {
       >
         <div className="flex items-center gap-1.5 font-semibold text-mine-text">
           <Layers className="w-3.5 h-3.5 text-talus-600" />
-          <span>Mine Map GIS Layers</span>
+          <span>Landslide GIS Layers</span>
         </div>
         {isExpanded ? (
           <ChevronDown className="w-3.5 h-3.5 text-mine-muted" />
@@ -37,7 +43,7 @@ export default function MapLegend() {
           {/* Risk Color Scales */}
           <div>
             <div className="text-[10px] font-semibold uppercase tracking-wider text-mine-muted mb-1.5">
-              Operational Risk Bands
+              Susceptibility Risk Bands
             </div>
             <div className="space-y-1">
               {RISK_BAND_KEYS.map((b) => (
@@ -47,6 +53,24 @@ export default function MapLegend() {
                     style={{ backgroundColor: b.color }}
                   ></span>
                   <span className="font-mono text-mine-text">{b.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Road Network Legend */}
+          <div>
+            <div className="text-[10px] font-semibold uppercase tracking-wider text-mine-muted mb-1.5">
+              Road Network (R1–R4)
+            </div>
+            <div className="space-y-1">
+              {ROAD_LEGEND.map((r) => (
+                <div key={r.label} className="flex items-center gap-2 text-[11px]">
+                  <span
+                    className="w-4 h-1 rounded-sm shrink-0"
+                    style={{ backgroundColor: r.color }}
+                  ></span>
+                  <span className="text-mine-text">{r.label}</span>
                 </div>
               ))}
             </div>

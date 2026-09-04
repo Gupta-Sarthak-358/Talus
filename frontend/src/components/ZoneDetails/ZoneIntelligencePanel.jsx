@@ -43,12 +43,12 @@ export default function ZoneIntelligencePanel() {
         <div className="flex items-center justify-between text-[11px] font-semibold text-mine-muted uppercase tracking-wider">
           <span className="flex items-center gap-1.5">
             <MapPin className="w-3.5 h-3.5 text-talus-600" />
-            <span>Select Pit Sector</span>
+            <span>Select Slope Sector</span>
           </span>
-          <span className="text-[10px] text-mine-muted font-mono">{zones.length} Sectors Monitored</span>
+          <span className="text-[10px] text-mine-muted font-mono">{zones.length} Slopes Monitored (S1–S4)</span>
         </div>
 
-        <div className="grid grid-cols-5 gap-1.5">
+        <div className="grid grid-cols-4 gap-2">
           {zones.map((z) => {
             const isSelected = z.id === selectedZoneId;
             const isCriticalOrHigh = z.risk_band === 'CRITICAL' || z.risk_band === 'HIGH';
@@ -57,15 +57,15 @@ export default function ZoneIntelligencePanel() {
               <button
                 key={z.id}
                 onClick={() => selectZone(z.id)}
-                className={`py-1.5 px-2 rounded-lg text-xs font-bold font-mono transition-all flex flex-col items-center justify-center relative ${
+                className={`py-2 px-2 rounded-lg text-xs font-bold font-mono transition-all flex flex-col items-center justify-center relative ${
                   isSelected
                     ? 'bg-talus-600 text-white shadow-sm border border-talus-700'
                     : 'bg-mine-darker hover:bg-mine-dark text-mine-text border border-mine-border'
                 }`}
               >
-                <span>Zone {z.id}</span>
+                <span>Slope {z.id}</span>
                 <span
-                  className={`text-[9px] font-normal ${
+                  className={`text-[10px] font-semibold ${
                     z.risk_band === 'CRITICAL'
                       ? 'text-risk-critical font-bold'
                       : z.risk_band === 'HIGH'
@@ -90,9 +90,9 @@ export default function ZoneIntelligencePanel() {
       <div className="border-t border-mine-border pt-3 flex flex-wrap items-center justify-between gap-2">
         <div>
           <div className="text-[11px] text-talus-600 font-bold uppercase tracking-wider flex items-center gap-1.5">
-            <span>{zone.sector || 'Open-Pit Highwall'}</span>
+            <span>{zone.sector || 'Gangtok Slope Cluster'}</span>
             <ChevronRight className="w-3 h-3 text-mine-muted" />
-            <span className="text-mine-muted">{zone.benches || 'Benches 05–08'}</span>
+            <span className="text-mine-muted">{zone.benches || 'Elevation 1,450m – 1,820m'}</span>
           </div>
           <h2 className="text-lg font-extrabold text-mine-text tracking-tight mt-0.5">
             {zone.name}

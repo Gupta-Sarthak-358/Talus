@@ -67,7 +67,7 @@ export default function RouteComparisonCard({ routePlan }) {
           <div>
             <div className="text-sm font-bold text-mine-text">{riskAwareRoute.name}</div>
             <div className="text-[11px] text-risk-verylow mt-0.5">
-              Avoids all active highwall hazard sectors
+              Avoids at-risk segment R2 and high-risk slopes
             </div>
           </div>
 

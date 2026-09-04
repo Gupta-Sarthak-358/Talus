@@ -4,6 +4,8 @@ import RiskSummaryCards from '../components/RiskSummary/RiskSummaryCards';
 import QuickStatsBar from '../components/RiskSummary/QuickStatsBar';
 import MineMap from '../components/RiskMap/MineMap';
 import ZoneIntelligencePanel from '../components/ZoneDetails/ZoneIntelligencePanel';
+import RoadStatusCard from '../components/Routing/RoadStatusCard';
+import ReportModal from '../components/Reports/ReportModal';
 import WhatIfDrawer from '../components/Simulation/WhatIfDrawer';
 import SafeRouteModal from '../components/Routing/SafeRouteModal';
 import CvCrackModal from '../components/ComputerVision/CvCrackModal';
@@ -31,20 +33,24 @@ export default function Dashboard() {
 
       {/* 3. Main Command Center Grid: Map (Left) + Zone Intelligence (Right) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
-        {/* Left: Interactive Mine GIS Map & Routing (7 cols on large displays) */}
+        {/* Left: Interactive Landslide GIS Map & Routing (7 cols on large displays) */}
         <div className="lg:col-span-7 xl:col-span-7 h-[640px] xl:h-[720px] sticky top-20">
           <MineMap />
         </div>
 
-        {/* Right: Selected Zone Risk Intelligence & Decision Actions (5 cols) */}
+        {/* Right: Selected Slope Risk Intelligence & Decision Actions (5 cols) */}
         <div className="lg:col-span-5 xl:col-span-5 space-y-4">
           <ZoneIntelligencePanel />
         </div>
       </div>
 
+      {/* 4. Road Network Status (R1-R4) with R2 Avoidance */}
+      <RoadStatusCard />
+
       {/* Drawers & Modals */}
       <WhatIfDrawer />
       <SafeRouteModal />
+      <ReportModal />
       <CvCrackModal />
       <AlertPanel />
     </main>

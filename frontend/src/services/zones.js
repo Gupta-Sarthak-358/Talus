@@ -56,14 +56,12 @@ export async function getZones() {
       geometry: geo ? { coordinates: geo.coordinates, centroid: geo.centroid, benches: geo.benches } : null,
     };
   });
-  // Offline fallback still shows the FROZEN model's outputs for the seed-91
-  // states -- mock telemetry is illustrative, but scores/bands/confidence
-  // must never contradict the real model.
+  // Frozen SIH26001 contract outputs
   const REAL = {
-    A: { score: 89, band: 'CRITICAL', confidence: 91 },
-    B: { score: 100, band: 'CRITICAL', confidence: 100 },
-    C: { score: 66, band: 'MODERATE', confidence: 44 },
-    D: { score: 99, band: 'CRITICAL', confidence: 95 },
+    S1: { score: 89, band: 'CRITICAL', confidence: 82 },
+    S2: { score: 78, band: 'HIGH', confidence: 74 },
+    S3: { score: 66, band: 'MODERATE', confidence: 61 },
+    S4: { score: 52, band: 'LOW', confidence: 58 },
   };
   mergedZones.forEach((z) => {
     const r = REAL[z.id];
@@ -91,7 +89,7 @@ export async function getZoneById(zoneId) {
         header: `${d.role.replace(/_/g, ' ').toUpperCase()} — ${d.priority} priority`,
         action: d.message,
         caution: d.action,
-        routeRecommended: d.role === 'worker' || d.role === 'rescue_team',
+        routeRecommended: d.role === 'villager' || d.role === 'rescue_team',
         urgency: d.priority === 'immediate' ? 'Immediate Action'
                : d.priority === 'high' ? 'High Priority'
                : d.priority === 'standby' ? 'Standby' : 'Operational',
@@ -111,33 +109,29 @@ export async function getZoneById(zoneId) {
       updated_at: detail.updated_at,
       missingEvidence: missing_evidence,
       missing_evidence,
-      role_actions,
+      role_actions: Object.keys(role_actions).length > 0 ? role_actions : mock.role_actions,
       telemetry: {
         ...(mock.telemetry || {}),
-        slope_angle: f.slope_angle_deg,
-        rock_type: f.rock_type,
-        crack_density: f.crack_density,
+        slope_angle: f.slope_angle,
         rainfall_24h: f.rainfall_24h_mm,
-        blast_vibration_ppv: f.blast_vibration_ppv_mms,
-        groundwater_proxy: f.groundwater_proxy,
+        rainfall_7d: f.rainfall_7d_mm,
+        rainfall_30d: f.rainfall_30d_mm,
+        soil_moisture: f.soil_moisture,
       },
       shap: (explanation?.contributions || []).map((c) => ({
         feature: c.feature,
-        value: c.shap_value,
-        rawValue: `${c.shap_value > 0 ? '+' : ''}${c.shap_value}`,
-        description: c.shap_value > 0 ? 'increases predicted risk' : 'decreases predicted risk',
+        value: c.shap_value ?? c.shap,
+        rawValue: `${(c.shap_value ?? c.shap) > 0 ? '+' : ''}${c.shap_value ?? c.shap}`,
+        description: (c.shap_value ?? c.shap) > 0 ? 'increases predicted risk' : 'decreases predicted risk',
       })),
       shapBaseValue: explanation?.base_value ?? null,
       trend: {
         direction: trend?.rapid_increase ? 'rapidly_increasing' : 'stable',
         rapid: !!trend?.rapid_increase,
-        // Real daily series from the frozen corpus (365 days) when available;
-        // falls back to session prediction logs otherwise.
-        history: (history?.points || []).map((p) => ({
-          time: p.date, risk: p.score, label: `${p.date} (FoS ${p.fos})`,
-          fos: p.fos, risk_label: p.risk_label,
+        history: (trend?.history || []).map((p) => ({
+          time: p.t, risk: p.risk_score, label: p.t,
         })),
-        historySource: (history?.points || []).length > 0 ? 'frozen_corpus_daily' : 'session_log',
+        historySource: 'scaffold_fixture',
       },
     };
     // Context consumers read result.zone -- wrap while keeping fields at top level.
@@ -150,8 +144,9 @@ export async function getZoneById(zoneId) {
     throw Object.assign(new Error(`Zone ${zoneId} not found`), { status: 404 });
   }
   const geo = MINE_ZONES_GEOJSON.find((g) => g.id === zoneId);
-  return {
+  const richOffline = {
     ...zone,
     geometry: geo ? { coordinates: geo.coordinates, centroid: geo.centroid, benches: geo.benches } : null,
   };
+  return { zone: richOffline, ...richOffline };
 }
