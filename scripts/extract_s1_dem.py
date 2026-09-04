@@ -171,7 +171,10 @@ def main() -> None:
         + mosaic[y0 + 1, x0] * (1 - fx) * fy + mosaic[y0 + 1, x0 + 1] * fx * fy
     )
 
-    # Horn (1981) slope/aspect on 3x3 at nearest pixel
+    # Horn (1981) slope/aspect on 3x3 at nearest pixel. Aspect is the
+    # DOWNSLOPE direction clockwise from north: atan2(-dzdx, dzdy).
+    # (atan2(dzdx, -dzdy) gives the UPHILL direction, 180 deg off — fixed
+    # 2026-09-04 after independent re-derivation from the committed window.)
     z = mosaic[iy - 1:iy + 2, ix - 1:ix + 2]
     dzdx = ((z[0, 2] + 2 * z[1, 2] + z[2, 2]) - (z[0, 0] + 2 * z[1, 0] + z[2, 0])) / (8 * dx_m)
     dzdy = ((z[2, 0] + 2 * z[2, 1] + z[2, 2]) - (z[0, 0] + 2 * z[0, 1] + z[0, 2])) / (8 * dx_m)
@@ -179,7 +182,7 @@ def main() -> None:
     if slope < 0.5:
         aspect = 0.0
     else:
-        aspect = (math.degrees(math.atan2(dzdx, -dzdy)) + 360.0) % 360.0
+        aspect = (math.degrees(math.atan2(-dzdx, dzdy)) + 360.0) % 360.0
 
     # Laplacian curvature (central differences), 1/m
     d2x = (mosaic[iy, ix + 1] - 2 * mosaic[iy, ix] + mosaic[iy, ix - 1]) / dx_m**2

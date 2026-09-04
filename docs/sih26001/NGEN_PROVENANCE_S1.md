@@ -33,7 +33,7 @@ science features remain STUB/demo.
 
 **CSV row (verbatim, `feature_matrix.sample.csv:2`):**
 ```
-S1,2024-06-16,22.1,1287,68,-0.0395,8.1,12.4,14.0,327.3,712.2,0.42,0.35,BUILT,schist,4,226,1.8,2.1,1,1,dated
+S1,2024-06-16,22.1,1287,248,-0.0395,8.1,12.4,14.0,327.3,712.2,0.42,0.35,BUILT,schist,4,226,1.8,2.1,1,1,dated
 ```
 Extraction (Person 1): `scripts/extract_gangtok_rainfall.py` (xarray nearest grid
 27.25N 88.50E to S1 27.3450N 88.6000E, ~13 km — 0.25° representativeness limit
@@ -51,8 +51,13 @@ roadside — the old 45 m STUB understated this); nearest waterway = unnamed
 stream OSM-129509880 at **226 m**. `scripts/extract_s1_dem.py` (z15 3×3
 Terrarium mosaic, Horn-1981 + Laplacian, bilinear at exact S1) →
 `data/processed/terrain/s1_dem_window.csv` (64×64 audit grid, sha256 in
-manifest): elevation **1287 m**, slope **22.1°**, aspect **68°** (ENE),
-curvature **−0.0395/m** (convex spur). Cross-check: same mosaic reads
+manifest): elevation **1287 m**, slope **22.1°**, aspect **248°** (WSW,
+downslope), curvature **−0.0395/m** (convex spur). Independently re-derived
+from the committed window (2026-09-04: slope 22.1 ✓, aspect 247.8→248 ✓,
+elev 1287.5 ✓). NOTE: first version shipped aspect 68° (uphill convention,
+atan2(dzdx,−dzdy) — 180° off); corrected to downslope atan2(−dzdx,dzdy) in
+`extract_s1_dem.py`, which is now self-consistent with the westward fall
+toward the stream. Cross-check: same mosaic reads
 Gangtok centre (27.3389,88.6065) at 1509 m vs ~1600–1650 nominal — grid
 trusted within SRTM steep-terrain limits; westward fall toward the stream
 (226 m) is internally consistent. TWI/SPI stay STUB (catchment flow routing
@@ -74,7 +79,7 @@ no Bhusanket Sikkim join exists, so `previous_landslide`/`event` stay STUB
 | — | `time_window` | 2024-06-16 | REAL (rainfall window) | Wettest trailing-7d spell end, IMD 2024 extraction (above) | Event-occurrence at S1 still unproven — see rows 18–19 |
 | 1 | `slope_angle` | 22.1 | PROXY (mirror) | Horn-1981 on z15 Terrarium mosaic, `s1_dem_window.csv` + `extract_s1_dem.py` | USGS N27E088 tile → re-derive, replace |
 | 2 | `elevation` | 1287 | PROXY (mirror) | Bilinear at exact S1 from same mosaic; town-centre cross-check 1509 m (§2) | Same USGS tile |
-| 3 | `aspect` | 68 | PROXY (mirror) | Horn aspect ENE, same mosaic | Same USGS tile |
+| 3 | `aspect` | 248 | PROXY (mirror) | Horn downslope aspect WSW (247.8), same mosaic; 68° uphill version corrected 2026-09-04 | Same USGS tile |
 | 4 | `curvature` | -0.0395 | PROXY (mirror) | Laplacian central differences, same mosaic | Same USGS tile |
 | 5 | `twi` | 8.1 | STUB/demo | Derived from DEM | Same SRTM tile + TWI calc |
 | 6 | `spi` | 12.4 | STUB/demo | Derived from DEM | Same SRTM tile + SPI calc |
