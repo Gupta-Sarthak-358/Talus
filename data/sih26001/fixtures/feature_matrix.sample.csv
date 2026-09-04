@@ -1,5 +1,5 @@
 zone_id,time_window,slope_angle,elevation,aspect,curvature,twi,spi,rainfall_24h_mm,rainfall_7d_mm,rainfall_30d_mm,soil_moisture,ndvi,lulc,lithology,distance_to_road,distance_to_river,lineament_density,drain_density,previous_landslide,event,evidence_quality
-S1,2024-06-16,28.5,1290,289,0.0111,5.99,120.9,14.0,327.3,712.2,0.271,0.718,BUILT,schist,4,226,1.8,0.0,0,0,dated-only-negative
-S2,2024-06-16,11.3,1642,219,0.0003,4.85,5.9,14.0,327.3,712.2,0.271,0.139,ROAD,phyllite,6,183,1.5,1.9,1,0,approximate
-S3,2024-06-16,36.7,1374,281,0.0167,5.55,144.2,14.0,327.3,712.2,0.271,0.817,AGRI,gneiss,126,1093,1.1,1.6,0,0,dated-only-negative
-S4,2024-06-16,18.2,1136,290,0.0048,8.97,882.5,14.0,327.3,712.2,0.271,0.468,FOREST,sandstone,66,460,0.6,1.2,0,0,dated-only-negative
+S1,2024-06-16,28.5,1290,289,0.0111,5.99,120.9,14.0,327.3,712.2,0.271,0.718,FOREST,schist,4,226,1.8,0.0,0,0,dated-only-negative
+S2,2024-06-16,11.3,1642,219,0.0003,4.85,5.9,14.0,327.3,712.2,0.271,0.139,BUILT,phyllite,6,183,1.5,1.9,1,0,approximate
+S3,2024-06-16,36.7,1374,281,0.0167,5.55,144.2,14.0,327.3,712.2,0.271,0.817,FOREST,gneiss,126,1093,1.1,1.6,0,0,dated-only-negative
+S4,2024-06-16,18.2,1136,290,0.0048,8.97,882.5,14.0,327.3,712.2,0.271,0.468,BUILT,sandstone,66,460,0.6,1.2,0,0,dated-only-negative
