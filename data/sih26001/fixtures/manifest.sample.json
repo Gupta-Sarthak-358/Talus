@@ -19,13 +19,16 @@
       "window_rule": "wettest trailing-7d spell of 2024 at pilot cell",
       "date": "2026-09-04"
     },
-    "era5_soil": {
-      "version": "ERA5-volumetric",
-      "clip": "pilot-period",
-      "status": "not_available",
-      "date": null,
-      "proxy_tag": "reanalysis-proxy",
-      "attempt": "2026-09-04 Person-3: no ~/.cdsapirc, no cdsapi on either python; CDS account wall stands. Logged skip per handoff."
+    "cci_soil": {
+      "version": "ESA CCI SM COMBINED TCDR v202505 (DOI 10.24381/cds.d7782f18)",
+      "status": "available",
+      "source": "CDS user download 2026-09-04 (user-selected: volumetric, combined, daily, June 10-16 2024)",
+      "raw": "data/raw/soil/C3S-SOILMOISTURE-*-DAILY-*.nc, 7 daily global files (LOCAL ONLY per .gitignore)",
+      "file": "data/processed/soil/gangtok_soil_cci.csv",
+      "extract_script": "scripts/extract_soil_cci.py (xarray, system py311)",
+      "method": "nearest 0.25-degree cell (27.375,88.625) per slope per day; reliability-killer flag bits 4|8|16|32 masked (none hit: 7/7 valid, flags=[0]); window-mean per slope = 0.271 all slopes (same-cell consequence, stated)",
+      "note": "satellite-observed (stronger than ERA5 reanalysis); CDS-request path for ERA5 proper was never needed",
+      "date": "2026-09-04"
     },
     "srtm_dem": {
       "version": "USGS SRTM 1 Arc-Second Global v3 (SRTMGL1.003) — REAL, mirror superseded 2026-09-04",
@@ -99,6 +102,8 @@
     "s1_sentinel2.json": "sha256:E5E6F8B0FD4B2A1FE39B48456BF51FE051BEB2FC7D5EDAB2D827D44306D7EEC6",
     "s1_drain_window.json": "sha256:0A5D19154B4C28B40ED81ECED2A497076B859E7A165BF966A04F9E33A826E67C",
     "usgs_s234.json": "sha256:B456C95E51DB747FB9A73CAC92F882F645476E20E2C331FE08A7BBA07C15DC",
+    "gangtok_soil_cci.csv": "sha256:BBFBE01B40905176081A3BB60F79F62E18820D958DC454201F483FB7F8E98272",
+    "gangtok_soil_cci.meta.json": "sha256:595390CB7846750B2AFB38FC65443D0DB89138A2880DA5711556FBF1DFF6EB63",
     "catchment_s234.json": "sha256:59005868617CC248964EBA25977B4D563B9BA8A6359EAB77C54EBD392C630E70",
     "s234_ndvi.json": "sha256:8BACD19C3113314AFD60893690C7A82995FDABB2F07276E26CDD8E7E278",
     "s234_landuse.json": "sha256:3654269AE5B6BDED8A8846112FDE017A80F48417A4FA93D00DF85177A514",

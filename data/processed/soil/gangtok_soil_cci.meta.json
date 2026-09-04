@@ -1,0 +1,57 @@
+{
+  "source": "ESA CCI SM COMBINED TCDR v202505 (CDS, user download 2026-09-04)",
+  "doi": "10.24381/cds.d7782f18",
+  "units": "m3/m3 used as-is (0-1)",
+  "grid": "0.25-degree nearest-cell (same representativeness caveat as IMD)",
+  "kill_bits": "4|8|16|32 masked as missing; other flags kept but logged",
+  "window": [
+    "2024-06-10",
+    "2024-06-16"
+  ],
+  "row_values": {
+    "S1": {
+      "window_mean": 0.271,
+      "valid_days": "7/7",
+      "cell": [
+        27.375,
+        88.625
+      ],
+      "flags_seen": [
+        0
+      ]
+    },
+    "S2": {
+      "window_mean": 0.271,
+      "valid_days": "7/7",
+      "cell": [
+        27.375,
+        88.625
+      ],
+      "flags_seen": [
+        0
+      ]
+    },
+    "S3": {
+      "window_mean": 0.271,
+      "valid_days": "7/7",
+      "cell": [
+        27.375,
+        88.625
+      ],
+      "flags_seen": [
+        0
+      ]
+    },
+    "S4": {
+      "window_mean": 0.271,
+      "valid_days": "7/7",
+      "cell": [
+        27.375,
+        88.625
+      ],
+      "flags_seen": [
+        0
+      ]
+    }
+  }
+}

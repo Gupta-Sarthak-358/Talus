@@ -56,12 +56,14 @@ data/synthetic/*
 !data/processed/blasting/
 !data/processed/cracks/
 !data/processed/crack_features/
+!data/processed/soil/
 !data/synthetic/v1/
 
 # re-ignore bulk dataset files (they stay out of git)
 data/raw/imd/*
 data/raw/dem/*
 data/raw/crack_seg/*
+data/raw/soil/*
 
 # whitelist only small metadata/docs/schema/sample files inside data dirs
 !data/**/.gitkeep
