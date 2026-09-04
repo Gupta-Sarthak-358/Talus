@@ -68,5 +68,53 @@
       "reason": "nearest slide SK/ESK/78A11/2018/001 at 1156.4 m, outside 300 m"
     }
   },
-  "queried_at": "2026-09-04T11:49:39Z"
+  "queried_at": "2026-09-04T11:49:39Z",
+  "report_pdf": {
+    "source": "data/raw/landslide_report.pdf (LOCAL ONLY per .gitignore, 904 pp)",
+    "pages": "p659-676 Sikkim block (first SK Sl.26052 p659; p677 Tripura)",
+    "extract_script": "scripts/extract_sikkim_report.py",
+    "extract_csv": "data/sih26001/evidence/sikkim_report_gangtok.csv",
+    "window": [
+      "2024-06-10",
+      "2024-06-16"
+    ],
+    "buffer_m": 300.0,
+    "corroboration": {
+      "S1": {
+        "pdf_slide_no": "SI/GTK/78A11/2025/03",
+        "pdf_sl_no": "26813",
+        "pdf_name": "Upper Sichey Landslide",
+        "dist_m": 1219.2,
+        "prev_stays": 0,
+        "verdict": "stays 0 (nearest PDF row Sl.26813 at 1219.2 m, outside 300 m)"
+      },
+      "S2": {
+        "pdf_slide_no": "SI/GTK/78A11/2025/03",
+        "pdf_sl_no": "26813",
+        "pdf_name": "Upper Sichey Landslide",
+        "dist_m": 259.5,
+        "prev_stays": 1,
+        "verdict": "corroborates prev=1 (second ID SI/GTK/78A11/2025/03 Sl.26813)"
+      },
+      "S3": {
+        "pdf_slide_no": "SKM/Gangtok/78A11/2022",
+        "pdf_sl_no": "26787",
+        "pdf_name": "Lumsay Slide",
+        "dist_m": 1102.2,
+        "prev_stays": 0,
+        "verdict": "stays 0 (nearest PDF row Sl.26787 at 1102.2 m, outside 300 m)"
+      },
+      "S4": {
+        "pdf_slide_no": "SKM/Gangtok/78A11/2022",
+        "pdf_sl_no": "26787",
+        "pdf_name": "Lumsay Slide",
+        "dist_m": 1261.0,
+        "prev_stays": 0,
+        "verdict": "stays 0 (nearest PDF row Sl.26787 at 1261.0 m, outside 300 m)"
+      }
+    },
+    "event_note": "all seven histories (Jun 2022, Aug/Oct 2022, Mar 2023, Aug 2024, Jun 2024, Jul 2025 x2) lie outside 2024-06-10/16 -> event stays 0 with reason logged",
+    "join_unchanged": true,
+    "extracted_at": "2026-09-04T12:02:08Z"
+  }
 }
