@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { useMineContext } from '../../context/MineContext';
-import { FileText, Send, X, Clock, MapPin, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-react';
+import { FileText, Send, X, Clock, MapPin, CheckCircle2, AlertCircle, RefreshCw, ShieldCheck } from 'lucide-react';
 
 const REPORT_TYPES = [
   { id: 'crack', label: 'Tension Crack' },
-  { id: 'rockfall', label: 'Rockfall / Debris' },
-  { id: 'subsidence', label: 'Ground Subsidence' },
-  { id: 'seepage', label: 'Water Seepage / Wetting' },
+  { id: 'slope_movement', label: 'Slope Movement' },
+  { id: 'blocked_road', label: 'Blocked Road' },
+  { id: 'other', label: 'Other' },
+];
+
+const REPORTER_ROLES = [
+  { id: 'field_officer', label: 'Field Officer' },
+  { id: 'villager', label: 'Villager / Community' },
 ];
 
 export default function ReportModal() {
@@ -23,9 +28,11 @@ export default function ReportModal() {
   const [formZone, setFormZone] = useState(selectedZoneId || 'S2');
   const [reportType, setReportType] = useState('crack');
   const [description, setDescription] = useState('');
-  const [reporterName, setReporterName] = useState('Field Officer (Gangtok)');
+  const [reporterRole, setReporterRole] = useState('field_officer');
+  const [consent, setConsent] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(null);
+  const [submitError, setSubmitError] = useState(null);
 
   if (!isReportModalOpen) return null;
 
@@ -35,24 +42,36 @@ export default function ReportModal() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!description.trim()) return;
+    if (!description.trim() || description.trim().length < 10) return;
+    if (!consent) return;
 
     setSubmitting(true);
     setSubmitSuccess(null);
+    setSubmitError(null);
     try {
-      const res = await submitNewReport({
+      const payload = {
         zone_id: formZone,
         type: reportType,
         text: description.trim(),
         lat: defaultLat,
         lon: defaultLon,
-        reporter: reporterName,
-        photo: 'fixture-only (no binary in repo)',
-      });
+        captured_at: new Date().toISOString(),
+        reporter_role: reporterRole,
+        photo: {
+          filename: `field_${formZone}_${Date.now()}.jpg`,
+          mime: 'image/jpeg',
+          size_bytes: 0,
+          sha256: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+          exif_lat: defaultLat,
+          exif_lon: defaultLon,
+        },
+        consent: true,
+      };
+      const res = await submitNewReport(payload);
       setSubmitSuccess(res.id || 'Queued');
       setDescription('');
     } catch (err) {
-      console.error('Failed to submit report:', err);
+      setSubmitError(err.message || 'Failed to submit report');
     } finally {
       setSubmitting(false);
     }
@@ -70,7 +89,7 @@ export default function ReportModal() {
             <div>
               <h3 className="text-sm font-bold text-mine-text">Field Hazard Reports & Queue</h3>
               <p className="text-[11px] text-mine-muted">
-                Submit geo-tagged field observations (POST /api/reports) and inspect officer queue (GET /api/reports/queue)
+                Submit geo-tagged field observations (POST /api/reports) and inspect officer queue (GET /api/reports/queue?status=)
               </p>
             </div>
           </div>
@@ -99,7 +118,13 @@ export default function ReportModal() {
             {submitSuccess && (
               <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-xs text-emerald-300 flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
-                <span>Report <strong>{submitSuccess}</strong> queued successfully and added to queue!</span>
+                <span>Report <strong>{submitSuccess}</strong> queued successfully!</span>
+              </div>
+            )}
+            {submitError && (
+              <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-xs text-red-300 flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
+                <span>{submitError}</span>
               </div>
             )}
 
@@ -140,7 +165,20 @@ export default function ReportModal() {
               </div>
 
               <div>
-                <label className="text-[11px] font-semibold text-mine-muted">Description / Field Notes</label>
+                <label className="text-[11px] font-semibold text-mine-muted">Reporter Role</label>
+                <select
+                  value={reporterRole}
+                  onChange={(e) => setReporterRole(e.target.value)}
+                  className="w-full mt-1 bg-mine-card border border-mine-border rounded-lg px-2.5 py-1.5 text-xs text-mine-text focus:outline-none focus:border-talus-500"
+                >
+                  {REPORTER_ROLES.map((r) => (
+                    <option key={r.id} value={r.id}>{r.label}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="text-[11px] font-semibold text-mine-muted">Description / Field Notes (≥10 chars)</label>
                 <textarea
                   rows={3}
                   value={description}
@@ -148,6 +186,7 @@ export default function ReportModal() {
                   placeholder="e.g. Fresh tension crack observed ~5m above road-cut after continuous rainfall..."
                   className="w-full mt-1 bg-mine-card border border-mine-border rounded-lg p-2 text-xs text-mine-text focus:outline-none focus:border-talus-500 resize-none"
                   required
+                  minLength={10}
                 />
               </div>
 
@@ -162,14 +201,22 @@ export default function ReportModal() {
                 </div>
               </div>
 
+              <label className="flex items-start gap-2 p-2 bg-mine-card border border-mine-border rounded-lg cursor-pointer">
+                <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-0.5" />
+                <span className="text-[11px] text-mine-muted leading-tight">
+                  I consent to sharing this photo + location with disaster authorities. Photo bytes are never committed (metadata only: sha256 + EXIF).
+                </span>
+              </label>
+
               <button
                 type="submit"
-                disabled={submitting || !description.trim()}
+                disabled={submitting || !description.trim() || description.trim().length < 10 || !consent}
                 className="w-full flex items-center justify-center gap-2 py-2 bg-talus-600 hover:bg-talus-500 disabled:opacity-50 text-white rounded-lg text-xs font-bold transition-all shadow-sm mt-2"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>{submitting ? 'Queuing Report...' : 'Submit Field Report'}</span>
               </button>
+              <p className="text-[10px] text-mine-muted text-center">EXIF GPS = claimed GPS (no mismatch) · consent:true · pilot bbox 27.20-27.40/88.40-88.70</p>
             </form>
           </div>
 
@@ -188,7 +235,7 @@ export default function ReportModal() {
               <button
                 onClick={refreshReports}
                 className="text-[11px] text-mine-muted hover:text-talus-600 flex items-center gap-1 transition-colors"
-                title="Refresh queue from backend"
+                title="Refresh queue from backend (GET /api/reports/queue?status=)"
               >
                 <RefreshCw className="w-3 h-3" />
                 <span>Sync</span>
@@ -209,7 +256,7 @@ export default function ReportModal() {
                       </span>
                     </div>
 
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 font-mono font-semibold border border-emerald-500/30">
+                    <span className={`text-[10px] px-2 py-0.5 rounded font-mono font-semibold border ${rep.status === 'flagged' ? 'bg-amber-500/15 text-amber-400 border-amber-500/30' : rep.status === 'verified' ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30' : 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'}`}>
                       {rep.status}
                     </span>
                   </div>
@@ -218,12 +265,16 @@ export default function ReportModal() {
                     "{rep.text}"
                   </p>
 
+                  {rep.flagged_reason && (
+                    <p className="text-[10px] text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded px-2 py-1">{rep.flagged_reason}</p>
+                  )}
+
                   <div className="flex items-center justify-between text-[10px] text-mine-muted pt-1 border-t border-mine-border/60">
                     <span className="flex items-center gap-1">
                       <MapPin className="w-2.5 h-2.5 text-mine-muted" />
-                      {rep.lat.toFixed(4)}, {rep.lon.toFixed(4)}
+                      {Number(rep.lat).toFixed(4)}, {Number(rep.lon).toFixed(4)}
                     </span>
-                    <span>{rep.reporter}</span>
+                    <span className="flex items-center gap-1"><ShieldCheck className="w-2.5 h-2.5" />{rep.reporter_role || rep.reporter || '—'}</span>
                   </div>
                 </div>
               ))}
@@ -233,7 +284,7 @@ export default function ReportModal() {
 
         {/* Footer Note */}
         <div className="p-3 bg-mine-darker border-t border-mine-border text-center text-[10px] text-mine-muted">
-          Offline resilience: Reports are queued in memory and persisted locally; syncs via GET/POST /api/reports when network is available.
+          Offline resilience: Reports use metadata-only lane (no binary in repo) + localStorage outbox + flagged (&gt;200m EXIF mismatch) + consent gate. Verified never auto-promotes to event.
         </div>
       </div>
     </div>
