@@ -1,38 +1,91 @@
 from __future__ import annotations
 
+import csv
+import json
 import math
 from datetime import datetime, timezone
+from pathlib import Path
 
 from . import model_service
 from .schemas import Features
 
-ZONE_NAMES = {
-    "A": "Zone A — SE bench",
-    "B": "Zone B — NW bench",
-    "C": "Zone C — SW bench",
-    "D": "Zone D — NE bench",
-}
+# Sept-5 scaffold: fixture dir + loaders. Zone identity (names, centers,
+# graph) comes from slopes.json — the frozen contract. Do not hand-edit
+# values here; edit the fixture + contract + validator instead.
+FIX = Path(__file__).resolve().parents[2] / "data" / "sih26001" / "fixtures"
 
-ZONE_GEOMETRY = {
-    "A": {"type": "Polygon", "coordinates": [[[80.10, 20.50], [80.13, 20.50], [80.13, 20.52], [80.10, 20.52], [80.10, 20.50]]]},
-    "B": {"type": "Polygon", "coordinates": [[[80.15, 20.53], [80.18, 20.53], [80.18, 20.55], [80.15, 20.55], [80.15, 20.53]]]},
-    "C": {"type": "Polygon", "coordinates": [[[80.10, 20.55], [80.13, 20.55], [80.13, 20.57], [80.10, 20.57], [80.10, 20.55]]]},
-    "D": {"type": "Polygon", "coordinates": [[[80.15, 20.57], [80.18, 20.57], [80.18, 20.59], [80.15, 20.59], [80.15, 20.57]]]},
-}
+
+def _load_json(name: str):
+    return json.loads((FIX / name).read_text(encoding="utf-8"))
+
+
+_SLOPES = _load_json("slopes.json")
+_FIXTURE_ZONES: dict[str, dict] = {z["zone_id"]: z for z in _SLOPES["zones"]}
+_FIXTURE_HISTORIES: dict[str, list[dict]] = _SLOPES.get("histories", {})
+
+
+def _load_feature_rows() -> dict[str, dict]:
+    """4-row NGEN-format sample (17 NER features + keys) keyed by zone."""
+    rows: dict[str, dict] = {}
+    with (FIX / "feature_matrix.sample.csv").open(newline="", encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            parsed: dict = {}
+            for k, v in row.items():
+                try:
+                    parsed[k] = int(v)
+                    continue
+                except ValueError:
+                    pass
+                try:
+                    parsed[k] = float(v)
+                except ValueError:
+                    parsed[k] = v
+            rows[row["zone_id"]] = parsed
+    return rows
+
+
+_FEATURE_ROWS = _load_feature_rows()
+
+ZONE_NAMES = {zid: z["name"] for zid, z in _FIXTURE_ZONES.items()}
 
 ZONE_CENTERS = {
-    "A": {"lat": 20.51, "lng": 80.115},
-    "B": {"lat": 20.54, "lng": 80.165},
-    "C": {"lat": 20.56, "lng": 80.115},
-    "D": {"lat": 20.58, "lng": 80.165},
+    zid: {"lat": z["geometry"]["lat"], "lng": z["geometry"]["lon"]}
+    for zid, z in _FIXTURE_ZONES.items()
 }
 
-GRAPH = {
-    "A": ["B", "C"],
-    "B": ["A", "D"],
-    "C": ["A", "D"],
-    "D": ["B", "C"],
+
+def _box(lat: float, lon: float, d: float = 0.002) -> dict:
+    return {
+        "type": "Polygon",
+        "coordinates": [[
+            [lon - d, lat - d], [lon + d, lat - d], [lon + d, lat + d],
+            [lon - d, lat + d], [lon - d, lat - d],
+        ]],
+    }
+
+
+ZONE_GEOMETRY = {
+    zid: _box(c["lat"], c["lng"]) for zid, c in ZONE_CENTERS.items()
 }
+
+# Fixture topology: S1:[S2,S3], S2:[S1,S3], S3:[S1,S2,S4], S4:[S3].
+# Routing S1->S4 can avoid S2 via S3.
+GRAPH = {
+    "S1": ["S2", "S3"],
+    "S2": ["S1", "S3"],
+    "S3": ["S1", "S2", "S4"],
+    "S4": ["S3"],
+}
+
+
+def fixture_zone(zone_id: str) -> dict | None:
+    """Raw fixture row for S1-S4 (score, band, SHAP, missing_evidence)."""
+    return _FIXTURE_ZONES.get(zone_id)
+
+
+def fixture_missing_evidence(zone_id: str) -> list[str]:
+    z = _FIXTURE_ZONES.get(zone_id)
+    return list(z.get("missing_evidence", [])) if z else []
 
 
 def risk_band(score: int) -> str:
@@ -140,31 +193,37 @@ def interpolate(points: list[dict]) -> list[dict]:
 
 
 class ZoneStore:
-    """Zone states bootstrapped from the frozen model on real corpus rows
-    (last day of held-out world seed 91), never hardcoded constants."""
+    """Sept-5 scaffold: zone states seeded from frozen fixtures
+    (slopes.json scores/confidence/histories + feature_matrix.sample.csv),
+    never from the v1 model. v1 model calls remain available for
+    explanation fallback only."""
 
     def __init__(self) -> None:
         self.reset()
 
     def reset(self) -> None:
-        svc = model_service.get_service()
-        states = svc.latest_zone_states(seed=91)
-        self.features: dict[str, Features] = {}
+        self.features: dict[str, dict] = {}
         self.risk: dict[str, int] = {}
         self.confidence: dict[str, float] = {}
         self.history: dict[str, list[tuple[str, int]]] = {}
+        self.trend_label: dict[str, str] = {}
         self.updated_at: dict[str, str] = {}
         stamp = now_iso()
-        for z, f in states.items():
-            self.features[z] = Features(**f)
-            pred = svc.predict(z, f)
-            self.risk[z] = pred["score"]
-            self.confidence[z] = pred["confidence"]
-            self.history[z] = [(stamp, pred["score"])]
-            self.updated_at[z] = stamp
+        for zid, z in _FIXTURE_ZONES.items():
+            self.features[zid] = dict(_FEATURE_ROWS.get(zid, {}))
+            self.risk[zid] = int(z["risk_score"])
+            self.confidence[zid] = float(z["confidence"])
+            hist = [
+                (p["t"], int(p["risk_score"]))
+                for p in _FIXTURE_HISTORIES.get(zid, [])
+            ] or [(stamp, int(z["risk_score"]))]
+            self.history[zid] = hist
+            self.trend_label[zid] = z.get("trend", "stable")
+            self.updated_at[zid] = stamp
 
     def trend(self, zone_id: str) -> tuple[str, bool]:
-        return detect_trend(self.history[zone_id])
+        _, rapid = detect_trend(self.history[zone_id])
+        return self.trend_label.get(zone_id, "stable"), rapid
 
     def recompute(self, zone_id: str, features: Features) -> None:
         self.features[zone_id] = features

@@ -5,13 +5,56 @@
   "grid": "pilot-grid-v1 (freeze before training)",
   "seeds": [42],
   "sources": {
-    "imd_gridded": { "version": "IMD-0.25deg-1901-present", "clip": "pilot-bbox", "date": "FILL" },
-    "era5_soil": { "version": "ERA5-volumetric", "clip": "pilot-period", "date": "FILL", "proxy_tag": "reanalysis-proxy" },
-    "srtm_dem": { "version": "SRTM-30m", "tiles": ["FILL"], "date": "FILL" },
-    "sentinel2": { "version": "L2A-composite-FILL", "date": "FILL" },
-    "bhusanket": { "export": "FILL-date", "ner_filter": true },
-    "osm": { "extract": "geofabrik-sikkim-FILL-date", "qa": "osm-qa-unverified" }
+    "imd_gridded": {
+      "version": "IMD-0.25deg-1901-present",
+      "clip": "pilot-bbox",
+      "status": "available",
+      "file": "data/raw/imd/ind2024_rfp25.nc",
+      "extract_script": "scripts/extract_gangtok_rainfall.py",
+      "extract_csv": "data/processed/imd/gangtok_rainfall_2024.csv",
+      "grid_lat": 27.25,
+      "grid_lon": 88.5,
+      "grid_method": "nearest to S1 27.3450N 88.6000E (~13 km; 0.25 deg representativeness limit applies)",
+      "window_end": "2024-06-16",
+      "window_rule": "wettest trailing-7d spell of 2024 at pilot cell",
+      "date": "2026-09-04"
+    },
+    "era5_soil": {
+      "version": "ERA5-volumetric",
+      "clip": "pilot-period",
+      "status": "not_available",
+      "date": null,
+      "proxy_tag": "reanalysis-proxy"
+    },
+    "srtm_dem": {
+      "version": "SRTM-30m",
+      "tiles": [],
+      "status": "not_available",
+      "date": null
+    },
+    "sentinel2": {
+      "version": null,
+      "status": "not_available",
+      "date": null
+    },
+    "bhusanket": {
+      "export": null,
+      "status": "not_available",
+      "ner_filter": true
+    },
+    "osm": {
+      "extract": null,
+      "status": "not_available",
+      "qa": "osm-qa-unverified"
+    }
   },
-  "sampling": { "positive": "dated-event+window", "negative_buffer_m": 300, "ratio": "FILL", "cv": "spatial-cluster (no random split)" },
-  "checksums": { "feature_matrix": "FILL-sha256" }
+  "sampling": {
+    "positive": "dated-event+window",
+    "negative_buffer_m": 300,
+    "ratio": null,
+    "cv": "spatial-cluster (no random split)"
+  },
+  "checksums": {
+    "gangtok_rainfall_2024.csv": "sha256:2FA66C6F268F6A62B8744215FA650AFEADDF3D84840D74E0D3CA0CE5BB575735"
+  }
 }

@@ -18,7 +18,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 FIX = ROOT / "data" / "sih26001" / "fixtures"
 
-EXPECTED_SCORES = {"S1": 89, "S2": 78, "S3": 66, "S4": 42}
+EXPECTED_SCORES = {"S1": 89, "S2": 78, "S3": 66, "S4": 52}
 EXPECTED_BANDS = {"S1": "Critical", "S2": "High", "S3": "Moderate", "S4": "Low"}
 EXPECTED_ROLES = {"villager", "district_officer", "state_manager", "rescue_team"}
 EXPECTED_FEATURES = [
@@ -118,7 +118,7 @@ def main() -> int:
         for e in errors:
             print(f"  - {e}")
         return 1
-    print("SCAFFOLD OK: S1-S4 89/78/66/42, roles, R2-avoidance, en/hi/ne, templates, 17-feature schema.")
+    print("SCAFFOLD OK: S1-S4 89/78/66/52, roles, R2-avoidance, en/hi/ne, templates, 17-feature schema.")
     return 0
 
 

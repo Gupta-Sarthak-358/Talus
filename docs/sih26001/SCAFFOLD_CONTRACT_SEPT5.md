@@ -18,7 +18,7 @@ against until Sept 5. If it is not here, do not build it.
 | S1 | Tathangchen (upper) | 27.3450 | 88.6000 | Critical | 89 |
 | S2 | Chandmari (road-cut) | 27.3380 | 88.6120 | High | 78 |
 | S3 | Tadong (mid) | 27.3250 | 88.6065 | Moderate | 66 |
-| S4 | Ranipool (valley) | 27.3150 | 88.5950 | Low | 42 |
+| S4 | Ranipool (valley) | 27.3150 | 88.5950 | Low | 52 |
 
 Files (all committed, all small):
 

@@ -19,7 +19,7 @@
 * `backend/app/main.py`: rename `DECISIONS_BY_BAND` roles to the 4 NER roles; rename zones A–D → S1–S4; load scores/bands/confidence from `slopes.json` (keep v1 API shapes).
 * Add 4 fixture endpoints exactly as §2: `GET /api/roads/status`, `POST+GET /api/reports*`, `POST /api/alerts/dispatch`, `GET /api/forecast/rainfall`. In-memory only, `fixture:true` flag, no live SMS/network.
 * `GET /api/simulation/templates` returns `monga-mdl` + `dahal-144` from `forecast.json`.
-* Done = validator green + `start_demo.ps1` boots + `GET /api/zones` returns S1-S4 with 89/78/66/42.
+* Done = validator green + `start_demo.ps1` boots + `GET /api/zones` returns S1-S4 with 89/78/66/52.
 
 ## Lane C — Data → features (rest) → `feature/sih26001/ngen-pilot`
 
