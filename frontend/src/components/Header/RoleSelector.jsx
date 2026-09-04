@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useMineContext } from '../../context/MineContext';
 import { ROLES } from '../../data/mockData';
-import { Shield, HardHat, Briefcase, Flame, ChevronDown, Check } from 'lucide-react';
+import { Shield, Users, Briefcase, Flame, ChevronDown, Check } from 'lucide-react';
 
 const ROLE_ICONS = {
-  safety_officer: Shield,
-  worker: HardHat,
-  mine_manager: Briefcase,
+  villager: Users,
+  district_officer: Shield,
+  state_manager: Briefcase,
   rescue_team: Flame,
 };
 

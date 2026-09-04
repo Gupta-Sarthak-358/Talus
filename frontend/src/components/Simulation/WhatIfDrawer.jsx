@@ -20,12 +20,12 @@ export default function WhatIfDrawer() {
     simulationLoading,
   } = useMineContext();
 
-  const [targetZoneId, setTargetZoneId] = useState(selectedZoneId || 'B');
+  const [targetZoneId, setTargetZoneId] = useState(selectedZoneId || 'S3');
   const [params, setParams] = useState({
-    rainfall_24h: 88,
-    blast_vibration: 34,
-    crack_density: 0.8,
-    slope_angle: 64,
+    rainfall_24h: 132,
+    blast_vibration: 10,
+    crack_density: 0.5,
+    slope_angle: 28,
   });
 
   // Sync target zone with selected zone when drawer opens
@@ -35,10 +35,10 @@ export default function WhatIfDrawer() {
       const z = zones.find((item) => item.id === selectedZoneId);
       if (z && z.telemetry) {
         setParams({
-          rainfall_24h: z.telemetry.rainfall_24h || 50,
-          blast_vibration: z.telemetry.blast_vibration_ppv || 15,
+          rainfall_24h: z.telemetry.rainfall_24h || 132,
+          blast_vibration: z.telemetry.blast_vibration_ppv || 10,
           crack_density: z.telemetry.crack_density || 0.5,
-          slope_angle: z.telemetry.slope_angle || 50,
+          slope_angle: z.telemetry.slope_angle || 28,
         });
       }
     }
@@ -50,8 +50,11 @@ export default function WhatIfDrawer() {
   const [causalResult, setCausalResult] = useState(null);
   const [templates, setTemplates] = useState([]);
   const [causalForm, setCausalForm] = useState({
-    kind: 'historical_rain', start_day: 550, duration_days: 31,
-    params: { template_id: 'dec_1902' }, horizon_days: 1095,
+    kind: 'threshold_saturation',
+    start_day: 0,
+    duration_days: 7,
+    params: { template_id: 'monga-mdl' },
+    horizon_days: 14,
   });
   const [hoveredPreset, setHoveredPreset] = useState(null);
 
@@ -63,6 +66,9 @@ export default function WhatIfDrawer() {
 
   const handleApplyPreset = (preset) => {
     setParams(preset.values);
+    if (preset.targetZone) {
+      setTargetZoneId(preset.targetZone);
+    }
   };
 
   const handleRunCausal = async () => {
@@ -155,43 +161,24 @@ export default function WhatIfDrawer() {
             <>
               <div className="space-y-3">
                 <div>
-                  <label className="text-[10px] font-semibold text-mine-muted uppercase tracking-wider">Scenario Type</label>
+                  <label className="text-[10px] font-semibold text-mine-muted uppercase tracking-wider">
+                    Threshold & Physics Template (IMD Fixture)
+                  </label>
                   <select
-                    value={causalForm.kind}
+                    value={causalForm.params?.template_id || 'monga-mdl'}
                     onChange={(e) => setCausalForm({
                       ...causalForm,
-                      kind: e.target.value,
-                      params: e.target.value === 'historical_rain'
-                        ? { template_id: templates[0]?.template_id || 'dec_1902' }
-                        : e.target.value === 'rainfall_storm' ? { peak_mm: 100 }
-                        : e.target.value === 'prolonged_rain' ? { daily_mm: 20 }
-                        : e.target.value === 'blast_surge' ? { ppv_mult: 2.0, extra_event_prob: 0.3 }
-                        : { peak_mm: 120, ppv_mult: 2.0, extra_event_prob: 0.3 },
+                      params: { ...causalForm.params, template_id: e.target.value },
                     })}
-                    className="w-full mt-1 bg-mine-darker border border-mine-border rounded-lg px-2 py-1.5 text-xs text-mine-text"
+                    className="w-full mt-1 bg-mine-darker border border-mine-border rounded-lg px-2.5 py-1.5 text-xs text-mine-text focus:outline-none focus:border-talus-500"
                   >
-                    {CAUSAL_KINDS.map((k) => <option key={k} value={k}>{k}</option>)}
+                    {templates.map((t) => (
+                      <option key={t.template_id || t.id} value={t.template_id || t.id}>
+                        {t.name || t.template_id || t.id} — {t.formula || t.demo_effect || ''}
+                      </option>
+                    ))}
                   </select>
                 </div>
-
-                {causalForm.kind === 'historical_rain' && (
-                  <div>
-                    <label className="text-[10px] font-semibold text-mine-muted uppercase tracking-wider">
-                      Historical Storm Template (IMD provenance)
-                    </label>
-                    <select
-                      value={causalForm.params.template_id || 'dec_1902'}
-                      onChange={(e) => setCausalForm({ ...causalForm, params: { ...causalForm.params, template_id: e.target.value } })}
-                      className="w-full mt-1 bg-mine-darker border border-mine-border rounded-lg px-2 py-1.5 text-xs text-mine-text"
-                    >
-                      {templates.map((t) => (
-                        <option key={t.template_id} value={t.template_id}>
-                          {t.template_id} — {t.window_total_mm} mm total, max day {t.window_max_day_mm} mm
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
 
                 <div className="grid grid-cols-3 gap-2">
                   <div>

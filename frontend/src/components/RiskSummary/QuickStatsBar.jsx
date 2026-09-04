@@ -13,31 +13,31 @@ export default function QuickStatsBar() {
         {/* Weather Indicator */}
         <div className="flex items-center gap-2">
           <CloudRain className={`w-4 h-4 ${rainfallVal > 60 ? 'text-risk-moderate animate-bounce' : 'text-mine-muted'}`} />
-          <span className="text-mine-muted">Pit Rainfall (24h):</span>
+          <span className="text-mine-muted">IMD Rainfall (24h):</span>
           <span className="font-mono font-semibold text-mine-text">
             {rainfallVal} mm {rainfallVal > 60 && <span className="text-[10px] text-risk-high font-bold ml-1">[MONSOON SATURATION]</span>}
           </span>
         </div>
 
-        {/* Zones Monitored */}
+        {/* Slopes Monitored */}
         <div className="flex items-center gap-2 border-l border-mine-border pl-4">
           <Users className="w-4 h-4 text-talus-600" />
-          <span className="text-mine-muted">Zones Monitored:</span>
-          <span className="font-mono font-semibold text-mine-text">{zones.length}</span>
+          <span className="text-mine-muted">Slopes Monitored:</span>
+          <span className="font-mono font-semibold text-mine-text">S1–S4 ({zones.length})</span>
         </div>
 
         {/* Model Status */}
         <div className="hidden sm:flex items-center gap-2 border-l border-mine-border pl-4">
           <Radio className="w-4 h-4 text-risk-verylow animate-pulse" />
           <span className="text-mine-muted">Risk Engine:</span>
-          <span className="font-semibold text-risk-verylow">Frozen Model v1 (calibrated)</span>
+          <span className="font-semibold text-risk-verylow">Frozen Model v1 (17 features)</span>
         </div>
       </div>
 
       <div className="flex items-center gap-3 text-[11px] text-mine-muted">
-        <span className="flex items-center gap-1">
+        <span className="flex items-center gap-1 font-mono">
           <Compass className="w-3.5 h-3.5 text-mine-muted" />
-          Neyveli Mine-II · WGS84
+          Gangtok Cluster, Sikkim · 27.3389, 88.6065 (EPSG:4326)
         </span>
       </div>
     </div>

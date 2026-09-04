@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { MapContainer, TileLayer, Polygon, Polyline, Marker, Popup, Tooltip, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { useMineContext } from '../../context/MineContext';
-import { MINE_CENTER, MINE_ZOOM, MINE_SENSORS, MINE_INFRASTRUCTURE } from '../../data/mineGeoData';
+import { MINE_CENTER, MINE_ZOOM, MINE_SENSORS, MINE_INFRASTRUCTURE, ROAD_SEGMENTS } from '../../data/mineGeoData';
 import { RISK_BANDS } from '../../data/mockData';
 import MapLegend from './MapLegend';
 import { AlertOctagon, Navigation, Shield, Radio, ShieldAlert, Maximize2, Compass, Layers } from 'lucide-react';
@@ -55,54 +55,42 @@ function MapController() {
   return null;
 }
 
-// Synthetic Bench Topographic Contours (RL Elevations) to provide rich, offline-independent pit geography
-const BENCH_CONTOURS = [
-  // Upper Crest (RL +240m)
+// Gangtok Ridge Topographic Contours (SRTM DEM Elevations)
+const GANGTOK_CONTOURS = [
   {
-    name: 'Pit Crest Rim (RL +240m)',
+    name: 'Gangtok Ridge Crest (1,850m)',
     coords: [
-      [23.7620, 86.4180],
-      [23.7625, 86.4290],
-      [23.7590, 86.4370],
-      [23.7510, 86.4360],
-      [23.7445, 86.4290],
-      [23.7445, 86.4180],
-      [23.7530, 86.4110],
-      [23.7620, 86.4180],
+      [27.3520, 88.5920],
+      [27.3485, 88.5960],
+      [27.3450, 88.6000],
+      [27.3415, 88.6080],
+      [27.3380, 88.6140],
     ],
     color: '#997e67',
     dash: '6, 4',
   },
-  // Mid Bench 04 (RL +180m)
   {
-    name: 'Mid Bench 04 (RL +180m)',
+    name: 'Mid-Slope Contour (1,600m)',
     coords: [
-      [23.7595, 86.4205],
-      [23.7600, 86.4270],
-      [23.7570, 86.4330],
-      [23.7525, 86.4325],
-      [23.7475, 86.4270],
-      [23.7475, 86.4200],
-      [23.7535, 86.4145],
-      [23.7595, 86.4205],
+      [27.3450, 88.5900],
+      [27.3380, 88.5980],
+      [27.3320, 88.6050],
+      [27.3250, 88.6090],
+      [27.3200, 88.6150],
     ],
     color: '#b8a695',
     dash: '4, 4',
   },
-  // Lower Bench 08 (RL +120m)
   {
-    name: 'Lower Bench 08 (RL +120m)',
+    name: 'Valley Base / River Line (1,380m)',
     coords: [
-      [23.7575, 86.4220],
-      [23.7578, 86.4265],
-      [23.7550, 86.4295],
-      [23.7525, 86.4285],
-      [23.7500, 86.4250],
-      [23.7510, 86.4205],
-      [23.7550, 86.4180],
-      [23.7575, 86.4220],
+      [27.3350, 88.5850],
+      [27.3280, 88.5900],
+      [27.3200, 88.5950],
+      [27.3150, 88.5950],
+      [27.3100, 88.5920],
     ],
-    color: '#d2c3b3',
+    color: '#7fa4b8',
     dash: '3, 3',
   },
 ];
@@ -130,9 +118,9 @@ export default function MineMap() {
       {/* Top Banner on Map */}
       <div className="absolute top-3 left-3 z-[400] bg-mine-card border border-mine-border rounded-lg px-3 py-1.5 text-xs font-medium text-mine-text flex items-center gap-2 shadow-sm">
         <span className="w-2 h-2 rounded-full bg-talus-600 animate-pulse"></span>
-        <span className="font-semibold">Open-Pit Mine GIS Layout</span>
+        <span className="font-semibold">Gangtok Cluster Landslide GIS (S1–S4)</span>
         <span className="text-mine-muted font-mono">|</span>
-        <span className="text-mine-muted text-[11px]">Click any zone polygon to inspect risk intelligence</span>
+        <span className="text-mine-muted text-[11px]">Roads R1–R4 · Click slope to inspect SHAP intelligence</span>
       </div>
 
       {/* Top-Right Map Controls: Reset View / Basemap Mode */}
@@ -173,8 +161,8 @@ export default function MineMap() {
           />
         )}
 
-        {/* Topographic Bench Elevation Contours (Always Visible, completely independent of external tile availability) */}
-        {BENCH_CONTOURS.map((contour, i) => (
+        {/* Gangtok Elevation Contours (Always Visible offline) */}
+        {GANGTOK_CONTOURS.map((contour, i) => (
           <Polyline
             key={i}
             positions={contour.coords}
@@ -182,7 +170,7 @@ export default function MineMap() {
               color: contour.color,
               weight: 1.5,
               dashArray: contour.dash,
-              opacity: 0.7,
+              opacity: 0.65,
             }}
           >
             <Tooltip sticky direction="top">
@@ -190,6 +178,47 @@ export default function MineMap() {
             </Tooltip>
           </Polyline>
         ))}
+
+        {/* Road Network (R1-R4) with status coloring: R1 blocked, R2 at-risk, R3/R4 open */}
+        {ROAD_SEGMENTS.map((road) => {
+          const isBlocked = road.status === 'blocked';
+          const isAtRisk = road.status === 'at-risk';
+          const color = isBlocked ? '#c74732' : isAtRisk ? '#d97706' : '#5e7f3a';
+          return (
+            <Polyline
+              key={road.id}
+              positions={road.coordinates}
+              pathOptions={{
+                color: color,
+                weight: isBlocked ? 4.5 : isAtRisk ? 4 : 3,
+                dashArray: isAtRisk ? '5, 5' : isBlocked ? '2, 3' : null,
+                opacity: 0.9,
+              }}
+            >
+              <Tooltip sticky direction="top">
+                <div className="text-xs space-y-0.5 p-0.5">
+                  <div className="font-bold flex items-center gap-1.5" style={{ color }}>
+                    <span>{road.id} — {road.name}</span>
+                    <span className="text-[10px] uppercase font-mono px-1 rounded bg-mine-dark border border-mine-border">
+                      [{road.status}]
+                    </span>
+                  </div>
+                  <div className="text-[11px] text-mine-text">{road.description}</div>
+                  {isAtRisk && (
+                    <div className="text-[10px] text-amber-400 font-medium">
+                      ⚠ Bypassed by S1→S4 Safe Route recommendation
+                    </div>
+                  )}
+                  {isBlocked && (
+                    <div className="text-[10px] text-risk-critical font-medium">
+                      ✕ Road closed due to active debris flow
+                    </div>
+                  )}
+                </div>
+              </Tooltip>
+            </Polyline>
+          );
+        })}
 
         {/* Terraced Mine Pit Zone Polygons */}
         {zones.map((zone) => {
@@ -241,13 +270,13 @@ export default function MineMap() {
                     <div className="p-1 space-y-1">
                       <div className="flex items-center gap-1.5 text-risk-critical font-bold text-xs">
                         <ShieldAlert className="w-4 h-4" />
-                        <span>{zone.name} — Hazard Zone</span>
+                        <span>{zone.name} — High Hazard</span>
                       </div>
                       <p className="text-[11px] text-mine-text">
                         Risk Score: <strong className="text-risk-critical">{zone.risk_score}</strong> / 100 ({zone.risk_band})
                       </p>
                       <p className="text-[10px] text-mine-muted">
-                        Pore-pressure & crack density escalating. Immediate avoidance recommended.
+                        High pore-pressure & rainfall saturation. Safe corridor avoids road R2.
                       </p>
                     </div>
                   </Popup>

@@ -1,279 +1,314 @@
 /**
- * Mine GIS and Geometrical Coordinates for Open-Pit Topography
- * Centered around an open-pit mine layout (coordinates relative to a synthetic mine bounding box)
+ * GIS and Geometrical Coordinates for Gangtok Cluster, Sikkim (SIH26001 Sept-5 Demo)
+ * Pilot Center: Gangtok cluster (27.3389, 88.6065, EPSG:4326 demo)
+ * Slopes: S1 (Tathangchen), S2 (Chandmari), S3 (Tadong), S4 (Ranipool)
  */
 
-export const MINE_CENTER = [11.47, 79.48]; // Neyveli Mine-II excavation belt (SW of township; IMD cell 11.50N 79.50E)
-export const MINE_ZOOM = 15;
+export const MINE_CENTER = [27.3389, 88.6065]; // Gangtok cluster centre
+export const MINE_ZOOM = 13;
 
-// Defined Mine Zones with realistic terraced polygons
+// Defined Slope Zones with realistic hill-slope bounding polygons
 export const MINE_ZONES_GEOJSON = [
   {
-    id: "A",
-    name: "Zone A — North Highwall",
-    type: "Highwall Sector",
-    benches: "Benches 01–04",
+    id: "S1",
+    name: "S1 — Tathangchen (upper)",
+    village: "Tathangchen",
+    type: "Upper Hillside Slope",
+    benches: "Upper Ridge Corridor",
     coordinates: [
-      [11.477, 79.475],
-      [11.4775, 79.482],
-      [11.4735, 79.4835],
-      [11.4725, 79.4765],
+      [27.3485, 88.5960],
+      [27.3490, 88.6050],
+      [27.3420, 88.6060],
+      [27.3410, 88.5970],
     ],
-    centroid: [11.4751, 79.4792],
+    centroid: [27.3450, 88.6000],
+    area_hectares: 18.5,
+    sensorIds: ["IMD-GTK-01", "INC-S1-01"],
+  },
+  {
+    id: "S2",
+    name: "S2 — Chandmari (road-cut)",
+    village: "Chandmari",
+    type: "Active Road-Cut Slope",
+    benches: "Highway Cut Benches",
+    coordinates: [
+      [27.3415, 88.6080],
+      [27.3420, 88.6160],
+      [27.3345, 88.6165],
+      [27.3340, 88.6085],
+    ],
+    centroid: [27.3380, 88.6120],
     area_hectares: 14.2,
-    sensorIds: ["INC-A01", "PZ-A02"],
+    sensorIds: ["EXT-S2-01", "PZ-S2-02"],
   },
   {
-    id: "B",
-    name: "Zone B — East Haulage & Toe",
-    type: "Critical Haulage & Slope",
-    benches: "Benches 05–08",
+    id: "S3",
+    name: "S3 — Tadong (mid)",
+    village: "Tadong",
+    type: "Mid-Slope Inhabited Sector",
+    benches: "Mid Valley Transition",
     coordinates: [
-      [11.4735, 79.4835],
-      [11.4775, 79.482],
-      [11.474, 79.49],
-      [11.4685, 79.4895],
-      [11.4695, 79.483],
+      [27.3290, 88.6020],
+      [27.3295, 88.6110],
+      [27.3210, 88.6115],
+      [27.3205, 88.6025],
     ],
-    centroid: [11.4725, 79.4865],
-    area_hectares: 18.6,
-    sensorIds: ["SEIS-B01", "PZ-B02", "RADAR-01"],
+    centroid: [27.3250, 88.6065],
+    area_hectares: 22.0,
+    sensorIds: ["SM-S3-01", "FLOW-S3-02"],
   },
   {
-    id: "C",
-    name: "Zone C — Central Pit Floor & Sump",
-    type: "Pit Floor / Dewatering Sump",
-    benches: "Pit Bottom Floor",
+    id: "S4",
+    name: "S4 — Ranipool (valley)",
+    village: "Ranipool",
+    type: "Valley Staging & Egress",
+    benches: "River Basin Flats",
     coordinates: [
-      [11.4725, 79.4765],
-      [11.4735, 79.4835],
-      [11.4695, 79.483],
-      [11.4665, 79.478],
-      [11.468, 79.474],
+      [27.3190, 88.5900],
+      [27.3195, 88.6000],
+      [27.3110, 88.6005],
+      [27.3105, 88.5905],
     ],
-    centroid: [11.47, 79.479],
-    area_hectares: 21.0,
-    sensorIds: ["SUMP-C01", "FLOW-C02"],
-  },
-  {
-    id: "D",
-    name: "Zone D — South Ramp & Staging",
-    type: "Access Ramp & Staging",
-    benches: "Ramp System S",
-    coordinates: [
-      [11.468, 79.474],
-      [11.4665, 79.478],
-      [11.4695, 79.483],
-      [11.4645, 79.484],
-      [11.462, 79.476],
-    ],
-    centroid: [11.466, 79.479],
-    area_hectares: 16.8,
-    sensorIds: ["INC-D01"],
-  },
-  {
-    id: "E",
-    name: "Zone E — West Overburden & Crusher",
-    type: "Overburden Dump / Crusher Ridge",
-    benches: "Dump Terraces 1-2",
-    coordinates: [
-      [11.477, 79.475],
-      [11.4725, 79.4765],
-      [11.468, 79.474],
-      [11.462, 79.476],
-      [11.464, 79.469],
-      [11.474, 79.468],
-    ],
-    centroid: [11.4705, 79.4715],
-    area_hectares: 26.4,
-    sensorIds: ["WX-E01", "SEIS-E02"],
+    centroid: [27.3150, 88.5950],
+    area_hectares: 28.4,
+    sensorIds: ["STG-S4-01", "WX-S4-02"],
   },
 ];
 
-// Open-Pit Infrastructure & Landmarks
+// Road Network Segments from data/sih26001/fixtures/roads.json
+export const ROAD_SEGMENTS = [
+  {
+    id: "R1",
+    name: "Tathangchen link",
+    status: "blocked",
+    adjacent_slope: "S1",
+    description: "Tathangchen access link — completely blocked by debris",
+    coordinates: [
+      [27.3450, 88.6000],
+      [27.3425, 88.6030],
+      [27.3400, 88.6045],
+    ],
+    color: "#c74732", // Critical red
+  },
+  {
+    id: "R2",
+    name: "Ridge shortcut S1-S4",
+    status: "at-risk",
+    adjacent_slope: "S1",
+    description: "Ridge shortcut S1-S4 — severe tension crack hazard (avoided by safe routing)",
+    coordinates: [
+      [27.3450, 88.6000],
+      [27.3370, 88.6020],
+      [27.3280, 88.5980],
+      [27.3150, 88.5950],
+    ],
+    color: "#d96b24", // High orange
+  },
+  {
+    id: "R3",
+    name: "Valley road S3-S4",
+    status: "open",
+    adjacent_slope: "S3",
+    description: "Valley road S3-S4 — open and monitored",
+    coordinates: [
+      [27.3450, 88.6000],
+      [27.3350, 88.6090],
+      [27.3250, 88.6065],
+    ],
+    color: "#5e7f3a", // Safe green
+  },
+  {
+    id: "R4",
+    name: "Ranipool approach",
+    status: "open",
+    adjacent_slope: "S4",
+    description: "Ranipool approach corridor — reinforced and clear",
+    coordinates: [
+      [27.3250, 88.6065],
+      [27.3200, 88.6010],
+      [27.3150, 88.5950],
+    ],
+    color: "#5e7f3a", // Safe green
+  },
+];
+
+// NER Infrastructure & Staging Landmarks
 export const MINE_INFRASTRUCTURE = [
   {
     id: "AP-1",
-    name: "Assembly Point 1 (South Safe Zone)",
+    name: "Ranipool Staging & Evacuation Center",
     type: "assembly",
-    coordinates: [11.4615, 79.475],
-    capacity: "120 Personnel",
+    coordinates: [27.3140, 88.5940],
+    capacity: "450 Evacuees / SDRF Staging",
     status: "Active / Clear",
   },
   {
     id: "AP-2",
-    name: "Assembly Point 2 (West Crusher Station)",
+    name: "Tadong Community Shelter",
     type: "assembly",
-    coordinates: [11.4755, 79.4675],
-    capacity: "80 Personnel",
-    status: "Active / Clear",
+    coordinates: [27.3235, 88.6050],
+    capacity: "180 Personnel",
+    status: "Active / Monitored",
   },
   {
-    id: "CRUSHER-01",
-    name: "Primary In-Pit Crusher #1",
+    id: "DISPATCH-01",
+    name: "Gangtok District Disaster Emergency Ops (DEOC)",
     type: "facility",
-    coordinates: [11.4745, 79.4695],
-    status: "Operational",
+    coordinates: [27.3320, 88.6140],
+    status: "Operational 24/7",
   },
   {
-    id: "WORKSHOP-01",
-    name: "Heavy Equipment Maintenance Workshop",
+    id: "DEPOT-01",
+    name: "PWD Heavy Machine Staging Depot",
     type: "facility",
-    coordinates: [11.4625, 79.483],
-    status: "Operational",
-  },
-  {
-    id: "EXC-04",
-    name: "Electric Shovel / Excavator Site #4",
-    type: "equipment",
-    coordinates: [11.475, 79.478],
-    zone: "A",
-    status: "Operating (2 Operators)",
-  },
-  {
-    id: "TRUCK-12",
-    name: "Haul Truck #12 (CAT 793F)",
-    type: "equipment",
-    coordinates: [11.4715, 79.487],
-    zone: "B",
-    status: "In Transit / High Risk Corridor",
+    coordinates: [27.3160, 88.5965],
+    status: "Earthmovers & Excavators Ready",
   },
 ];
 
-// Sensor Stations deployed across pit
+// Sensor Stations deployed across pilot cluster
 export const MINE_SENSORS = [
   {
-    id: "WX-E01",
-    name: "Meteorological Station #01",
-    type: "Weather / Rain Gauge",
-    coordinates: [11.474, 79.4685],
-    zone: "E",
+    id: "IMD-GTK-01",
+    name: "IMD Gangtok Automatic Weather Station",
+    type: "Rain Gauge / IMD Fixture",
+    coordinates: [27.3465, 88.6025],
+    zone: "S1",
     status: "online",
-    reading: "Rainfall: 42 mm/24h",
+    reading: "24h Rain: 88 mm (Peak: 132 mm forecast)",
   },
   {
-    id: "SEIS-B01",
-    name: "Triaxial Seismograph #B01",
-    type: "Blast Vibration (PPV)",
-    coordinates: [11.471, 79.488],
-    zone: "B",
-    status: "degraded", // Stale / degraded to highlight missing evidence
-    reading: "PPV: 24.5 mm/s (Stale > 3h)",
+    id: "EXT-S2-01",
+    name: "Chandmari Road-Cut Crack Extensometer",
+    type: "Displacement / Tension Joint",
+    coordinates: [27.3385, 88.6130],
+    zone: "S2",
+    status: "degraded",
+    reading: "Displacement: 5.4 mm (OSM QA unverified)",
   },
   {
-    id: "RADAR-01",
-    name: "Ground-Based SAR Slope Radar",
-    type: "Displacement / Velocity",
-    coordinates: [11.4675, 79.472],
-    zone: "E",
+    id: "SM-S3-01",
+    name: "Tadong Soil Moisture Probe",
+    type: "ERA5 Reanalysis Proxy",
+    coordinates: [27.3260, 88.6075],
+    zone: "S3",
     status: "online",
-    reading: "Velocity: 1.8 mm/day",
+    reading: "Soil Saturation: 76% (Near Threshold)",
   },
   {
-    id: "PZ-B02",
-    name: "Vibrating Wire Piezometer PZ-02",
-    type: "Pore Water Pressure",
-    coordinates: [11.4745, 79.486],
-    zone: "B",
+    id: "STG-S4-01",
+    name: "Ranipool River Stage Gauge",
+    type: "River Basin Hydrology",
+    coordinates: [27.3145, 88.5935],
+    zone: "S4",
     status: "online",
-    reading: "Pressure: 142 kPa",
-  },
-  {
-    id: "INC-A01",
-    name: "In-Place Inclinometer I-A01",
-    type: "Subsurface Shear Strain",
-    coordinates: [11.476, 79.48],
-    zone: "A",
-    status: "online",
-    reading: "Deflection: 0.4 mm",
+    reading: "Water Level: 2.1 m (Normal discharge)",
   },
 ];
 
-// Routing Graph Waypoints & Calculated Paths
+// Precomputed Routing Paths according to roads.json:
+// origin: S1 (Tathangchen), destination: S4 (Ranipool)
+// Shortest: via R2 (crosses at-risk R2)
+// Risk-Aware: via S1 -> S3 -> S4 using R3 and R4 (avoids R2)
 export const PRECOMPUTED_ROUTES = {
   "worker_zoneA_to_ap1": {
-    origin: "Zone A (Worker Crew #3)",
-    destination: "Assembly Point 1",
+    origin: "S1 — Tathangchen (upper)",
+    destination: "S4 — Ranipool (valley)",
     normalRoute: {
       id: "normal_route_1",
-      name: "Shortest Route (via Zone B East Ramp)",
-      distanceKm: 1.2,
-      estimatedTimeMin: 4.5,
-      riskExposureScore: 0.76,
-      riskExposureBand: "HIGH",
-      passesThroughHazardZone: "Zone B",
-      hazardDescription: "Directly traverses active rockfall trajectory below East Highwall Toe",
+      name: "Shortest Route (via Ridge Shortcut R2)",
+      distanceKm: 4.8,
+      total_cost: 10.0,
+      estimatedTimeMin: 18,
+      riskExposureScore: 89,
+      riskExposureBand: "CRITICAL",
+      passesThroughHazardZone: "S1 & R2 (At-Risk Ridge)",
+      hazardDescription: "Directly traverses at-risk segment R2 below Tathangchen tension crack zone",
       color: "#c74732",
       dashArray: "6, 6",
       waypoints: [
-        [11.475, 79.478], // Zone A origin
-        [11.474, 79.483],
-        [11.4725, 79.4865], // Traverses dead center of risky Zone B
-        [11.4695, 79.487], // Near unstable toe
-        [11.465, 79.484],
-        [11.4615, 79.475], // Assembly Point 1
+        [27.3450, 88.6000], // S1
+        [27.3370, 88.6020], // R2 midpoint
+        [27.3280, 88.5980], // R2 lower
+        [27.3150, 88.5950], // S4 Ranipool
       ]
     },
     riskAwareRoute: {
       id: "risk_aware_route_1",
-      name: "Risk-Aware Safe Route (via Central Sump & West Ridge)",
-      distanceKm: 1.5,
-      estimatedTimeMin: 6.0,
-      riskExposureScore: 0.18,
-      riskExposureBand: "LOW",
-      passesThroughHazardZone: "None",
-      hazardDescription: "Safely diverts around hazardous Zone B highwall, adhering to reinforced benches",
+      name: "Risk-Aware Safe Route (via Tadong Valley R3 + R4)",
+      distanceKm: 6.2,
+      total_cost: 12.5,
+      estimatedTimeMin: 24,
+      riskExposureScore: 66,
+      riskExposureBand: "MODERATE",
+      passesThroughHazardZone: "None (Bypasses R2 & S1)",
+      hazardDescription: "Avoids at-risk segment R2 and critical slope S1; diverts safely through Tadong Valley",
       color: "#5e7f3a",
       dashArray: null,
       waypoints: [
-        [11.475, 79.478], // Zone A origin
-        [11.4725, 79.4765], // Diverts down through safe Zone C ramp
-        [11.47, 79.4785],
-        [11.467, 79.476], // Follows protected Zone D haul corridor
-        [11.4635, 79.475],
-        [11.4615, 79.475], // Assembly Point 1
+        [27.3450, 88.6000], // S1 origin
+        [27.3350, 88.6090], // R3 descent
+        [27.3250, 88.6065], // S3 Tadong
+        [27.3200, 88.6010], // R4 approach
+        [27.3150, 88.5950], // S4 Ranipool
       ]
-    }
+    },
+    avoidedZones: ["S1"],
+    avoidedSegments: ["R2"],
   },
-  "truck_zoneB_to_workshop": {
-    origin: "Zone B (Haul Truck #12)",
-    destination: "Maintenance Workshop",
+  "s1_to_s4": {
+    origin: "S1 — Tathangchen",
+    destination: "S4 — Ranipool Staging",
     normalRoute: {
-      id: "normal_route_2",
-      name: "Direct Toe Haul Road",
-      distanceKm: 0.8,
-      estimatedTimeMin: 3.0,
-      riskExposureScore: 0.84,
+      id: "shortest_r2",
+      name: "Shortest Route (via R2)",
+      distanceKm: 4.8,
+      total_cost: 10.0,
+      estimatedTimeMin: 18,
+      riskExposureScore: 89,
       riskExposureBand: "CRITICAL",
-      passesThroughHazardZone: "Zone B Highwall",
-      hazardDescription: "Runs along toe of unstable bench facing potential planar slide",
+      passesThroughHazardZone: "R2 Ridge Shortcut",
+      hazardDescription: "Crosses segment R2 directly adjacent to unstable slope S1",
       color: "#c74732",
       dashArray: "6, 6",
       waypoints: [
-        [11.4715, 79.487],
-        [11.4685, 79.486],
-        [11.465, 79.4845],
-        [11.4625, 79.483],
+        [27.3450, 88.6000],
+        [27.3370, 88.6020],
+        [27.3280, 88.5980],
+        [27.3150, 88.5950],
       ]
     },
     riskAwareRoute: {
-      id: "risk_aware_route_2",
-      name: "Upper Berm Bypass Route",
-      distanceKm: 1.3,
-      estimatedTimeMin: 5.2,
-      riskExposureScore: 0.22,
-      riskExposureBand: "LOW",
+      id: "safe_r3_r4",
+      name: "Safe Route (via R3 & R4)",
+      distanceKm: 6.2,
+      total_cost: 12.5,
+      estimatedTimeMin: 24,
+      riskExposureScore: 66,
+      riskExposureBand: "MODERATE",
       passesThroughHazardZone: "None",
-      hazardDescription: "Routes up through stabilized secondary switchback",
+      hazardDescription: "Safely diverts via Tadong and Ranipool approach, completely avoiding R2",
       color: "#5e7f3a",
       dashArray: null,
       waypoints: [
-        [11.4715, 79.487],
-        [11.47, 79.481],
-        [11.4665, 79.479],
-        [11.4635, 79.481],
-        [11.4625, 79.483],
+        [27.3450, 88.6000],
+        [27.3350, 88.6090],
+        [27.3250, 88.6065],
+        [27.3200, 88.6010],
+        [27.3150, 88.5950],
       ]
-    }
+    },
+    avoidedZones: ["S1"],
+    avoidedSegments: ["R2"],
   }
 };
+
+// SIH26001 aliases — prefer GANGTOK_*/SIH_* names (MINE_* kept for backward compat)
+export const GANGTOK_CENTER = MINE_CENTER;
+export const GANGTOK_ZOOM = MINE_ZOOM;
+export const GANGTOK_ZONES_GEOJSON = MINE_ZONES_GEOJSON;
+export const GANGTOK_ROAD_SEGMENTS = ROAD_SEGMENTS;
+export const GANGTOK_INFRASTRUCTURE = MINE_INFRASTRUCTURE;
+export const GANGTOK_SENSORS = MINE_SENSORS;
+export const SIH_PRECOMPUTED_ROUTES = PRECOMPUTED_ROUTES;
+

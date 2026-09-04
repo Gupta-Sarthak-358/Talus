@@ -1,6 +1,6 @@
 # TALUS v2 Architecture — SIH26001
 
-**Status:** Draft · **Trace to:** `01_REQUIREMENTS_SIH26001.md`,
+**Status:** Built — freeze 2026-09-04 · **Branch:** `SIH26001 @ 68c0c28` · **Trace to:** `01_REQUIREMENTS_SIH26001.md`,
 `docs/SIH26001_RESEARCH.md` §8
 
 v1 diagrams live in `docs/02_ARCHITECTURE.md` and stay authoritative for the
@@ -60,22 +60,21 @@ offline-first philosophy.
 
 ## 3. Component deltas
 
-### Backend (FastAPI) — new/proposed endpoints
+### Backend (FastAPI) — built endpoints (frozen 2026-09-04)
 
 ```text
-GET  /api/units[/{id}][/features|/trend|/explanation|/decision]
+GET  /api/zones · GET /api/zones/{id} · GET /api/zones/{id}/features|/trend|/explanation|/decision|/history
 POST /api/risk/predict
-POST /api/simulation/rainfall-what-if     (threshold scenarios)
-GET  /api/roads/status                     (open / at-risk / blocked)
-POST /api/routes/safe                      (over OSM graph)
-POST /api/reports                          (geo-tagged field report)
-GET  /api/reports/queue                    (officer review)
-POST /api/alerts/dispatch                  (SMS/app fixture in demo)
-GET  /api/forecast/rainfall                (IMD fixture in demo)
+POST /api/simulation/what-if              (ML counterfactual 66→74) · POST /api/simulation/causal-what-if (physics)
+GET  /api/simulation/templates             (monga-mdl + dahal-144)
+GET  /api/roads/status                     (open / at-risk / blocked — R2 at-risk)
+POST /api/routes/safe                     (risk-aware avoids R2)
+POST /api/reports                         (ReportIn: zone_id/type/text/lat/lon/captured_at/reporter_role/photo{sha256,exif}+consent → queued|flagged)
+GET  /api/reports/queue?status=           (queued|verified|dismissed|flagged) · PATCH /api/reports/{id} (review)
+POST /api/alerts/dispatch                 (en/hi/ne fixture) · GET /api/forecast/rainfall
 ```
 
-Endpoint paths are proposals until frozen in a v2 API spec. v1 endpoints
-must keep working on this branch until a migration ADR says otherwise.
+Live `backend/app/main.py:389` `ReportIn/Out` + `15 tests` `test_reports.py:1`, fixtures `reports.json:1`, validator `check_scaffold.py:92`. v1 shapes intact.
 
 ### Frontend
 

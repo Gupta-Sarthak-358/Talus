@@ -1,7 +1,6 @@
-# TALUS v2 Demo Scenario — SIH26001 (skeleton, NOT frozen)
+# TALUS v2 Demo Scenario — SIH26001 (live — frozen 2026-09-04)
 
-**Status:** Skeleton — numbers will be frozen against the real v2 model once
-it exists. Do not quote any number here to judges. · **Trace to:**
+**Status:** Live demo + training-backed — `SIH26001 @ 68c0c28` · **Trace to:**
 `01_REQUIREMENTS_SIH26001.md`
 
 (Replaces nothing yet. v1 demo `docs/06_DEMO_SCENARIO.md` stays frozen for
@@ -9,51 +8,29 @@ the mine track.)
 
 ---
 
-## Pilot extent
+## Pilot extent (frozen)
 
-TBD by ADR (candidate: best-dated-inventory district cluster — Sikkim or
-Nagaland, per research §3.2). All screens below run on the frozen pilot +
-frozen scenario with recorded fixtures (no live network).
+Gangtok pilot `27.3389/88.6065` `27.315-27.345N/88.595-88.612E` `NGEN_PROVENANCE_S1.md:10` — chosen per research §3.2 (best-dated Sikkim + best tile `n27_e088`). All screens below run on the frozen pilot + recorded fixtures (no live network) — scores `S1 89 S2 78 S3 66 S4 52` `slopes.json:1`, training `1528×22` backing `metrics.md:9`.
 
-## Screen 1 — NER overview
+## Screen 1 — NER overview (live)
 
-GIS heatmap, 5-band colors. Pilot units colored by score/band. Road overlay
-shows open / at-risk / blocked. Village priority flags visible.
+GIS heatmap, 5-band colors. Pilot units `S1 89 Critical S2 78 High S3 66 Moderate S4 52 Low` `slopes.json:1`. Road overlay `R1 blocked R2 at-risk R3/R4 open` `roads.json:1` `R2` avoided. Village priority flags via `decisions`.
 
-*Freeze later: unit count, band distribution, fixture IDs.*
+## Screen 2 — "Why?" (live)
 
-## Screen 2 — "Why?" (selected high-risk unit)
+Tree SHAP panel: `S1 distance_to_road 12.5 rainfall_7d 9.0 slope 7.5 soil 5.0` `slopes.json:1` + `shap_sample` 5-pt `manifest.training.json:shap_sample` `metrics.md:51` `elevation/road/ndvi` top.
 
-Tree SHAP panel: base value + top contributions with NER feature names
-(e.g. `distance_to_road`, `rainfall_7d_mm`, `slope_angle`, `soil_moisture`).
+## Screen 3 — ML what-if (live)
 
-*Freeze later: real SHAP values from the trained model. Say out loud what the
-top drivers are and which evidence is missing.*
+`POST /api/simulation/what-if` `S3 66→74 delta 8` `forecast.json:1` `66→74` with caveat badge (off-manifold). Frontend `WhatIfDrawer` shows `baseline/simulated` + `flagged` if needed.
 
-## Screen 3 — ML what-if (counterfactual) + documented caveat
+## Screen 4 — Causal what-if (live)
 
-Raise `rainfall_24h_mm` on a moderate unit; show score movement **with the
-off-manifold caveat**: "Single-feature overrides break realistic correlations,
-so this is a counterfactual, not a causal answer. For causal questions we use
-the rainfall scenario engine."
+`POST /api/simulation/causal-what-if` threshold replay `Monga E=-11.10+0.62D` `monga-mdl` + `Dahal >144` `dahal-144` `forecast.json:1` → saturation trajectory `groundwater +15mm` `evidence_timeline` `scenario_service.py:64` (physical causes, not SHAP).
 
-*Freeze later: input values, output scores.*
+## Screen 5 — Roads + routing (live)
 
-## Screen 4 — Causal what-if (rainfall threshold scenario)
-
-Threshold replay: Monga 2026 MDL curve (E = −11.10 + 0.62×D) and/or
-Dahal–Hasegawa >144 mm/day preset over the pilot monsoon window. Show
-saturation trajectory → FoS divergence → newly escalated units + evidence
-timeline with physical causes (not SHAP).
-
-*Freeze later: preset definition, divergence numbers, escalated unit IDs.*
-
-## Screen 5 — Roads + routing
-
-Risk-aware route between two pilot points avoids a high-risk segment;
-shortest path crosses it. Road-status panel lists at-risk/blocked segments.
-
-*Freeze later: origin/destination, avoided segments.*
+`S1→S4` shortest via `R2 at-risk` vs risk-aware via `R3/R4` `roads.json:1` `avoided_segments ["R2"]`, `max_risk_exposed 89→66` `backend/app/main.py:254`.
 
 ## Screen 6 — Field report + alert (LIVE: geo-tagged reporting, officer review, offline outbox)
 

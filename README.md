@@ -1,172 +1,137 @@
-# Talus
+# Talus — Risk-Aware Decision Support
 
-## Risk-Aware Decision Support for Open-Pit Mine Safety
+**Current track: `SIH26001` — NER Landslide Risk Intelligence (MDoNER, Disaster Management, Software)**
+`V1 (mine rockfall, SIH25071)` is frozen on `main` — see `docs/00_*`–`08_*`. This README describes **V2 (NER landslide, SIH26001)** on `SIH26001 @ 68c0c28`.
 
-Talus converts scattered mine data into explainable risk and actionable safety decisions.
+Talus converts scattered geospatial signals into explainable risk and actionable safety decisions.
 
 ### Core Flow
 
 **Detect → Understand → Escalate → Decide → Act**
 
-### What Talus Does
+*(Unchanged from V1. The pattern survives; the data and physics change.)*
 
-1. Collects environmental, geological, operational and visual signals.
-2. Produces zone-level rockfall risk scores.
-3. Provides confidence and explainability (SHAP).
-4. Detects rapidly increasing risk (trend / escalation).
-5. Generates role-specific actions (worker, safety officer, manager, rescue team).
-6. Recommends risk-aware routes between points on the mine map.
-7. Supports what-if simulation of changed conditions.
+### What Talus V2 Does (SIH26001)
 
-The key differentiation: from **"What is the risk?"** → **"What should we do now?"**
+1. Collects multi-source NER signals: IMD rainfall, CCI soil moisture, SRTM DEM + derivatives, Sentinel-2 NDVI / WorldCover LULC, GSI lithology/lineament, OSM roads/rivers, GSI/Bhusanket + report-PDF landslide inventories.
+2. Produces slope-level susceptibility `0–100` + calibrated confidence + `missing_evidence`.
+3. Explains *why* (Tree SHAP + permutation) per prediction.
+4. Detects monsoon escalation and road at-risk segments.
+5. Generates role-specific actions (villager / district_officer / state_manager / rescue_team) + risk-aware routing (Dijkstra avoids `R2`).
+6. Supports rainfall what-if (Monga/Dahal) + causal physics replay and geo-tagged field reporting (`POST /api/reports` + `PATCH review`).
+7. Serves an offline-first GIS dashboard + field queue with multilingual alerts (`en/hi/ne`).
 
-### MVP
+The key differentiation: from **"What is the risk?"** → **"What should we do now, and what are we missing?"**
 
-- Random Forest risk engine
-- SHAP explainability
-- Confidence + missing-evidence reporting
-- Risk trend / escalation detection
-- Role-based decisions
-- Risk-aware Dijkstra routing
-- React + Leaflet dashboard
-- FastAPI backend
-- Synthetic training data (physics-informed FoS labels)
+### MVP — Built & Frozen 2026-09-04 (`SIH26001 @ 68c0c28`)
 
-### Important Limitation
+- NGEN over Gangtok pilot `S1 89 S2 78 S3 66 S4 52` — `16/17 REAL/PROXY, zero STUBs` (`feature_matrix.sample.csv:1`, `manifest.sample.json:1`)
+- Inventory-scale training `1528×22` (`764+764` Sikkim `feature_matrix.training.csv:1`, `manifest.training.json:1`) — `RF OOF 0.921 XGB 0.9256 LGBM 0.9207` `ml/sih26001/reports/metrics.md:9`, `temporal 35/73 → RF test 0.9264`, `cal Brier 0.1019`, SHAP 5-pt sample
+- Field reporting `POST /api/reports` (`ReportIn {zone_id/type/text/lat/lon/captured_at/photo{sha256,exif}+consent}`) + `PATCH review` `queued|flagged→verified` + `GET /queue?status` (`15 tests`, `reports.json:1`)
+- FastAPI `backend` `S1-S4` + `POST /simulation/what-if` `66→74` + `GET /roads/status` `R2 at-risk` + `POST /routes/safe`
+- React + Leaflet (fixtures), offline `localStorage talus_report_outbox` + `en/hi/ne` alerts (fixture)
 
-The prototype does **not** have real Indian mine sensor telemetry. Unavailable mine-specific data is simulated using a documented, physics-informed synthetic generation process. See [docs/07_ASSUMPTIONS.md](docs/07_ASSUMPTIONS.md) and [docs/08_LIMITATIONS.md](docs/08_LIMITATIONS.md).
+### Important Limitation (V2)
 
-### Repository Structure
+The prototype is **not a live warning system**. It validates the decision-support architecture on **real documented Sikkim events** (`693 shp + 777 PDF → 764 deduped`, `CCI soil 0.271`, `USGS n27_e088`, `WorldCover N27E087`, `IMD 0.25° 1901–2024`) with `1991-2020` climatology / quasi-static proxies for time-varying inputs (tagged `approximate`). In-situ rain/soil sensors are **adapter-fixture only** (`02_ARCHITECTURE:5`); live feeds and cloud are post-hackathon swaps. See `docs/sih26001/08_LIMITATIONS_SIH26001.md` and `docs/sih26001/NGEN_PROVENANCE_S1.md`.
+
+`V1 limitation (legacy):` synthetic mine data only, no real mine telemetry — see `docs/07_ASSUMPTIONS.md` on `main`.
+
+### Repository Structure — V2 (`SIH26001`)
 
 ```text
 talus/
-│
-├── README.md            ← you are here
-├── CONTRIBUTING.md      ← branch/commit rules for the team
-├── LICENSE              ← MIT
-├── .gitignore
-├── .env.example
-│
-├── docs/                ← single source of truth (spec)
-│   ├── 00_PROJECT_BRIEF.md   → product scope firewall
-│   ├── 01_REQUIREMENTS.md    → what the software must do
-│   ├── 02_ARCHITECTURE.md    → how it is built
-│   ├── 03_DATA_PLAN.md       → data + provenance table
-│   ├── 04_MODEL_PLAN.md      → training & evaluation
-│   ├── 05_FEATURE_SCHEMA.md  → frozen ML-facing schema + internal vs ML boundary
-│   ├── 05_API_SPEC.md        → frozen API contract
-│   ├── 06_DEMO_SCENARIO.md   → known expected outputs
-│   ├── 07_ASSUMPTIONS.md
-│   ├── 08_LIMITATIONS.md
-│   ├── GENERATOR_V1_SPEC.md  → research→implementation bridge (Member 2)
-│   ├── observations.md       → research decision ledger (why we chose X)
-│   ├── research/             → grounded track artifacts:
-│   │                           neyveli_geology.md, neyveli_blasting.md, neyveli_cracks.md
-│   ├── decisions/            → ADR-001 MVP scope, ADR-002 Neyveli reference mine
-│   └── source/               → original research/plan documents:
-│                               Talus_Master_Project_Document.md
-│                               Talus_Data_Training_Plan.md
-│                               Talus_Deep_Research_Report.md
-│                               Complete_Context.md (full project history)
-│
-├── research/            ← references & data sources index
-│   ├── references.md
-│   ├── sources.md
-│   └── papers/          ← citation-only policy (no copyright PDFs)
-│
-├── data/                ← git-ignored datasets (small samples only)
-│   ├── raw/             → IMD rainfall, DEM, Crack-Seg
-│   ├── processed/       → engineered features
-│   └── synthetic/       → generated training data (v1/…)
-│
-├── ml/                  ← data_generation / training / evaluation / models
-├── backend/             ← FastAPI app + tests
-├── frontend/            ← React + Leaflet dashboard
+├── README.md            ← you are here (V2)
+├── docs/sih26001/       ← single source of truth for SIH26001 (NER)
+│   ├── 00_PROJECT_BRIEF_SIH26001.md
+│   ├── 01_REQUIREMENTS_SIH26001.md
+│   ├── 02_ARCHITECTURE_SIH26001.md
+│   ├── 03_DATA_PLAN_SIH26001.md
+│   ├── 04_MODEL_PLAN_SIH26001.md
+│   ├── 05_FEATURE_SCHEMA_SIH26001.md  (17 NER features)
+│   ├── 06_DEMO_SCENARIO_SIH26001.md
+│   ├── 07_ASSUMPTIONS_SIH26001.md
+│   ├── 08_LIMITATIONS_SIH26001.md
+│   ├── NGEN_PROVENANCE_S1.md  ← per-feature REAL/PROXY/STUB + evidence
+│   ├── ML_MODEL_CARD_V2.md    ← RF500 + XGB + LGBM + SHAP
+│   ├── SCAFFOLD_CONTRACT_SEPT5.md  ← frozen S1–S4 89/78/66/52
+│   └── decisions/ADR-001-sih26001-scope.md
+├── docs/                ← V1 (mine) frozen on main
+├── data/sih26001/
+│   ├── fixtures/        ← committed samples (S1–S4, roads, reports, forecast, manifests)
+│   ├── evidence/        ← sikkim_join.json, sikkim_report_gangtok.csv, training sample
+│   └── processed/       ← DEM/rain/soil extracts + training matrix (git-ignored except .training.sample.csv)
+├── ml/sih26001/
+│   ├── reports/         ← metrics.md / calibration.md / benchmarks.md (committed)
+│   └── models/          ← sih26001_*_v1.joblib (git-ignored)
+├── backend/             ← FastAPI (S1–S4, reports, simulation, routing)
+├── frontend/            ← React + Leaflet (fixtures)
 ├── routing/             ← risk-aware Dijkstra
-├── cv/                  ← crack detection / feature extraction
-├── scripts/             ← one-off utilities
-├── tests/               ← cross-module tests
-└── assets/              ← diagrams / ppt / demo
+├── scripts/             ← build_training_matrix.py, train_sih26001.py, extract_*.py, check_scaffold.py
+└── SIH26001_RESEARCH.md ← 966-line fact-checked strategy
 ```
 
-### Running Locally
-
-Coming with the first code commit. Planned:
+### Running Locally — V2 (`SIH26001`)
 
 ```text
-# Backend
+# Validators (must stay green)
+python scripts/check_scaffold.py        # SCAFFOLD OK: S1-S4 89/78/66/52, roles, R2-avoidance
+python scripts/validate_ngen_sample.py  # NGEN SAMPLE OK: 22 cols, no STUBs
+
+# Backend (reporting + simulation + routing live on :8000, fixtures S1–S4)
 cd backend
 pip install -r requirements.txt
-uvicorn app.main:app --reload   # http://127.0.0.1:8000
+python -m uvicorn app.main:app --reload   # http://127.0.0.1:8000  GET /api/zones → S1 89 S2 78 S3 66 S4 52
+python -m pytest backend/tests/test_reports.py -v  # 15 passed (geo-tagged reports)
 
-# Frontend
+# Frontend (fixtures)
 cd frontend
 npm install
-npm run dev                     # http://localhost:5173
+npm run dev                               # http://localhost:5173  (VITE_USE_LIVE_API=true → :8000)
+
+# One-command demo (backend + frontend, offline)
+powershell -ExecutionPolicy Bypass -File ./start_demo.ps1  # http://localhost:3000 + :8000/docs
+
+# Training (inventory-scale, other terminal — mnemo venv has xgb/lgbm/shap)
+C:\Users\satvi\AppData\Local\Programs\Python\Python311\python.exe scripts/build_training_matrix.py
+C:\Users\satvi\Desktop\mnemo\.venv\Scripts\python.exe scripts/train_sih26001.py  # RF 0.921 XGB 0.9256 → ml/sih26001/reports/
 ```
 
-### Team
+### Related Docs — V2
 
-| Area | Owner |
-|---|---|
-| Architecture / Integration | Member 1 |
-| Data / Synthetic Generator | Member 2 |
-| ML / Risk Engine | Member 3 |
-| Backend / API | Member 4 |
-| Frontend / GIS | Member 5 |
-| Routing / CV / QA | Member 6 |
+- [Project Brief V2](docs/sih26001/00_PROJECT_BRIEF_SIH26001.md) — scope firewall (Gangtok pilot, 1528-row training, reporting LIVE)
+- [Requirements V2](docs/sih26001/01_REQUIREMENTS_SIH26001.md) — `R1–R13 → FR-01–13` built + acceptance `✅`
+- [Architecture V2](docs/sih26001/02_ARCHITECTURE_SIH26001.md) — deltas, sensor adapter `§5`, report capture/queue
+- [Data Plan V2](docs/sih26001/03_DATA_PLAN_SIH26001.md) — Phase 0 all `[x]` Gangtok
+- [Model Plan V2](docs/sih26001/04_MODEL_PLAN_SIH26001.md) — Phase-1 complete `RF/XGB/LGBM` `temporal 35/73`
+- [Feature Schema V2](docs/sih26001/05_FEATURE_SCHEMA_SIH26001.md) — frozen `17 + 2 keys` slope-point
+- [Demo Scenario V2](docs/sih26001/06_DEMO_SCENARIO_SIH26001.md) — live Screens 1–6 (`S1 89 → High`, `66→74`, `R2 avoided`, report queue)
+- [Assumptions V2](docs/sih26001/07_ASSUMPTIONS_SIH26001.md) — validated `5: 16` rescue, `35/73` temporal
+- [Limitations V2](docs/sih26001/08_LIMITATIONS_SIH26001.md) — `CCI quasi-static`, `672/764 undated`, `center-approx` OSM
+- [Provenance S1](docs/sih26001/NGEN_PROVENANCE_S1.md) — `16/17 REAL/PROXY` per-feature evidence
+- [Model Card V2](docs/sih26001/ML_MODEL_CARD_V2.md) — `RF500 + XGB + LGBM + SHAP` `clean:true`
+- [Research & Strategy](docs/SIH26001_RESEARCH.md) — PS decomposition, gap analysis, data inventory (updated 2026-09-04)
+- [Scaffold Contract](docs/sih26001/SCAFFOLD_CONTRACT_SEPT5.md) — frozen `S1-S4` + API shapes + merge rules
 
-Owner ≠ "only person allowed to touch it." Owner = **if something breaks in this area, this person is responsible for understanding it.**
+**V1 docs (legacy, frozen on `main`):** `docs/00_PROJECT_BRIEF.md` … `08_LIMITATIONS.md`, `GENERATOR_V1_SPEC.md`, `docs/source/Complete_Context.md` — referenced but not edited from `SIH26001`.
 
-### Related Docs
-
-- [Project Brief](docs/00_PROJECT_BRIEF.md) — what Talus is
-- [Requirements](docs/01_REQUIREMENTS.md) — functional/non-functional requirements
-- [Architecture](docs/02_ARCHITECTURE.md) — diagrams
-- [Data Plan](docs/03_DATA_PLAN.md)
-- [Model Plan](docs/04_MODEL_PLAN.md)
-- [Feature Schema (ML-facing contract)](docs/05_FEATURE_SCHEMA.md)
-- [API Spec](docs/05_API_SPEC.md)
-- [Generator v1 Spec](docs/GENERATOR_V1_SPEC.md)
-- [Demo Scenario](docs/06_DEMO_SCENARIO.md)
-- [Assumptions](docs/07_ASSUMPTIONS.md)
-- [Limitations](docs/08_LIMITATIONS.md)
-- [ADR-001: MVP Scope](docs/decisions/ADR-001-mvp-scope.md)
-- [ADR-002: Neyveli Reference Mine](docs/decisions/ADR-002-neyveli-reference-mine.md)
-- [Data Grounding Manifest](data/grounding_manifest.md) — what grounds the synthetic data
-- [Contributing](CONTRIBUTING.md) — branch & commit rules
-- [Complete Project Context](docs/source/Complete_Context.md) — full project history
-- [Master Project Document](docs/source/Talus_Master_Project_Document.md) — research/original spec
-- [Data & Training Plan](docs/source/Talus_Data_Training_Plan.md) — research source
-- [Deep Research Report](docs/source/Talus_Deep_Research_Report.md) — research source
-
-**New to the project?** Start with the [Project Brief](docs/00_PROJECT_BRIEF.md) and [Requirements](docs/01_REQUIREMENTS.md). For the full project history and narrative (deck decisions, data honesty rules, differentiation story), read [Complete Project Context](docs/source/Complete_Context.md).
+**New to the project?** Branch is `SIH26001`. Start with `docs/sih26001/00_PROJECT_BRIEF_SIH26001.md` and `01_REQUIREMENTS_SIH26001.md`. For the full NER strategy, read `docs/SIH26001_RESEARCH.md`.
 
 ## Navigating the Repository
 
-This repo is the **single source of truth**. If two people disagree about something, the repo decides.
+This repo is the **single source of truth**. If two people disagree, the repo decides.
 
-**Onboarding order (read these three first, ~10 min total):**
-
-1. `README.md` — what Talus is, who owns what (this page)
-2. `docs/00_PROJECT_BRIEF.md` — the scope firewall (what is / is not in the MVP)
-3. `docs/01_REQUIREMENTS.md` — what the software must actually do
+**Onboarding (read these three first, ~10 min):**
+1. `README.md` — this page (V2)
+2. `docs/sih26001/00_PROJECT_BRIEF_SIH26001.md`
+3. `docs/sih26001/01_REQUIREMENTS_SIH26001.md`
 
 > If it's not in the Brief / Requirements, **don't build it**. Propose it, update the ADR, then build.
 
-**Then, by area:**
+**Then, by area:** `02_ARCHITECTURE` + `06_DEMO_SCENARIO` (everyone), `03_DATA_PLAN` + `04_MODEL_PLAN` (data/ML), `05_FEATURE_SCHEMA` (ML contract), `CONTRIBUTING.md` (branch rules).
 
-| Your area | Read next |
-|---|---|
-| Everyone | `docs/02_ARCHITECTURE.md`, `docs/06_DEMO_SCENARIO.md` |
-| Data / ML | `docs/03_DATA_PLAN.md`, `docs/04_MODEL_PLAN.md` |
-| Backend / Frontend | `docs/05_API_SPEC.md` ← frozen contract, develop against it |
-| Everything | `CONTRIBUTING.md` ← branch & commit rules |
-
-**Full background (optional, for the story):** `docs/source/Complete_Context.md` (project history), `docs/source/Talus_Master_Project_Document.md`, `docs/source/Talus_Data_Training_Plan.md`, `docs/source/Talus_Deep_Research_Report.md`.
-
-**Git in one line:** branch off `dev` as `feature/<your-area>`, never push to `main`, conventional commits (`feat:` / `fix:` / `docs:` / `refactor:`), keep large datasets and trained models out of git.
+**Git in one line:** `SIH26001` is the integration branch — `feature/sih26001/<name>` off it, conventional commits, `python scripts/check_scaffold.py` + `validate_ngen_sample.py` green before merge, never push to `main`, keep datasets/weights out of git.
 
 ---
 
-*Team Sangyan — College Internal Hackathon for SIH 2026.*
+*Team Sangyan — SIH 2026 — SIH26001 (MDoNER) — NER Landslide Risk Intelligence — `SIH26001 @ 68c0c28` — Phase-1 built, 15 report tests green.*

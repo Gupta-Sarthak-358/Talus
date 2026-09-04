@@ -1,7 +1,6 @@
 # TALUS v2 Assumptions — SIH26001
 
-**Status:** Draft · Each assumption is falsifiable and owned. Falsified →
-ADR + plan update. · **Source:** `docs/SIH26001_RESEARCH.md` §6–§9
+**Status:** Built — validated 2026-09-04 · **Branch:** `SIH26001 @ 68c0c28` · Each assumption is falsifiable and owned. `5` validated via `35/73 dated` temporal `metrics.md:32` (year rescue `16` clusters), `2` via `CCI 0.271` `manifest.sample.json:22`, `3` via `USGS n27_e088` `usgs_s234.json:1`, `4` via `6698/1320 OSM` `manifest.training.json:30` — all logged. · **Source:** `docs/SIH26001_RESEARCH.md` §6–§9
 
 ## Data
 
@@ -16,10 +15,10 @@ ADR + plan update. · **Source:** `docs/SIH26001_RESEARCH.md` §6–§9
    pass (rural gaps expected; `osm-qa-unverified` tag until checked).
 5. **Undated inventory events can seed season-window positives** without
    corrupting the target, provided `event-date:approximate` tags flow to
-   missing-evidence and a dated-only sensitivity run is reported.
+   missing-evidence and a dated-only sensitivity run is reported. **Validated:** `92→108 dated` after `16`-cluster rescue `build_training_matrix.py:294`, `35/73` dated temporal `done:true` `manifest.training.json:144` `RF test AUC 0.9264`.
 6. **Negative sampling at >300 m from known landslides** yields true
    negatives often enough for the prototype (buffer distance freezes in model
-   plan; sensitivity on buffer reported).
+   plan; sensitivity on buffer reported). **Built:** `764` negatives `>300m` `seed 42` `manifest.training.json:42`, `prev_rate 0.437` `training_sidecar.csv:1`.
 
 ## Modeling
 

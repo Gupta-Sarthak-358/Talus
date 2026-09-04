@@ -11,7 +11,8 @@ import {
   Radio,
   Clock,
   Layers,
-  Sparkles
+  Sparkles,
+  FileText
 } from 'lucide-react';
 
 export default function Header() {
@@ -21,6 +22,8 @@ export default function Header() {
     setIsRouteModalOpen,
     setIsCvModalOpen,
     setIsAlertsDrawerOpen,
+    setIsReportModalOpen,
+    reportsQueue,
     activeSimulation,
     resetSimulation,
   } = useMineContext();
@@ -46,23 +49,23 @@ export default function Header() {
                 <span className="font-extrabold tracking-wider text-lg text-mine-text font-mono flex items-center gap-1.5">
                   TALUS
                   <span className="text-[10px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded bg-talus-600/15 text-talus-600 border border-talus-600/30">
-                    SIH 2026
+                    SIH26001
                   </span>
                 </span>
                 {/* Demo mode badge */}
                 <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-mine-card text-[10px] font-medium text-mine-muted border border-mine-border">
                   <span className="w-1.5 h-1.5 rounded-full bg-risk-verylow animate-pulse"></span>
-                  DEMO MODE — Synthetic / Historical Data
+                  OFFLINE DEMO · Gangtok Corridor Prototype
                 </span>
               </div>
               <p className="text-[11px] text-mine-muted font-medium">
-                Risk-Aware Decision Support for Open-Pit Mine Safety
+                North-Eastern Region Landslide Early Warning & Decision Support (MDoNER)
               </p>
             </div>
           </div>
         </div>
 
-        {/* Center: Command Actions (Simulation, Routing, CV Inspector) */}
+        {/* Center: Command Actions (Simulation, Routing, Field Reports) */}
         <div className="flex items-center gap-2 flex-wrap">
           {/* What-If Simulator Button */}
           <button
@@ -85,20 +88,25 @@ export default function Header() {
           <button
             onClick={() => setIsRouteModalOpen(true)}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-mine-card hover:bg-mine-dark text-mine-text border border-mine-border hover:border-talus-500 transition-all"
-            title="Calculate and compare risk-aware evacuation & haulage routes"
+            title="Calculate and compare safe routes avoiding at-risk road R2"
           >
             <Navigation className="w-3.5 h-3.5 text-risk-verylow" />
-            <span>Safe Route</span>
+            <span>Safe Route (S1→S4)</span>
           </button>
 
-          {/* CV Crack Inspector Button */}
+          {/* Field Reports Modal Button */}
           <button
-            onClick={() => setIsCvModalOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-mine-card hover:bg-mine-dark text-mine-text border border-mine-border hover:border-talus-500 transition-all"
-            title="Inspect drone-based highwall crack segmentation and feature extraction"
+            onClick={() => setIsReportModalOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-mine-card hover:bg-mine-dark text-mine-text border border-mine-border hover:border-talus-500 transition-all relative"
+            title="Submit field incident report or inspect officer verification queue"
           >
-            <Eye className="w-3.5 h-3.5 text-talus-600" />
-            <span>CV Crack Analysis</span>
+            <FileText className="w-3.5 h-3.5 text-talus-600" />
+            <span>Field Reports</span>
+            {reportsQueue && reportsQueue.length > 0 && (
+              <span className="px-1.5 py-0.2 rounded-full bg-talus-600 text-white text-[9px] font-bold">
+                {reportsQueue.length}
+              </span>
+            )}
           </button>
 
           {/* Reset Baseline if active simulation */}
@@ -133,7 +141,7 @@ export default function Header() {
           {/* Role-Specific Perspective Selector */}
           <RoleSelector />
 
-          {/* Pit Telemetry & Clock */}
+          {/* Corridor Telemetry & Clock */}
           <div className="hidden lg:flex flex-col items-end pl-2 border-l border-mine-border text-right font-mono">
             <div className="flex items-center gap-1.5 text-[11px] text-mine-text">
               <Clock className="w-3 h-3 text-mine-muted" />
@@ -142,7 +150,7 @@ export default function Header() {
             </div>
             <div className="flex items-center gap-1 text-[10px] text-risk-verylow font-sans">
               <span className="w-1.5 h-1.5 rounded-full bg-risk-verylow animate-pulse"></span>
-              Telemetry Live
+              IMD Gangtok Feed Live
             </div>
           </div>
         </div>

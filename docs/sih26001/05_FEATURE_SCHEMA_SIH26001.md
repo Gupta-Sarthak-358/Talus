@@ -1,15 +1,13 @@
 # TALUS v2 Feature Schema — SIH26001 (ML-facing contract)
 
-**Status:** Draft (freezes before training; changes need ADR) · **Trace to:**
+**Status:** Frozen — built 2026-09-04 · **Branch:** `SIH26001 @ 68c0c28` · **Trace to:**
 `03_DATA_PLAN_SIH26001.md` · **Source:** `docs/SIH26001_RESEARCH.md` §7.3
 
 This is the **frozen ML-facing contract**. NGEN may carry richer internal
 fields; only these cross the boundary into training/inference. Internal-vs-ML
 boundary rule inherited from v1 (`docs/05_FEATURE_SCHEMA.md` pattern).
 
-Spatial unit (`zone_id` grain: pixel / slope unit / admin zone) is **not yet
-frozen** — freezes in ADR before NGEN completion. All features below are per
-`zone_id` + time window.
+Spatial unit (`zone_id` grain: pilot point `S1-S4` + training `T0000` grid) frozen to **slope-point** `NGEN_PROVENANCE_S1.md:10` `27.315-27.345N/88.595-88.612E` + `manifest.training.json:5` study area `88.06-88.96/27.08-27.999` (inside `n27_e088`). All features below are per `zone_id` + `time_window` `2024-06-16` / `JJAS` proxy.
 
 ---
 

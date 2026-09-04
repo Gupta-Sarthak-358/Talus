@@ -29,11 +29,16 @@ Target: `event` season-window proxy (positives = inventoried Sikkim slides, tagg
 
 {
   "rule": ">= 30 dated positives per side",
-  "n_train_pos_dated": 21,
-  "n_test_pos_dated": 71,
+  "n_train_pos_dated": 35,
+  "n_test_pos_dated": 73,
   "negatives_split": "seeded 50/50 (timeless background)",
-  "done": false,
-  "reason": "only 21 dated positives <=2018 / 71 >=2019 (672/764 positives undated) \u2014 below rule; skipped, not fudged"
+  "done": true,
+  "test_n": 455,
+  "rf_test": {
+    "auc": 0.9264,
+    "brier": 0.0867,
+    "ece10": 0.0491
+  }
 }
 
 ## Threshold-consistency screen

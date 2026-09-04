@@ -292,12 +292,33 @@ def load_positives() -> pd.DataFrame:
         kept_lat.extend([float(blat[gi]) for gi in chunk[keep]])
         kept_lon.extend([float(blon[gi]) for gi in chunk[keep]])
     pos = both.iloc[kept_idx].reset_index(drop=True)
+    # rescue year: same slide <50m may have dated PDF history while kept shp is year 0 — take max year in cluster
+    raw_lat = both["lat"].to_numpy()
+    raw_lon = both["lon"].to_numpy()
+    raw_year = both["year"].to_numpy()
+    kept_lat_arr = pos["lat"].to_numpy()
+    kept_lon_arr = pos["lon"].to_numpy()
+    # vectorised distances kept x raw (764 x 1470 ~1M, fine)
+    D = hav_chunk(kept_lat_arr, kept_lon_arr, raw_lat, raw_lon)
+    rescued = 0
+    new_years = pos["year"].to_numpy().copy()
+    for i in range(len(pos)):
+        mask = D[i] <= DEDUPE_M
+        if mask.any():
+            my = int(raw_year[mask].max())
+            if my != new_years[i]:
+                if new_years[i] == 0 and my != 0:
+                    rescued += 1
+                new_years[i] = my
+    pos["year"] = new_years
     by_src = Counter(pos["source"])
     log(f"stage1: deduped positives={len(pos)} "
         f"(shp={by_src.get('shp', 0)} pdf={by_src.get('pdf', 0)} merged-away={len(both) - len(pos)})")
+    log(f"stage1: year rescue {rescued} clusters 0->dated via <50m PDF counterpart")
     STATS["positives_raw"] = int(len(both))
     STATS["positives_deduped"] = int(len(pos))
     STATS["positives_by_source"] = {k: int(v) for k, v in by_src.items()}
+    STATS["year_rescued"] = int(rescued)
     return pos
 
 

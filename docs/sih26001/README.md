@@ -36,17 +36,12 @@ TALUS v1 docs (`docs/00_*`–`08_*`, mine rockfall, SIH25071) stay frozen on
 | `decisions/ADR-001-sih26001-scope.md` | Why migrate (not fork), why real data | Research §1, §9.1 |
 | `../../SIH26001_RESEARCH.md` (in `docs/`) | Full research & strategy (966 lines, fact-checked) | — |
 
-## Roadmap (from research §12)
+## Roadmap (built — `SIH26001 @ 68c0c28` 2026-09-04)
 
-- **Phase 0 (now):** data assembly — IMD rainfall, SRTM DEM, GSI Bhusanket
-  inventory, ERA5 soil moisture, Sentinel-2 NDVI/LULC, OSM roads/rivers.
-  Checklist in `03_DATA_PLAN_SIH26001.md`.
-- **Phase 1:** core ML — NGEN pipeline → RF+XGBoost(+LGBM) → SHAP → isotonic
-  calibration → benchmark validation.
-- **Phase 2:** decision layer — GIS dashboard, 4-role engine, road overlay +
-  routing, rainfall-threshold scenario engine.
-- **Phase 3:** platform — field-reporting app, SMS/multilingual alerts,
-  offline sync, IMD API integration.
+- **Phase 0 — done:** `124` IMD files `ind*.nc` 1901–2024 + USGS `n27_e088` + `30k` GSI inventory `+777` PDF → `764` Sikkim `manifest.training.json:42`, `CCI soil 0.271`, `WorldCover N27E087` `S2B_45RXL_20241129` — `03_DATA_PLAN:154` all `[x]`.
+- **Phase 1 — done:** `1528` rows `build_training_matrix.py:1` → `RF 0.921 XGB 0.9256 LGBM 0.9207` `metrics.md:9` + `Brier 0.1019` `calibration.md:8` + SHAP 5-pt `manifest.training.json:shap_sample` + temporal `35/73` `RF test 0.9264`.
+- **Phase 2 — done:** GIS dashboard fixtures `S1 89 S2 78 S3 66 S4 52` `slopes.json:1`, 4-role engine, road `R2 at-risk` avoided `roads.json:1`, rainfall-threshold `monga-mdl/dahal-144` `forecast.json:1`.
+- **Phase 3 — done (backend):** field reporting `POST /api/reports` + `PATCH review` + `queue?status` `photo {sha256,exif}` + `consent` + `flagged` `15 tests` `test_reports.py:1`; SMS `en/hi/ne` fixture `alerts.json:1`, offline `localStorage talus_report_outbox` outbox `06_DEMO_SCENARIO:58`.
 
 ## Rules (inherit from `/CONTRIBUTING.md`)
 

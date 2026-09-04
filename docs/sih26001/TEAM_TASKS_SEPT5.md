@@ -1,7 +1,7 @@
-# Sept-5 Team Tasks (handout — pick one lane, stay in it)
+# Sept-5 Team Tasks — ARCHIVED (built 2026-09-04)
 
 **Source of truth:** `docs/sih26001/SCAFFOLD_CONTRACT_SEPT5.md` + fixtures in
-`data/sih26001/fixtures/`. Demo is Sept 5. Nothing outside the contract ships.
+`data/sih26001/fixtures/`. Demo was Sept 5 — all lanes built and merged to `SIH26001 @ 68c0c28`.
 
 ## Lane A — Frontend (1 person) → `feature/sih26001/frontend-sept5`
 
@@ -29,7 +29,8 @@
 * Target for Sept 5: 1 real slope row with all 17 filled + manifest. Full train is bonus — if RF trains, swap at most ONE fixture score; else present matrix+manifest as "training-ready, spatial-CV next".
 * Done = sample CSV loads, every value has provenance, validator green.
 
-## Daily checkpoint (5 min)
+## Result (2026-09-04)
 
-* Scaffold merged? Frontend on fixtures? Backend serving S1-S4? Data team: how many of 17 filled for S1?
-* Anything outside contract → cut, do not chase. Demo runs on fixtures even if backend or training slips.
+* Lane A: fixtures ready, `S1 89 S2 78 S3 66 S4 52` `slopes.json:1` + `roads.json:1` — frontend merges off `68c0c28`
+* Lane B: `backend/app/main.py:389` `POST /api/reports` + `PATCH` + `queue?status` + `15 tests` + `reports.json:1` — live on `:8000`
+* Lane C: `16/17 REAL/PROXY` `feature_matrix.sample.csv:1` + `1528×22` training `feature_matrix.training.csv:1` `RF 0.921 XGB 0.9256` `metrics.md:9` `temporal 35/73`

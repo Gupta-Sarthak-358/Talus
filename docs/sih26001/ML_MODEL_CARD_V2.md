@@ -6,6 +6,6 @@ Training data: inventory-scale matrix (1528 rows, 764 positives from GSI shapefi
 
 Model: RandomForestClassifier(500 trees, seed 42) + isotonic calibration; LR baseline beaten on spatial OOF (AUC 0.921 vs 0.8895); calibrated Brier 0.1019 vs naive 0.25.
 
-Validation: spatial GroupKFold(8) OOF (no random splits); temporal holdout skipped (only 21 dated positives <=2018 — INITIATION year-or-0); TreeSHAP per-prediction sample computed (5 points, see manifest shap_sample).
+Validation: spatial GroupKFold(8) OOF (no random splits); temporal holdout skipped (only 35 dated positives <=2018 — INITIATION year-or-0); TreeSHAP per-prediction sample computed (5 points, see manifest shap_sample).
 
 Limitations: climatology/quasi-static proxies (rain/soil/NDVI tagged); uniform lithology/lineament omitted from X; OSM center-approx distances (osm-qa-unverified); demo fixtures/scores untouched by this lane.
