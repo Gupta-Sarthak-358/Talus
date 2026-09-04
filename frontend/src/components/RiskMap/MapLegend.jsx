@@ -17,7 +17,7 @@ const ROAD_LEGEND = [
 ];
 
 export default function MapLegend() {
-  const { mapLayers, toggleMapLayer } = useTalusContext();
+  const { mapLayers, toggleMapLayer, t } = useTalusContext();
   const [isExpanded, setIsExpanded] = useState(true);
 
   return (
@@ -29,7 +29,7 @@ export default function MapLegend() {
       >
         <div className="flex items-center gap-1.5 font-semibold text-mine-text">
           <Layers className="w-3.5 h-3.5 text-talus-600" />
-          <span>Landslide GIS Layers</span>
+          <span>{t('map.legend')}</span>
         </div>
         {isExpanded ? (
           <ChevronDown className="w-3.5 h-3.5 text-mine-muted" />
@@ -43,7 +43,7 @@ export default function MapLegend() {
           {/* Risk Color Scales */}
           <div>
             <div className="text-[10px] font-semibold uppercase tracking-wider text-mine-muted mb-1.5">
-              Susceptibility Risk Bands
+              {t('map.riskBands')}
             </div>
             <div className="space-y-1">
               {RISK_BAND_KEYS.map((b) => (
@@ -61,7 +61,7 @@ export default function MapLegend() {
           {/* Road Network Legend */}
           <div>
             <div className="text-[10px] font-semibold uppercase tracking-wider text-mine-muted mb-1.5">
-              Road Network (R1–R4)
+              {t('map.roadNetwork')}
             </div>
             <div className="space-y-1">
               {ROAD_LEGEND.map((r) => (
@@ -79,7 +79,7 @@ export default function MapLegend() {
           {/* Layer Toggles */}
           <div className="border-t border-mine-border pt-2.5 space-y-1.5">
             <div className="text-[10px] font-semibold uppercase tracking-wider text-mine-muted mb-1">
-              Display Overlays
+              {t('map.displayOverlays')}
             </div>
 
             <button
@@ -88,7 +88,7 @@ export default function MapLegend() {
             >
               <span className="flex items-center gap-2">
                 <span className="w-2.5 h-0.5 bg-risk-verylow inline-block"></span>
-                Safe vs Normal Routes
+                {t('map.safeVsNormal')}
               </span>
               {mapLayers.routes ? (
                 <CheckSquare className="w-3.5 h-3.5 text-talus-600" />
@@ -103,7 +103,7 @@ export default function MapLegend() {
             >
               <span className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-talus-600 inline-block"></span>
-                Telemetry Sensors
+                {t('map.telemetrySensors')}
               </span>
               {mapLayers.sensors ? (
                 <CheckSquare className="w-3.5 h-3.5 text-talus-600" />
@@ -118,7 +118,7 @@ export default function MapLegend() {
             >
               <span className="flex items-center gap-2">
                 <span className="w-2 h-2 bg-risk-moderate inline-block"></span>
-                Assembly & Facilities
+                {t('map.assembly')}
               </span>
               {mapLayers.infrastructure ? (
                 <CheckSquare className="w-3.5 h-3.5 text-talus-600" />
@@ -133,7 +133,7 @@ export default function MapLegend() {
             >
               <span className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-risk-critical animate-pulse inline-block"></span>
-                Hazard Pulse Animation
+                {t('map.hazardPulse')}
               </span>
               {mapLayers.hazardGlow ? (
                 <CheckSquare className="w-3.5 h-3.5 text-talus-600" />

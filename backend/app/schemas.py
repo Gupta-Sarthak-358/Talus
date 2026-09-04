@@ -134,6 +134,7 @@ class RouteResponse(BaseModel):
     risk_aware_route: RouteResult
     shortest_route: RouteResult
     avoided_zones: list[str]
+    location: str = "gangtok"
 
 
 class WhatIfRequest(BaseModel):

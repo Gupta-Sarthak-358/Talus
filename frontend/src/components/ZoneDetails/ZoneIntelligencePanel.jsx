@@ -65,7 +65,7 @@ export default function ZoneIntelligencePanel() {
                     : 'bg-mine-darker hover:bg-mine-dark text-mine-text border border-mine-border'
                 }`}
               >
-                <span>Slope {z.id}</span>
+                <span>{t('zone.slope')} {z.id}</span>
                 {role === 'villager' ? (
                   <span
                     className={`text-[10px] font-bold uppercase ${
@@ -104,9 +104,9 @@ export default function ZoneIntelligencePanel() {
       <div className="border-t border-mine-border pt-3 flex flex-wrap items-center justify-between gap-2">
         <div>
           <div className="text-[11px] text-talus-600 font-bold uppercase tracking-wider flex items-center gap-1.5">
-            <span>{zone.sector || 'Gangtok Slope Cluster'}</span>
+            <span>{zone.sector || t('zone.intelligence')}</span>
             <ChevronRight className="w-3 h-3 text-mine-muted" />
-            <span className="text-mine-muted">{zone.benches || 'Elevation 1,450m – 1,820m'}</span>
+            <span className="text-mine-muted">{zone.benches || ''}</span>
           </div>
           <h2 className="text-lg font-extrabold text-mine-text tracking-tight mt-0.5">
             {zone.name}
@@ -114,7 +114,7 @@ export default function ZoneIntelligencePanel() {
         </div>
 
         <div className="text-right">
-          <div className="text-[10px] text-mine-muted">Status</div>
+          <div className="text-[10px] text-mine-muted">{t('zone.status')}</div>
           <div
             className={`text-xs font-bold uppercase ${
               zone.risk_band === 'CRITICAL' || zone.risk_band === 'HIGH'
@@ -165,7 +165,7 @@ export default function ZoneIntelligencePanel() {
         />
       ) : zone.missing_evidence?.length > 0 && (
         <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 text-xs text-amber-900">
-          <span className="font-bold">Note:</span> {t('villager.caution') || 'Some sensor data is from satellite proxy — follow officer instructions, not the number.'}
+          <span className="font-bold">{t('zone.note')}</span> {t('villager.caution')}
         </div>
       )}
     </div>

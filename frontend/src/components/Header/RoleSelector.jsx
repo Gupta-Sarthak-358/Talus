@@ -96,7 +96,7 @@ export default function RoleSelector() {
           </div>
           <div className="px-3 py-2 bg-mine-darker border-t border-mine-border text-[10px] text-mine-muted flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-talus-600"></span>
-            All risk intelligence dynamically adapts to role protocols.
+            {t('role.allAdapt')}
           </div>
         </div>
       )}

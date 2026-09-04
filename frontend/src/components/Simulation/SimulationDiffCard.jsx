@@ -1,8 +1,10 @@
 import React from 'react';
+import { useTalusContext } from '../../context/TalusContext';
 import RiskBadge from '../Common/RiskBadge';
 import { ArrowRight, TrendingUp, TrendingDown, Sparkles, ShieldAlert } from 'lucide-react';
 
 export default function SimulationDiffCard({ simulationResult, baselineZone }) {
+  const { t } = useTalusContext();
   if (!simulationResult) return null;
 
   const { risk_score, risk_band, confidence, delta, isEscalated, shap, explanationText,
@@ -18,7 +20,7 @@ export default function SimulationDiffCard({ simulationResult, baselineZone }) {
         <div className="flex items-center gap-1.5 text-mine-text">
           <Sparkles className="w-4 h-4 text-talus-600" />
           <h4 className="text-xs font-bold uppercase tracking-wider">
-            Simulated Risk Delta
+            {t('simdiff.title')}
           </h4>
         </div>
         <span
@@ -40,7 +42,7 @@ export default function SimulationDiffCard({ simulationResult, baselineZone }) {
       {/* Before / After Comparison */}
       <div className="grid grid-cols-2 gap-3 p-3 bg-mine-card rounded-lg border border-mine-border text-center">
         <div>
-          <div className="text-[10px] text-mine-muted uppercase font-semibold">Current State</div>
+          <div className="text-[10px] text-mine-muted uppercase font-semibold">{t('simdiff.current')}</div>
           <div className="text-[9px] text-mine-muted -mt-0.5">Model prediction from observed inputs</div>
           <div className="text-xl font-bold font-mono text-mine-text mt-1">{baseScore} / 100</div>
           <div className="mt-1">
@@ -49,7 +51,7 @@ export default function SimulationDiffCard({ simulationResult, baselineZone }) {
         </div>
 
         <div className="border-l border-mine-border pl-2">
-          <div className="text-[10px] text-talus-600 uppercase font-semibold">What-If State</div>
+          <div className="text-[10px] text-talus-600 uppercase font-semibold">{t('simdiff.whatif')}</div>
           <div className="text-[9px] text-mine-muted -mt-0.5">Model prediction with your overrides</div>
           <div className="text-xl font-bold font-mono text-risk-high mt-1">{risk_score} / 100</div>
           <div className="mt-1">
@@ -63,7 +65,7 @@ export default function SimulationDiffCard({ simulationResult, baselineZone }) {
         <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
         <div className="text-[11px] leading-snug">
           <span className="font-bold uppercase tracking-wider text-[10px] block text-amber-400">
-            ML Counterfactual Caveat Badge:
+            {t('simdiff.caveat')}
           </span>
           {simulationResult.caveat || 'Counterfactual only — single-feature override breaks correlations. Causal questions use the threshold engine.'}
         </div>
@@ -77,7 +79,7 @@ export default function SimulationDiffCard({ simulationResult, baselineZone }) {
       {/* Dynamic SHAP Preview */}
       <div className="space-y-1 pt-1">
         <div className="text-[10px] uppercase font-bold text-mine-muted">
-          Top Shifted Risk Drivers:
+          {t('simdiff.drivers')}
         </div>
         <div className="grid grid-cols-2 gap-1.5">
           {shap.slice(0, 2).map((s) => (

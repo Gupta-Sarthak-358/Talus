@@ -5,7 +5,7 @@ import { AlertTriangle, ShieldAlert, CheckCircle2, Database, TrendingUp, Brain, 
 const idsOf = (zones) => zones.map((z) => z.id).join(', ') || '—';
 
 export default function RiskSummaryCards() {
-  const { riskSummary, zones, selectZone, selectedZoneId } = useTalusContext();
+  const { riskSummary, zones, selectZone, selectedZoneId, t } = useTalusContext();
 
   if (!riskSummary) return null;
 
@@ -31,7 +31,7 @@ export default function RiskSummaryCards() {
             <ShieldAlert className="w-4 h-4" />
           </div>
           <span className="text-[11px] font-bold text-risk-critical uppercase tracking-wider px-2 py-0.5 rounded bg-risk-critical/10 border border-risk-critical/20">
-            Escalated
+            {t('summary.escalated')}
           </span>
         </div>
         <div className="mt-2.5 flex items-baseline gap-2">
@@ -39,13 +39,13 @@ export default function RiskSummaryCards() {
             {riskSummary.criticalCount + riskSummary.highCount}
           </span>
           <span className="text-xs text-mine-muted font-medium">
-            High / Critical Slope{riskSummary.criticalCount + riskSummary.highCount !== 1 ? 's' : ''}
+            {t('summary.high_critical')}
           </span>
         </div>
         <div className="mt-2 flex items-center justify-between text-[11px] text-mine-muted border-t border-mine-border pt-1.5 gap-1">
           <span className="truncate">Slopes: {idsOf([...criticalZones, ...highZones])}</span>
           <span className="text-risk-critical font-semibold flex items-center gap-0.5 shrink-0">
-            <TrendingUp className="w-3 h-3" /> Action req.
+            <TrendingUp className="w-3 h-3" /> {t('summary.action_req')}
           </span>
         </div>
       </div>
@@ -63,7 +63,7 @@ export default function RiskSummaryCards() {
             <AlertTriangle className="w-4 h-4" />
           </div>
           <span className="text-[11px] font-bold text-risk-moderate uppercase tracking-wider px-2 py-0.5 rounded bg-risk-moderate/10 border border-risk-moderate/20">
-            Surveillance
+            {t('summary.surveillance')}
           </span>
         </div>
         <div className="mt-2.5 flex items-baseline gap-2">
@@ -71,12 +71,12 @@ export default function RiskSummaryCards() {
             {riskSummary.moderateCount}
           </span>
           <span className="text-xs text-mine-muted font-medium">
-            Moderate Slope{riskSummary.moderateCount !== 1 ? 's' : ''}
+            {t('summary.moderate_slopes')}
           </span>
         </div>
         <div className="mt-2 flex items-center justify-between text-[11px] text-mine-muted border-t border-mine-border pt-1.5 gap-1">
           <span className="truncate">Slopes: {idsOf(moderateZones)}</span>
-          <span className="text-risk-moderate font-medium shrink-0">Monitoring</span>
+          <span className="text-risk-moderate font-medium shrink-0">{t('summary.monitoring')}</span>
         </div>
       </div>
 
@@ -93,7 +93,7 @@ export default function RiskSummaryCards() {
             <CheckCircle2 className="w-4 h-4" />
           </div>
           <span className="text-[11px] font-bold text-risk-verylow uppercase tracking-wider px-2 py-0.5 rounded bg-risk-verylow/10 border border-risk-verylow/20">
-            Nominal
+            {t('summary.nominal')}
           </span>
         </div>
         <div className="mt-2.5 flex items-baseline gap-2">
@@ -101,12 +101,12 @@ export default function RiskSummaryCards() {
             {riskSummary.lowCount}
           </span>
           <span className="text-xs text-mine-muted font-medium">
-            Stable Slope{riskSummary.lowCount !== 1 ? 's' : ''}
+            {t('summary.stable_slopes')}
           </span>
         </div>
         <div className="mt-2 flex items-center justify-between text-[11px] text-mine-muted border-t border-mine-border pt-1.5 gap-1">
           <span className="truncate">Slopes: {idsOf(lowZones)}</span>
-          <span className="text-risk-verylow font-medium shrink-0">No escalation</span>
+          <span className="text-risk-verylow font-medium shrink-0">{t('summary.no_escalation')}</span>
         </div>
       </div>
 
@@ -118,14 +118,14 @@ export default function RiskSummaryCards() {
             <Database className="w-4 h-4" />
           </div>
           <span className="text-[11px] font-bold text-talus-600 uppercase tracking-wider px-2 py-0.5 rounded bg-talus-600/10 border border-talus-600/20">
-            Evidence Quality
+            {t('summary.evidence')}
           </span>
         </div>
         <div className="mt-2.5 flex items-baseline gap-2">
           <span className="text-2xl font-extrabold text-mine-text font-mono">
             {riskSummary.dataQualityConfidence}%
           </span>
-          <span className="text-xs text-mine-muted font-medium">Mean Calibrated Confidence</span>
+          <span className="text-xs text-mine-muted font-medium">{t('summary.mean_conf')}</span>
         </div>
         <div className="mt-2 flex items-center justify-between text-[11px] text-mine-muted border-t border-mine-border pt-1.5 gap-1">
           <span className="truncate">Sources: IMD, SRTM, CCI, WorldCover, Bhusanket</span>

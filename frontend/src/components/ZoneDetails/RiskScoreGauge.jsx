@@ -60,10 +60,10 @@ export default function RiskScoreGauge({ score = 0, band = 'LOW', confidence = 8
       <div className="flex items-start justify-between">
         <div>
           <div className="text-[11px] font-semibold text-mine-muted uppercase tracking-wider flex items-center gap-1.5">
-            <span>Risk Score & Operational Band</span>
+            <span>{t('zone.riskScore')}</span>
             {isSimulated && (
               <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-risk-moderate/20 text-mine-text border border-risk-moderate/40 animate-pulse">
-                SIMULATED
+                {t('zone.simulated')}
               </span>
             )}
           </div>
@@ -79,7 +79,7 @@ export default function RiskScoreGauge({ score = 0, band = 'LOW', confidence = 8
           <RiskBadge band={band} size="lg" />
           <div className="flex items-center gap-1 text-[11px] font-semibold font-mono">
             <TrendIcon className={`w-3.5 h-3.5 ${trendColor}`} />
-            <span className={trendColor}>{trend.badge || 'Stable'}</span>
+            <span className={trendColor}>{trend.badge || t('trend.stable')}</span>
           </div>
         </div>
       </div>
@@ -104,7 +104,7 @@ export default function RiskScoreGauge({ score = 0, band = 'LOW', confidence = 8
       <div className="flex items-center justify-between pt-2 border-t border-mine-border text-xs">
         <div className="flex items-center gap-1.5 text-mine-muted">
           <ShieldCheck className="w-3.5 h-3.5 text-talus-600" />
-          <span>{isVillager ? certaintyText : 'Model Confidence:'}</span>
+          <span>{isVillager ? certaintyText : t('zone.confidence')}</span>
         </div>
         <div className="flex items-center gap-2">
           {!isVillager && (

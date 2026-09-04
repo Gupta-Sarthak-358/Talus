@@ -18,9 +18,16 @@ export default class ErrorBoundary extends React.Component {
 
   render() {
     if (this.state.error) {
+      // Class component: read persisted language directly (no hooks)
+      let lang = 'en';
+      try { lang = localStorage.getItem('talus_lang') || 'en'; } catch { /* default */ }
+      const copy = {
+        hi: { title: 'TALUS UI त्रुटि', retry: 'पुनः प्रयास' },
+        ne: { title: 'TALUS UI त्रुटि', retry: 'पुन: प्रयास' },
+      }[lang] || { title: 'TALUS UI error', retry: 'Retry' };
       return (
         <div style={{ padding: 32, fontFamily: 'monospace', color: '#f87171' }}>
-          <h2 style={{ marginBottom: 12 }}>TALUS UI error</h2>
+          <h2 style={{ marginBottom: 12 }}>{copy.title}</h2>
           <pre style={{ whiteSpace: 'pre-wrap', fontSize: 12, color: '#cbd5e1' }}>
             {String(this.state.error?.message || this.state.error)}
           </pre>
@@ -29,7 +36,7 @@ export default class ErrorBoundary extends React.Component {
             style={{ marginTop: 16, padding: '8px 16px', background: '#334155',
                      color: 'white', border: 'none', borderRadius: 8, cursor: 'pointer' }}
           >
-            Retry
+            {copy.retry}
           </button>
         </div>
       );

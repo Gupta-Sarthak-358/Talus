@@ -351,25 +351,33 @@ def predict(req: PredictRequest):
 
 @app.post("/api/routes/safe", response_model=RouteResponse)
 def safe_route(req: RouteRequest):
-    start = min(data.ZONE_CENTERS, key=lambda z: data.distance(req.start.model_dump(), data.ZONE_CENTERS[z]))
-    end = min(data.ZONE_CENTERS, key=lambda z: data.distance(req.end.model_dump(), data.ZONE_CENTERS[z]))
+    # location-aware: N1-N4 -> lachung, D1-D4 -> darjeeling (strict 2-char ids
+    # so v1 single-letter zones A-D still resolve to gangtok), else gangtok.
+    # Each corridor routes on its own centers/graph/risk so waypoints render
+    # on that corridor's map instead of off-screen at Gangtok.
+    loc = _route_location(req.start.zone_id)
+    centers = data.ZONE_CENTERS_BY_LOCATION.get(loc) or data.ZONE_CENTERS
+    graph = _road_graph_for(loc)
+    store = data.get_store(loc)
+    start = min(centers, key=lambda z: data.distance(req.start.model_dump(), centers[z]))
+    end = min(centers, key=lambda z: data.distance(req.end.model_dump(), centers[z]))
     comparison = compare_routes(
-        MINE_ROAD_GRAPH,
+        graph,
         start,
         end,
-        data.store.risk,
+        store.risk,
         ROUTING_ALPHA,
     )
     shortest = {
         "path": data.interpolate(
-            [data.ZONE_CENTERS[zone_id] for zone_id in comparison.shortest_route.path]
+            [centers[zone_id] for zone_id in comparison.shortest_route.path]
         ),
         "total_cost": comparison.shortest_route.total_cost,
         "max_risk_exposed": comparison.shortest_route.max_risk_exposed,
     }
     aware = {
         "path": data.interpolate(
-            [data.ZONE_CENTERS[zone_id] for zone_id in comparison.risk_aware_route.path]
+            [centers[zone_id] for zone_id in comparison.risk_aware_route.path]
         ),
         "total_cost": comparison.risk_aware_route.total_cost,
         "max_risk_exposed": comparison.risk_aware_route.max_risk_exposed,
@@ -378,7 +386,42 @@ def safe_route(req: RouteRequest):
         risk_aware_route=aware,
         shortest_route=shortest,
         avoided_zones=comparison.avoided_zones,
+        location=loc,
     )
+
+
+def _route_location(zone_id: str) -> str:
+    zid = (zone_id or "").strip().upper()
+    if len(zid) == 2 and zid[0] == "N" and zid[1:].isdigit():
+        return "lachung"
+    if len(zid) == 2 and zid[0] == "D" and zid[1:].isdigit():
+        return "darjeeling"
+    return "gangtok"
+
+
+_LOCATION_GRAPHS: dict[str, MineRoadGraph] = {}
+
+
+def _road_graph_for(location: str) -> MineRoadGraph:
+    """Per-corridor road graph (same topology family as the Gangtok default)."""
+    if location not in _LOCATION_GRAPHS:
+        centers = data.ZONE_CENTERS_BY_LOCATION.get(location) or data.ZONE_CENTERS
+        graph = data.GRAPH_BY_LOCATION.get(location) or data.GRAPH
+        g = MineRoadGraph()
+        for zid in centers:
+            g.add_zone(zid)
+        for start_zone_id, neighbors in graph.items():
+            for end_zone_id in neighbors:
+                if g.graph.has_edge(start_zone_id, end_zone_id):
+                    continue
+                g.add_road(
+                    start_zone_id,
+                    end_zone_id,
+                    length=data.distance(centers[start_zone_id], centers[end_zone_id]),
+                    adjacent_zones=(start_zone_id, end_zone_id),
+                )
+        _LOCATION_GRAPHS[location] = g
+    return _LOCATION_GRAPHS[location]
 
 
 @app.post("/api/simulation/what-if", response_model=WhatIfResponse,
@@ -558,8 +601,45 @@ def _report_flagged_reason(rep: dict) -> tuple[str, str] | None:
 
 
 @app.get("/api/roads/status")
-def roads_status():
-    return {"segments": _ROADS["segments"]}
+def roads_status(location: str = "gangtok"):
+    # location-aware: Gangtok coords are canonical in roads.json; Lachung/
+    # Darjeeling reuse the same R1-R4 topology shifted by the documented
+    # fixture offsets (same constants as frontend locations.js) until NGEN
+    # extraction lands. Default gangtok behavior unchanged (validator-safe).
+    return _road_segments_for(location)
+
+
+# ---- per-corridor road geometry (fixture-preview) ---------------------------
+# Shift offsets mirror frontend/src/data/locations.js so both layers agree.
+_ROAD_SHIFT = {
+    "gangtok": (0.0, 0.0),
+    "lachung": (0.35, 0.135),
+    "darjeeling": (-0.298, -0.337),
+}
+_ROAD_ZONE_PREFIX = {"gangtok": "S", "lachung": "N", "darjeeling": "D"}
+
+
+def _road_segments_for(location: str) -> dict:
+    loc = location if location in _ROAD_SHIFT else "gangtok"
+    dlat, dlon = _ROAD_SHIFT[loc]
+    prefix = _ROAD_ZONE_PREFIX[loc]
+    out = []
+    for seg in _ROADS["segments"]:
+        s = dict(seg)
+        adj = str(s.get("adjacent_slope", ""))
+        if len(adj) == 2 and adj[0] == "S" and adj[1:].isdigit():
+            local_adj = f"{prefix}{adj[1:]}"
+            s["adjacent_slope"] = local_adj
+            for key in ("name", "description"):
+                if isinstance(s.get(key), str):
+                    s[key] = s[key].replace(adj, local_adj)
+        s["coordinates"] = [[round(lat + dlat, 5), round(lon + dlon, 5)]
+                            for lat, lon in s.get("coordinates", [])]
+        if loc != "gangtok":
+            s["description"] = (s.get("description", "")
+                                + " [fixture-preview geometry cloned from Gangtok; pending NGEN extraction]")
+        out.append(s)
+    return {"segments": out, "location": loc, "preview": loc != "gangtok"}
 
 
 @app.post("/api/reports", response_model=ReportOut)

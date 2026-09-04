@@ -18,6 +18,7 @@ export default function WhatIfDrawer() {
     resetSimulation,
     activeSimulation,
     simulationLoading,
+    t,
   } = useTalusContext();
 
   const [targetZoneId, setTargetZoneId] = useState(selectedZoneId || 'S3');
@@ -103,9 +104,9 @@ export default function WhatIfDrawer() {
               <Sliders className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-mine-text">What-If Condition Simulator</h3>
+              <h3 className="text-sm font-bold text-mine-text">{t('sim.title')}</h3>
               <p className="text-[11px] text-mine-muted">
-                Simulate geotechnical and weather changes in real time
+                {t('sim.subtitle')}
               </p>
             </div>
           </div>
@@ -122,7 +123,7 @@ export default function WhatIfDrawer() {
         <div className="flex-1 p-5 space-y-5 overflow-y-auto">
           {/* Target Zone Selection */}
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-mine-text">Target Slope Sector:</label>
+            <label className="text-xs font-semibold text-mine-text">{t('sim.targetSector')}</label>
             <select
               value={targetZoneId}
               onChange={(e) => setTargetZoneId(e.target.value)}
@@ -142,19 +143,19 @@ export default function WhatIfDrawer() {
               onClick={() => setMode('ml')}
               className={`py-2 rounded-lg text-[11px] font-bold transition-colors ${mode === 'ml' ? 'bg-talus-600 text-mine-text' : 'bg-mine-border text-mine-muted hover:text-mine-text'}`}
             >
-              ML COUNTERFACTUAL
+              {t('sim.mlCounterfactual')}
             </button>
             <button
               onClick={() => setMode('causal')}
               className={`py-2 rounded-lg text-[11px] font-bold transition-colors ${mode === 'causal' ? 'bg-emerald-600 text-mine-text' : 'bg-mine-border text-mine-muted hover:text-mine-text'}`}
             >
-              CAUSAL PHYSICS
+              {t('sim.causalPhysics')}
             </button>
           </div>
           <p className="text-[10px] text-mine-muted leading-relaxed">
             {mode === 'ml'
-              ? 'ML counterfactual: overrides observed features and re-predicts with the frozen RF. Answers "what would the model predict?"'
-              : 'Causal physics (Scenario Engine v1.5): modifies real-world causes and lets the frozen generator chain propagate them into a day-by-day FoS trajectory. Answers "what physically happens?"'}
+              ? t('sim.mlDesc')
+              : t('sim.causalDesc')}
           </p>
 
           {mode === 'causal' && (
@@ -162,7 +163,7 @@ export default function WhatIfDrawer() {
               <div className="space-y-3">
                 <div>
                   <label className="text-[10px] font-semibold text-mine-muted uppercase tracking-wider">
-                    Threshold & Physics Template (IMD Fixture)
+                    {t('sim.template')}
                   </label>
                   <select
                     value={causalForm.params?.template_id || 'monga-mdl'}
@@ -182,19 +183,19 @@ export default function WhatIfDrawer() {
 
                 <div className="grid grid-cols-3 gap-2">
                   <div>
-                    <label className="text-[9px] text-mine-muted uppercase">Start Day</label>
+                    <label className="text-[9px] text-mine-muted uppercase">{t('sim.start')}</label>
                     <input type="number" min="0" value={causalForm.start_day}
                       onChange={(e) => setCausalForm({ ...causalForm, start_day: Number(e.target.value) })}
                       className="w-full mt-1 bg-mine-darker border border-mine-border rounded-lg px-2 py-1 text-xs text-mine-text" />
                   </div>
                   <div>
-                    <label className="text-[9px] text-mine-muted uppercase">Duration</label>
+                    <label className="text-[9px] text-mine-muted uppercase">{t('sim.duration')}</label>
                     <input type="number" min="1" value={causalForm.duration_days}
                       onChange={(e) => setCausalForm({ ...causalForm, duration_days: Number(e.target.value) })}
                       className="w-full mt-1 bg-mine-darker border border-mine-border rounded-lg px-2 py-1 text-xs text-mine-text" />
                   </div>
                   <div>
-                    <label className="text-[9px] text-mine-muted uppercase">Horizon (days)</label>
+                    <label className="text-[9px] text-mine-muted uppercase">{t('sim.horizon')}</label>
                     <input type="number" min="30" max="1500" step="30" value={causalForm.horizon_days}
                       onChange={(e) => setCausalForm({ ...causalForm, horizon_days: Number(e.target.value) })}
                       className="w-full mt-1 bg-mine-darker border border-mine-border rounded-lg px-2 py-1 text-xs text-mine-text" />
@@ -207,7 +208,7 @@ export default function WhatIfDrawer() {
                   className="w-full flex items-center justify-center gap-2 py-2.5 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-mine-text rounded-lg text-xs font-bold transition-all shadow-lg shadow-emerald-500/25 disabled:opacity-50"
                 >
                   <FlaskConical className="w-4 h-4" />
-                  <span>{causalLoading ? 'Propagating frozen physics chain...' : 'Run Causal Simulation'}</span>
+                  <span>{causalLoading ? t('sim.propagating') : t('sim.run_causal')}</span>
                 </button>
               </div>
 
@@ -221,7 +222,7 @@ export default function WhatIfDrawer() {
                   <div className="p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/20">
                     <div className="flex items-center gap-2 mb-2">
                       <Clock className="w-3.5 h-3.5 text-emerald-400" />
-                      <span className="text-[11px] font-bold text-mine-text">Trajectory Summary</span>
+                      <span className="text-[11px] font-bold text-mine-text">{t('sim.traj')}</span>
                       <span className="ml-auto text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono">
                         gen v{causalResult.generator_version}
                       </span>
@@ -234,7 +235,7 @@ export default function WhatIfDrawer() {
                     </p>
                     <details className="text-[11px]">
                       <summary className="cursor-pointer text-mine-muted hover:text-mine-text select-none">
-                        Advanced trajectory metrics
+                        {t('sim.advanced')}
                       </summary>
                       <div className="grid grid-cols-2 gap-x-3 gap-y-1 mt-2">
                       <span className="text-mine-muted">Min FoS (baseline → scenario)</span>
@@ -261,7 +262,7 @@ export default function WhatIfDrawer() {
 
                   {causalResult.provenance && (
                     <div className="p-2.5 rounded-lg bg-mine-darker border border-mine-border text-[10px] text-mine-muted">
-                      <span className="font-semibold text-mine-text">Provenance:</span>{' '}
+                      <span className="font-semibold text-mine-text">{t('sim.provenance')}</span>{' '}
                       {causalResult.provenance.template_id} [{causalResult.provenance.imd_window?.[0]} … {causalResult.provenance.imd_window?.[1]}]
                       {' · '}{causalResult.provenance.window_total_mm} mm total · max day {causalResult.provenance.window_max_day_mm} mm
                       <div className="text-mine-muted mt-0.5">{causalResult.provenance.source}</div>
@@ -271,13 +272,13 @@ export default function WhatIfDrawer() {
                   {(causalResult.evidence_timeline || []).length > 0 && (
                     <div>
                       <div className="text-[10px] font-semibold text-mine-muted uppercase tracking-wider mb-1.5">
-                        Evidence Timeline (state changes → causes)
+                        {t('sim.evidence_timeline')}
                       </div>
                       <div className="space-y-1.5 max-h-56 overflow-y-auto pr-1">
                         {causalResult.evidence_timeline.map((ev, i) => (
                           <div key={i} className="p-2 rounded-lg bg-mine-darker border border-mine-border">
                             <div className="flex items-center justify-between text-[11px]">
-                              <span className="font-mono text-mine-text">Day {ev.day}</span>
+                              <span className="font-mono text-mine-text">{t('sim.day')} {ev.day}</span>
                               <span className="font-mono">
                                 <span className="text-mine-muted">{ev.score_from}</span>
                                 <span className="text-mine-muted mx-1">→</span>
@@ -305,8 +306,8 @@ export default function WhatIfDrawer() {
           {/* Quick Scenario Presets */}
           <div className="space-y-2">
             <div className="text-xs font-semibold text-mine-text flex items-center justify-between">
-              <span>Quick Demo Presets:</span>
-              <span className="text-[10px] text-talus-400">Hover for details · Click to load</span>
+              <span>{t('sim.presets')}</span>
+              <span className="text-[10px] text-talus-400">{t('sim.presets_hint')}</span>
             </div>
             <div className="grid grid-cols-2 gap-2">
               {WHAT_IF_PRESETS.map((preset) => (
@@ -332,7 +333,7 @@ export default function WhatIfDrawer() {
                 <div className="text-[11px] font-bold text-mine-text">{hoveredPreset.name}</div>
                 <p className="text-[10px] text-mine-text leading-relaxed">{hoveredPreset.description}</p>
                 <div className="text-[10px] text-mine-muted leading-relaxed">
-                  <span className="font-semibold text-mine-muted">Inputs applied: </span>
+                  <span className="font-semibold text-mine-muted">{t('sim.inputs_applied')} </span>
                   {Object.entries(hoveredPreset.values).map(([k, v]) => `${k} = ${v}`).join(' · ')}
                 </div>
               </div>
@@ -346,7 +347,7 @@ export default function WhatIfDrawer() {
               <div className="flex justify-between text-xs">
                 <span className="text-mine-text flex items-center gap-1.5">
                   <CloudRain className="w-3.5 h-3.5 text-blue-400" />
-                  24h Cumulative Rainfall:
+                  {t('sim.rainfall')}
                 </span>
                 <span className="font-mono font-bold text-mine-text">{params.rainfall_24h} mm</span>
               </div>
@@ -370,7 +371,7 @@ export default function WhatIfDrawer() {
               <div className="flex justify-between text-xs">
                 <span className="text-mine-text flex items-center gap-1.5">
                   <Activity className="w-3.5 h-3.5 text-orange-400" />
-                  Ground Vibration Proxy (PPV):
+                  {t('sim.vibration')}
                 </span>
                 <span className="font-mono font-bold text-mine-text">{params.blast_vibration} mm/s</span>
               </div>
@@ -394,7 +395,7 @@ export default function WhatIfDrawer() {
               <div className="flex justify-between text-xs">
                 <span className="text-mine-text flex items-center gap-1.5">
                   <GitCommit className="w-3.5 h-3.5 text-red-400" />
-                  Tension Crack Density:
+                  {t('sim.crack')}
                 </span>
                 <span className="font-mono font-bold text-mine-text">{params.crack_density} /m²</span>
               </div>
@@ -418,7 +419,7 @@ export default function WhatIfDrawer() {
               <div className="flex justify-between text-xs">
                 <span className="text-mine-text flex items-center gap-1.5">
                   <Layers className="w-3.5 h-3.5 text-talus-400" />
-                  Hillside Slope Angle:
+                  {t('sim.slopeAngle')}
                 </span>
                 <span className="font-mono font-bold text-mine-text">{params.slope_angle}°</span>
               </div>
@@ -446,7 +447,7 @@ export default function WhatIfDrawer() {
               className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-gradient-to-r from-talus-600 to-talus-500 hover:from-talus-500 hover:to-talus-400 text-mine-text rounded-lg text-xs font-bold transition-all shadow-lg shadow-talus-500/25 disabled:opacity-50"
             >
               <Play className="w-4 h-4" />
-              <span>{simulationLoading ? 'Inferring ML Risk Shift...' : 'Run What-If Simulation'}</span>
+              <span>{simulationLoading ? t('sim.inferring') : t('sim.run')}</span>
             </button>
 
             {activeSimulation && (

@@ -17,6 +17,7 @@ export default function RoleActionCard({ roleActions = {}, zoneName = 'S1', risk
     setIsWhatIfOpen,
     setIsAlertsDrawerOpen,
     setIsReportModalOpen,
+    t,
   } = useTalusContext();
 
   const action = roleActions[role] || {
@@ -46,7 +47,7 @@ export default function RoleActionCard({ roleActions = {}, zoneName = 'S1', risk
           </div>
           <div>
             <div className="text-[10px] uppercase font-bold tracking-wider text-talus-600">
-              Role Directive: {currentRoleMeta.label}
+              {t('action.directive')} {currentRoleMeta.label}
             </div>
             <h4 className="text-xs font-extrabold text-mine-text uppercase tracking-wide">
               {action.header}
@@ -80,7 +81,7 @@ export default function RoleActionCard({ roleActions = {}, zoneName = 'S1', risk
         )}
 
         <div className="text-[11px] text-mine-muted flex items-center justify-between pt-1 border-t border-mine-border">
-          <span>Recommended Route Corridor:</span>
+          <span>{t('action.route')}</span>
           <span className="font-semibold text-risk-verylow font-mono">
             {action.routeRecommended}
           </span>
@@ -96,14 +97,14 @@ export default function RoleActionCard({ roleActions = {}, zoneName = 'S1', risk
               className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-talus-600 hover:bg-talus-500 text-white rounded-lg text-xs font-bold transition-all shadow-sm"
             >
               <Navigation className="w-3.5 h-3.5" />
-              <span>Safe Evacuation Route (Avoid R2)</span>
+              <span>{t('action.safe_route')}</span>
             </button>
             <button
               onClick={() => setIsReportModalOpen(true)}
               className="flex items-center justify-center gap-1.5 py-2 px-3 bg-mine-card hover:bg-mine-dark text-mine-text border border-mine-border rounded-lg text-xs font-semibold transition-all"
             >
               <FileText className="w-3.5 h-3.5 text-talus-600" />
-              <span>Submit Report</span>
+              <span>{t('action.submit')}</span>
             </button>
           </>
         )}
@@ -115,14 +116,14 @@ export default function RoleActionCard({ roleActions = {}, zoneName = 'S1', risk
               className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-talus-600 hover:bg-talus-500 text-white rounded-lg text-xs font-bold transition-all shadow-sm"
             >
               <FileText className="w-3.5 h-3.5" />
-              <span>Review Field Queue & Submit</span>
+              <span>{t('action.review_queue')}</span>
             </button>
             <button
               onClick={() => setIsAlertsDrawerOpen(true)}
               className="flex items-center justify-center gap-1.5 py-2 px-3 bg-mine-card hover:bg-mine-dark text-mine-text border border-mine-border rounded-lg text-xs font-semibold transition-all"
             >
               <Bell className="w-3.5 h-3.5 text-risk-critical" />
-              <span>Multi-Lang Alerts</span>
+              <span>{t('action.alerts_btn')}</span>
             </button>
           </>
         )}
@@ -134,14 +135,14 @@ export default function RoleActionCard({ roleActions = {}, zoneName = 'S1', risk
               className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-talus-600 hover:bg-talus-500 text-white rounded-lg text-xs font-bold transition-all shadow-sm"
             >
               <Sliders className="w-3.5 h-3.5 text-risk-moderate" />
-              <span>Simulate Monsoon & Causal Replay</span>
+              <span>{t('action.simulate')}</span>
             </button>
             <button
               onClick={() => setIsRouteModalOpen(true)}
               className="flex items-center justify-center gap-1.5 py-2 px-3 bg-mine-card hover:bg-mine-dark text-mine-text border border-mine-border rounded-lg text-xs font-semibold transition-all"
             >
               <Navigation className="w-3.5 h-3.5 text-risk-verylow" />
-              <span>Corridor Routing</span>
+              <span>{t('action.routing_btn')}</span>
             </button>
           </>
         )}
@@ -152,7 +153,7 @@ export default function RoleActionCard({ roleActions = {}, zoneName = 'S1', risk
             className="w-full flex items-center justify-center gap-1.5 py-2 bg-risk-critical hover:bg-risk-critical/90 text-white rounded-lg text-xs font-bold transition-all shadow-sm"
           >
             <Flame className="w-3.5 h-3.5" />
-            <span>Inspect Safe Ingress Corridor (Strictly Bypassing R2)</span>
+            <span>{t('action.ingress')}</span>
           </button>
         )}
       </div>

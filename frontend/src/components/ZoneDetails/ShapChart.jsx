@@ -1,11 +1,13 @@
 import React from 'react';
+import { useTalusContext } from '../../context/TalusContext';
 import { HelpCircle, Info, Sparkles } from 'lucide-react';
 
 export default function ShapChart({ shap = [], baseRisk = 15, currentRisk = 82, zoneName = 'Zone B' }) {
+  const { t } = useTalusContext();
   if (!shap || shap.length === 0) {
     return (
       <div className="p-4 bg-mine-darker rounded-xl border border-mine-border text-center text-xs text-mine-muted">
-        No feature attribution explanation available for this zone.
+        {t('shap.empty')}
       </div>
     );
   }
@@ -20,11 +22,11 @@ export default function ShapChart({ shap = [], baseRisk = 15, currentRisk = 82, 
         <div className="flex items-center gap-1.5">
           <Sparkles className="w-4 h-4 text-talus-600" />
           <h4 className="text-xs font-bold text-mine-text uppercase tracking-wider">
-            Why is this Risk High? (SHAP Explanation)
+            {t('shap.title')}
           </h4>
         </div>
         <div className="text-[10px] text-mine-muted font-mono">
-          Base: <span className="text-mine-text font-bold">{baseRisk}</span> → Current: <span className="text-risk-high font-bold">{currentRisk}</span>
+          {t('shap.base')} <span className="text-mine-text font-bold">{baseRisk}</span> {t('shap.current')} <span className="text-risk-high font-bold">{currentRisk}</span>
         </div>
       </div>
 

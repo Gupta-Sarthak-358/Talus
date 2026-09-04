@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTalusContext } from '../../context/TalusContext';
 import {
   ResponsiveContainer,
   LineChart,
@@ -12,6 +13,7 @@ import {
 import { TrendingUp, Clock, AlertCircle } from 'lucide-react';
 
 export default function RiskTrendChart({ trend = {}, zoneName = 'Zone B' }) {
+  const { t } = useTalusContext();
   const history = trend.history || [
     { time: '09:00', risk: 41, label: '09:00 AM' },
     { time: '10:00', risk: 53, label: '10:00 AM' },
@@ -42,11 +44,11 @@ export default function RiskTrendChart({ trend = {}, zoneName = 'Zone B' }) {
         <div className="flex items-center gap-1.5">
           <TrendingUp className="w-4 h-4 text-risk-high" />
           <h4 className="text-xs font-bold text-mine-text uppercase tracking-wider">
-            Risk Escalation Timeline
+            {t('zone.trend')}
           </h4>
         </div>
         <span className="text-[11px] font-mono text-risk-critical font-semibold bg-risk-critical/15 px-2 py-0.5 rounded border border-risk-critical/30">
-          {trend.delta || '↑ Rising Rapidly'}
+          {trend.delta || t('trend.rising')}
         </span>
       </div>
 
@@ -78,9 +80,9 @@ export default function RiskTrendChart({ trend = {}, zoneName = 'Zone B' }) {
 
             {/* Frozen risk-band thresholds (FoS-derived) */}
             <ReferenceLine y={75} stroke="#d96b24" strokeDasharray="3 3" opacity={0.7}
-              label={{ value: 'High', position: 'insideTopRight', fontSize: 9, fill: '#d96b24' }} />
+              label={{ value: t('trend.high'), position: 'insideTopRight', fontSize: 9, fill: '#d96b24' }} />
             <ReferenceLine y={85} stroke="#c74732" strokeDasharray="3 3" opacity={0.7}
-              label={{ value: 'Critical', position: 'insideTopRight', fontSize: 9, fill: '#c74732' }} />
+              label={{ value: t('trend.critical'), position: 'insideTopRight', fontSize: 9, fill: '#c74732' }} />
 
             <Line
               type="monotone"
@@ -96,10 +98,10 @@ export default function RiskTrendChart({ trend = {}, zoneName = 'Zone B' }) {
 
       <div className="flex items-center justify-between text-[10px] text-mine-muted border-t border-mine-border pt-2 font-mono">
         <span className="flex items-center gap-1">
-          <span className="w-2 h-0.5 bg-risk-high inline-block"></span> High Threshold (75)
+          <span className="w-2 h-0.5 bg-risk-high inline-block"></span> {t('trend.high_thr')}
         </span>
         <span className="flex items-center gap-1">
-          <span className="w-2 h-0.5 bg-risk-critical inline-block"></span> Critical Threshold (85)
+          <span className="w-2 h-0.5 bg-risk-critical inline-block"></span> {t('trend.crit_thr')}
         </span>
       </div>
     </div>

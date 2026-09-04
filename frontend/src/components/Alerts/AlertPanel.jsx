@@ -41,7 +41,7 @@ export default function AlertPanel() {
   };
 
   const selectedMessage = alertDispatchData?.messages?.find((m) => m.lang === activeLang) ||
-    alertDispatchData?.messages?.[0] || { lang: 'en', text: 'Critical risk for 2 days.' };
+    alertDispatchData?.messages?.[0] || { lang: 'en', text: t('alerts.fallback') };
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-sm transition-opacity">
@@ -71,7 +71,7 @@ export default function AlertPanel() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5 text-xs font-bold text-mine-text uppercase tracking-wider">
               <Globe className="w-3.5 h-3.5 text-talus-600" />
-              <span>Multilingual Broadcast Preview</span>
+              <span>{t('alerts.multilingualPreview')}</span>
             </div>
 
             <button
@@ -80,7 +80,7 @@ export default function AlertPanel() {
               className="flex items-center gap-1.5 px-2.5 py-1 bg-talus-600 hover:bg-talus-500 disabled:opacity-50 text-white rounded-lg text-[11px] font-bold transition-all shadow-sm"
             >
               <Send className="w-3 h-3" />
-              <span>{dispatching ? 'Queuing Broadcast...' : dispatchSent ? 'Dispatched (Fixture)' : 'Dispatch Alert'}</span>
+              <span>{dispatching ? t('alerts.queuingBroadcast') : dispatchSent ? t('alerts.dispatched') : t('alerts.dispatch')}</span>
             </button>
           </div>
 
@@ -122,9 +122,9 @@ export default function AlertPanel() {
           <div className="p-3 bg-mine-card rounded-xl border border-risk-critical/30 space-y-1.5">
             <div className="flex items-center justify-between text-[10px] text-mine-muted font-mono">
               <span className="text-risk-critical font-bold uppercase">
-                {activeLang === 'en' ? 'English Broadcast' : activeLang === 'hi' ? 'Hindi Broadcast' : 'Nepali Broadcast'}
+                {activeLang === 'en' ? t('alerts.englishBroadcast') : activeLang === 'hi' ? t('alerts.hindiBroadcast') : t('alerts.nepaliBroadcast')}
               </span>
-              <span>Trigger: S1 Critical</span>
+              <span>{t('alerts.trigger')}</span>
             </div>
             <p className="text-xs text-mine-text font-medium leading-relaxed">
               "{selectedMessage.text}"
@@ -135,10 +135,10 @@ export default function AlertPanel() {
           <div className="flex items-center justify-between text-[10px] px-2.5 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/25 text-emerald-300">
             <span className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span>Sync Badge: {alertDispatchData?.offline_note || 'Cached on device. Queued sync when network returns (fixture).'}</span>
+              <span>{t('alerts.syncBadge')}: {alertDispatchData?.offline_note || t('alerts.cached')}</span>
             </span>
             <span className="font-mono font-bold uppercase text-[9px] px-1 bg-emerald-500/20 rounded">
-              Queued: {alertDispatchData?.queued || 3}
+              {t('alerts.queued')} {alertDispatchData?.queued || 3}
             </span>
           </div>
         </div>
@@ -147,7 +147,7 @@ export default function AlertPanel() {
         <div className="px-4 py-2 bg-mine-darker border-b border-mine-border flex items-center justify-between text-xs">
           <div className="flex items-center gap-1">
             <Filter className="w-3 h-3 text-mine-muted" />
-            <span className="text-mine-muted text-[11px]">Filter Active:</span>
+            <span className="text-mine-muted text-[11px]">{t('alerts.filterActive')}</span>
           </div>
           <div className="flex gap-1">
             {['ALL', 'CRITICAL', 'HIGH'].map((sev) => (
@@ -171,7 +171,7 @@ export default function AlertPanel() {
           {filteredAlerts.length === 0 ? (
             <div className="p-8 text-center text-mine-muted text-xs">
               <CheckCircle2 className="w-8 h-8 text-risk-verylow mx-auto mb-2" />
-              No active alerts matching the selected filter.
+              {t('alerts.empty')}
             </div>
           ) : (
             filteredAlerts.map((alert) => {
@@ -209,10 +209,10 @@ export default function AlertPanel() {
                         className="text-[10px] font-semibold text-talus-600 hover:text-talus-700 flex items-center gap-1 transition-colors"
                       >
                         <CheckCircle2 className="w-3 h-3" />
-                        <span>Acknowledge</span>
+                        <span>{t('common.acknowledge')}</span>
                       </button>
                     ) : (
-                      <span className="text-[10px] text-mine-muted italic">Acknowledged</span>
+                      <span className="text-[10px] text-mine-muted italic">{t('common.acknowledged')}</span>
                     )}
                   </div>
 
@@ -242,7 +242,7 @@ export default function AlertPanel() {
                   {roleDirective && (
                     <div className="mt-2.5 p-2 bg-mine-card border border-mine-border rounded-lg text-[11px]">
                       <div className="text-[10px] text-talus-600 font-bold uppercase">
-                        Action for {currentRoleMeta.label}:
+                        {t('alerts.action_for')} {currentRoleMeta.label}:
                       </div>
                       <div className="text-mine-text mt-0.5 font-medium">{roleDirective}</div>
                     </div>
@@ -257,7 +257,7 @@ export default function AlertPanel() {
                       }}
                       className="text-xs font-bold text-talus-600 hover:text-talus-700 flex items-center gap-1 transition-colors"
                     >
-                      <span>Inspect {alert.zoneId} on Map</span>
+                      <span>Inspect {alert.zoneId} {t('alerts.inspect')}</span>
                       <ExternalLink className="w-3 h-3" />
                     </button>
                   </div>

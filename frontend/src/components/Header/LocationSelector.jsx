@@ -3,13 +3,13 @@ import { useTalusContext } from '../../context/TalusContext';
 import { MapPin, ChevronDown } from 'lucide-react';
 
 export default function LocationSelector() {
-  const { activeLocation, switchLocation, locations, locationData } = useTalusContext();
+  const { activeLocation, switchLocation, locations, locationData, t } = useTalusContext();
 
   return (
     <div className="relative flex items-center gap-2">
       <div className="flex items-center gap-1.5 text-mine-muted">
         <MapPin className="w-3.5 h-3.5 text-talus-600" />
-        <span className="text-[11px] font-semibold hidden sm:inline">Corridor</span>
+        <span className="text-[11px] font-semibold hidden sm:inline">{t('header.corridor')}</span>
       </div>
       <div className="relative">
         <select
@@ -19,7 +19,7 @@ export default function LocationSelector() {
         >
           {Object.values(locations).map((loc) => (
             <option key={loc.id} value={loc.id}>
-              {loc.label} {loc.live ? '● LIVE' : '○ Preview'}
+              {loc.label} {loc.live ? `● ${t('location.live')}` : `○ ${t('location.preview')}`}
             </option>
           ))}
         </select>

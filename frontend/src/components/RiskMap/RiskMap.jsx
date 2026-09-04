@@ -108,11 +108,17 @@ export default function RiskMap() {
     activeSimulation,
     locationData,
     activeLocation,
+    roads: liveRoads,
+    t,
   } = useTalusContext();
 
   const mapCenter = locationData.center;
   const mapZoom = locationData.zoom;
-  const roadSegments = locationData.roads;
+  // Live per-corridor segments from GET /api/roads/status?location= (carry
+  // coordinates); fall back to the static fixture geometry pre-load.
+  const roadSegments = (Array.isArray(liveRoads) && liveRoads.length > 0 && liveRoads[0]?.coordinates)
+    ? liveRoads
+    : locationData.roads;
   const infra = locationData.infra;
   const sensors = locationData.sensors;
 
@@ -129,10 +135,10 @@ export default function RiskMap() {
       {/* Top Banner on Map — location-aware */}
       <div className="absolute top-3 left-3 z-[400] bg-mine-card border border-mine-border rounded-lg px-3 py-1.5 text-xs font-medium text-mine-text flex items-center gap-2 shadow-sm">
         <span className={`w-2 h-2 rounded-full ${locationData.live ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`}></span>
-        <span className="font-semibold">{locationData.label} Landslide GIS ({zones.map(z=>z.id).join('–') || locationData.id})</span>
+        <span className="font-semibold">{locationData.label} {t('map.title')} ({zones.map(z=>z.id).join('–') || locationData.id})</span>
         <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold border ${locationData.live ? 'bg-emerald-500/15 text-emerald-700 border-emerald-500/30' : 'bg-amber-500/15 text-amber-700 border-amber-500/30'}`}>{locationData.badge}</span>
         <span className="text-mine-muted font-mono">|</span>
-        <span className="text-mine-muted text-[11px]">Roads R1–R4 · Click slope to inspect SHAP intelligence</span>
+        <span className="text-mine-muted text-[11px]">{t('map.clickSlope')}</span>
       </div>
 
       {/* Top-Right Map Controls: Reset View / Basemap Mode */}
@@ -140,10 +146,10 @@ export default function RiskMap() {
         <button
           onClick={() => setTileMode(tileMode === 'osm' ? 'dark' : tileMode === 'dark' ? 'light' : 'osm')}
           className="px-2 py-1 bg-mine-darker hover:bg-mine-dark text-mine-text rounded text-[10px] font-mono font-semibold flex items-center gap-1 transition-colors"
-          title="Switch Basemap Style"
+          title={t('map.switch_layer')}
         >
           <Layers className="w-3 h-3 text-talus-600" />
-          <span>Layer: {tileMode.toUpperCase()}</span>
+          <span>{t('map.layer')}: {tileMode.toUpperCase()}</span>
         </button>
       </div>
 
@@ -229,12 +235,12 @@ export default function RiskMap() {
                   <div className="text-[11px] text-mine-text">{road.description}</div>
                   {isAtRisk && (
                     <div className="text-[10px] text-amber-400 font-medium">
-                      ⚠ Bypassed by S1→S4 Safe Route recommendation
+                      ⚠ {t('map.bypassed')}
                     </div>
                   )}
                   {isBlocked && (
                     <div className="text-[10px] text-risk-critical font-medium">
-                      ✕ Road closed due to active debris flow
+                      ✕ {t('map.road_closed')}
                     </div>
                   )}
                 </div>
@@ -269,17 +275,17 @@ export default function RiskMap() {
                   <div className="p-1 space-y-0.5">
                     <div className="font-bold text-mine-text flex items-center gap-1">
                       <span>{zone.name}</span>
-                      {isSelected && <span className="text-[10px] text-talus-600 font-normal">(Selected)</span>}
+                      {isSelected && <span className="text-[10px] text-talus-600 font-normal">({t('map.selected')})</span>}
                     </div>
                     <div className="text-[11px] flex items-center gap-2">
                       <span className="font-mono font-bold" style={{ color: fillColor }}>
-                        Risk: {zone.risk_score}/100 [{zone.risk_band}]
+                        {t('map.risk')} {zone.risk_score}/100 [{zone.risk_band}]
                       </span>
-                      <span className="text-mine-muted">Conf: {zone.confidence}%</span>
+                      <span className="text-mine-muted">{t('map.conf')} {zone.confidence}%</span>
                     </div>
                     {zone.shap && zone.shap[0] && (
                       <div className="text-[10px] text-mine-muted">
-                        Primary: {zone.shap[0].feature} (+{zone.shap[0].value})
+                        {t('map.primary')} {zone.shap[0].feature} (+{zone.shap[0].value})
                       </div>
                     )}
                   </div>
@@ -293,13 +299,13 @@ export default function RiskMap() {
                     <div className="p-1 space-y-1">
                       <div className="flex items-center gap-1.5 text-risk-critical font-bold text-xs">
                         <ShieldAlert className="w-4 h-4" />
-                        <span>{zone.name} — High Hazard</span>
+                        <span>{zone.name} — {t('map.high_hazard')}</span>
                       </div>
                       <p className="text-[11px] text-mine-text">
-                        Risk Score: <strong className="text-risk-critical">{zone.risk_score}</strong> / 100 ({zone.risk_band})
+                        {t('map.risk_score')} <strong className="text-risk-critical">{zone.risk_score}</strong> / 100 ({zone.risk_band})
                       </p>
                       <p className="text-[10px] text-mine-muted">
-                        High pore-pressure & rainfall saturation. Safe corridor avoids road R2.
+                        {t('map.high_pore')}
                       </p>
                     </div>
                   </Popup>
@@ -321,7 +327,7 @@ export default function RiskMap() {
                   </div>
                   <div className="text-[11px] text-mine-text font-mono">{sensor.reading}</div>
                   <div className="text-[10px] text-mine-muted flex items-center justify-between">
-                    <span>Type: {sensor.type}</span>
+                    <span>{t('map.type')} {sensor.type}</span>
                     <span
                       className={`font-semibold ${
                         sensor.status === 'online' ? 'text-risk-verylow' : 'text-risk-moderate'
@@ -346,9 +352,9 @@ export default function RiskMap() {
                     <span>{item.name}</span>
                   </div>
                   {item.capacity && (
-                    <div className="text-[11px] text-mine-text">Capacity: {item.capacity}</div>
+                    <div className="text-[11px] text-mine-text">{t('map.capacity')} {item.capacity}</div>
                   )}
-                  <div className="text-[10px] text-mine-muted">Status: {item.status}</div>
+                  <div className="text-[10px] text-mine-muted">{t('zone.status')}: {item.status}</div>
                 </div>
               </Popup>
             </Marker>
@@ -375,11 +381,11 @@ export default function RiskMap() {
                       <span>{activeRoutePlan.normalRoute.name}</span>
                     </div>
                     <div className="text-[11px] text-mine-text">
-                      Distance: {activeRoutePlan.normalRoute.distanceKm} km | Exposure: HIGH (
+                      {t('route.distance')}: {activeRoutePlan.normalRoute.distanceKm} km | {t('route.exposure')}: HIGH (
                       {activeRoutePlan.normalRoute.riskExposureScore})
                     </div>
                     <div className="text-[10px] text-risk-critical">
-                      ⚠ Direct rockfall hazard in {activeRoutePlan.normalRoute.passesThroughHazardZone}
+                      ⚠ {t('map.direct_hazard')} {activeRoutePlan.normalRoute.passesThroughHazardZone}
                     </div>
                   </div>
                 </Tooltip>
@@ -403,11 +409,11 @@ export default function RiskMap() {
                       <span>{activeRoutePlan.riskAwareRoute.name}</span>
                     </div>
                     <div className="text-[11px] text-mine-text">
-                      Distance: {activeRoutePlan.riskAwareRoute.distanceKm} km | Exposure: LOW (
+                      {t('route.distance')}: {activeRoutePlan.riskAwareRoute.distanceKm} km | {t('route.exposure')}: LOW (
                       {activeRoutePlan.riskAwareRoute.riskExposureScore})
                     </div>
                     <div className="text-[10px] text-risk-verylow">
-                      ✓ Safely bypasses unstable highwall sectors
+                      ✓ {t('map.safe_bypass')}
                     </div>
                   </div>
                 </Tooltip>

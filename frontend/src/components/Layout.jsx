@@ -9,10 +9,10 @@ import { LayoutDashboard, Users, Shield, Briefcase, Flame } from 'lucide-react';
 // (/map /reports /lab /routes) stay in the router for deep links
 // from role pages, but are hidden here to avoid 9-tab confusion.
 const ROLE_TABS = [
-  { to: '/role/villager', label: 'Villager', icon: Users },
-  { to: '/role/district_officer', label: 'District', icon: Shield },
-  { to: '/role/state_manager', label: 'State', icon: Briefcase },
-  { to: '/role/rescue_team', label: 'Rescue', icon: Flame },
+  { to: '/role/villager', key: 'nav.villager', icon: Users },
+  { to: '/role/district_officer', key: 'nav.district', icon: Shield },
+  { to: '/role/state_manager', key: 'nav.state', icon: Briefcase },
+  { to: '/role/rescue_team', key: 'nav.rescue', icon: Flame },
 ];
 
 function Footer() {
@@ -28,7 +28,7 @@ function Footer() {
             <span className="text-talus-600 font-mono text-[11px] font-bold">SIH26001 / MDoNER Prototype</span>
           </div>
           <div className="flex items-center gap-3 text-[11px] text-mine-muted">
-            <span>Region: <strong className="text-mine-text">{locationData.label} ({locationData.zones.map(z=>z.id).join('–')})</strong></span>
+            <span>{t('app.region')}: <strong className="text-mine-text">{locationData.label} ({locationData.zones.map(z=>z.id).join('–')})</strong></span>
             <span className="text-mine-muted font-mono">|</span>
             <span className="text-talus-600 font-mono font-medium">{t('app.footerModel')}</span>
           </div>
@@ -47,6 +47,7 @@ function Footer() {
 
 export default function Layout() {
   const location = useLocation();
+  const { t } = useTalusContext();
   return (
     <div className="min-h-screen bg-mine-darkest flex flex-col font-sans selection:bg-talus-600 selection:text-white">
       <Header />
@@ -65,10 +66,10 @@ export default function Layout() {
             }
           >
             <LayoutDashboard className="w-3.5 h-3.5" />
-            <span>Who are you?</span>
+            <span>{t('nav.home')}</span>
           </NavLink>
           <span className="hidden md:block w-px h-5 bg-mine-border mx-1" />
-          {ROLE_TABS.map(({ to, label, icon: Icon }) => (
+          {ROLE_TABS.map(({ to, key, icon: Icon }) => (
             <NavLink
               key={to}
               to={to}
@@ -81,7 +82,7 @@ export default function Layout() {
               }
             >
               <Icon className="w-3.5 h-3.5" />
-              <span>{label}</span>
+              <span>{t(key)}</span>
             </NavLink>
           ))}
           <span className="ml-auto hidden sm:flex items-center gap-1 text-[11px] text-mine-muted font-mono">

@@ -1,9 +1,17 @@
 {
   "segments": [
-    { "id": "R1", "name": "Tathangchen link", "status": "blocked", "adjacent_slope": "S1" },
-    { "id": "R2", "name": "Ridge shortcut S1-S4", "status": "at-risk", "adjacent_slope": "S1" },
-    { "id": "R3", "name": "Valley road S3-S4", "status": "open", "adjacent_slope": "S3" },
-    { "id": "R4", "name": "Ranipool approach", "status": "open", "adjacent_slope": "S4" }
+    { "id": "R1", "name": "Tathangchen link", "status": "blocked", "adjacent_slope": "S1",
+      "description": "Tathangchen access link — completely blocked by debris",
+      "coordinates": [[27.3450, 88.6000], [27.3425, 88.6030], [27.3400, 88.6045]] },
+    { "id": "R2", "name": "Ridge shortcut S1-S4", "status": "at-risk", "adjacent_slope": "S1",
+      "description": "Ridge shortcut S1-S4 — severe tension crack hazard (avoided by safe routing)",
+      "coordinates": [[27.3450, 88.6000], [27.3370, 88.6020], [27.3280, 88.5980], [27.3150, 88.5950]] },
+    { "id": "R3", "name": "Valley road S3-S4", "status": "open", "adjacent_slope": "S3",
+      "description": "Valley road S3-S4 — open and monitored",
+      "coordinates": [[27.3450, 88.6000], [27.3350, 88.6090], [27.3250, 88.6065]] },
+    { "id": "R4", "name": "Ranipool approach", "status": "open", "adjacent_slope": "S4",
+      "description": "Ranipool approach corridor — reinforced and clear",
+      "coordinates": [[27.3250, 88.6065], [27.3200, 88.6010], [27.3150, 88.5950]] }
   ],
   "demo_route": {
     "origin": "S1",

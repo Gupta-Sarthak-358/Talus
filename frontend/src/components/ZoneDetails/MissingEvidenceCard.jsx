@@ -1,11 +1,13 @@
 import React from 'react';
+import { useTalusContext } from '../../context/TalusContext';
 import { AlertTriangle, Database, CheckCircle2, ShieldAlert } from 'lucide-react';
 
 export default function MissingEvidenceCard({
   missingEvidence = [],
   confidence = 76,
-  warningText = 'Risk should be interpreted with incomplete evidence.',
+  warningText = null,
 }) {
+  const { t } = useTalusContext();
   const hasMissingEvidence = missingEvidence && missingEvidence.length > 0;
 
   if (!hasMissingEvidence) {
@@ -13,7 +15,7 @@ export default function MissingEvidenceCard({
       <div className="bg-mine-darker border border-mine-border rounded-xl p-3.5 flex items-center justify-between text-xs">
         <div className="flex items-center gap-2 text-mine-text">
           <CheckCircle2 className="w-4 h-4 text-risk-verylow" />
-          <span>Telemetry Evidence: <strong>Complete</strong> (All sensors operational)</span>
+          <span>{t('miss.telemetry')} <strong>{t('miss.complete')}</strong> {t('miss.all_ops')}</span>
         </div>
         <span className="font-mono text-risk-verylow font-bold">{confidence}% Confidence</span>
       </div>
@@ -26,7 +28,7 @@ export default function MissingEvidenceCard({
         <div className="flex items-center gap-1.5 text-risk-moderate">
           <AlertTriangle className="w-4 h-4 text-risk-moderate" />
           <h4 className="text-xs font-bold uppercase tracking-wider text-mine-text">
-            Evidence Quality & Uncertainty Warning
+            {t('miss.title')}
           </h4>
         </div>
         <span className="text-[11px] font-mono font-bold text-risk-moderate bg-risk-moderate/15 px-2 py-0.5 rounded border border-risk-moderate/30">
@@ -40,7 +42,7 @@ export default function MissingEvidenceCard({
 
       <div className="space-y-1.5 pt-1">
         <div className="text-[10px] uppercase font-bold text-mine-muted tracking-wider">
-          Missing / Degraded Signals:
+          {t('miss.missing')}
         </div>
         {missingEvidence.map((item, i) => (
           <div

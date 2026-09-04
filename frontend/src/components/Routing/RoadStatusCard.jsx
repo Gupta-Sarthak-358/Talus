@@ -9,7 +9,7 @@ const STATUS_ICONS = {
 };
 
 export default function RoadStatusCard() {
-  const { roads, setIsRouteModalOpen, activeRoutePlan } = useTalusContext();
+  const { roads, setIsRouteModalOpen, activeRoutePlan, locationData, t } = useTalusContext();
 
   return (
     <div className="bg-mine-card border border-mine-border rounded-2xl p-4 sm:p-5 shadow-sm space-y-3.5">
@@ -20,10 +20,10 @@ export default function RoadStatusCard() {
           </div>
           <div>
             <h3 className="text-xs font-bold text-mine-text uppercase tracking-wider">
-              Road Network Status
+              {t('dashboard.roadStatus')}
             </h3>
             <p className="text-[10px] text-mine-muted font-mono">
-              GET /api/roads/status · Gangtok Arterial Graph
+              GET /api/roads/status · {locationData?.label || 'Corridor'} Arterial Graph
             </p>
           </div>
         </div>
@@ -33,7 +33,7 @@ export default function RoadStatusCard() {
           className="flex items-center gap-1 px-2.5 py-1 bg-talus-600 hover:bg-talus-500 text-white rounded-lg text-[11px] font-bold transition-all shadow-sm"
         >
           <Navigation className="w-3 h-3" />
-          <span>S1→S4 Safe Route</span>
+          <span>{activeRoutePlan?.origin?.zone_id && activeRoutePlan?.destination?.zone_id ? `${activeRoutePlan.origin.zone_id}→${activeRoutePlan.destination.zone_id} Safe Route` : 'Safe Route'}</span>
         </button>
       </div>
 
@@ -65,8 +65,8 @@ export default function RoadStatusCard() {
                     <span className="text-[11px] font-semibold text-mine-text truncate">{seg.name}</span>
                   </div>
                   <div className="text-[10px] text-mine-muted">
-                    Adj: <span className="font-semibold text-mine-text">{seg.adjacent_slope}</span>
-                    {isR2 && <span className="text-amber-400 ml-1 font-bold">(Routing avoids R2)</span>}
+                    {t('road.adj')} <span className="font-semibold text-mine-text">{seg.adjacent_slope}</span>
+                    {isR2 && <span className="text-amber-400 ml-1 font-bold">{t('road.avoids_r2')}</span>}
                   </div>
                 </div>
               </div>
@@ -83,9 +83,9 @@ export default function RoadStatusCard() {
       <div className="p-2.5 bg-mine-darker rounded-xl border border-mine-border text-[11px] text-mine-muted flex items-start gap-2">
         <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
         <div>
-          <span className="font-bold text-mine-text">Deterministic Hazard Avoidance: </span>
+          <span className="font-bold text-mine-text">{t('road.avoid_title')} </span>
           <span>
-            The S1→S4 evacuation and response corridor automatically diverts via Tadong Valley (R3 + R4), completely bypassing at-risk segment <strong>R2</strong> and slope <strong>S1</strong>.
+            {t('road.avoid_body')}
           </span>
         </div>
       </div>

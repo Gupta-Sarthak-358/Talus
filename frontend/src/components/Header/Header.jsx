@@ -59,7 +59,7 @@ export default function Header() {
                 {/* Demo mode badge */}
                 <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-mine-card text-[10px] font-medium text-mine-muted border border-mine-border">
                   <span className="w-1.5 h-1.5 rounded-full bg-risk-verylow animate-pulse"></span>
-                  OFFLINE DEMO · Gangtok Corridor Prototype
+                  {t('app.offlineDemo')} · {t('app.prototype')}
                 </span>
               </div>
               <p className="text-[11px] text-mine-muted font-medium">
@@ -119,7 +119,7 @@ export default function Header() {
             <button
               onClick={resetSimulation}
               className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-risk-critical/15 hover:bg-risk-critical/25 text-risk-critical border border-risk-critical/30 transition-all"
-              title="Reset simulated conditions"
+              title={t('header.resetSim')}
             >
               <RotateCcw className="w-3 h-3 text-risk-critical" />
               <span>{t('header.resetSim')}</span>

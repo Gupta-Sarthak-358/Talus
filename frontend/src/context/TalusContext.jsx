@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { getZones, getZoneById } from '../services/zones';
 import { getRiskSummary, getAlerts, acknowledgeAlert } from '../services/risk';
-import { calculateRoute as fetchRoute, getRoadsStatus } from '../services/routing';
+import { calculateRoute as fetchRoute, getRoadsStatus, defaultOriginKey } from '../services/routing';
 import { simulateConditions } from '../services/simulation';
-import { getReportsQueue, submitReport as postReport } from '../services/reports';
+import { getReportsQueue, submitReport as postReport, savePhotoBackground, saveReportOutbox, readReportOutbox, dropReportOutbox } from '../services/reports';
 import { dispatchAlerts as postDispatchAlerts } from '../services/alerts';
 import { ROLES } from '../data/constants';
 import { LOCATIONS, getLocationData } from '../data/locations';
@@ -151,7 +151,7 @@ export function TalusProvider({ children }) {
             isPreview: true,
           });
         }
-        const defaultRoute = await fetchRoute({ originKey: 'worker_zoneA_to_ap1' }).catch(() => null);
+        const defaultRoute = await fetchRoute({ originKey: defaultOriginKey(activeLocation), location: activeLocation }).catch(() => null);
         setActiveRoutePlan(defaultRoute);
         return;
       }
@@ -159,7 +159,7 @@ export function TalusProvider({ children }) {
       const [zonesRes, alertsRes, roadsRes, reportsRes] = await Promise.all([
         getZones(activeLocation),
         getAlerts(),
-        getRoadsStatus(),
+        getRoadsStatus(activeLocation),
         getReportsQueue(),
       ]);
 
@@ -177,8 +177,10 @@ export function TalusProvider({ children }) {
       const initialZone = await getZoneById(firstLiveId, lang);
       setSelectedZoneData(initialZone.zone || initialZone);
 
-      // Preload default route plan (S1 -> S4 avoiding R2)
-      const defaultRoute = await fetchRoute({ originKey: 'worker_zoneA_to_ap1' });
+      // Preload default route plan for the active corridor
+      // (upper -> valley avoiding R2; per-corridor waypoints so routes render
+      // on that corridor's map instead of off-screen at Gangtok)
+      const defaultRoute = await fetchRoute({ originKey: defaultOriginKey(activeLocation), location: activeLocation });
       setActiveRoutePlan(defaultRoute);
     } catch (err) {
       console.error('Failed to load initial NER intelligence:', err);
@@ -319,10 +321,11 @@ export function TalusProvider({ children }) {
     await loadInitialData();
   };
 
-  // Calculate Safe Route
-  const executeRouting = async ({ originKey = 'worker_zoneA_to_ap1', avoidZoneIds } = {}) => {
+  // Calculate Safe Route (defaults to active corridor's upper -> valley preset)
+  const executeRouting = async ({ originKey = null, location = null, avoidZoneIds } = {}) => {
+    const loc = location || activeLocation;
     try {
-      const result = await fetchRoute({ originKey, avoidZoneIds });
+      const result = await fetchRoute({ originKey: originKey || defaultOriginKey(loc), location: loc, avoidZoneIds });
       setActiveRoutePlan(result);
       return result;
     } catch (err) {
@@ -331,7 +334,8 @@ export function TalusProvider({ children }) {
     }
   };
 
-  // Reports Management
+  // Reports Management (validation errors surface; network failures are
+  // outboxed by the caller with the photo thumbnail — see ReportModal)
   const submitNewReport = async (reportData) => {
     const res = await postReport(reportData);
     const updated = await getReportsQueue();
@@ -340,13 +344,26 @@ export function TalusProvider({ children }) {
   };
 
   const refreshReports = async () => {
+    // Flush background outbox first (oldest first), then reload the live queue
+    for (const entry of readReportOutbox()) {
+      try {
+        const res = await postReport(entry.payload);
+        if (entry.thumb && res?.id) {
+          savePhotoBackground(res.id, { dataUrl: entry.thumb, filename: entry.payload?.photo?.filename || '', mime: entry.payload?.photo?.mime || '' });
+        }
+        dropReportOutbox(entry.outboxId);
+      } catch {
+        break; // still offline — keep the rest queued
+      }
+    }
     const updated = await getReportsQueue();
     setReports(updated);
+    return readReportOutbox().length;
   };
 
   // Roads Management
   const refreshRoads = async () => {
-    const updated = await getRoadsStatus();
+    const updated = await getRoadsStatus(activeLocation);
     setRoads(updated);
   };
 
