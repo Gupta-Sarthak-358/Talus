@@ -162,9 +162,9 @@ means without live sensors:
 
 | Requirement | Definition of done | Status |
 |---|---|---|
-| FR-01 | NGEN run reproduces the feature matrix from pinned sources; provenance present per value. | ✅ `feature_matrix.sample.csv:1` 4 rows + `feature_matrix.training.csv:1` 1528 rows, `manifest.sample.json:1` + `manifest.training.json:1`, `validate_ngen_sample.py` `NGEN SAMPLE OK` |
+| FR-01 | NGEN run reproduces the feature matrix from pinned sources; provenance present per value. | ✅ `feature_matrix.sample.csv:1` 12 rows + `feature_matrix.training.csv:1` 2936 rows, `manifest.sample.json:1` + `manifest.training.json:1`, `validate_ngen_sample.py` `NGEN SAMPLE OK` |
 | FR-02 | API returns 0–100 score per unit; map colors update. | ✅ `GET /api/zones` → `S1 89 S2 78 S3 66 S4 52` `backend/app/main.py:130`, `check_scaffold.py` `SCAFFOLD OK` |
-| FR-03 | Score response includes `confidence` and `missing_evidence`; calibration report (Brier/ECE) committed. | ✅ `confidence 0.82-0.58` `slopes.json:1`, `calibration.md:8` `Brier 0.1019`, `metrics.md:9` |
+| FR-03 | Score response includes `confidence` and `missing_evidence`; calibration report (Brier/ECE) committed. | ✅ `confidence 0.82-0.58` `slopes.json:1`, `calibration.md:8` `Brier 0.118`, `metrics.md:9` |
 | FR-04 | `GET /api/units/{id}/explanation` returns SHAP contributions. | ✅ `GET /api/zones/{id}/explanation` `main.py:189` TreeExplainer `shap_sample` 5 pts `manifest.training.json:shap_sample` + `permutation` `metrics.md:51` |
 | FR-05 | Trend endpoint flags units crossing the escalation threshold on held-out monsoon data. | ✅ `GET /api/zones/{id}/trend` `main.py:178` `trend escalating/stable`, `metrics.md:13` per-cluster |
 | FR-06 | Decision endpoint returns role-specific message per NER role. | ✅ `GET /api/zones/{id}/decision` `main.py:228` 4 roles `villager/district_officer/state_manager/rescue_team` |

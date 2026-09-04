@@ -377,8 +377,9 @@ def main() -> int:
     shap_note = (f"SHAP sample: {len(shap_sample)} points TreeSHAP on RF (see manifest shap_sample)" if shap_sample else "SHAP deferred (package absent); permutation+impurity above instead.")
     (REPORTDIR / "metrics.md").write_text(
         f"# SIH26001 Phase-1 training metrics ({date})\n\n"
-        f"Target: `event` season-window proxy (positives = inventoried Sikkim slides, "
-        f"tagged `approximate`; negatives = >300m background, seed 42). "
+        f"Target: `event` season-window proxy (positives = inventoried Sikkim + "
+        f"Darjeeling-hills (WB) slides, tagged `approximate`; negatives = >300m "
+        f"background, seed 42). "
         f"n={len(y)} (pos={int(y.sum())}). X = 14 numeric (spi log1p) + lulc one-hot "
         f"(drop_first); lithology/lineament omitted (uniform PROXY), previous_landslide "
         f"omitted (leakage — positives ARE inventory slides).\n\n"

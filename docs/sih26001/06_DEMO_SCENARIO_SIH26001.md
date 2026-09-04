@@ -10,7 +10,7 @@ the mine track.)
 
 ## Pilot extent (frozen)
 
-Gangtok pilot `27.3389/88.6065` `27.315-27.345N/88.595-88.612E` `NGEN_PROVENANCE_S1.md:10` — chosen per research §3.2 (best-dated Sikkim + best tile `n27_e088`). All screens below run on the frozen pilot + recorded fixtures (no live network) — scores `S1 89 S2 78 S3 66 S4 52` `slopes.json:1`, training `1528×22` backing `metrics.md:9`.
+Gangtok pilot `27.3389/88.6065` `27.315-27.345N/88.595-88.612E` `NGEN_PROVENANCE_S1.md:10` — chosen per research §3.2 (best-dated Sikkim + best tile `n27_e088`). All screens below run on the frozen pilot + recorded fixtures (no live network) — scores `S1 89 S2 78 S3 66 S4 52` `slopes.json:1`, training `2936×22` backing `metrics.md:9`.
 
 ## Screen 1 — NER overview (live)
 

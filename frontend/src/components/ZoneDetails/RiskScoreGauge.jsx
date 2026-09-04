@@ -115,7 +115,7 @@ export default function RiskScoreGauge({ score = 0, band = 'LOW', confidence = 8
           <span className={`font-bold ${isVillager ? 'text-mine-text text-xs' : 'font-mono text-mine-text'}`}>{isVillager ? confidenceLabel : `${confidence}%`}</span>
         </div>
       </div>
-      {!isVillager && <div className="text-[10px] text-mine-muted font-mono pl-5">Calibrated (isotonic, Brier 0.10) — see Model Card</div>}
+      {!isVillager && <div className="text-[10px] text-mine-muted font-mono pl-5">Calibrated (isotonic, Brier 0.12) — see Model Card</div>}
     </div>
   );
 }

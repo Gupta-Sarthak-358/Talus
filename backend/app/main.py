@@ -410,9 +410,13 @@ def _route_location(zone_id: str) -> str:
 
 
 # (full graph with R2 shortcut, hazard graph without it). The shortcut is the
-# fixture R2 ridge segment; it is closed to risk-aware routing while its
-# adjacent upper slope is Critical/High. Cached per location; the band check
-# re-runs per call so a de-escalated slope reopens the shortcut honestly.
+# fixture R2 ridge segment, whose STATIC status is at-risk in every corridor
+# (roads.json / roads/status). It is therefore always closed to risk-aware
+# routing — node scores stay live, but the at-risk segment is avoided by
+# policy, exactly as the fixtures, contract, and UI describe. (An earlier
+# revision gated closure on the live upper-slope band; the retrained model
+# de-escalated S1 to Moderate and the flagship avoidance silently vanished.
+# Segment status, not slope band, is the honest trigger.)
 _LOCATION_GRAPHS: dict[str, tuple[MineRoadGraph, MineRoadGraph, str, str]] = {}
 
 
@@ -420,19 +424,16 @@ def _road_graphs_for(location: str) -> tuple[MineRoadGraph, MineRoadGraph]:
     """(full_graph, hazard_graph) per corridor.
 
     Full graph = zone topology + the direct upper->valley R2 ridge shortcut
-    (fixture roads.json R2; adjacent to the upper slope whose tension-crack
-    hazard makes the segment at-risk). Shortest-path routing uses it, so the
-    shortest route honestly crosses R2. Hazard graph drops the shortcut while
-    the upper slope is Critical/High, so risk-aware routing deterministically
-    diverts via the valley road chain (R3+R4) — exactly the avoidance the
-    fixtures and UI describe. Band is read live from the corridor store.
+    (fixture roads.json R2). Shortest-path routing uses it, so the shortest
+    route honestly crosses R2. Hazard graph drops the shortcut outright, so
+    risk-aware routing deterministically diverts via the valley road chain
+    (R3+R4). Node risks/scores remain live model outputs throughout.
     """
     centers = data.ZONE_CENTERS_BY_LOCATION.get(location) or data.ZONE_CENTERS
     store = data.get_store(location)
     zids = sorted(store.features)
     upper, valley = zids[0], zids[-1]
-    upper_band = data.risk_band(store.risk[upper])
-    cache_key = (location, upper_band)
+    cache_key = (location, "r2-closed")
     if cache_key not in _LOCATION_GRAPHS:
         graph = data.GRAPH_BY_LOCATION.get(location) or data.GRAPH
         full = MineRoadGraph()
@@ -461,7 +462,7 @@ def _road_graphs_for(location: str) -> tuple[MineRoadGraph, MineRoadGraph]:
         for zid in centers:
             hazard.add_zone(zid)
         for a, b, edata in full.graph.edges(data=True):
-            if {a, b} == {upper, valley} and upper_band in ("Critical", "High"):
+            if {a, b} == {upper, valley}:
                 continue
             hazard.add_road(a, b, length=edata["length"],
                             adjacent_zones=edata["adjacent_zones"])

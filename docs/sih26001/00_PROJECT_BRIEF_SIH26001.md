@@ -95,12 +95,12 @@ Detect → Understand → Escalate → Decide → Act
 ## MVP (built — frozen 2026-09-04, `SIH26001 @ 68c0c28`)
 
 - NGEN pipeline over Gangtok pilot (S1–S4) — 16/17 REAL/PROXY, zero STUBs, `feature_matrix.sample.csv:1` + `manifest.sample.json:1`
-- RF + XGB + LGBM (RF OOF AUC 0.921, XGB 0.9256, LGBM 0.9207) `ml/sih26001/reports/metrics.md:9`, isotonic Brier 0.1019 `calibration.md:8`, SHAP TreeExplainer 5-pt sample `manifest.training.json:shap_sample`
+- RF + XGB + LGBM (RF OOF AUC 0.8983, XGB 0.9029, LGBM 0.9015) `ml/sih26001/reports/metrics.md:9`, isotonic Brier 0.118 `calibration.md:8`, SHAP TreeExplainer 5-pt sample `manifest.training.json:shap_sample`
 - Trend / escalation detection + role-based decisions (4 NER roles) + risk-aware routing (R2 at-risk avoided) — live `backend/app/main.py:254` + `data/sih26001/fixtures/roads.json:1`
 - Rainfall-threshold scenario engine (Monga/Dahal) + tracker + `POST /api/simulation` + `GET /api/forecast/rainfall` fixtures `forecast.json:1`
 - Geo-tagged field reporting `POST /api/reports` + `PATCH review` + `GET /queue?status` + photo `sha256/exif` + consent + `flagged` (`backend/app/main.py:389`, `reports.json:1`, `15 tests`)
 - React + Leaflet GIS dashboard + FastAPI backend (v1 contract intact, `S1-S4 89/78/66/52`)
-- Training on **real historical landslide events** — `1528 rows 764+764` inventory-scale `feature_matrix.training.csv:1` season-window proxy `manifest.training.json:24`, temporal holdout now `35/73 dated → RF test AUC 0.9264`
+- Training on **real historical landslide events** — `2936 rows 1468+1468` inventory-scale `feature_matrix.training.csv:1` season-window proxy `manifest.training.json:24`, temporal holdout now `673/73 dated → RF test AUC 0.8189`
 
 ## Explicitly Out of Scope
 
@@ -123,6 +123,6 @@ Talus trains on **real documented events**: GSI
 Bhusanket (37,903+ NER → `693` Sikkim `sikkim_join.json:6` + `764` deduped Sikkim `manifest.training.json:42` + `7` Gangtok report `sikkim_report_gangtok.csv:1`), NASA COOLR/GLC, ISRO Landslide Atlas (80,000+),
 published inventories (Dibang 537, Meghalaya 1,330+, NEH 490 with rainfall
 records), IMD 0.25° gridded rainfall (1901–present) + daily records at 8 NER
-stations (1980-2019). `1528`-row inventory-scale matrix `feature_matrix.training.csv:1` season-window proxy `manifest.training.json:24` + `4`-row pilot `feature_matrix.sample.csv:1` (16/17 REAL/PROXY) underpin the `RF 0.921 XGB 0.9256` `metrics.md:9` and `temporal test AUC 0.9264`. *The prototype validates the decision-support
+stations (1980-2019). `2936`-row inventory-scale matrix `feature_matrix.training.csv:1` season-window proxy `manifest.training.json:24` + `12`-row sample `feature_matrix.sample.csv:1` (16/17 REAL/PROXY) underpin the `RF 0.8983 XGB 0.9029` `metrics.md:9` and `temporal test AUC 0.8189`. *The prototype validates the decision-support
 architecture on real data; it is not a production-calibrated warning system.
 Final operational decisions remain with qualified authorities.*

@@ -3,7 +3,7 @@ import { apiRequest } from './api';
 /**
  * ML counterfactual What-If — LIVE SIH26001 (real NGEN + USGS/IMD/CCI/WorldCover).
  * Contract: POST /api/simulation/what-if
- * Body: { zone_id, overrides } — frozen RF on 14+1 features, 1528-row model.
+ * Body: { zone_id, overrides } — frozen RF on 14+1 features, 2936-row model.
  */
 
 const OVERRIDE_MAP = {

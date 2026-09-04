@@ -1,6 +1,6 @@
 # NGEN Provenance — S1 (Gangtok Pilot) — Persons 1, 2, 3: Complete Honest Pilot (Rain + Terrain/Satellite + Labels/Manifest)
 
-**Status:** Built — honest training-ready fixture (16/17 REAL/PROXY, zero STUBs, plus training 1528×22) — all 3 roles covered · **Pilot:** Gangtok cluster, Sikkim ONLY · **Branch:** `SIH26001 @ 68c0c28` · **Date:** 2026-09-04
+**Status:** Built — honest training-ready fixture (16/17 REAL/PROXY, zero STUBs, plus training 2936×22) — all 3 roles covered · **Pilot:** Gangtok cluster, Sikkim ONLY · **Branch:** `SIH26001 @ 68c0c28` · **Date:** 2026-09-04
 **Roles:** Person 1 = rainfall_24h/7d/30d + soil_moisture · Person 2 = terrain/satellite/spatial (10 features) · Person 3 = labels/manifest/provenance
 **Trace to:** `docs/sih26001/SCAFFOLD_CONTRACT_SEPT5.md:1`, `docs/sih26001/TEAM_TASKS_SEPT5.md:24`, `docs/sih26001/05_FEATURE_SCHEMA_SIH26001.md:16`, `docs/sih26001/03_DATA_PLAN_SIH26001.md:1`
 **Related files:** `data/sih26001/fixtures/feature_matrix.sample.csv:1`, `data/sih26001/fixtures/manifest.sample.json:1` · **Validator:** `python scripts/check_scaffold.py:1`

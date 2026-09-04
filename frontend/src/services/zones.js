@@ -4,7 +4,9 @@ import { MINE_ZONES_GEOJSON, LOCATIONS } from '../data/locations';
 /**
  * Zone services — LIVE SIH26001 (real NGEN + USGS/IMD/CCI/WorldCover).
  *   GET /api/zones, /api/zones/{id}, /{id}/features, /{id}/explanation, /{id}/trend
- * Scores/bands from frozen fixtures S1-S4 89/78/66/52 (16/17 REAL/PROXY) + training 1528×22 backing.
+ * Scores/bands live from the trained RF over NGEN rows when the backend
+ * reports scoring=live-rf, else frozen fixtures S1-S4 89/78/66/52.
+ * Training 2936×22 backing.
  */
 
 function bandUpper(band) {

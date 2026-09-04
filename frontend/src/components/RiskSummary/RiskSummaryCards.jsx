@@ -146,17 +146,17 @@ export default function RiskSummaryCards() {
               Training Phase-1 — Inventory-Scale Susceptibility
               <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-500 border border-emerald-500/20 text-[10px] font-bold uppercase">Live</span>
               <span className="hidden sm:inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-mine-darker border border-mine-border text-[10px] font-mono text-mine-muted">
-                <FlaskConical className="w-3 h-3" /> 1528×22 (764+764)
+                <FlaskConical className="w-3 h-3" /> 2936×22 (1468+1468)
               </span>
             </div>
             <div className="text-[11px] text-mine-muted font-mono mt-0.5">
-              <span className="text-mine-text font-semibold">RF 0.921</span> <span className="text-mine-muted">·</span> <span className="text-mine-text font-semibold">XGB 0.9256</span> <span className="text-mine-muted">·</span> <span className="text-mine-text font-semibold">LGBM 0.9207</span> <span className="text-mine-muted">·</span> <span>Brier 0.1019</span> <span className="text-mine-muted">vs naive 0.25</span> <span className="text-mine-muted">·</span> <span>SHAP 5-pt</span>
+              <span className="text-mine-text font-semibold">RF 0.8983</span> <span className="text-mine-muted">·</span> <span className="text-mine-text font-semibold">XGB 0.9029</span> <span className="text-mine-muted">·</span> <span className="text-mine-text font-semibold">LGBM 0.9015</span> <span className="text-mine-muted">·</span> <span>Brier 0.118</span> <span className="text-mine-muted">vs naive 0.25</span> <span className="text-mine-muted">·</span> <span>SHAP 5-pt</span>
             </div>
           </div>
         </div>
         <div className="flex items-center gap-2 text-[11px]">
           <span className="px-2 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 font-mono font-bold">
-            Temporal 35/73 → RF test 0.9264
+            Temporal 673/73 → RF test 0.8189
           </span>
           <span className="hidden sm:inline text-mine-muted">GroupKFold(8) spatial · 16/17 REAL/PROXY</span>
         </div>

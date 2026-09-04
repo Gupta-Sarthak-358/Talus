@@ -48,7 +48,7 @@ has real, documented landslide data from multiple sources — GSI Bhusanket
 Landslide Atlas (80,000+), published academic inventories (490-1,330+ events
 with rainfall records), and IMD 0.25° gridded rainfall (1901–present) plus
 daily records at 8 NER stations (1980-2019). This means we *did* train on real
-events: `1528×22` inventory-scale `feature_matrix.training.csv:1` `RF 0.921 XGB 0.9256` `metrics.md:9` `temporal test AUC 0.9264` `manifest.training.json:144`.
+events: `2936×22` inventory-scale `feature_matrix.training.csv:1` `RF 0.8983 XGB 0.9029` `metrics.md:9` `temporal test AUC 0.8189` `manifest.training.json:144`.
 events, not
 synthetic data — a stronger evidence base than TALUS v1.
 

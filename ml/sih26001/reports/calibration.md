@@ -4,8 +4,8 @@ Isotonic fit on RF spatial-OOF predictions (CalibratedClassifierCV-style prefit 
 
 | predictor | Brier | ECE10 |
 |---|---|---|
-| RF raw OOF | 0.1111 | 0.0688 |
-| RF isotonic OOF | 0.1019 | 0.0 |
+| RF raw OOF | 0.1254 | 0.0621 |
+| RF isotonic OOF | 0.118 | 0.0 |
 | naive prevalence | 0.25 | 0.0 |
 
 Confidence = calibrated P(elevated susceptibility) under the prototype season-window target — never 'probability a landslide will occur here tomorrow'.

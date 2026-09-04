@@ -1,0 +1,14 @@
+{
+  "scene": {
+    "product_id": "S2B_45RXK_20241129_0_L2A",
+    "date": "2024-11-29",
+    "cloud_cover_pct": 0.019721,
+    "tile": "MGRS-45RXK"
+  },
+  "cogs": {
+    "red": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/45/R/XK/2024/11/S2B_45RXK_20241129_0_L2A/B04.tif",
+    "nir": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/45/R/XK/2024/11/S2B_45RXK_20241129_0_L2A/B08.tif",
+    "scl": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/45/R/XK/2024/11/S2B_45RXK_20241129_0_L2A/SCL.tif"
+  },
+  "note": "Darjeeling granule, same date as Gangtok 45RXL pinned scene; covers all D1-D4"
+}

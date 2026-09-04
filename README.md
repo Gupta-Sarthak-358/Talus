@@ -25,8 +25,8 @@ The key differentiation: from **"What is the risk?"** → **"What should we do n
 
 ### MVP — Built & Frozen 2026-09-04
 
-- NGEN over Gangtok pilot `S1 89 S2 78 S3 66 S4 52` — `16/17 REAL/PROXY, zero STUBs` (`feature_matrix.sample.csv:1`, `manifest.sample.json:1`)
-- Inventory-scale training `1528×22` (`764+764` Sikkim `feature_matrix.training.csv:1`, `manifest.training.json:1`) — `RF OOF 0.921 XGB 0.9256 LGBM 0.9207` `ml/sih26001/reports/metrics.md:9`, `temporal 35/73 → RF test 0.9264`, `cal Brier 0.1019`, SHAP 5-pt sample
+- NGEN over 3 corridors (`S1-S4` Gangtok + `D1-D4` Darjeeling + `N1-N4` Lachung, 12 rows, per-corridor windows) — `17/17 REAL/PROXY, zero STUBs` (`feature_matrix.sample.csv:1`, `manifest.sample.json:1`)
+- Inventory-scale training `2936×22` (`1468+1468` Sikkim + Darjeeling-hills `feature_matrix.training.csv:1`, `manifest.training.json:1`) — `RF OOF 0.8983 XGB 0.9029 LGBM 0.9015` `ml/sih26001/reports/metrics.md:9`, `temporal 673/73 → RF test 0.8189`, `cal Brier 0.118`, SHAP 5-pt sample
 - Field reporting `POST /api/reports` (`ReportIn {zone_id/type/text/lat/lon/captured_at/photo{sha256,exif}+consent}`) + `PATCH review` `queued|flagged→verified` + `GET /queue?status` (`15 tests`, `reports.json:1`)
 - FastAPI `backend` `S1-S4` + `POST /simulation/what-if` `66→74` + `GET /roads/status` `R2 at-risk` + `POST /routes/safe`
 - React + Leaflet (fixtures), offline `localStorage talus_report_outbox` + `en/hi/ne` alerts (fixture)
@@ -91,19 +91,19 @@ powershell -ExecutionPolicy Bypass -File ./start_demo.ps1  # http://localhost:30
 
 # Training (inventory-scale, other terminal — mnemo venv has xgb/lgbm/shap)
 C:\Users\satvi\AppData\Local\Programs\Python\Python311\python.exe scripts/build_training_matrix.py
-C:\Users\satvi\Desktop\mnemo\.venv\Scripts\python.exe scripts/train_sih26001.py  # RF 0.921 XGB 0.9256 → ml/sih26001/reports/
+C:\Users\satvi\Desktop\mnemo\.venv\Scripts\python.exe scripts/train_sih26001.py  # RF 0.8983 XGB 0.9029 → ml/sih26001/reports/
 ```
 
 ### Related Docs
 
-- [Project Brief](docs/sih26001/00_PROJECT_BRIEF_SIH26001.md) — scope firewall (Gangtok pilot, 1528-row training, reporting LIVE)
+- [Project Brief](docs/sih26001/00_PROJECT_BRIEF_SIH26001.md) — scope firewall (Gangtok pilot, 2936-row training, reporting LIVE)
 - [Requirements](docs/sih26001/01_REQUIREMENTS_SIH26001.md) — `R1–R13 → FR-01–13` built + acceptance `✅`
 - [Architecture](docs/sih26001/02_ARCHITECTURE_SIH26001.md) — sensor adapter `§5`, report capture/queue
 - [Data Plan](docs/sih26001/03_DATA_PLAN_SIH26001.md) — Phase 0 all `[x]` Gangtok
-- [Model Plan](docs/sih26001/04_MODEL_PLAN_SIH26001.md) — Phase-1 complete `RF/XGB/LGBM` `temporal 35/73`
+- [Model Plan](docs/sih26001/04_MODEL_PLAN_SIH26001.md) — Phase-1 complete `RF/XGB/LGBM` `temporal 673/73`
 - [Feature Schema](docs/sih26001/05_FEATURE_SCHEMA_SIH26001.md) — frozen `17 + 2 keys` slope-point
 - [Demo Scenario](docs/sih26001/06_DEMO_SCENARIO_SIH26001.md) — live Screens 1–6 (`S1 89 → High`, `66→74`, `R2 avoided`, report queue)
-- [Assumptions](docs/sih26001/07_ASSUMPTIONS_SIH26001.md) — validated `5: 16` rescue, `35/73` temporal
+- [Assumptions](docs/sih26001/07_ASSUMPTIONS_SIH26001.md) — validated `5: 16` rescue, `673/73` temporal
 - [Limitations](docs/sih26001/08_LIMITATIONS_SIH26001.md) — `CCI quasi-static`, `672/764 undated`, `center-approx` OSM
 - [Provenance S1](docs/sih26001/NGEN_PROVENANCE_S1.md) — `16/17 REAL/PROXY` per-feature evidence
 - [Model Card](docs/sih26001/ML_MODEL_CARD_V2.md) — `RF500 + XGB + LGBM + SHAP` `clean:true`
