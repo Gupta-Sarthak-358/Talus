@@ -15,15 +15,16 @@ export default function DistrictPage() {
         <span className="font-bold text-mine-text">{t('role.district_officer')} — Closure & Evacuation</span>
         <span className="text-mine-muted">{zones.length} slopes · live · score + calibrated % + SHAP drivers</span>
       </div>
+      {/* Officer primary workflow first — queue above map */}
+      <div className="flex gap-2">
+        <Link to="/reports" className="flex-1 py-2 bg-talus-600 text-white rounded-lg text-xs font-bold text-center flex items-center justify-center gap-1"><FileText className="w-3.5 h-3.5" /> Review Field Queue & Submit</Link>
+        <Link to="/reports" className="px-3 py-2 bg-mine-darker border border-mine-border rounded-lg text-xs font-semibold flex items-center gap-1"><Bell className="w-3.5 h-3.5" /> Multi-Lang Alerts</Link>
+      </div>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
         <div className="lg:col-span-7 h-[640px] sticky top-[88px]"><RiskMap /></div>
         <div className="lg:col-span-5 space-y-4"><ZoneIntelligencePanel /></div>
       </div>
       <RoadStatusCard />
-      <div className="flex gap-2">
-        <Link to="/reports" className="flex-1 py-2 bg-talus-600 text-white rounded-lg text-xs font-bold text-center flex items-center justify-center gap-1"><FileText className="w-3.5 h-3.5" /> Review Field Queue & Submit</Link>
-        <Link to="/reports" className="px-3 py-2 bg-mine-darker border border-mine-border rounded-lg text-xs font-semibold flex items-center gap-1"><Bell className="w-3.5 h-3.5" /> Multi-Lang Alerts</Link>
-      </div>
     </main>
   );
 }
