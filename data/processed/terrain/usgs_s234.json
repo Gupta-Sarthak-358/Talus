@@ -1,0 +1,68 @@
+{
+  "tile": {
+    "file": "n27_e088_1arc_v3.tif",
+    "source": "USGS SRTM 1 Arc-Second Global v3 (SRTMGL1.003)",
+    "crs": "EPSG:4326",
+    "local_only_gitignored": true
+  },
+  "slopes": {
+    "S1": {
+      "row": 2359,
+      "col": 2160,
+      "dx_m": 27.47,
+      "dy_m": 30.71,
+      "elevation": 1290.0,
+      "slope_angle": 28.5,
+      "aspect": 289.0,
+      "curvature": 0.0111,
+      "twi": 5.99,
+      "spi": 120.9,
+      "catchment_cells": 8,
+      "catch_edge_px": 55
+    },
+    "S2": {
+      "row": 2384,
+      "col": 2204,
+      "dx_m": 27.47,
+      "dy_m": 30.71,
+      "elevation": 1642.0,
+      "slope_angle": 11.3,
+      "aspect": 219.0,
+      "curvature": 0.0003,
+      "twi": 4.85,
+      "spi": 5.9,
+      "catchment_cells": 1,
+      "catch_edge_px": 63
+    },
+    "S3": {
+      "row": 2431,
+      "col": 2184,
+      "dx_m": 27.47,
+      "dy_m": 30.71,
+      "elevation": 1374.0,
+      "slope_angle": 36.7,
+      "aspect": 281.0,
+      "curvature": 0.0167,
+      "twi": 5.55,
+      "spi": 144.2,
+      "catchment_cells": 7,
+      "catch_edge_px": 83
+    },
+    "S4": {
+      "row": 2467,
+      "col": 2142,
+      "dx_m": 27.47,
+      "dy_m": 30.71,
+      "elevation": 1136.0,
+      "slope_angle": 18.2,
+      "aspect": 290.0,
+      "curvature": 0.0048,
+      "twi": 8.97,
+      "spi": 882.5,
+      "catchment_cells": 96,
+      "catch_edge_px": 88
+    }
+  },
+  "method": "bilinear elev; Horn-1981 anisotropic; Laplacian curv; D8 priority-flood TWI=ln(a/tanB) SPI=a*tanB",
+  "queried_at": "2026-09-04T11:17:03Z"
+}

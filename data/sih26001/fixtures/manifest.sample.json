@@ -28,18 +28,14 @@
       "attempt": "2026-09-04 Person-3: no ~/.cdsapirc, no cdsapi on either python; CDS account wall stands. Logged skip per handoff."
     },
     "srtm_dem": {
-      "version": "Terrarium-mirror (SRTM-derived ~30m, PROXY — USGS tile N27E088 not yet fetched)",
-      "tiles": ["terrarium-z15 x24447-24449/y13793-13795 (S1 tile 24448/13794)"],
+      "version": "USGS SRTM 1 Arc-Second Global v3 (SRTMGL1.003) — REAL, mirror superseded 2026-09-04",
+      "tiles": ["n27_e088_1arc_v3.tif (3601x3601 int16, EPSG:4326, bounds 88-89E/27-28N, LOCAL ONLY per .gitignore)"],
       "status": "available",
-      "file": "data/processed/terrain/s1_dem_window.csv",
-      "extract_script": "scripts/extract_s1_dem.py",
-      "method": "Horn-1981 slope/aspect + Laplacian curvature on 4.24m Web-Mercator grid; bilinear elevation at S1",
-      "crosscheck": "Gangtok centre (27.3389,88.6065) reads 1509m vs ~1600-1650 nominal — grid trusted within SRTM steep-terrain limits",
-      "limit": "mirror resampling smooths micro-relief; slopes may understate true slope; replace with USGS tile when landed",
-      "catchment": "z14 3x3 Terrarium mosaic ~6.5km (tiles x12223-12225/y6897-6899, centroid-centred) + priority-flood D8 + descending-order accumulation",
-      "catchment_files": ["data/processed/terrain/catchment_s234.json", "data/processed/terrain/terrarium_z14/z14_<x>_<y>.png (9 tiles)"],
-      "catchment_script": "scripts/extract_catchment.py (numpy only)",
-      "catchment_method": "TWI=ln(a/tanB), SPI=a*tanB, a=acc*dx; tanB floor 1e-4 logged; S2-S4 slope/elev/aspect/curv PROXY from same mosaic",
+      "file": "data/processed/terrain/usgs_s234.json",
+      "extract_script": "scripts/extract_usgs.py (rasterio+numpy, system py311)",
+      "method": "bilinear elev; Horn-1981 anisotropic; Laplacian curv; D8 priority-flood TWI=ln(a/tanB) SPI=a*tanB on 7.7x5.9km crop; 90 voids (0.17%) neighbour-mean filled, slope neighbourhoods void-free",
+      "usgs_vs_mirror": "elev within 7m all slopes (mirror grid validated); slope/aspect/curv/TWI/SPI differ by resolution (30m native vs smoothed 4-8m) — documented per-slope deltas in usgs_s234.json; curvature sign flips are scale effects, stated",
+      "previous_mirror": "Terrarium z15/z14 extracts retained under data/processed/terrain/ as method audit trail",
       "date": "2026-09-04"
     },
     "sentinel2": {
@@ -102,6 +98,7 @@
     "s234_osm_nearest.json": "sha256:8638F6DC15C71169BA13109C0A0A685FD0CD7BA21450E9AD95D6A21F2E254C66",
     "s1_sentinel2.json": "sha256:E5E6F8B0FD4B2A1FE39B48456BF51FE051BEB2FC7D5EDAB2D827D44306D7EEC6",
     "s1_drain_window.json": "sha256:0A5D19154B4C28B40ED81ECED2A497076B859E7A165BF966A04F9E33A826E67C",
+    "usgs_s234.json": "sha256:B456C95E51DB747FB9A73CAC92F882F645476E20E2C331FE08A7BBA07C15DC",
     "catchment_s234.json": "sha256:59005868617CC248964EBA25977B4D563B9BA8A6359EAB77C54EBD392C630E70",
     "s234_ndvi.json": "sha256:8BACD19C3113314AFD60893690C7A82995FDABB2F07276E26CDD8E7E278",
     "s234_landuse.json": "sha256:3654269AE5B6BDED8A8846112FDE017A80F48417A4FA93D00DF85177A514",
