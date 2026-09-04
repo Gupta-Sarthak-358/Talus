@@ -1,5 +1,5 @@
 import { apiRequest } from './api';
-import { MINE_ZONES_GEOJSON } from '../data/mineGeoData';
+import { MINE_ZONES_GEOJSON, LOCATIONS } from '../data/mineGeoData';
 
 /**
  * Zone services — LIVE SIH26001 (real NGEN + USGS/IMD/CCI/WorldCover).
@@ -32,17 +32,21 @@ function mapLiveZone(z) {
   };
 }
 
-export async function getZones() {
-  const res = await apiRequest('/zones');
+export async function getZones(location = null) {
+  const qs = location ? `?location=${encodeURIComponent(location)}` : '';
+  const res = await apiRequest(`/zones${qs}`);
   const live = (res.zones || []).map(mapLiveZone);
+  const locKey = location || res.location || 'gangtok';
+  const locZones = LOCATIONS[locKey]?.zones || MINE_ZONES_GEOJSON;
   const merged = live.map((zone) => {
-    const geo = MINE_ZONES_GEOJSON.find((g) => g.id === zone.id);
+    let geo = MINE_ZONES_GEOJSON.find((g) => g.id === zone.id);
+    if (!geo) geo = locZones.find((g) => g.id === zone.id);
     return {
       ...zone,
       geometry: geo ? { coordinates: geo.coordinates, centroid: geo.centroid, benches: geo.benches } : zone.geometry,
     };
   });
-  return { status: 'success', timestamp: new Date().toISOString(), zones: merged };
+  return { status: 'success', timestamp: new Date().toISOString(), zones: merged, location: locKey };
 }
 
 export async function getZoneById(zoneId) {

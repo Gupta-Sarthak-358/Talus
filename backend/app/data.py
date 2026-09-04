@@ -12,6 +12,7 @@ from .schemas import Features
 # Sept-5 scaffold: fixture dir + loaders. Zone identity (names, centers,
 # graph) comes from slopes.json — the frozen contract. Do not hand-edit
 # values here; edit the fixture + contract + validator instead.
+# Multi-location: locations.json registry (gangtok live, lachung/darjeeling preview)
 FIX = Path(__file__).resolve().parents[2] / "data" / "sih26001" / "fixtures"
 
 
@@ -19,9 +20,34 @@ def _load_json(name: str):
     return json.loads((FIX / name).read_text(encoding="utf-8"))
 
 
+def _load_json_optional(name: str):
+    p = FIX / name
+    if p.exists():
+        return json.loads(p.read_text(encoding="utf-8"))
+    return None
+
+
 _SLOPES = _load_json("slopes.json")
 _FIXTURE_ZONES: dict[str, dict] = {z["zone_id"]: z for z in _SLOPES["zones"]}
 _FIXTURE_HISTORIES: dict[str, list[dict]] = _SLOPES.get("histories", {})
+
+# Multi-location fixtures (if locations.json exists)
+_LOCATIONS_CFG = _load_json_optional("locations.json")
+_FIXTURE_BY_LOCATION: dict[str, dict[str, dict]] = {"gangtok": _FIXTURE_ZONES}
+_HISTORIES_BY_LOCATION: dict[str, dict[str, list[dict]]] = {"gangtok": _FIXTURE_HISTORIES}
+if _LOCATIONS_CFG:
+    for loc in _LOCATIONS_CFG.get("locations", []):
+        loc_id = loc.get("id")
+        if loc_id == "gangtok":
+            continue
+        f = loc.get("file")
+        if f:
+            try:
+                data = _load_json(f)
+                _FIXTURE_BY_LOCATION[loc_id] = {z["zone_id"]: z for z in data.get("zones", [])}
+                _HISTORIES_BY_LOCATION[loc_id] = data.get("histories", {})
+            except Exception:
+                pass
 
 
 def _load_feature_rows() -> dict[str, dict]:
@@ -41,6 +67,17 @@ def _load_feature_rows() -> dict[str, dict]:
                 except ValueError:
                     parsed[k] = v
             rows[row["zone_id"]] = parsed
+    # Mirror gangtok rows to preview zones for API compatibility (same 17-feature schema)
+    if "S1" in rows:
+        for loc_id in _FIXTURE_BY_LOCATION:
+            if loc_id == "gangtok":
+                continue
+            for zid in _FIXTURE_BY_LOCATION[loc_id]:
+                if zid not in rows:
+                    # clone S1 row and patch zone_id
+                    clone = dict(rows["S1"])
+                    clone["zone_id"] = zid
+                    rows[zid] = clone
     return rows
 
 
@@ -68,6 +105,15 @@ ZONE_GEOMETRY = {
     zid: _box(c["lat"], c["lng"]) for zid, c in ZONE_CENTERS.items()
 }
 
+# Per-location derived maps
+ZONE_NAMES_BY_LOCATION: dict[str, dict[str, str]] = {}
+ZONE_CENTERS_BY_LOCATION: dict[str, dict[str, dict]] = {}
+ZONE_GEOMETRY_BY_LOCATION: dict[str, dict[str, dict]] = {}
+for loc_id, zones in _FIXTURE_BY_LOCATION.items():
+    ZONE_NAMES_BY_LOCATION[loc_id] = {zid: z["name"] for zid, z in zones.items()}
+    ZONE_CENTERS_BY_LOCATION[loc_id] = {zid: {"lat": z["geometry"]["lat"], "lng": z["geometry"]["lon"]} for zid, z in zones.items()}
+    ZONE_GEOMETRY_BY_LOCATION[loc_id] = {zid: _box(c["lat"], c["lng"]) for zid, c in ZONE_CENTERS_BY_LOCATION[loc_id].items()}
+
 # Fixture topology: S1:[S2,S3], S2:[S1,S3], S3:[S1,S2,S4], S4:[S3].
 # Routing S1->S4 can avoid S2 via S3.
 GRAPH = {
@@ -77,14 +123,31 @@ GRAPH = {
     "S4": ["S3"],
 }
 
+# Per-location graphs (same topology, remapped ids)
+GRAPH_BY_LOCATION: dict[str, dict[str, list[str]]] = {"gangtok": GRAPH}
+for loc_id, zones in _FIXTURE_BY_LOCATION.items():
+    if loc_id == "gangtok":
+        continue
+    # assume zones ordered like S1-S4 → N1-N4 etc, keep same connectivity
+    zids = sorted(zones.keys())
+    # Build mapping S1->first, S2->second, etc
+    gangtok_ids = ["S1","S2","S3","S4"]
+    remap = {gangtok_ids[i]: zids[i] for i in range(min(len(gangtok_ids), len(zids)))}
+    g = {}
+    for src, dsts in GRAPH.items():
+        if src in remap:
+            g[remap[src]] = [remap.get(d, d) for d in dsts if d in remap]
+    GRAPH_BY_LOCATION[loc_id] = g
 
-def fixture_zone(zone_id: str) -> dict | None:
-    """Raw fixture row for S1-S4 (score, band, SHAP, missing_evidence)."""
-    return _FIXTURE_ZONES.get(zone_id)
+
+def fixture_zone(zone_id: str, location: str = "gangtok") -> dict | None:
+    """Raw fixture row for zone (location-aware)."""
+    zones = _FIXTURE_BY_LOCATION.get(location) or _FIXTURE_ZONES
+    return zones.get(zone_id)
 
 
-def fixture_missing_evidence(zone_id: str) -> list[str]:
-    z = _FIXTURE_ZONES.get(zone_id)
+def fixture_missing_evidence(zone_id: str, location: str = "gangtok") -> list[str]:
+    z = ( _FIXTURE_BY_LOCATION.get(location) or _FIXTURE_ZONES).get(zone_id)
     return list(z.get("missing_evidence", [])) if z else []
 
 
@@ -141,14 +204,17 @@ def distance(a: dict, b: dict) -> float:
     return math.sqrt((a["lat"] - b["lat"]) ** 2 + (a["lng"] - b["lng"]) ** 2)
 
 
-def _edge_cost(start: str, end: str, risk: dict[str, int], risk_weight: float) -> float:
-    d = distance(ZONE_CENTERS[start], ZONE_CENTERS[end])
+def _edge_cost(start: str, end: str, risk: dict[str, int], risk_weight: float, location: str = "gangtok") -> float:
+    centers = ZONE_CENTERS_BY_LOCATION.get(location) or ZONE_CENTERS
+    d = distance(centers[start], centers[end])
     exposure = risk.get(end, 0)
     return d * (1.0 + risk_weight * exposure / 100.0)
 
 
-def _dijkstra(start: str, end: str, risk: dict[str, int], risk_weight: float) -> tuple[list[str], float, int]:
-    nodes = list(ZONE_CENTERS)
+def _dijkstra(start: str, end: str, risk: dict[str, int], risk_weight: float, location: str = "gangtok") -> tuple[list[str], float, int]:
+    centers = ZONE_CENTERS_BY_LOCATION.get(location) or ZONE_CENTERS
+    graph = GRAPH_BY_LOCATION.get(location) or GRAPH
+    nodes = list(centers)
     dist = {n: math.inf for n in nodes}
     prev = {n: None for n in nodes}
     dist[start] = 0.0
@@ -160,8 +226,8 @@ def _dijkstra(start: str, end: str, risk: dict[str, int], risk_weight: float) ->
         unvisited.discard(current)
         if current == end:
             break
-        for nxt in GRAPH.get(current, []):
-            alt = dist[current] + _edge_cost(current, nxt, risk, risk_weight)
+        for nxt in graph.get(current, []):
+            alt = dist[current] + _edge_cost(current, nxt, risk, risk_weight, location)
             if alt < dist[nxt]:
                 dist[nxt] = alt
                 prev[nxt] = current
@@ -196,12 +262,15 @@ class ZoneStore:
     """Sept-5 scaffold: zone states seeded from frozen fixtures
     (slopes.json scores/confidence/histories + feature_matrix.sample.csv),
     never from the v1 model. v1 model calls remain available for
-    explanation fallback only."""
+    explanation fallback only. Now location-aware."""
 
-    def __init__(self) -> None:
+    def __init__(self, location: str = "gangtok") -> None:
+        self.location = location
         self.reset()
 
     def reset(self) -> None:
+        zones = _FIXTURE_BY_LOCATION.get(self.location) or _FIXTURE_ZONES
+        histories = _HISTORIES_BY_LOCATION.get(self.location) or _FIXTURE_HISTORIES
         self.features: dict[str, dict] = {}
         self.risk: dict[str, int] = {}
         self.confidence: dict[str, float] = {}
@@ -209,13 +278,13 @@ class ZoneStore:
         self.trend_label: dict[str, str] = {}
         self.updated_at: dict[str, str] = {}
         stamp = now_iso()
-        for zid, z in _FIXTURE_ZONES.items():
+        for zid, z in zones.items():
             self.features[zid] = dict(_FEATURE_ROWS.get(zid, {}))
             self.risk[zid] = int(z["risk_score"])
             self.confidence[zid] = float(z["confidence"])
             hist = [
                 (p["t"], int(p["risk_score"]))
-                for p in _FIXTURE_HISTORIES.get(zid, [])
+                for p in histories.get(zid, [])
             ] or [(stamp, int(z["risk_score"]))]
             self.history[zid] = hist
             self.trend_label[zid] = z.get("trend", "stable")
@@ -236,4 +305,12 @@ class ZoneStore:
         self.updated_at[zone_id] = now_iso()
 
 
-store = ZoneStore()
+# Default store (gangtok) for backward compat + per-location stores
+store = ZoneStore("gangtok")
+stores: dict[str, ZoneStore] = {"gangtok": store}
+for loc_id in _FIXTURE_BY_LOCATION:
+    if loc_id not in stores:
+        stores[loc_id] = ZoneStore(loc_id)
+
+def get_store(location: str = "gangtok") -> ZoneStore:
+    return stores.get(location) or store

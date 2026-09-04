@@ -28,14 +28,24 @@ export default {
           critical: '#c74732' // Critical 500
         },
         mine: {
-          darkest: '#ccbeb1', // Primary background
-          darker: '#e5d8c9',  // Secondary background
-          dark: '#ddd0c1',    // Inner contrast surface
-          card: '#f3e9dd',    // Card / panel background
-          border: '#d2c3b3',  // Borders and dividers
-          highlight: '#997e67',// Secondary brown / hover
-          text: '#2b2119',    // Primary text
-          muted: '#6f6256',   // Secondary text
+          darkest: '#ccbeb1', // Primary background — deprecated alias, use surface
+          darker: '#e5d8c9',
+          dark: '#ddd0c1',
+          card: '#f3e9dd',
+          border: '#d2c3b3',
+          highlight: '#997e67',
+          text: '#2b2119',
+          muted: '#6f6256',
+        },
+        surface: {
+          darkest: '#ccbeb1',
+          darker: '#e5d8c9',
+          dark: '#ddd0c1',
+          card: '#f3e9dd',
+          border: '#d2c3b3',
+          highlight: '#997e67',
+          text: '#2b2119',
+          muted: '#6f6256',
         }
       },
       fontFamily: {

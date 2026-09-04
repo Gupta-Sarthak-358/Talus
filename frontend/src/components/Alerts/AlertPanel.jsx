@@ -13,10 +13,12 @@ export default function AlertPanel() {
     currentRoleMeta,
     alertDispatchData,
     dispatchAlertFixture,
+    lang,
+    t,
   } = useMineContext();
 
   const [filterSeverity, setFilterSeverity] = useState('ALL');
-  const [activeLang, setActiveLang] = useState('en');
+  const [activeLang, setActiveLang] = useState(lang || 'en');
   const [dispatching, setDispatching] = useState(false);
   const [dispatchSent, setDispatchSent] = useState(false);
 
@@ -51,8 +53,8 @@ export default function AlertPanel() {
               <Bell className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-mine-text">Multilingual Alert Dispatch & Feeds</h3>
-              <p className="text-[11px] text-mine-muted">POST /api/alerts/dispatch · SIH26001 Multilingual Fixture</p>
+              <h3 className="text-sm font-bold text-mine-text">{t('alerts.title')}</h3>
+              <p className="text-[11px] text-mine-muted">POST /api/alerts/dispatch · SIH26001 Multilingual Fixture · [{lang.toUpperCase()}]</p>
             </div>
           </div>
 

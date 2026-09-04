@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useMineContext } from '../../context/MineContext';
 import RoleSelector from './RoleSelector';
 import LocationSelector from './LocationSelector';
+import LanguageSelector from './LanguageSelector';
 import {
   Activity,
   Sliders,
@@ -27,6 +28,8 @@ export default function Header() {
     reports,
     activeSimulation,
     resetSimulation,
+    t,
+    lang,
   } = useMineContext();
 
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -60,7 +63,7 @@ export default function Header() {
                 </span>
               </div>
               <p className="text-[11px] text-mine-muted font-medium">
-                North-Eastern Region Landslide Early Warning & Decision Support (MDoNER)
+                {t('app.subtitle')}
               </p>
             </div>
           </div>
@@ -77,10 +80,10 @@ export default function Header() {
                 ? 'bg-risk-moderate/20 text-mine-text border-risk-moderate shadow-md animate-pulse'
                 : 'bg-mine-card hover:bg-mine-dark text-mine-text border-mine-border hover:border-talus-500'
             }`}
-            title="Open geotechnical condition simulator"
+            title={t('sim.subtitle')}
           >
             <Sliders className="w-3.5 h-3.5 text-risk-moderate" />
-            <span>What-If Simulator</span>
+            <span>{t('header.whatIf')}</span>
             {activeSimulation && (
               <span className="w-2 h-2 rounded-full bg-risk-moderate ml-0.5"></span>
             )}
@@ -90,20 +93,20 @@ export default function Header() {
           <button
             onClick={() => setIsRouteModalOpen(true)}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-mine-card hover:bg-mine-dark text-mine-text border border-mine-border hover:border-talus-500 transition-all"
-            title="Calculate and compare safe routes avoiding at-risk road R2"
+            title={t('routing.subtitle')}
           >
             <Navigation className="w-3.5 h-3.5 text-risk-verylow" />
-            <span>Safe Route (S1→S4)</span>
+            <span>{t('header.safeRoute')}</span>
           </button>
 
           {/* Field Reports Modal Button */}
           <button
             onClick={() => setIsReportModalOpen(true)}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-mine-card hover:bg-mine-dark text-mine-text border border-mine-border hover:border-talus-500 transition-all relative"
-            title="Submit field incident report or inspect officer verification queue"
+            title={t('reports.title')}
           >
             <FileText className="w-3.5 h-3.5 text-talus-600" />
-            <span>Field Reports</span>
+            <span>{t('header.fieldReports')}</span>
             {reports && reports.length > 0 && (
               <span className="px-1.5 py-0.2 rounded-full bg-talus-600 text-white text-[9px] font-bold">
                 {reports.length}
@@ -116,21 +119,21 @@ export default function Header() {
             <button
               onClick={resetSimulation}
               className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-risk-critical/15 hover:bg-risk-critical/25 text-risk-critical border border-risk-critical/30 transition-all"
-              title="Reset simulated conditions back to pit baseline telemetry"
+              title="Reset simulated conditions"
             >
               <RotateCcw className="w-3 h-3 text-risk-critical" />
-              <span>Reset Sim</span>
+              <span>{t('header.resetSim')}</span>
             </button>
           )}
         </div>
 
-        {/* Right: Active Alerts, Role Selector, Clock & Status */}
-        <div className="flex items-center gap-3">
+        {/* Right: Alerts, Language, Role, Clock */}
+        <div className="flex items-center gap-2">
           {/* Active Alerts Drawer Trigger */}
           <button
             onClick={() => setIsAlertsDrawerOpen(true)}
             className="relative p-2 bg-mine-card hover:bg-mine-dark border border-mine-border hover:border-talus-500 rounded-lg text-mine-muted hover:text-mine-text transition-all group"
-            title="View Active Risk Escalation Alerts"
+            title={t('header.alerts')}
           >
             <Bell className="w-4 h-4 group-hover:text-risk-moderate transition-colors" />
             {unacknowledgedAlertsCount > 0 && (
@@ -140,19 +143,19 @@ export default function Header() {
             )}
           </button>
 
-          {/* Role-Specific Perspective Selector */}
+          <LanguageSelector />
           <RoleSelector />
 
           {/* Corridor Telemetry & Clock */}
           <div className="hidden lg:flex flex-col items-end pl-2 border-l border-mine-border text-right font-mono">
             <div className="flex items-center gap-1.5 text-[11px] text-mine-text">
               <Clock className="w-3 h-3 text-mine-muted" />
-              <span>{currentTime.toLocaleTimeString('en-US', { hour12: false })}</span>
+              <span>{currentTime.toLocaleTimeString(lang === 'hi' ? 'hi-IN' : lang === 'ne' ? 'ne-NP' : 'en-US', { hour12: false })}</span>
               <span className="text-[9px] text-mine-muted font-sans">IST</span>
             </div>
             <div className="flex items-center gap-1 text-[10px] text-risk-verylow font-sans">
               <span className="w-1.5 h-1.5 rounded-full bg-risk-verylow animate-pulse"></span>
-              IMD Gangtok Feed Live
+              {t('header.imdLive')}
             </div>
           </div>
         </div>

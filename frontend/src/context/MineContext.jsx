@@ -7,6 +7,7 @@ import { getReportsQueue, submitReport as postReport } from '../services/reports
 import { dispatchAlerts as postDispatchAlerts } from '../services/alerts';
 import { ROLES } from '../data/constants';
 import { LOCATIONS, getLocationData } from '../data/mineGeoData';
+import { translations, SUPPORTED_LANGS } from '../i18n/translations';
 
 const MineContext = createContext(null);
 
@@ -14,6 +15,19 @@ export function MineProvider({ children }) {
   // Location State — NER multi-corridor (gangtok live, lachung/darjeeling preview)
   const [activeLocation, setActiveLocation] = useState('gangtok');
   const locationData = getLocationData(activeLocation);
+
+  // Language State — persisted, drives all UI + alert dispatch language
+  const [lang, setLangState] = useState(() => {
+    try { return localStorage.getItem('talus_lang') || 'en'; } catch { return 'en'; }
+  });
+  const setLang = useCallback((newLang) => {
+    setLangState(newLang);
+    try { localStorage.setItem('talus_lang', newLang); } catch {}
+  }, []);
+  const t = useCallback((key) => {
+    const table = translations[lang] || translations.en;
+    return table[key] || translations.en[key] || key;
+  }, [lang]);
 
   // Application State
   const [role, setRoleState] = useState('district_officer'); // default to district disaster officer
@@ -140,9 +154,9 @@ export function MineProvider({ children }) {
         setActiveRoutePlan(defaultRoute);
         return;
       }
-      // Live Gangtok path
+      // Live path (Gangtok + now Lachung/Darjeeling via backend stores)
       const [zonesRes, alertsRes, roadsRes, reportsRes] = await Promise.all([
-        getZones(),
+        getZones(activeLocation),
         getAlerts(),
         getRoadsStatus(),
         getReportsQueue(),
@@ -156,7 +170,7 @@ export function MineProvider({ children }) {
       const summary = await getRiskSummary(zonesRes.zones);
       setRiskSummary(summary);
 
-      // Load initial selected slope (S1 Tathangchen)
+      // Load initial selected slope for this corridor
       const firstLiveId = zonesRes.zones[0]?.id || 'S1';
       setSelectedZoneId(firstLiveId);
       const initialZone = await getZoneById(firstLiveId);
@@ -370,6 +384,12 @@ export function MineProvider({ children }) {
     locationData,
     locations: LOCATIONS,
 
+    // Language (i18n)
+    lang,
+    setLang,
+    t,
+    supportedLangs: SUPPORTED_LANGS,
+
     // Role
     role,
     setRole,
@@ -445,3 +465,8 @@ export function useMineContext() {
   }
   return context;
 }
+
+// Aliases for rename debt — prefer Talus* names (Mine* kept for compat)
+export const TalusContext = MineContext;
+export const TalusProvider = MineProvider;
+export const useTalusContext = useMineContext;

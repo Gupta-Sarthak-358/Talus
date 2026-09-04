@@ -83,9 +83,22 @@ DECISIONS_BY_BAND = {
 }
 
 
+def _location_for_zone(zone_id: str) -> str:
+    if zone_id.startswith("N"):
+        return "lachung"
+    if zone_id.startswith("D"):
+        return "darjeeling"
+    return "gangtok"
+
+def _store_for_zone(zone_id: str):
+    return data.get_store(_location_for_zone(zone_id))
+
 def _zone_or_404(zone_id: str) -> None:
-    if zone_id not in data.store.features:
-        raise HTTPException(status_code=404, detail=f"Zone {zone_id} not found")
+    # check all locations (gangtok + preview)
+    for store in data.stores.values():
+        if zone_id in store.features:
+            return
+    raise HTTPException(status_code=404, detail=f"Zone {zone_id} not found")
 
 
 def _decisions(zone_id: str, score: int) -> list[dict]:
@@ -132,44 +145,56 @@ def root():
 
 
 @app.get("/api/zones", response_model=dict)
-def list_zones():
+def list_zones(location: str | None = None):
+    # location-aware: ?location=gangtok|lachung|darjeeling (default gangtok for compat)
+    # also supports ?zone_id prefix inference; if location omitted but zones include N/D, return requested location's zones
+    if location and location in data.stores:
+        store = data.get_store(location)
+    else:
+        store = data.store
     zones = []
-    for zid in data.store.features:
-        trend, _ = data.store.trend(zid)
+    for zid in store.features:
+        trend, _ = store.trend(zid)
         zones.append(
             ZoneSummary(
                 zone_id=zid,
-                risk_score=data.store.risk[zid],
-                risk_band=data.risk_band(data.store.risk[zid]),
-                confidence=data.store.confidence[zid],
+                risk_score=store.risk[zid],
+                risk_band=data.risk_band(store.risk[zid]),
+                confidence=store.confidence[zid],
                 trend=trend,
             )
         )
-    return {"zones": zones}
+    return {"zones": zones, "location": getattr(store, 'location', 'gangtok')}
 
 
 @app.get("/api/zones/{zone_id}", response_model=ZoneDetail)
 def get_zone(zone_id: str):
     _zone_or_404(zone_id)
-    trend, _ = data.store.trend(zone_id)
+    store = _store_for_zone(zone_id)
+    loc = _location_for_zone(zone_id)
+    names = data.ZONE_NAMES_BY_LOCATION.get(loc) or data.ZONE_NAMES
+    geoms = data.ZONE_GEOMETRY_BY_LOCATION.get(loc) or data.ZONE_GEOMETRY
+    trend, _ = store.trend(zone_id)
     return ZoneDetail(
         zone_id=zone_id,
-        name=data.ZONE_NAMES[zone_id],
-        geometry=data.ZONE_GEOMETRY[zone_id],
-        risk_score=data.store.risk[zone_id],
-        risk_band=data.risk_band(data.store.risk[zone_id]),
-        confidence=data.store.confidence[zone_id],
+        name=names.get(zone_id, zone_id),
+        geometry=geoms.get(zone_id, {"type":"Polygon","coordinates":[]}),
+        risk_score=store.risk[zone_id],
+        risk_band=data.risk_band(store.risk[zone_id]),
+        confidence=store.confidence[zone_id],
         trend=trend,
-        updated_at=data.store.updated_at[zone_id],
+        updated_at=store.updated_at[zone_id],
     )
 
 
 @app.get("/api/zones/{zone_id}/features", response_model=ZoneFeaturesResponse)
 def get_features(zone_id: str):
     _zone_or_404(zone_id)
-    feats = data.store.features[zone_id]
-    if data.fixture_zone(zone_id) is not None:
-        missing = data.fixture_missing_evidence(zone_id)
+    store = _store_for_zone(zone_id)
+    loc = _location_for_zone(zone_id)
+    feats = store.features[zone_id]
+    if data.fixture_zone(zone_id, loc) is not None:
+        missing = data.fixture_missing_evidence(zone_id, loc)
     else:
         missing = data.missing_evidence(feats)
     return ZoneFeaturesResponse(
@@ -182,27 +207,30 @@ def get_features(zone_id: str):
 @app.get("/api/zones/{zone_id}/trend", response_model=TrendResponse)
 def get_trend(zone_id: str):
     _zone_or_404(zone_id)
-    trend, rapid = data.store.trend(zone_id)
+    store = _store_for_zone(zone_id)
+    trend, rapid = store.trend(zone_id)
     return TrendResponse(
         zone_id=zone_id,
         rapid_increase=rapid,
-        history=[{"t": t, "risk_score": s} for t, s in data.store.history[zone_id]],
+        history=[{"t": t, "risk_score": s} for t, s in store.history[zone_id]],
     )
 
 
 @app.get("/api/zones/{zone_id}/explanation", response_model=ExplanationResponse)
 def get_explanation(zone_id: str):
     _zone_or_404(zone_id)
+    store = _store_for_zone(zone_id)
+    loc = _location_for_zone(zone_id)
     try:
         letter = zone_id.split("_")[-1]
-        _, contribs = data.compute_risk(letter, data.store.features[zone_id])
+        _, contribs = data.compute_risk(letter, store.features[zone_id])
         svc = data.model_service.get_service()
-        expl = svc.explain(letter, data.store.features[zone_id].model_dump())
+        expl = svc.explain(letter, store.features[zone_id].model_dump() if hasattr(store.features[zone_id], 'model_dump') else store.features[zone_id])
         base_value = expl["base_value"]
     except Exception:
         # Scaffold: v1 model has no S1-S4 — serve frozen fixture SHAP
         # (slopes.json contributions, `shap` mapped to API `shap_value`).
-        fx = data.fixture_zone(zone_id)
+        fx = data.fixture_zone(zone_id, loc)
         if fx is None:
             raise
         base_value = float(fx["base_value"])
@@ -212,7 +240,7 @@ def get_explanation(zone_id: str):
         ]
     return ExplanationResponse(
         zone_id=zone_id,
-        risk_score=data.store.risk[zone_id],
+        risk_score=store.risk[zone_id],
         base_value=base_value,
         contributions=contribs,
     )
@@ -226,13 +254,14 @@ def get_zone_history(zone_id: str, seed: int = 91):
     _zone_or_404(zone_id)
     from . import model_service
     hist = model_service.get_service().daily_history(zone_id, seed=seed)
-    return {"zone_id": zone_id, "seed": seed, "points": hist}
+    return {"zone_id": zone_id, "seed": seed, "points": hist, "location": _location_for_zone(zone_id)}
 
 
 @app.get("/api/zones/{zone_id}/decision", response_model=DecisionResponse)
 def get_decision(zone_id: str):
     _zone_or_404(zone_id)
-    score = data.store.risk[zone_id]
+    store = _store_for_zone(zone_id)
+    score = store.risk[zone_id]
     return DecisionResponse(
         zone_id=zone_id,
         risk_score=score,
@@ -244,13 +273,14 @@ def get_decision(zone_id: str):
 @app.post("/api/risk/predict", response_model=PredictResponse)
 def predict(req: PredictRequest):
     _zone_or_404(req.zone_id)
-    data.store.recompute(req.zone_id, req.features)
-    score = data.store.risk[req.zone_id]
+    store = _store_for_zone(req.zone_id)
+    store.recompute(req.zone_id, req.features)
+    score = store.risk[req.zone_id]
     return PredictResponse(
         zone_id=req.zone_id,
         risk_score=score,
         risk_band=data.risk_band(score),
-        confidence=data.store.confidence[req.zone_id],
+        confidence=store.confidence[req.zone_id],
         missing_evidence=data.missing_evidence(req.features),
     )
 
