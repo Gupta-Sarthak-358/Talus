@@ -46,7 +46,7 @@ export async function getZones(location = null) {
       geometry: geo ? { coordinates: geo.coordinates, centroid: geo.centroid, benches: geo.benches } : zone.geometry,
     };
   });
-  return { status: 'success', timestamp: new Date().toISOString(), zones: merged, location: locKey };
+  return { status: 'success', timestamp: new Date().toISOString(), zones: merged, location: locKey, scoring: res.scoring || 'fixture' };
 }
 
 export async function getZoneById(zoneId, lang = null) {

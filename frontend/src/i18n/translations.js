@@ -64,6 +64,7 @@ export const translations = {
     'quick.slopesMonitored': 'Slopes Monitored:',
     'quick.riskEngine': 'Risk Engine:',
     'quick.frozenModel': 'Frozen Model v1 (17 features)',
+    'quick.liveModel': 'Live RF model (17 features)',
     // Zone panel
     'zone.intelligence': 'Zone Intelligence',
     'zone.selectSlope': 'Select Slope Sector',
@@ -370,6 +371,7 @@ export const translations = {
     'quick.slopesMonitored': 'निगरानी ढाल:',
     'quick.riskEngine': 'जोखिम इंजन:',
     'quick.frozenModel': 'फ्रोज़न मॉडल v1 (17 फ़ीचर्स)',
+    'quick.liveModel': 'लाइव RF मॉडल (17 फ़ीचर्स)',
     'zone.intelligence': 'क्षेत्र ख़ुफ़िया',
     'zone.selectSlope': 'ढाल क्षेत्र चुनें',
     'zone.riskScore': 'जोखिम स्कोर एवं बैंड',
@@ -644,6 +646,7 @@ export const translations = {
     'quick.slopesMonitored': 'निगरानी भिर:',
     'quick.riskEngine': 'जोखिम इन्जिन:',
     'quick.frozenModel': 'फ्रोजन मोडेल v1 (१७ फिचर्स)',
+    'quick.liveModel': 'लाइभ RF मोडेल (१७ फिचर्स)',
     'zone.intelligence': 'क्षेत्र बुद्धिमत्ता',
     'zone.selectSlope': 'भिर क्षेत्र छान्नुहोस्',
     'zone.riskScore': 'जोखिम स्कोर र ब्यान्ड',

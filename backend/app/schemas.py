@@ -122,6 +122,9 @@ class RoutePoint(BaseModel):
 class RouteRequest(BaseModel):
     start: RoutePoint
     end: RoutePoint
+    # Optional caller-requested exclusions (e.g. officer closes a slope).
+    # Honored by the risk-aware route only; shortest stays pure-length.
+    avoid_zones: list[str] = []
 
 
 class RouteResult(BaseModel):

@@ -174,29 +174,9 @@ def _decisions(zone_id: str, score: int, lang: str = "en") -> list[dict]:
     return out
 
 
-def _mine_road_graph() -> MineRoadGraph:
-    """Adapt the demo topology and center distances to the routing domain."""
-    mine_road_graph = MineRoadGraph()
-    for zone_id in data.ZONE_CENTERS:
-        mine_road_graph.add_zone(zone_id)
-
-    for start_zone_id, neighbors in data.GRAPH.items():
-        for end_zone_id in neighbors:
-            if mine_road_graph.graph.has_edge(start_zone_id, end_zone_id):
-                continue
-            mine_road_graph.add_road(
-                start_zone_id,
-                end_zone_id,
-                length=data.distance(
-                    data.ZONE_CENTERS[start_zone_id], data.ZONE_CENTERS[end_zone_id]
-                ),
-                adjacent_zones=(start_zone_id, end_zone_id),
-            )
-
-    return mine_road_graph
-
-
-MINE_ROAD_GRAPH = _mine_road_graph()
+# NOTE: the v1 single-graph MINE_ROAD_GRAPH was removed 2026-09-05 — routing
+# is per-corridor via _road_graphs_for() (full + hazard graphs). The shared
+# routing/ lib (graph/search/cost/compare) is untouched.
 
 
 @app.get("/")
@@ -225,7 +205,8 @@ def list_zones(location: str | None = None):
                 trend=trend,
             )
         )
-    return {"zones": zones, "location": getattr(store, 'location', 'gangtok')}
+    return {"zones": zones, "location": getattr(store, 'location', 'gangtok'),
+            "scoring": "live-rf" if getattr(store, 'live_scores', False) else "fixture"}
 
 
 @app.get("/api/zones/{zone_id}", response_model=ZoneDetail)
@@ -282,6 +263,20 @@ def get_explanation(zone_id: str):
     _zone_or_404(zone_id)
     store = _store_for_zone(zone_id)
     loc = _location_for_zone(zone_id)
+    # Live SIH26001 TreeSHAP over the zone's NGEN row (weights present only).
+    try:
+        from . import sih26001_model
+        live = sih26001_model.get_live()
+        real = live.explain_row(store.features[zone_id]) if live is not None else None
+    except Exception:
+        real = None
+    if real is not None:
+        return ExplanationResponse(
+            zone_id=zone_id,
+            risk_score=store.risk[zone_id],
+            base_value=real["base_value"],
+            contributions=real["contributions"],
+        )
     try:
         letter = zone_id.split("_")[-1]
         _, contribs = data.compute_risk(letter, store.features[zone_id])
@@ -362,10 +357,20 @@ def safe_route(req: RouteRequest):
     end = min(centers, key=lambda z: data.distance(req.end.model_dump(), centers[z]))
     # Shortest uses the full graph INCLUDING the R2 ridge shortcut, so it
     # honestly crosses the at-risk segment. Risk-aware uses the hazard graph
-    # (shortcut closed while its adjacent slope is Critical/High).
+    # (shortcut closed while its adjacent slope is Critical/High), minus any
+    # caller-requested avoid_zones (validated below, never start/end).
     full_graph, hazard_graph = _road_graphs_for(loc)
+    avoid = [z for z in (req.avoid_zones or []) if z not in (start, end)]
+    for z in avoid:
+        if z not in hazard_graph.graph:
+            raise HTTPException(status_code=422, detail=f"avoid_zones: unknown zone {z!r}")
+    if avoid:
+        hazard_graph = _without_zones(hazard_graph, avoid)
     shortest_comparison = compare_routes(full_graph, start, end, store.risk, ROUTING_ALPHA)
-    aware_comparison = compare_routes(hazard_graph, start, end, store.risk, ROUTING_ALPHA)
+    try:
+        aware_comparison = compare_routes(hazard_graph, start, end, store.risk, ROUTING_ALPHA)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=f"no risk-aware route: {exc}")
     shortest = {
         "path": data.interpolate(
             [centers[zone_id] for zone_id in shortest_comparison.shortest_route.path]
@@ -469,6 +474,20 @@ def _road_graph_for(location: str) -> MineRoadGraph:
     """Backward-compat: full per-corridor graph (with R2 shortcut)."""
     full, _ = _road_graphs_for(location)
     return full
+
+
+def _without_zones(graph: MineRoadGraph, drop: list[str]) -> MineRoadGraph:
+    """Copy of graph with zones removed (officer closures for risk-aware)."""
+    g = MineRoadGraph()
+    drop_set = set(drop)
+    for node in graph.graph.nodes:
+        if node not in drop_set:
+            g.add_zone(node)
+    for a, b, edata in graph.graph.edges(data=True):
+        if a not in drop_set and b not in drop_set:
+            g.add_road(a, b, length=edata["length"],
+                       adjacent_zones=edata["adjacent_zones"])
+    return g
 
 
 @app.post("/api/simulation/what-if", response_model=WhatIfResponse,

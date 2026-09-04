@@ -95,7 +95,7 @@ export async function calculateRoute({ originKey = null, location = 'gangtok', a
 
   const res = await apiRequest('/routes/safe', {
     method: 'POST',
-    body: JSON.stringify({ start, end }),
+    body: JSON.stringify({ start, end, avoid_zones: avoidZoneIds || [] }),
   });
   const aware = res.risk_aware_route || {};
   const normal = res.shortest_route || {};
@@ -137,7 +137,8 @@ export async function calculateRoute({ originKey = null, location = 'gangtok', a
     },
     comparison: {
       distanceDeltaKm: +(awareKm - normalKm).toFixed(2),
-      timeDeltaMin: +((awareKm - normalKm) * 1.5).toFixed(1),
+      // Mountain-road estimate at ~20 km/h (was an arbitrary x1.5 factor).
+      timeDeltaMin: +((awareKm - normalKm) * 3).toFixed(1),
       riskReductionPct: normalRisk > 0 ? Math.round(((normalRisk - awareRisk) / normalRisk) * 100) : 0,
       summary: `Shortest crosses at-risk segment R2 below ${preset.start}; the safe route diverts via the valley chain (${awareZones.join(' → ') || 'R3/R4'}) and avoids R2 entirely. Both start at ${preset.start} (${normalRisk}) — the difference is the ground crossed, shown as two separate lines on the map.`,
     },

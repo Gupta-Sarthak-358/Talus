@@ -7,8 +7,8 @@ season-window proxy target, tile-bounded study area, Phase 1.
 Pipeline (all local-first; network only for WorldCover/Sentinel-2 COGs +
 two bulk Overpass queries — stage 0 fails fast if offline):
   0. connectivity probe (WorldCover 1px + Overpass tiny query)
-  1. positives: GSI shapefile Sikkim pts + PDF p659-676 Sikkim rows -> dedupe <50m
-  2. study-area filter (tile bbox n27_e088: 88-89E/27-28N, Sikkim extent inset)
+  1. positives: GSI shapefile Sikkim + West Bengal pts + PDF p659-676 Sikkim rows -> dedupe <50m
+  2. study-area filter (tile bbox n27_e088: 88-89E/27-28N, Sikkim + Darjeeling-hills inset)
   3. negatives: seed-42 uniform, >300m from any positive, 1:1
   4. DEM point ops from USGS tile (bilinear elev, Horn slope/aspect, Laplacian curv)
   5. hydro per 0.1-deg block (+margin): priority-flood + D8 + descending
@@ -77,8 +77,10 @@ SIDECAR_CSV = PROCDIR / "training_sidecar.csv"
 SAMPLE_CSV = EVIDDIR / "feature_matrix.training.sample.csv"
 MANIFEST = REPO / "data/sih26001/manifest.training.json"
 
-# Study area: inside USGS tile (88-89E/27-28N), Sikkim-extent inset (logged).
-LON0, LON1, LAT0, LAT1 = 88.06, 88.96, 27.08, 27.999
+# Study area: inside USGS tile (88-89E/27-28N), Sikkim + Darjeeling-hills inset
+# (logged). LAT0 27.00 (was 27.08) pulls in the Darjeeling hills corridor
+# (town 27.04N); Lachung (27.66-27.70N) was already inside. Tile-bounded.
+LON0, LON1, LAT0, LAT1 = 88.06, 88.96, 27.00, 27.999
 BUFFER_M = 300.0
 DEDUPE_M = 50.0
 NEG_RATIO = 1.0  # 1:1
@@ -248,22 +250,30 @@ def parse_pdf_rows() -> pd.DataFrame:
     return df
 
 
+def _shp_state_frame(a, token: str, tag: str) -> pd.DataFrame:
+    sel = np.array([(token in clean(x).upper()) for x in a["STATE"]])
+    sub = a[sel]
+    lon = np.array([float(x) if x.strip() else float("nan") for x in sub["LONGITUDE"]])
+    lat = np.array([float(x) if x.strip() else float("nan") for x in sub["LATITUDE"]])
+    ok = ~(np.isnan(lon) | np.isnan(lat))
+    sub, lon, lat = sub[ok], lon[ok], lat[ok]
+    init = np.array([clean(x) for x in sub["INITIATION"]])
+    year = np.array([int(v) if v.isdigit() else 0 for v in init])
+    return pd.DataFrame({"slide_no": [clean(x) for x in sub["SLIDE_NO"]],
+                         "district": [clean(x) for x in sub["DISTRICT"]],
+                         "lat": lat, "lon": lon, "year": year, "source": tag})
+
+
 def load_positives() -> pd.DataFrame:
     a = load_shp_all()
-    is_sk = np.array([("SIKKIM" in clean(x).upper()) for x in a["STATE"]])
-    sk = a[is_sk]
-    lon = np.array([float(x) if x.strip() else float("nan") for x in sk["LONGITUDE"]])
-    lat = np.array([float(x) if x.strip() else float("nan") for x in sk["LATITUDE"]])
-    ok = ~(np.isnan(lon) | np.isnan(lat))
-    sk, lon, lat = sk[ok], lon[ok], lat[ok]
-    init = np.array([clean(x) for x in sk["INITIATION"]])
-    year = np.array([int(v) if v.isdigit() else 0 for v in init])
-    shp = pd.DataFrame({"slide_no": [clean(x) for x in sk["SLIDE_NO"]],
-                        "district": [clean(x) for x in sk["DISTRICT"]],
-                        "lat": lat, "lon": lon, "year": year, "source": "shp"})
-    log(f"stage1: shapefile Sikkim rows={len(shp)}")
+    shp_sk = _shp_state_frame(a, "SIKKIM", "shp")
+    log(f"stage1: shapefile Sikkim rows={len(shp_sk)}")
+    # Darjeeling hills corridor: WEST BENGAL rows (same cleaning; bbox filter
+    # at stage 2 keeps only the in-tile hills portion, plains fall away).
+    shp_wb = _shp_state_frame(a, "WEST BENGAL", "shp-wb")
+    log(f"stage1: shapefile West Bengal rows={len(shp_wb)}")
     pdf = parse_pdf_rows()
-    both = pd.concat([shp, pdf[["slide_no", "district", "lat", "lon", "year", "source"]]],
+    both = pd.concat([shp_sk, shp_wb, pdf[["slide_no", "district", "lat", "lon", "year", "source"]]],
                      ignore_index=True)
     # greedy <50m dedupe, shapefile priority (listed first)
     blat = both["lat"].to_numpy()
@@ -657,7 +667,10 @@ def optical_batched(df: pd.DataFrame) -> pd.DataFrame:
     log(f"stage8: pinned scene {s1['scene']['product_id']} date={s1['scene']['date']}")
     lat = df["lat"].to_numpy()
     lon = df["lon"].to_numpy()
-    cell = 0.02
+    # 0.05-deg cells (not 0.02): identical per-point results (members are
+    # indexed from the group window), ~5x fewer HTTP range reads. The 0.02
+    # Sept-4 run stalled the demo waiting on ~5k silent reads.
+    cell = 0.05
     keys = list(zip(np.floor((lat - LAT0) / cell).astype(int), np.floor((lon - LON0) / cell).astype(int)))
     groups: dict = {}
     for k, gi in enumerate(keys):
@@ -671,13 +684,45 @@ def optical_batched(df: pd.DataFrame) -> pd.DataFrame:
     n_cloud = 0
     n_wc_unknown = 0
     from rasterio.warp import transform as warp_transform
-    # Explicit opens (not `with`): datasets must stay alive across ~828 cell reads;
+    from rasterio.env import Env
+    # Second pinned scene: Darjeeling granule 45RXK, SAME date as the Gangtok
+    # 45RXL scene (2024-11-29, cloud ~0.02% both). Points outside the RXL
+    # granule (Darjeeling corridor) previously fell through to median impute;
+    # now each cell group uses the first scene whose red COG contains it.
+    rxk = json.loads((REPO / "data/processed/terrain/darjeeling_sentinel_cogs.json").read_text(encoding="utf-8"))
+    SCENES = [
+        {"name": "45RXL", "red": red_href, "nir": nir_href, "scl": scl_href},
+        {"name": "45RXK", "red": rxk["cogs"]["red"], "nir": rxk["cogs"]["nir"], "scl": rxk["cogs"]["scl"]},
+    ]
+    log(f"stage8: scenes 45RXL {s1['scene']['date']} + 45RXK {rxk['scene']['date']}")
+    # HTTP timeouts: /vsicurl/ reads must never hang silently (the Sept-5 stall).
+    env = Env(GDAL_HTTP_TIMEOUT="60", GDAL_HTTP_MAX_RETRY="2", GDAL_HTTP_RETRY_DELAY="5",
+              GDAL_DISABLE_READDIR_ON_OPEN="EMPTY_DIR", VSI_CACHE="TRUE", VSI_CACHE_SIZE="67108864")
+    env.__enter__()
+    # Explicit opens (not `with`): datasets must stay alive across cell reads;
     # closed explicitly at the end of this stage.
-    dR = rasterio.open("/vsicurl/" + red_href)
-    dN = rasterio.open("/vsicurl/" + nir_href)
-    dS = rasterio.open("/vsicurl/" + scl_href)
+    opened = []
+    for sc in SCENES:
+        sc["dR"] = rasterio.open("/vsicurl/" + sc["red"])
+        sc["dN"] = rasterio.open("/vsicurl/" + sc["nir"])
+        sc["dS"] = rasterio.open("/vsicurl/" + sc["scl"])
+        opened += [sc["dR"], sc["dN"], sc["dS"]]
     dW = rasterio.open(WC_URL)
+    opened.append(dW)
     assert dW.crs.to_epsg() == 4326, dW.crs
+
+    def scene_for(lon0, lat0):
+        """First scene whose red COG contains (lon, lat); None if neither."""
+        for sc in SCENES:
+            ds = sc["dR"]
+            try:
+                xs, ys = warp_transform("EPSG:4326", ds.crs, [lon0], [lat0])
+                row, col = ds.index(xs[0], ys[0])
+                if 0 <= row < ds.height and 0 <= col < ds.width:
+                    return sc
+            except Exception:  # noqa: BLE001
+                continue
+        return None
     def band_window(ds, lo0, lo1, la0, la1):
         """Pixel window for geo bbox in this band's own grid (bands differ: B04/B08 10m, SCL 20m)."""
         xs, ys = warp_transform("EPSG:4326", ds.crs, [lo0, lo1], [la0, la1])
@@ -689,19 +734,47 @@ def optical_batched(df: pd.DataFrame) -> pd.DataFrame:
             return None
         return ds.read(1, window=((r0, r1), (c0, c1))).astype(np.float64), r0, c0
 
-    for (cy, cx), members in groups.items():
+    scene_counts = {sc["name"]: 0 for sc in SCENES}
+    ngroups = len(groups)
+    for gi_group, ((cy, cx), members) in enumerate(groups.items()):
+        if gi_group % 25 == 0:
+            log(f"stage8: group {gi_group}/{ngroups} (ndvi-miss-so-far={int(np.isnan(ndvi).sum())})")
         mlat = lat[members]
         mlon = lon[members]
+        # Scene for this cell: centroid decides (cells are 0.02 deg, far
+        # smaller than a granule, so one scene covers the whole group).
+        clo = float(np.mean(mlon))
+        cla = float(np.mean(mlat))
+        sc = scene_for(clo, cla)
+        dR, dN, dS = (sc["dR"], sc["dN"], sc["dS"]) if sc else (None, None, None)
+        if sc:
+            scene_counts[sc["name"]] += len(members)
         # S2 window covering the cell (+~110m margin), read once per band
         la0, la1 = mlat.min() - 0.001, mlat.max() + 0.001
         lo0, lo1 = mlon.min() - 0.001, mlon.max() + 0.001
-        R = band_window(dR, lo0, lo1, la0, la1)
-        N = band_window(dN, lo0, lo1, la0, la1)
-        S = band_window(dS, lo0, lo1, la0, la1)
+        R = band_window(dR, lo0, lo1, la0, la1) if dR else None
+        N = band_window(dN, lo0, lo1, la0, la1) if dN else None
+        S = band_window(dS, lo0, lo1, la0, la1) if dS else None
         # NOTE: rasterio index() does NOT reproject — member lon/lat (degrees)
         # must be warped to each band's CRS first (UTM for S2; dW is 4326-native).
-        px_r, py_r = warp_transform("EPSG:4326", dR.crs, mlon.tolist(), mlat.tolist())
-        px_s, py_s = warp_transform("EPSG:4326", dS.crs, mlon.tolist(), mlat.tolist())
+        if dR:
+            px_r, py_r = warp_transform("EPSG:4326", dR.crs, mlon.tolist(), mlat.tolist())
+            px_s, py_s = warp_transform("EPSG:4326", dS.crs, mlon.tolist(), mlat.tolist())
+        else:
+            n_out += len(members)
+            px_r = py_r = px_s = py_s = [None] * len(members)
+        # WorldCover: ONE window read per cell group (was one 3x3 read per
+        # point — ~3x fewer range requests), members indexed from the array.
+        try:
+            wc_rows = [dW.index(mlon[i], mlat[i])[0] for i in range(len(members))]
+            wc_cols = [dW.index(mlon[i], mlat[i])[1] for i in range(len(members))]
+            wr0, wr1 = max(0, min(wc_rows) - 1), min(dW.height, max(wc_rows) + 2)
+            wc0, wc1 = max(0, min(wc_cols) - 1), min(dW.width, max(wc_cols) + 2)
+            wc_arr = dW.read(1, window=((wr0, wr1), (wc0, wc1)))
+            wc_ok = True
+        except Exception:  # noqa: BLE001
+            wc_arr = None
+            wc_ok = False
         for mi, gi in enumerate(members):
             got_ndvi = False
             if R is not None and N is not None and S is not None:
@@ -715,12 +788,12 @@ def optical_batched(df: pd.DataFrame) -> pd.DataFrame:
                     lrs, lcs = rs - rs0, cs - cs0
                     if (0 <= lr < arr_r.shape[0] and 0 <= lc < arr_r.shape[1]
                             and 0 <= lrs < arr_s.shape[0] and 0 <= lcs < arr_s.shape[1]):
-                        rd, nr, sc = arr_r[lr, lc], arr_n[lr, lc], int(arr_s[lrs, lcs])
+                        rd, nr, scv = arr_r[lr, lc], arr_n[lr, lc], int(arr_s[lrs, lcs])
                         den = nr + rd
                         nd = (nr - rd) / den if den != 0 else 0.0
-                        if -1.0 <= nd <= 1.0 and sc not in CLOUD:
+                        if -1.0 <= nd <= 1.0 and scv not in CLOUD:
                             ndvi[gi] = round(float(nd), 3)
-                            sclv[gi] = sc
+                            sclv[gi] = scv
                             got_ndvi = True
                         else:
                             n_cloud += 1
@@ -730,13 +803,16 @@ def optical_batched(df: pd.DataFrame) -> pd.DataFrame:
                     n_out += 1
             else:
                 n_out += 1
-            # WorldCover 3x3 mode (own try — independent of S2).
+            # WorldCover 3x3 mode from the group window (independent of S2).
             # NOTE: mlon/mlat are member-subsets: index with mi (position), not gi.
             try:
-                wr, wc = dW.index(mlon[mi], mlat[mi])
-                if not (1 <= wr < dW.height - 1 and 1 <= wc < dW.width - 1):
+                if not wc_ok:
+                    raise RuntimeError("WC group window failed")
+                wr, wc_ = wc_rows[mi], wc_cols[mi]
+                if not (1 <= wr < dW.height - 1 and 1 <= wc_ < dW.width - 1):
                     raise RuntimeError("WC edge")
-                win = dW.read(1, window=((wr - 1, wr + 2), (wc - 1, wc + 2))).flatten()
+                lr, lc = wr - wr0, wc_ - wc0
+                win = wc_arr[lr - 1:lr + 2, lc - 1:lc + 2].flatten()
                 mode = Counter(int(v) for v in win).most_common(1)[0][0]
                 if mode in WC2LABEL:
                     lulc[gi] = WC2LABEL[mode]
@@ -744,6 +820,7 @@ def optical_batched(df: pd.DataFrame) -> pd.DataFrame:
                     n_wc_unknown += 1
             except Exception:  # noqa: BLE001
                 pass
+    log(f"stage8: scene split {scene_counts}")
     miss_ndvi = int(np.isnan(ndvi).sum())
     if miss_ndvi:
         med = float(np.nanmedian(ndvi))
@@ -761,7 +838,12 @@ def optical_batched(df: pd.DataFrame) -> pd.DataFrame:
     STATS["ndvi_cloud_masked"] = n_cloud
     STATS["lulc_missing_mode"] = miss_lulc
     STATS["lulc_mix"] = {k: int(v) for k, v in Counter(lulc.tolist()).items()}
-    dR.close(); dN.close(); dS.close(); dW.close()
+    for ds in opened:
+        try:
+            ds.close()
+        except Exception:  # noqa: BLE001
+            pass
+    env.__exit__(None, None, None)
     return pd.DataFrame({"ndvi": ndvi, "lulc": lulc})
 
 
@@ -912,7 +994,7 @@ def write_manifest() -> None:
         "spec": "docs/sih26001/MODEL_TRAINING_HANDOFF.md",
         "defaults": "season-window proxy target; tile-bounded study area (no n28 fetch); Phase 1",
         "study_area": {"lon": [LON0, LON1], "lat": [LAT0, LAT1], "crs": "EPSG:4326",
-                       "note": "inside USGS tile n27_e088 (88-89E/27-28N); Sikkim-extent inset"},
+                       "note": "inside USGS tile n27_e088 (88-89E/27-28N); Sikkim + Darjeeling-hills inset (LAT0 27.00)"},
         "seeds": [SEED],
         "dedupe_m": DEDUPE_M,
         "negative_buffer_m": BUFFER_M,

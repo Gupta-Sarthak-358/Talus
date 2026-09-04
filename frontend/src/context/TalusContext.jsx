@@ -33,6 +33,7 @@ export function TalusProvider({ children }) {
   const [role, setRoleState] = useState('district_officer'); // default to district disaster officer
   const [selectedZoneId, setSelectedZoneId] = useState('S1'); // default to Slope S1 (Tathangchen Critical)
   const [zones, setZones] = useState([]);
+  const [scoringMode, setScoringMode] = useState('fixture'); // 'live-rf' when backend serves trained-RF scores
   const [selectedZoneData, setSelectedZoneData] = useState(null);
   const [riskSummary, setRiskSummary] = useState(null);
   const [alerts, setAlerts] = useState([]);
@@ -164,6 +165,7 @@ export function TalusProvider({ children }) {
       ]);
 
       setZones(zonesRes.zones);
+      setScoringMode(zonesRes.scoring || 'fixture');
       setAlerts(alertsRes.alerts);
       setRoads(roadsRes);
       setReports(reportsRes);
@@ -415,6 +417,7 @@ export function TalusProvider({ children }) {
     
     // Zones & Risk
     zones,
+    scoringMode,
     selectedZoneId,
     selectedZoneData,
     selectZone,

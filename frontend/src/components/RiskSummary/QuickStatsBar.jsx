@@ -3,7 +3,7 @@ import { useTalusContext } from '../../context/TalusContext';
 import { CloudRain, Radio, Users, Compass } from 'lucide-react';
 
 export default function QuickStatsBar() {
-  const { zones, activeSimulation, selectedZoneData, locationData, t } = useTalusContext();
+  const { zones, activeSimulation, selectedZoneData, locationData, scoringMode, t } = useTalusContext();
 
   // Live rainfall: from selected zone telemetry or active simulation override
   const liveRainfall = selectedZoneData?.telemetry?.rainfall_24h ?? selectedZoneData?.telemetry?.rainfall_24h_mm ?? null;
@@ -32,7 +32,7 @@ export default function QuickStatsBar() {
         <div className="hidden sm:flex items-center gap-2 border-l border-mine-border pl-4">
           <Radio className="w-4 h-4 text-risk-verylow animate-pulse" />
           <span className="text-mine-muted">{t('quick.riskEngine')}</span>
-          <span className="font-semibold text-risk-verylow">{t('quick.frozenModel')}</span>
+          <span className="font-semibold text-risk-verylow">{scoringMode === 'live-rf' ? t('quick.liveModel') : t('quick.frozenModel')}</span>
         </div>
       </div>
 

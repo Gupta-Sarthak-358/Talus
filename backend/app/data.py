@@ -277,11 +277,27 @@ class ZoneStore:
         self.history: dict[str, list[tuple[str, int]]] = {}
         self.trend_label: dict[str, str] = {}
         self.updated_at: dict[str, str] = {}
+        # Live SIH26001 scoring: run the trained RF over each zone's NGEN
+        # sample row. All-or-nothing per store: any miss -> frozen fixtures
+        # (fresh clones without weights stay honest, logged).
+        self.live_scores = False
+        try:
+            from . import sih26001_model
+            live = sih26001_model.get_live()
+        except Exception:
+            live = None
+        live_hits = 0
         stamp = now_iso()
         for zid, z in zones.items():
             self.features[zid] = dict(_FEATURE_ROWS.get(zid, {}))
-            self.risk[zid] = int(z["risk_score"])
-            self.confidence[zid] = float(z["confidence"])
+            scored = live.score_row(self.features[zid]) if live is not None else None
+            if scored is not None:
+                self.risk[zid] = int(scored["score"])
+                self.confidence[zid] = float(scored["confidence"])
+                live_hits += 1
+            else:
+                self.risk[zid] = int(z["risk_score"])
+                self.confidence[zid] = float(z["confidence"])
             hist = [
                 (p["t"], int(p["risk_score"]))
                 for p in histories.get(zid, [])
@@ -289,6 +305,13 @@ class ZoneStore:
             self.history[zid] = hist
             self.trend_label[zid] = z.get("trend", "stable")
             self.updated_at[zid] = stamp
+        if zones and live_hits == len(zones):
+            self.live_scores = True
+            print(f"[sih26001] live scores active for '{self.location}' "
+                  f"({live_hits}/{len(zones)} zones via trained RF+isotonic)")
+        else:
+            print(f"[sih26001] fixture scores for '{self.location}' "
+                  f"(live {live_hits}/{len(zones)}; weights absent or row invalid)")
 
     def trend(self, zone_id: str) -> tuple[str, bool]:
         _, rapid = detect_trend(self.history[zone_id])

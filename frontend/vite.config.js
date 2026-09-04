@@ -14,7 +14,9 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom'],
+          // NOTE: no 'vendor' entry — react/react-dom resolve into index
+          // (a vendor chunk came out empty). Router gets its own chunk.
+          router: ['react-router-dom'],
           leaflet: ['leaflet', 'react-leaflet'],
           charts: ['recharts'],
           icons: ['lucide-react'],
