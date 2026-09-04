@@ -7,7 +7,7 @@ What it checks (beginner-friendly):
 - Required fields are not empty, numeric fields are numbers, categorical fields are text.
 - No uppercase FILL placeholder remains (honesty check).
 - Manifest is valid JSON, declares Gangtok pilot + EPSG:4326, and does not claim not_available sources as real.
-- Always warns that current values are STUB/demo, not scientifically validated.
+- Always warns that non-IMD values are STUB/demo (S1 rainfall is REAL-verified, see NGEN_PROVENANCE_S1.md).
 
 Usage:
   python scripts/validate_ngen_sample.py
@@ -250,11 +250,11 @@ def main() -> int:
     # 14: always print STUB/demo warning — never hide that this is not scientific data
     print()
     print("=" * 72)
-    print("WARNING: This sample contains STUB/demo values and is NOT scientifically")
-    print("validated. All 17 science features are STUB/demo until a real source")
-    print("file (SRTM tile, IMD NetCDF, ERA5 request, Bhusanket export, OSM extract)")
-    print("is committed and checksummed. See docs/sih26001/NGEN_PROVENANCE_S1.md")
-    print("for per-feature status and upgrade evidence required.")
+    print("WARNING: This sample is PARTLY stub: S1 rainfall (24h/7d/30d) is")
+    print("REAL-verified from the IMD archive, but all other science features")
+    print("are STUB/demo until a real source file (SRTM tile, ERA5 request,")
+    print("Bhusanket export, OSM extract) is committed and checksummed.")
+    print("See docs/sih26001/NGEN_PROVENANCE_S1.md for per-feature status.")
     print("=" * 72)
     print()
 

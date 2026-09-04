@@ -8,8 +8,16 @@
     "imd_gridded": {
       "version": "IMD-0.25deg-1901-present",
       "clip": "pilot-bbox",
-      "status": "not_available",
-      "date": null
+      "status": "available",
+      "file": "data/raw/imd/ind2024_rfp25.nc",
+      "extract_script": "scripts/extract_gangtok_rainfall.py",
+      "extract_csv": "data/processed/imd/gangtok_rainfall_2024.csv",
+      "grid_lat": 27.25,
+      "grid_lon": 88.5,
+      "grid_method": "nearest to S1 27.3450N 88.6000E (~13 km; 0.25 deg representativeness limit applies)",
+      "window_end": "2024-06-16",
+      "window_rule": "wettest trailing-7d spell of 2024 at pilot cell",
+      "date": "2026-09-04"
     },
     "era5_soil": {
       "version": "ERA5-volumetric",
@@ -46,5 +54,7 @@
     "ratio": null,
     "cv": "spatial-cluster (no random split)"
   },
-  "checksums": {}
+  "checksums": {
+    "gangtok_rainfall_2024.csv": "sha256:2FA66C6F268F6A62B8744215FA650AFEADDF3D84840D74E0D3CA0CE5BB575735"
+  }
 }
