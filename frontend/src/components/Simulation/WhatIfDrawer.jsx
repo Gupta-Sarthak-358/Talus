@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useMineContext } from '../../context/MineContext';
-import { WHAT_IF_PRESETS } from '../../data/mockData';
+import { WHAT_IF_PRESETS } from '../../data/constants';
 import SimulationDiffCard from './SimulationDiffCard';
 import { runCausalWhatIf, getScenarioTemplates } from '../../services/scenario';
 import { Sliders, X, Sparkles, RotateCcw, Play, CloudRain, Activity, GitCommit, Layers, FlaskConical, Clock } from 'lucide-react';
@@ -50,7 +50,7 @@ export default function WhatIfDrawer() {
   const [causalResult, setCausalResult] = useState(null);
   const [templates, setTemplates] = useState([]);
   const [causalForm, setCausalForm] = useState({
-    kind: 'threshold_saturation',
+    kind: 'rainfall_storm',
     start_day: 0,
     duration_days: 7,
     params: { template_id: 'monga-mdl' },
@@ -122,7 +122,7 @@ export default function WhatIfDrawer() {
         <div className="flex-1 p-5 space-y-5 overflow-y-auto">
           {/* Target Zone Selection */}
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-mine-text">Target Mine Sector:</label>
+            <label className="text-xs font-semibold text-mine-text">Target Slope Sector:</label>
             <select
               value={targetZoneId}
               onChange={(e) => setTargetZoneId(e.target.value)}
@@ -365,12 +365,12 @@ export default function WhatIfDrawer() {
               </div>
             </div>
 
-            {/* 2. Blast Vibration PPV */}
+            {/* 2. Vibration Proxy (PPV) — kept for model compat, treated as ground-motion proxy for NER */}
             <div className="space-y-1.5">
               <div className="flex justify-between text-xs">
                 <span className="text-mine-text flex items-center gap-1.5">
                   <Activity className="w-3.5 h-3.5 text-orange-400" />
-                  Blast Vibration (PPV):
+                  Ground Vibration Proxy (PPV):
                 </span>
                 <span className="font-mono font-bold text-mine-text">{params.blast_vibration} mm/s</span>
               </div>
@@ -383,9 +383,9 @@ export default function WhatIfDrawer() {
                 className="w-full accent-talus-500 cursor-pointer"
               />
               <div className="flex justify-between text-[9px] text-mine-muted font-mono">
-                <span>0 mm/s (None)</span>
-                <span>25 mm/s (Controlled)</span>
-                <span>50 mm/s (High Blast Wave)</span>
+                <span>0 mm/s (Stable)</span>
+                <span>25 mm/s (Elevated)</span>
+                <span>50 mm/s (Severe)</span>
               </div>
             </div>
 
@@ -418,7 +418,7 @@ export default function WhatIfDrawer() {
               <div className="flex justify-between text-xs">
                 <span className="text-mine-text flex items-center gap-1.5">
                   <Layers className="w-3.5 h-3.5 text-talus-400" />
-                  Highwall Slope Angle:
+                  Hillside Slope Angle:
                 </span>
                 <span className="font-mono font-bold text-mine-text">{params.slope_angle}°</span>
               </div>
@@ -432,8 +432,8 @@ export default function WhatIfDrawer() {
               />
               <div className="flex justify-between text-[9px] text-mine-muted font-mono">
                 <span>30° (Gentle)</span>
-                <span>55° (Standard Bench)</span>
-                <span>75° (Steep Highwall)</span>
+                <span>45° (Typical NER Cut)</span>
+                <span>75° (Steep Scarp)</span>
               </div>
             </div>
           </div>

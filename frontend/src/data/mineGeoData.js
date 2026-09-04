@@ -303,6 +303,165 @@ export const PRECOMPUTED_ROUTES = {
   }
 };
 
+// ── Multi-location expansion — NER-wide scaffold (Gangtok live, Lachung/Darjeeling fixture-preview) ──
+export const LACHUNG_CENTER = [27.69, 88.74];
+export const LACHUNG_ZOOM = 12;
+export const LACHUNG_ZONES_GEOJSON = [
+  {
+    id: "N1",
+    name: "N1 — Lachung Upper (Yumthang approach)",
+    village: "Lachung Upper",
+    type: "Upper Hillside Slope",
+    benches: "Yumthang Ridge",
+    coordinates: [[27.7000,88.7300],[27.7010,88.7400],[27.6930,88.7410],[27.6920,88.7310]],
+    centroid: [27.6965,88.7355],
+    area_hectares: 16.2,
+    sensorIds: ["IMD-LAC-01","EXT-N1-01"],
+  },
+  {
+    id: "N2",
+    name: "N2 — Lachung Road-Cut (NH-310A)",
+    village: "Lachung Road-Cut",
+    type: "Active Road-Cut Slope",
+    benches: "Highway Cut Benches",
+    coordinates: [[27.6920,88.7420],[27.6930,88.7520],[27.6840,88.7530],[27.6830,88.7430]],
+    centroid: [27.6880,88.7475],
+    area_hectares: 13.8,
+    sensorIds: ["EXT-N2-01"],
+  },
+  {
+    id: "N3",
+    name: "N3 — Lachung Mid (River Bend)",
+    village: "Lachung Mid",
+    type: "Mid-Slope Inhabited Sector",
+    benches: "Mid Valley Transition",
+    coordinates: [[27.6820,88.7350],[27.6830,88.7450],[27.6740,88.7460],[27.6730,88.7360]],
+    centroid: [27.6780,88.7405],
+    area_hectares: 21.5,
+    sensorIds: ["SM-N3-01"],
+  },
+  {
+    id: "N4",
+    name: "N4 — Lachung Valley Staging",
+    village: "Lachung Valley",
+    type: "Valley Staging & Egress",
+    benches: "River Basin Flats",
+    coordinates: [[27.6720,88.7250],[27.6730,88.7350],[27.6640,88.7360],[27.6630,88.7260]],
+    centroid: [27.6680,88.7305],
+    area_hectares: 26.0,
+    sensorIds: ["STG-N4-01"],
+  },
+];
+
+export const DARJEELING_CENTER = [27.041, 88.263];
+export const DARJEELING_ZOOM = 12;
+export const DARJEELING_ZONES_GEOJSON = [
+  {
+    id: "D1",
+    name: "D1 — Darjeeling Upper (Ghoom)",
+    village: "Ghoom",
+    type: "Upper Hillside Slope",
+    benches: "Singalila Ridge",
+    coordinates: [[27.0520,88.2530],[27.0530,88.2630],[27.0450,88.2640],[27.0440,88.2540]],
+    centroid: [27.0485,88.2585],
+    area_hectares: 15.9,
+    sensorIds: ["IMD-DRJ-01"],
+  },
+  {
+    id: "D2",
+    name: "D2 — Darjeeling Road-Cut (Hill Cart Rd)",
+    village: "Ghoom Cut",
+    type: "Active Road-Cut Slope",
+    benches: "Highway Cut Benches",
+    coordinates: [[27.0450,88.2650],[27.0460,88.2750],[27.0370,88.2760],[27.0360,88.2660]],
+    centroid: [27.0410,88.2705],
+    area_hectares: 12.4,
+    sensorIds: ["EXT-D2-01"],
+  },
+  {
+    id: "D3",
+    name: "D3 — Darjeeling Mid (Lebong)",
+    village: "Lebong",
+    type: "Mid-Slope Inhabited Sector",
+    benches: "Mid Valley Transition",
+    coordinates: [[27.0360,88.2550],[27.0370,88.2650],[27.0280,88.2660],[27.0270,88.2560]],
+    centroid: [27.0320,88.2605],
+    area_hectares: 20.8,
+    sensorIds: ["SM-D3-01"],
+  },
+  {
+    id: "D4",
+    name: "D4 — Darjeeling Valley Staging",
+    village: "Darjeeling Valley",
+    type: "Valley Staging & Egress",
+    benches: "River Basin Flats",
+    coordinates: [[27.0260,88.2450],[27.0270,88.2550],[27.0180,88.2560],[27.0170,88.2460]],
+    centroid: [27.0220,88.2505],
+    area_hectares: 24.3,
+    sensorIds: ["STG-D4-01"],
+  },
+];
+
+// Location registry — single source for center/zoom/zones per NER corridor
+export const LOCATIONS = {
+  gangtok: {
+    id: "gangtok",
+    label: "Gangtok Corridor, Sikkim",
+    state: "Sikkim",
+    center: MINE_CENTER,
+    zoom: MINE_ZOOM,
+    zones: MINE_ZONES_GEOJSON,
+    roads: ROAD_SEGMENTS,
+    infra: MINE_INFRASTRUCTURE,
+    sensors: MINE_SENSORS,
+    live: true,
+    badge: "LIVE 16/17 REAL",
+  },
+  lachung: {
+    id: "lachung",
+    label: "Lachung Valley, North Sikkim",
+    state: "Sikkim",
+    center: LACHUNG_CENTER,
+    zoom: LACHUNG_ZOOM,
+    zones: LACHUNG_ZONES_GEOJSON,
+    roads: ROAD_SEGMENTS.map(r => ({
+      ...r,
+      coordinates: r.coordinates.map(([lat, lon]) => [+(lat + 0.35).toFixed(4), +(lon + 0.135).toFixed(4)]),
+      status: r.id==='R2'?'at-risk':r.status
+    })),
+    infra: [
+      { id: "LAC-AP-1", name: "Lachung Staging & Evacuation Center", type: "assembly", coordinates: [27.6680, 88.7310], capacity: "320 Evacuees / SDRF", status: "Preview — NGEN pending" },
+      { id: "LAC-DEOC", name: "Lachung Disaster Ops (DEOC)", type: "facility", coordinates: [27.6890, 88.7480], status: "Preview" },
+    ],
+    sensors: LACHUNG_ZONES_GEOJSON.flatMap(z => z.sensorIds.map(sid => ({id:sid, name:sid, type:"Fixture Preview", coordinates: z.centroid, zone:z.id, status:"preview", reading:"Preview — NGEN extraction pending"}))),
+    live: false,
+    badge: "PREVIEW — fixtures",
+  },
+  darjeeling: {
+    id: "darjeeling",
+    label: "Darjeeling Hills, W Bengal",
+    state: "W Bengal",
+    center: DARJEELING_CENTER,
+    zoom: DARJEELING_ZOOM,
+    zones: DARJEELING_ZONES_GEOJSON,
+    roads: ROAD_SEGMENTS.map(r => ({
+      ...r,
+      coordinates: r.coordinates.map(([lat, lon]) => [+(lat - 0.298).toFixed(4), +(lon - 0.337).toFixed(4)]),
+    })),
+    infra: [
+      { id: "DRJ-AP-1", name: "Darjeeling Staging Center (Lebong)", type: "assembly", coordinates: [27.0220, 88.2510], capacity: "280 Evacuees", status: "Preview — NGEN pending" },
+      { id: "DRJ-DEOC", name: "Darjeeling DEOC", type: "facility", coordinates: [27.0420, 88.2710], status: "Preview" },
+    ],
+    sensors: DARJEELING_ZONES_GEOJSON.flatMap(z => z.sensorIds.map(sid => ({id:sid, name:sid, type:"Fixture Preview", coordinates: z.centroid, zone:z.id, status:"preview", reading:"Preview — NGEN extraction pending"}))),
+    live: false,
+    badge: "PREVIEW — fixtures",
+  },
+};
+
+export function getLocationData(locationId) {
+  return LOCATIONS[locationId] || LOCATIONS.gangtok;
+}
+
 // SIH26001 aliases — prefer GANGTOK_*/SIH_* names (MINE_* kept for backward compat)
 export const GANGTOK_CENTER = MINE_CENTER;
 export const GANGTOK_ZOOM = MINE_ZOOM;

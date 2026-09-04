@@ -2,8 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { MapContainer, TileLayer, Polygon, Polyline, Marker, Popup, Tooltip, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { useMineContext } from '../../context/MineContext';
-import { MINE_CENTER, MINE_ZOOM, MINE_SENSORS, MINE_INFRASTRUCTURE, ROAD_SEGMENTS } from '../../data/mineGeoData';
-import { RISK_BANDS } from '../../data/mockData';
+import { RISK_BANDS } from '../../data/constants';
 import MapLegend from './MapLegend';
 import { AlertOctagon, Navigation, Shield, Radio, ShieldAlert, Maximize2, Compass, Layers } from 'lucide-react';
 
@@ -39,18 +38,22 @@ const criticalHazardIcon = createCustomIcon(
   'hazard-pulse-pin'
 );
 
-// Map Controller component to ensure proper bounds and size recalculation
-function MapController() {
+// Map Controller — recenters when active corridor changes (Gangtok/Lachung/Darjeeling)
+function MapController({ center, zoom }) {
   const map = useMap();
 
   useEffect(() => {
-    // Invalidate map size on initial mount to fix layout bounding
     const timer = setTimeout(() => {
       map.invalidateSize();
-      map.setView(MINE_CENTER, MINE_ZOOM);
+      map.setView(center, zoom);
     }, 150);
     return () => clearTimeout(timer);
-  }, [map]);
+  }, [map, center, zoom]);
+
+  // Also fly when corridor switches without remount
+  useEffect(() => {
+    map.flyTo(center, zoom, { duration: 0.6 });
+  }, [map, center, zoom]);
 
   return null;
 }
@@ -103,9 +106,17 @@ export default function MineMap() {
     activeRoutePlan,
     mapLayers,
     activeSimulation,
+    locationData,
+    activeLocation,
   } = useMineContext();
 
-  const [tileMode, setTileMode] = useState('dark'); // 'dark', 'osm', 'vector'
+  const mapCenter = locationData.center;
+  const mapZoom = locationData.zoom;
+  const roadSegments = locationData.roads;
+  const infra = locationData.infra;
+  const sensors = locationData.sensors;
+
+  const [tileMode, setTileMode] = useState('dark'); // 'dark' | 'osm' | 'light'
 
   // Zone colors lookup
   const getZoneFillColor = (band) => {
@@ -115,10 +126,11 @@ export default function MineMap() {
 
   return (
     <div className="relative w-full h-full min-h-[480px] bg-mine-darkest rounded-2xl overflow-hidden border border-mine-border shadow-md flex flex-col">
-      {/* Top Banner on Map */}
+      {/* Top Banner on Map — location-aware */}
       <div className="absolute top-3 left-3 z-[400] bg-mine-card border border-mine-border rounded-lg px-3 py-1.5 text-xs font-medium text-mine-text flex items-center gap-2 shadow-sm">
-        <span className="w-2 h-2 rounded-full bg-talus-600 animate-pulse"></span>
-        <span className="font-semibold">Gangtok Cluster Landslide GIS (S1–S4)</span>
+        <span className={`w-2 h-2 rounded-full ${locationData.live ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`}></span>
+        <span className="font-semibold">{locationData.label} Landslide GIS ({zones.map(z=>z.id).join('–') || locationData.id})</span>
+        <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold border ${locationData.live ? 'bg-emerald-500/15 text-emerald-700 border-emerald-500/30' : 'bg-amber-500/15 text-amber-700 border-amber-500/30'}`}>{locationData.badge}</span>
         <span className="text-mine-muted font-mono">|</span>
         <span className="text-mine-muted text-[11px]">Roads R1–R4 · Click slope to inspect SHAP intelligence</span>
       </div>
@@ -126,7 +138,7 @@ export default function MineMap() {
       {/* Top-Right Map Controls: Reset View / Basemap Mode */}
       <div className="absolute top-3 right-3 z-[400] flex items-center gap-1.5 bg-mine-card border border-mine-border rounded-lg p-1 shadow-sm">
         <button
-          onClick={() => setTileMode(tileMode === 'dark' ? 'osm' : tileMode === 'osm' ? 'vector' : 'dark')}
+          onClick={() => setTileMode(tileMode === 'dark' ? 'osm' : tileMode === 'osm' ? 'light' : 'dark')}
           className="px-2 py-1 bg-mine-darker hover:bg-mine-dark text-mine-text rounded text-[10px] font-mono font-semibold flex items-center gap-1 transition-colors"
           title="Switch Basemap Style"
         >
@@ -136,14 +148,14 @@ export default function MineMap() {
       </div>
 
       <MapContainer
-        center={MINE_CENTER}
-        zoom={MINE_ZOOM}
+        center={mapCenter}
+        zoom={mapZoom}
         scrollWheelZoom={true}
         className="w-full h-full flex-1"
         zoomControl={false}
         attributionControl={false}
       >
-        <MapController />
+        <MapController center={mapCenter} zoom={mapZoom} />
 
         {/* Dynamic Basemap Layer with Graceful Offline Handling */}
         {tileMode === 'dark' && (
@@ -161,8 +173,16 @@ export default function MineMap() {
           />
         )}
 
-        {/* Gangtok Elevation Contours (Always Visible offline) */}
-        {GANGTOK_CONTOURS.map((contour, i) => (
+        {tileMode === 'light' && (
+          <TileLayer
+            url="https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}{r}.png"
+            maxZoom={19}
+            subdomains="abcd"
+          />
+        )}
+
+        {/* Gangtok Elevation Contours — only for Gangtok corridor */}
+        {activeLocation === 'gangtok' && GANGTOK_CONTOURS.map((contour, i) => (
           <Polyline
             key={i}
             positions={contour.coords}
@@ -179,8 +199,8 @@ export default function MineMap() {
           </Polyline>
         ))}
 
-        {/* Road Network (R1-R4) with status coloring: R1 blocked, R2 at-risk, R3/R4 open */}
-        {ROAD_SEGMENTS.map((road) => {
+        {/* Road Network (R1-R4) with status coloring: R1 blocked, R2 at-risk, R3/R4 open — per corridor */}
+        {roadSegments.map((road) => {
           const isBlocked = road.status === 'blocked';
           const isAtRisk = road.status === 'at-risk';
           const color = isBlocked ? '#c74732' : isAtRisk ? '#d97706' : '#5e7f3a';
@@ -220,7 +240,7 @@ export default function MineMap() {
           );
         })}
 
-        {/* Terraced Mine Pit Zone Polygons */}
+        {/* NER Slope Zone Polygons (S1-S4 Gangtok) */}
         {zones.map((zone) => {
           if (!zone.geometry || !zone.geometry.coordinates) return null;
           const isSelected = zone.id === selectedZoneId;
@@ -286,9 +306,9 @@ export default function MineMap() {
           );
         })}
 
-        {/* Sensor Node Markers */}
+        {/* Sensor Node Markers — per corridor */}
         {mapLayers.sensors &&
-          MINE_SENSORS.map((sensor) => (
+          sensors.map((sensor) => (
             <Marker key={sensor.id} position={sensor.coordinates} icon={sensorIcon}>
               <Popup>
                 <div className="p-1 space-y-1">
@@ -312,9 +332,9 @@ export default function MineMap() {
             </Marker>
           ))}
 
-        {/* Infrastructure & Assembly Point Markers */}
+        {/* Infrastructure & Assembly Point Markers — per corridor */}
         {mapLayers.infrastructure &&
-          MINE_INFRASTRUCTURE.map((item) => (
+          infra.map((item) => (
             <Marker key={item.id} position={item.coordinates} icon={assemblyIcon}>
               <Popup>
                 <div className="p-1 space-y-1">

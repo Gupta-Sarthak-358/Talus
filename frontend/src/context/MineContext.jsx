@@ -5,11 +5,16 @@ import { calculateRoute as fetchRoute, getRoadsStatus } from '../services/routin
 import { simulateConditions } from '../services/simulation';
 import { getReportsQueue, submitReport as postReport } from '../services/reports';
 import { dispatchAlerts as postDispatchAlerts } from '../services/alerts';
-import { ROLES, MOCK_MULTILINGUAL_ALERT } from '../data/mockData';
+import { ROLES } from '../data/constants';
+import { LOCATIONS, getLocationData } from '../data/mineGeoData';
 
 const MineContext = createContext(null);
 
 export function MineProvider({ children }) {
+  // Location State — NER multi-corridor (gangtok live, lachung/darjeeling preview)
+  const [activeLocation, setActiveLocation] = useState('gangtok');
+  const locationData = getLocationData(activeLocation);
+
   // Application State
   const [role, setRoleState] = useState('district_officer'); // default to district disaster officer
   const [selectedZoneId, setSelectedZoneId] = useState('S1'); // default to Slope S1 (Tathangchen Critical)
@@ -19,7 +24,7 @@ export function MineProvider({ children }) {
   const [alerts, setAlerts] = useState([]);
   const [roads, setRoads] = useState([]);
   const [reports, setReports] = useState([]);
-  const [alertDispatchData, setAlertDispatchData] = useState(MOCK_MULTILINGUAL_ALERT);
+  const [alertDispatchData, setAlertDispatchData] = useState(null);
   
   // UI & Modals State
   const [isWhatIfOpen, setIsWhatIfOpen] = useState(false);
@@ -52,11 +57,90 @@ export function MineProvider({ children }) {
   const [simulationLoading, setSimulationLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Initial Data Load
+  // Location switcher — Gangtok live, others preview (local fixtures until NGEN extraction)
+  const switchLocation = useCallback((locId) => {
+    const loc = getLocationData(locId);
+    setActiveLocation(loc.id);
+    const firstZone = loc.zones[0]?.id || 'S1';
+    setSelectedZoneId(firstZone);
+    setActiveSimulation(null);
+  }, []);
+
+  // Helper: build preview zones for non-live locations (fixture scores, no API)
+  const buildPreviewZones = useCallback((locId) => {
+    const loc = getLocationData(locId);
+    // Preview risk mapping — distinct per corridor to show location differentiation
+    const previewScores = locId === 'lachung'
+      ? { N1: 86, N2: 73, N3: 64, N4: 49 }
+      : locId === 'darjeeling'
+      ? { D1: 81, D2: 76, D3: 62, D4: 46 }
+      : { S1: 89, S2: 78, S3: 66, S4: 52 };
+    const bands = (s) => s >= 85 ? 'CRITICAL' : s >= 75 ? 'HIGH' : s >= 65 ? 'MODERATE' : s >= 50 ? 'LOW' : 'VERY_LOW';
+    return loc.zones.map(z => ({
+      id: z.id,
+      name: z.name,
+      sector: z.type || '',
+      risk_score: previewScores[z.id] ?? 60,
+      risk_band: bands(previewScores[z.id] ?? 60),
+      confidence: 62,
+      status: bands(previewScores[z.id] ?? 60) === 'CRITICAL' ? 'Critical - preview' : 'Preview',
+      geometry: { coordinates: z.coordinates, centroid: z.centroid, benches: z.benches },
+      trend: z.id.endsWith('1') || z.id.endsWith('2') ? 'escalating' : 'stable',
+    }));
+  }, []);
+
+  // Initial Data Load — live for Gangtok, preview for other corridors
   const loadInitialData = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
+      const loc = getLocationData(activeLocation);
+      if (!loc.live) {
+        // Preview location: no live API, use local fixtures
+        const previewZones = buildPreviewZones(activeLocation);
+        setZones(previewZones);
+        setAlerts([]);
+        setRoads(loc.roads);
+        const previewReports = await getReportsQueue().catch(() => []);
+        setReports(Array.isArray(previewReports) ? previewReports : previewReports.reports || []);
+        setRiskSummary({
+          criticalCount: previewZones.filter(z => z.risk_band === 'CRITICAL').length,
+          highCount: previewZones.filter(z => z.risk_band === 'HIGH').length,
+          moderateCount: previewZones.filter(z => z.risk_band === 'MODERATE').length,
+          lowCount: previewZones.filter(z => z.risk_band === 'LOW' || z.risk_band === 'VERY_LOW').length,
+          totalZones: previewZones.length,
+          dataQualityConfidence: 62,
+          activePersonnelInHazard: 0,
+          systemStatus: previewZones.some(z => z.risk_band === 'CRITICAL') ? 'CRITICAL_ALERT' : 'HIGH_ALERT',
+        });
+        // Build preview zone detail from first zone
+        const first = previewZones[0];
+        if (first) {
+          setSelectedZoneId(first.id);
+          setSelectedZoneData({
+            id: first.id,
+            name: first.name,
+            sector: first.sector,
+            risk_score: first.risk_score,
+            risk_band: first.risk_band,
+            confidence: first.confidence,
+            status: first.status,
+            geometry: first.geometry,
+            updated_at: new Date().toISOString(),
+            missingEvidence: ["preview: NGEN extraction pending for this corridor"],
+            missing_evidence: ["preview: NGEN extraction pending"],
+            role_actions: {},
+            telemetry: { slope_angle: 32, rainfall_24h: 88, rainfall_7d: 210, soil_moisture: 0.31 },
+            shap: [{ feature: "preview", value: 0, rawValue: "0", description: "Preview — live SHAP after NGEN" }],
+            trend: { direction: first.trend === 'escalating' ? 'rising' : 'stable', rapid: false, history: [], historySource: 'preview' },
+            isPreview: true,
+          });
+        }
+        const defaultRoute = await fetchRoute({ originKey: 'worker_zoneA_to_ap1' }).catch(() => null);
+        setActiveRoutePlan(defaultRoute);
+        return;
+      }
+      // Live Gangtok path
       const [zonesRes, alertsRes, roadsRes, reportsRes] = await Promise.all([
         getZones(),
         getAlerts(),
@@ -73,7 +157,9 @@ export function MineProvider({ children }) {
       setRiskSummary(summary);
 
       // Load initial selected slope (S1 Tathangchen)
-      const initialZone = await getZoneById('S1');
+      const firstLiveId = zonesRes.zones[0]?.id || 'S1';
+      setSelectedZoneId(firstLiveId);
+      const initialZone = await getZoneById(firstLiveId);
       setSelectedZoneData(initialZone.zone || initialZone);
 
       // Preload default route plan (S1 -> S4 avoiding R2)
@@ -85,17 +171,43 @@ export function MineProvider({ children }) {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [activeLocation, buildPreviewZones]);
 
   useEffect(() => {
     loadInitialData();
   }, [loadInitialData]);
 
-  // Zone Selection Handler
+  // Zone Selection Handler — live for Gangtok, preview fallback
   const selectZone = useCallback(async (zoneId) => {
     setSelectedZoneId(zoneId);
     setZoneLoading(true);
     try {
+      const loc = getLocationData(activeLocation);
+      if (!loc.live) {
+        const previewZones = buildPreviewZones(activeLocation);
+        const pz = previewZones.find(z => z.id === zoneId);
+        if (pz) {
+          setSelectedZoneData({
+            id: pz.id,
+            name: pz.name,
+            sector: pz.sector,
+            risk_score: pz.risk_score,
+            risk_band: pz.risk_band,
+            confidence: pz.confidence,
+            status: pz.status,
+            geometry: pz.geometry,
+            updated_at: new Date().toISOString(),
+            missingEvidence: ["preview: NGEN extraction pending for this corridor"],
+            missing_evidence: ["preview: NGEN extraction pending"],
+            role_actions: {},
+            telemetry: { slope_angle: 32, rainfall_24h: 88, rainfall_7d: 210, soil_moisture: 0.31 },
+            shap: [{ feature: "preview", value: 0, rawValue: "0", description: "Preview — live SHAP after NGEN" }],
+            trend: { direction: pz.trend === 'escalating' ? 'rising' : 'stable', rapid: false, history: [], historySource: 'preview' },
+            isPreview: true,
+          });
+        }
+        return;
+      }
       // If the selected zone has an active simulation override, use simulated data
       if (activeSimulation && activeSimulation.zone_id === zoneId) {
         const base = await getZoneById(zoneId);
@@ -119,7 +231,7 @@ export function MineProvider({ children }) {
     } finally {
       setZoneLoading(false);
     }
-  }, [activeSimulation]);
+  }, [activeSimulation, activeLocation, buildPreviewZones]);
 
   // Role Switcher Handler
   const setRole = (newRoleId) => {
@@ -188,17 +300,8 @@ export function MineProvider({ children }) {
   // Reset What-If Simulation back to baseline
   const resetSimulation = async () => {
     setActiveSimulation(null);
-    setLoading(true);
-    try {
-      const zonesRes = await getZones();
-      setZones(zonesRes.zones);
-      const summary = await getRiskSummary(zonesRes.zones);
-      setRiskSummary(summary);
-      const currentZone = await getZoneById(selectedZoneId);
-      setSelectedZoneData(currentZone.zone || currentZone);
-    } finally {
-      setLoading(false);
-    }
+    // Reload via location-aware loader
+    await loadInitialData();
   };
 
   // Calculate Safe Route
@@ -260,6 +363,13 @@ export function MineProvider({ children }) {
   };
 
   const value = {
+    // Location (multi-corridor)
+    activeLocation,
+    setActiveLocation: switchLocation,
+    switchLocation,
+    locationData,
+    locations: LOCATIONS,
+
     // Role
     role,
     setRole,

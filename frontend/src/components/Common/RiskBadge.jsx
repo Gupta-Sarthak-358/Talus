@@ -1,5 +1,5 @@
 import React from 'react';
-import { RISK_BANDS } from '../../data/mockData';
+import { RISK_BANDS } from '../../data/constants';
 
 export default function RiskBadge({ band = 'LOW', size = 'md', showDot = true, className = '' }) {
   const meta = RISK_BANDS[band] || RISK_BANDS.LOW;

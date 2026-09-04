@@ -231,9 +231,9 @@ REPORT_TYPES = ["crack", "slope_movement", "blocked_road", "other"]
 REPORTER_ROLES = ["villager", "field_officer"]
 REPORT_STATUSES = ["queued", "verified", "dismissed", "flagged"]
 
-# Pilot bbox — Gangtok cluster central extent (SCAFFOLD_CONTRACT_SEPT5.md:4)
-PILOT_LAT_MIN, PILOT_LAT_MAX = 27.20, 27.40
-PILOT_LON_MIN, PILOT_LON_MAX = 88.40, 88.70
+# Pilot bbox — NER corridors (Gangtok + Lachung + Darjeeling preview) — expanded from Gangtok central
+PILOT_LAT_MIN, PILOT_LAT_MAX = 26.90, 27.80
+PILOT_LON_MIN, PILOT_LON_MAX = 88.10, 88.90
 
 # Allowed photo mime whitelist (metadata-only lane; bytes never committed per .gitignore + contract §4)
 ALLOWED_PHOTO_MIME = ["image/jpeg", "image/png", "image/webp", "video/mp4"]
@@ -249,7 +249,7 @@ class PhotoMeta(BaseModel):
 
 
 class ReportIn(BaseModel):
-    zone_id: Literal["S1", "S2", "S3", "S4"]
+    zone_id: Literal["S1", "S2", "S3", "S4", "N1", "N2", "N3", "N4", "D1", "D2", "D3", "D4"]
     type: Literal["crack", "slope_movement", "blocked_road", "other"]
     text: str = Field(min_length=10, max_length=500)
     lat: float = Field(ge=PILOT_LAT_MIN, le=PILOT_LAT_MAX)

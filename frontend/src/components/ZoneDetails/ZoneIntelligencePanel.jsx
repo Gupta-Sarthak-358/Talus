@@ -29,7 +29,7 @@ export default function ZoneIntelligencePanel() {
   if (!selectedZoneData) {
     return (
       <div className="bg-mine-card border border-mine-border rounded-2xl p-6 text-center text-mine-muted">
-        Select a mine zone on the map or choose below to inspect risk intelligence.
+        Select a slope sector on the map or choose below to inspect risk intelligence.
       </div>
     );
   }

@@ -1,0 +1,61 @@
+{
+  "locations": [
+    {
+      "id": "gangtok",
+      "label": "Gangtok Corridor, Sikkim",
+      "state": "Sikkim",
+      "center": [
+        27.3389,
+        88.6065
+      ],
+      "zoom": 13,
+      "zones": [
+        "S1",
+        "S2",
+        "S3",
+        "S4"
+      ],
+      "file": "slopes.json",
+      "live": true,
+      "badge": "LIVE 16/17 REAL"
+    },
+    {
+      "id": "lachung",
+      "label": "Lachung Valley, North Sikkim",
+      "state": "Sikkim",
+      "center": [
+        27.69,
+        88.74
+      ],
+      "zoom": 12,
+      "zones": [
+        "N1",
+        "N2",
+        "N3",
+        "N4"
+      ],
+      "file": "slopes.lachung.json",
+      "live": false,
+      "badge": "PREVIEW \u2014 fixtures"
+    },
+    {
+      "id": "darjeeling",
+      "label": "Darjeeling Hills, W Bengal",
+      "state": "W Bengal",
+      "center": [
+        27.041,
+        88.263
+      ],
+      "zoom": 12,
+      "zones": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "file": "slopes.darjeeling.json",
+      "live": false,
+      "badge": "PREVIEW \u2014 fixtures"
+    }
+  ]
+}

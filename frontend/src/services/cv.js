@@ -1,5 +1,3 @@
-import { isLiveApiEnabled, simulateLatency } from './api';
-
 /**
  * CV crack detection is a DEFERRED Tier-3 capability (decision recorded in
  * docs/CURRENT_SYSTEM.md). No model was trained; no endpoint exists. This
@@ -7,7 +5,6 @@ import { isLiveApiEnabled, simulateLatency } from './api';
  */
 
 export async function getCvCrackAnalysis(zoneId = 'B') {
-  await simulateLatency(150);
   return {
     status: 'deferred',
     deferred: true,

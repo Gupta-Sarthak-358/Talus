@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useMineContext } from '../../context/MineContext';
-import { ROLES } from '../../data/mockData';
+import { ROLES } from '../../data/constants';
 import { Shield, Users, Briefcase, Flame, ChevronDown, Check } from 'lucide-react';
 
 const ROLE_ICONS = {

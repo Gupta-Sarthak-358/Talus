@@ -493,9 +493,10 @@ def create_report(body: ReportIn):
     except Exception:
         raise HTTPException(status_code=422, detail="captured_at must be ISO-8601 (e.g. 2026-09-04T09:30:00+05:30)")
 
-    # zone validation: zone must exist (contract S1-S4)
-    if body.zone_id not in data.ZONE_CENTERS:
-        raise HTTPException(status_code=422, detail=f"zone_id must be one of {sorted(data.ZONE_CENTERS)}")
+    # zone validation: Gangtok live + Lachung/Darjeeling preview (expanded NER)
+    allowed_zones = set(data.ZONE_CENTERS) | {"N1","N2","N3","N4","D1","D2","D3","D4"}
+    if body.zone_id not in allowed_zones:
+        raise HTTPException(status_code=422, detail=f"zone_id must be one of {sorted(allowed_zones)}")
 
     # build record
     rid = f"REP-{len(_REPORTS) + 1:03d}"

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useMineContext } from '../../context/MineContext';
 import RoleSelector from './RoleSelector';
+import LocationSelector from './LocationSelector';
 import {
   Activity,
   Sliders,
@@ -23,7 +24,7 @@ export default function Header() {
     setIsCvModalOpen,
     setIsAlertsDrawerOpen,
     setIsReportModalOpen,
-    reportsQueue,
+    reports,
     activeSimulation,
     resetSimulation,
   } = useMineContext();
@@ -65,8 +66,9 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Center: Command Actions (Simulation, Routing, Field Reports) */}
+        {/* Center: Location + Command Actions (Simulation, Routing, Field Reports) */}
         <div className="flex items-center gap-2 flex-wrap">
+          <LocationSelector />
           {/* What-If Simulator Button */}
           <button
             onClick={() => setIsWhatIfOpen(true)}
@@ -102,9 +104,9 @@ export default function Header() {
           >
             <FileText className="w-3.5 h-3.5 text-talus-600" />
             <span>Field Reports</span>
-            {reportsQueue && reportsQueue.length > 0 && (
+            {reports && reports.length > 0 && (
               <span className="px-1.5 py-0.2 rounded-full bg-talus-600 text-white text-[9px] font-bold">
-                {reportsQueue.length}
+                {reports.length}
               </span>
             )}
           </button>

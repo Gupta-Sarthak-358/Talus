@@ -3,9 +3,11 @@ import { useMineContext } from '../../context/MineContext';
 import { CloudRain, Radio, Users, Compass } from 'lucide-react';
 
 export default function QuickStatsBar() {
-  const { zones, activeSimulation } = useMineContext();
+  const { zones, activeSimulation, selectedZoneData, locationData } = useMineContext();
 
-  const rainfallVal = activeSimulation?.inputs?.rainfall_24h ?? 42;
+  // Live rainfall: from selected zone telemetry or active simulation override
+  const liveRainfall = selectedZoneData?.telemetry?.rainfall_24h ?? selectedZoneData?.telemetry?.rainfall_24h_mm ?? null;
+  const rainfallVal = activeSimulation?.inputs?.rainfall_24h ?? liveRainfall ?? 42;
 
   return (
     <div className="bg-mine-darker border border-mine-border rounded-xl px-4 py-2 flex flex-wrap items-center justify-between gap-3 text-xs text-mine-text">
@@ -19,11 +21,11 @@ export default function QuickStatsBar() {
           </span>
         </div>
 
-        {/* Slopes Monitored */}
+        {/* Slopes Monitored — per corridor */}
         <div className="flex items-center gap-2 border-l border-mine-border pl-4">
           <Users className="w-4 h-4 text-talus-600" />
           <span className="text-mine-muted">Slopes Monitored:</span>
-          <span className="font-mono font-semibold text-mine-text">S1–S4 ({zones.length})</span>
+          <span className="font-mono font-semibold text-mine-text">{zones.map(z=>z.id).join('–')} ({zones.length})</span>
         </div>
 
         {/* Model Status */}
@@ -37,7 +39,7 @@ export default function QuickStatsBar() {
       <div className="flex items-center gap-3 text-[11px] text-mine-muted">
         <span className="flex items-center gap-1 font-mono">
           <Compass className="w-3.5 h-3.5 text-mine-muted" />
-          Gangtok Cluster, Sikkim · 27.3389, 88.6065 (EPSG:4326)
+          {locationData.label} · {locationData.center[0].toFixed(4)}, {locationData.center[1].toFixed(4)} (EPSG:4326)
         </span>
       </div>
     </div>

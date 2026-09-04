@@ -1,0 +1,275 @@
+{
+  "pilot": "Lachung Valley, North Sikkim (27.69, 88.74, EPSG:4326 preview)",
+  "frozen": true,
+  "updated_at": "2026-09-03T00:00:00+05:30",
+  "provenance_footnote": "IMD rainfall + SRTM DEM + GSI Bhusanket + ERA5 soil moisture + Sentinel-2 NDVI/LULC + OSM roads/rivers. Soil = reanalysis proxy. Sensor = recorded fixture. Bands = prototype, not safety standard.",
+  "zones": [
+    {
+      "zone_id": "N1",
+      "name": "Lachung Upper (Yumthang approach)",
+      "geometry": {
+        "lat": 27.695,
+        "lon": 88.735
+      },
+      "risk_score": 86,
+      "risk_band": "Critical",
+      "confidence": 0.79,
+      "trend": "escalating",
+      "base_value": 55.0,
+      "contributions": [
+        {
+          "feature": "distance_to_road",
+          "shap": 12.5
+        },
+        {
+          "feature": "rainfall_7d_mm",
+          "shap": 9.0
+        },
+        {
+          "feature": "slope_angle",
+          "shap": 7.5
+        },
+        {
+          "feature": "soil_moisture",
+          "shap": 5.0
+        }
+      ],
+      "missing_evidence": [
+        "soil_moisture:reanalysis-proxy",
+        "event-date:approximate"
+      ]
+    },
+    {
+      "zone_id": "N2",
+      "name": "Lachung Road-Cut (NH-310A)",
+      "geometry": {
+        "lat": 27.688,
+        "lon": 88.747
+      },
+      "risk_score": 73,
+      "risk_band": "High",
+      "confidence": 0.71,
+      "trend": "escalating",
+      "base_value": 55.0,
+      "contributions": [
+        {
+          "feature": "distance_to_road",
+          "shap": 10.0
+        },
+        {
+          "feature": "rainfall_24h_mm",
+          "shap": 6.5
+        },
+        {
+          "feature": "slope_angle",
+          "shap": 4.0
+        },
+        {
+          "feature": "ndvi",
+          "shap": 2.5
+        }
+      ],
+      "missing_evidence": [
+        "distance_to_road:osm-qa-unverified"
+      ]
+    },
+    {
+      "zone_id": "N3",
+      "name": "Lachung Mid (River Bend)",
+      "geometry": {
+        "lat": 27.675,
+        "lon": 88.7415
+      },
+      "risk_score": 64,
+      "risk_band": "Moderate",
+      "confidence": 0.6,
+      "trend": "stable",
+      "base_value": 55.0,
+      "contributions": [
+        {
+          "feature": "rainfall_7d_mm",
+          "shap": 5.0
+        },
+        {
+          "feature": "slope_angle",
+          "shap": 3.5
+        },
+        {
+          "feature": "soil_moisture",
+          "shap": 2.5
+        }
+      ],
+      "missing_evidence": [
+        "previous_landslide:inventory-incomplete"
+      ]
+    },
+    {
+      "zone_id": "N4",
+      "name": "Lachung Valley Staging",
+      "geometry": {
+        "lat": 27.665,
+        "lon": 88.73
+      },
+      "risk_score": 49,
+      "risk_band": "Low",
+      "confidence": 0.55,
+      "trend": "stable",
+      "base_value": 55.0,
+      "contributions": [
+        {
+          "feature": "elevation",
+          "shap": -6.0
+        },
+        {
+          "feature": "ndvi",
+          "shap": -4.0
+        },
+        {
+          "feature": "distance_to_river",
+          "shap": -3.0
+        }
+      ],
+      "missing_evidence": []
+    }
+  ],
+  "decisions": {
+    "Critical": [
+      {
+        "role": "villager",
+        "message": "Avoid the S1 hillside road for 2 days. Use the valley route.",
+        "action": "avoid-route guidance (Nepali/Hindi/English)",
+        "priority": "immediate"
+      },
+      {
+        "role": "district_officer",
+        "message": "Close the S1 stretch, evacuate Tathangchen upper first.",
+        "action": "closure + evacuation coordination",
+        "priority": "high"
+      },
+      {
+        "role": "state_manager",
+        "message": "Prioritise S1 over S2\u2013S4. Stage machines at Ranipool.",
+        "action": "resource allocation",
+        "priority": "high"
+      },
+      {
+        "role": "rescue_team",
+        "message": "Approach S1 from the south. Do not use the short ridge road.",
+        "action": "risk-aware approach",
+        "priority": "standby"
+      }
+    ],
+    "High": [
+      {
+        "role": "villager",
+        "message": "Avoid the Chandmari road-cut after heavy rain.",
+        "action": "avoid-route guidance",
+        "priority": "high"
+      },
+      {
+        "role": "district_officer",
+        "message": "Inspect S2 today, restrict night movement.",
+        "action": "inspection + restriction",
+        "priority": "high"
+      },
+      {
+        "role": "state_manager",
+        "message": "Hold one team for S2 if S1 stabilises.",
+        "action": "reserve allocation",
+        "priority": "medium"
+      },
+      {
+        "role": "rescue_team",
+        "message": "Standby near S2.",
+        "action": "standby",
+        "priority": "standby"
+      }
+    ],
+    "Moderate": [
+      {
+        "role": "villager",
+        "message": "Caution on Tadong paths during rain.",
+        "action": "awareness",
+        "priority": "normal"
+      },
+      {
+        "role": "district_officer",
+        "message": "Schedule S3 inspection this week.",
+        "action": "monitoring",
+        "priority": "normal"
+      },
+      {
+        "role": "state_manager",
+        "message": "Monitor S3 trend.",
+        "action": "monitoring",
+        "priority": "normal"
+      },
+      {
+        "role": "rescue_team",
+        "message": "No action required.",
+        "action": "none",
+        "priority": "none"
+      }
+    ],
+    "Low": [
+      {
+        "role": "villager",
+        "message": "No restriction for Ranipool.",
+        "action": "none",
+        "priority": "none"
+      },
+      {
+        "role": "district_officer",
+        "message": "Routine watch on S4.",
+        "action": "monitoring",
+        "priority": "normal"
+      },
+      {
+        "role": "state_manager",
+        "message": "No allocation for S4.",
+        "action": "none",
+        "priority": "none"
+      },
+      {
+        "role": "rescue_team",
+        "message": "No action required.",
+        "action": "none",
+        "priority": "none"
+      }
+    ]
+  },
+  "histories": {
+    "N1": [
+      {
+        "t": "2026-06-01",
+        "risk_score": 58
+      },
+      {
+        "t": "2026-06-20",
+        "risk_score": 66
+      },
+      {
+        "t": "2026-07-10",
+        "risk_score": 78
+      },
+      {
+        "t": "2026-08-15",
+        "risk_score": 89
+      }
+    ],
+    "N3": [
+      {
+        "t": "2026-06-01",
+        "risk_score": 52
+      },
+      {
+        "t": "2026-07-01",
+        "risk_score": 58
+      },
+      {
+        "t": "2026-08-01",
+        "risk_score": 66
+      }
+    ]
+  }
+}
