@@ -9,7 +9,7 @@ import { ROLES } from '../data/constants';
 import { LOCATIONS, getLocationData } from '../data/locations';
 import { translations, SUPPORTED_LANGS } from '../i18n/translations';
 
-const TalusContext = createContext(null);
+export const TalusContext = createContext(null);
 
 export function TalusProvider({ children }) {
   // Location State — NER multi-corridor (gangtok live, lachung/darjeeling preview)
