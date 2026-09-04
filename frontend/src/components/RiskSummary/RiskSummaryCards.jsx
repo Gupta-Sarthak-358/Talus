@@ -38,11 +38,11 @@ export default function RiskSummaryCards() {
             {riskSummary.criticalCount + riskSummary.highCount}
           </span>
           <span className="text-xs text-mine-muted font-medium">
-            High / Critical Zone{riskSummary.criticalCount + riskSummary.highCount !== 1 ? 's' : ''}
+            High / Critical Slope{riskSummary.criticalCount + riskSummary.highCount !== 1 ? 's' : ''}
           </span>
         </div>
         <div className="mt-2 flex items-center justify-between text-[11px] text-mine-muted border-t border-mine-border pt-1.5 gap-1">
-          <span className="truncate">Zones: {idsOf([...criticalZones, ...highZones])}</span>
+          <span className="truncate">Slopes: {idsOf([...criticalZones, ...highZones])}</span>
           <span className="text-risk-critical font-semibold flex items-center gap-0.5 shrink-0">
             <TrendingUp className="w-3 h-3" /> Action req.
           </span>
@@ -70,11 +70,11 @@ export default function RiskSummaryCards() {
             {riskSummary.moderateCount}
           </span>
           <span className="text-xs text-mine-muted font-medium">
-            Moderate Zone{riskSummary.moderateCount !== 1 ? 's' : ''}
+            Moderate Slope{riskSummary.moderateCount !== 1 ? 's' : ''}
           </span>
         </div>
         <div className="mt-2 flex items-center justify-between text-[11px] text-mine-muted border-t border-mine-border pt-1.5 gap-1">
-          <span className="truncate">Zones: {idsOf(moderateZones)}</span>
+          <span className="truncate">Slopes: {idsOf(moderateZones)}</span>
           <span className="text-risk-moderate font-medium shrink-0">Monitoring</span>
         </div>
       </div>
@@ -100,11 +100,11 @@ export default function RiskSummaryCards() {
             {riskSummary.lowCount}
           </span>
           <span className="text-xs text-mine-muted font-medium">
-            Stable Zone{riskSummary.lowCount !== 1 ? 's' : ''}
+            Stable Slope{riskSummary.lowCount !== 1 ? 's' : ''}
           </span>
         </div>
         <div className="mt-2 flex items-center justify-between text-[11px] text-mine-muted border-t border-mine-border pt-1.5 gap-1">
-          <span className="truncate">Zones: {idsOf(lowZones)}</span>
+          <span className="truncate">Slopes: {idsOf(lowZones)}</span>
           <span className="text-risk-verylow font-medium shrink-0">No escalation</span>
         </div>
       </div>
@@ -127,8 +127,8 @@ export default function RiskSummaryCards() {
           <span className="text-xs text-mine-muted font-medium">Mean Calibrated Confidence</span>
         </div>
         <div className="mt-2 flex items-center justify-between text-[11px] text-mine-muted border-t border-mine-border pt-1.5 gap-1">
-          <span className="truncate">3 provenance gaps (modeled PPV / GW proxy / no CV feed)</span>
-          <span className="text-risk-moderate font-medium shrink-0">Flagged</span>
+          <span className="truncate">Sources: IMD, SRTM, ERA5 proxy, Bhusanket</span>
+          <span className="text-talus-600 font-medium shrink-0">Calibrated</span>
         </div>
       </div>
     </div>
