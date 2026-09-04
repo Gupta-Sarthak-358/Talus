@@ -381,8 +381,7 @@ export default function RiskMap() {
                       <span>{activeRoutePlan.normalRoute.name}</span>
                     </div>
                     <div className="text-[11px] text-mine-text">
-                      {t('route.distance')}: {activeRoutePlan.normalRoute.distanceKm} km | {t('route.exposure')}: HIGH (
-                      {activeRoutePlan.normalRoute.riskExposureScore})
+                      {t('route.distance')}: {activeRoutePlan.normalRoute.distanceKm} km | {t('route.exposure')}: {activeRoutePlan.normalRoute.riskExposureScore}
                     </div>
                     <div className="text-[10px] text-risk-critical">
                       ⚠ {t('map.direct_hazard')} {activeRoutePlan.normalRoute.passesThroughHazardZone}
@@ -409,8 +408,7 @@ export default function RiskMap() {
                       <span>{activeRoutePlan.riskAwareRoute.name}</span>
                     </div>
                     <div className="text-[11px] text-mine-text">
-                      {t('route.distance')}: {activeRoutePlan.riskAwareRoute.distanceKm} km | {t('route.exposure')}: LOW (
-                      {activeRoutePlan.riskAwareRoute.riskExposureScore})
+                      {t('route.distance')}: {activeRoutePlan.riskAwareRoute.distanceKm} km | {t('route.exposure')}: {activeRoutePlan.riskAwareRoute.riskExposureScore}
                     </div>
                     <div className="text-[10px] text-risk-verylow">
                       ✓ {t('map.safe_bypass')}

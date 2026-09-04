@@ -2,6 +2,14 @@ import React from 'react';
 import { useTalusContext } from '../../context/TalusContext';
 import { ShieldCheck, AlertOctagon, Clock, Navigation, ArrowRight } from 'lucide-react';
 
+function exposureBand(score) {
+  if (score >= 85) return 'CRITICAL';
+  if (score >= 75) return 'HIGH';
+  if (score >= 65) return 'MODERATE';
+  if (score >= 50) return 'LOW';
+  return 'VERY LOW';
+}
+
 export default function RouteComparisonCard({ routePlan }) {
   const { t } = useTalusContext();
   if (!routePlan) return null;
@@ -36,6 +44,11 @@ export default function RouteComparisonCard({ routePlan }) {
 
           <div>
             <div className="text-sm font-bold text-mine-text">{normalRoute.name}</div>
+            {(normalRoute.zonePath || []).length > 0 && (
+              <div className="text-[11px] text-mine-muted font-mono mt-0.5">
+                via {normalRoute.zonePath.join(' → ')}
+              </div>
+            )}
             <div className="text-[11px] text-risk-critical mt-0.5">
               {t('route.traverses')} {normalRoute.passesThroughHazardZone}
             </div>
@@ -48,7 +61,7 @@ export default function RouteComparisonCard({ routePlan }) {
             </div>
             <div>
               <div className="text-[10px] text-mine-muted font-sans">{t('route.exposure')}</div>
-              <div className="font-bold text-risk-critical">{normalRoute.riskExposureScore} (HIGH)</div>
+              <div className="font-bold text-risk-critical">{normalRoute.riskExposureScore} ({exposureBand(normalRoute.riskExposureScore)})</div>
             </div>
           </div>
 
@@ -68,6 +81,11 @@ export default function RouteComparisonCard({ routePlan }) {
 
           <div>
             <div className="text-sm font-bold text-mine-text">{riskAwareRoute.name}</div>
+            {(riskAwareRoute.zonePath || []).length > 0 && (
+              <div className="text-[11px] text-mine-muted font-mono mt-0.5">
+                via {riskAwareRoute.zonePath.join(' → ')}
+              </div>
+            )}
             <div className="text-[11px] text-risk-verylow mt-0.5">
               {t('route.avoids_r2')}
             </div>
@@ -76,11 +94,11 @@ export default function RouteComparisonCard({ routePlan }) {
           <div className="grid grid-cols-2 gap-2 pt-1 font-mono text-xs border-t border-mine-border">
             <div>
               <div className="text-[10px] text-mine-muted font-sans">{t('route.distance')}</div>
-              <div className="font-bold text-mine-text">{riskAwareRoute.distanceKm} km (+0.3 km)</div>
+              <div className="font-bold text-mine-text">{riskAwareRoute.distanceKm} km (+{comparison.distanceDeltaKm} km)</div>
             </div>
             <div>
               <div className="text-[10px] text-mine-muted font-sans">{t('route.exposure')}</div>
-              <div className="font-bold text-risk-verylow">{riskAwareRoute.riskExposureScore} (LOW)</div>
+              <div className="font-bold text-risk-verylow">{riskAwareRoute.riskExposureScore} ({exposureBand(riskAwareRoute.riskExposureScore)})</div>
             </div>
           </div>
 

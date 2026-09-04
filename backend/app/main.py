@@ -357,35 +357,40 @@ def safe_route(req: RouteRequest):
     # on that corridor's map instead of off-screen at Gangtok.
     loc = _route_location(req.start.zone_id)
     centers = data.ZONE_CENTERS_BY_LOCATION.get(loc) or data.ZONE_CENTERS
-    graph = _road_graph_for(loc)
     store = data.get_store(loc)
     start = min(centers, key=lambda z: data.distance(req.start.model_dump(), centers[z]))
     end = min(centers, key=lambda z: data.distance(req.end.model_dump(), centers[z]))
-    comparison = compare_routes(
-        graph,
-        start,
-        end,
-        store.risk,
-        ROUTING_ALPHA,
-    )
+    # Shortest uses the full graph INCLUDING the R2 ridge shortcut, so it
+    # honestly crosses the at-risk segment. Risk-aware uses the hazard graph
+    # (shortcut closed while its adjacent slope is Critical/High).
+    full_graph, hazard_graph = _road_graphs_for(loc)
+    shortest_comparison = compare_routes(full_graph, start, end, store.risk, ROUTING_ALPHA)
+    aware_comparison = compare_routes(hazard_graph, start, end, store.risk, ROUTING_ALPHA)
     shortest = {
         "path": data.interpolate(
-            [centers[zone_id] for zone_id in comparison.shortest_route.path]
+            [centers[zone_id] for zone_id in shortest_comparison.shortest_route.path]
         ),
-        "total_cost": comparison.shortest_route.total_cost,
-        "max_risk_exposed": comparison.shortest_route.max_risk_exposed,
+        "zone_path": list(shortest_comparison.shortest_route.path),
+        # Raw graph cost (degrees for shortest, risk-weighted for aware).
+        # Clients must NOT display this as km — see frontend haversine.
+        "total_cost": shortest_comparison.shortest_route.total_cost,
+        "max_risk_exposed": shortest_comparison.shortest_route.max_risk_exposed,
     }
     aware = {
         "path": data.interpolate(
-            [centers[zone_id] for zone_id in comparison.risk_aware_route.path]
+            [centers[zone_id] for zone_id in aware_comparison.risk_aware_route.path]
         ),
-        "total_cost": comparison.risk_aware_route.total_cost,
-        "max_risk_exposed": comparison.risk_aware_route.max_risk_exposed,
+        "zone_path": list(aware_comparison.risk_aware_route.path),
+        "total_cost": aware_comparison.risk_aware_route.total_cost,
+        "max_risk_exposed": aware_comparison.risk_aware_route.max_risk_exposed,
     }
+    comparison = aware_comparison
+    aware_ids = set(aware["zone_path"])
+    avoided = [z for z in shortest["zone_path"] if z not in aware_ids]
     return RouteResponse(
         risk_aware_route=aware,
         shortest_route=shortest,
-        avoided_zones=comparison.avoided_zones,
+        avoided_zones=avoided,
         location=loc,
     )
 
@@ -399,29 +404,71 @@ def _route_location(zone_id: str) -> str:
     return "gangtok"
 
 
-_LOCATION_GRAPHS: dict[str, MineRoadGraph] = {}
+# (full graph with R2 shortcut, hazard graph without it). The shortcut is the
+# fixture R2 ridge segment; it is closed to risk-aware routing while its
+# adjacent upper slope is Critical/High. Cached per location; the band check
+# re-runs per call so a de-escalated slope reopens the shortcut honestly.
+_LOCATION_GRAPHS: dict[str, tuple[MineRoadGraph, MineRoadGraph, str, str]] = {}
 
 
-def _road_graph_for(location: str) -> MineRoadGraph:
-    """Per-corridor road graph (same topology family as the Gangtok default)."""
-    if location not in _LOCATION_GRAPHS:
-        centers = data.ZONE_CENTERS_BY_LOCATION.get(location) or data.ZONE_CENTERS
+def _road_graphs_for(location: str) -> tuple[MineRoadGraph, MineRoadGraph]:
+    """(full_graph, hazard_graph) per corridor.
+
+    Full graph = zone topology + the direct upper->valley R2 ridge shortcut
+    (fixture roads.json R2; adjacent to the upper slope whose tension-crack
+    hazard makes the segment at-risk). Shortest-path routing uses it, so the
+    shortest route honestly crosses R2. Hazard graph drops the shortcut while
+    the upper slope is Critical/High, so risk-aware routing deterministically
+    diverts via the valley road chain (R3+R4) — exactly the avoidance the
+    fixtures and UI describe. Band is read live from the corridor store.
+    """
+    centers = data.ZONE_CENTERS_BY_LOCATION.get(location) or data.ZONE_CENTERS
+    store = data.get_store(location)
+    zids = sorted(store.features)
+    upper, valley = zids[0], zids[-1]
+    upper_band = data.risk_band(store.risk[upper])
+    cache_key = (location, upper_band)
+    if cache_key not in _LOCATION_GRAPHS:
         graph = data.GRAPH_BY_LOCATION.get(location) or data.GRAPH
-        g = MineRoadGraph()
+        full = MineRoadGraph()
         for zid in centers:
-            g.add_zone(zid)
+            full.add_zone(zid)
         for start_zone_id, neighbors in graph.items():
             for end_zone_id in neighbors:
-                if g.graph.has_edge(start_zone_id, end_zone_id):
+                if full.graph.has_edge(start_zone_id, end_zone_id):
                     continue
-                g.add_road(
+                full.add_road(
                     start_zone_id,
                     end_zone_id,
                     length=data.distance(centers[start_zone_id], centers[end_zone_id]),
                     adjacent_zones=(start_zone_id, end_zone_id),
                 )
-        _LOCATION_GRAPHS[location] = g
-    return _LOCATION_GRAPHS[location]
+        # R2 ridge shortcut: straight upper->valley, adjacent to the upper
+        # slope (fixture R2 adjacent_slope). Shorter than any valley chain,
+        # so pure-length routing always takes it.
+        full.add_road(
+            upper,
+            valley,
+            length=data.distance(centers[upper], centers[valley]),
+            adjacent_zones=(upper, valley),
+        )
+        hazard = MineRoadGraph()
+        for zid in centers:
+            hazard.add_zone(zid)
+        for a, b, edata in full.graph.edges(data=True):
+            if {a, b} == {upper, valley} and upper_band in ("Critical", "High"):
+                continue
+            hazard.add_road(a, b, length=edata["length"],
+                            adjacent_zones=edata["adjacent_zones"])
+        _LOCATION_GRAPHS[cache_key] = (full, hazard, upper, valley)
+    full, hazard, _, _ = _LOCATION_GRAPHS[cache_key]
+    return full, hazard
+
+
+def _road_graph_for(location: str) -> MineRoadGraph:
+    """Backward-compat: full per-corridor graph (with R2 shortcut)."""
+    full, _ = _road_graphs_for(location)
+    return full
 
 
 @app.post("/api/simulation/what-if", response_model=WhatIfResponse,

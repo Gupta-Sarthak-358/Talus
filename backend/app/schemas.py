@@ -128,6 +128,9 @@ class RouteResult(BaseModel):
     path: list[PathPoint]
     total_cost: float
     max_risk_exposed: int
+    # Zone ids traversed, in order (e.g. ["S1","S4"] vs ["S1","S3","S4"]).
+    # Lets clients label the corridor honestly (via R2 vs via valley chain).
+    zone_path: list[str] = []
 
 
 class RouteResponse(BaseModel):

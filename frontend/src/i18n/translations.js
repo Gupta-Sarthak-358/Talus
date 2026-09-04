@@ -216,7 +216,7 @@ export const translations = {
     'map.road_closed': 'Road closed due to active debris flow',
     'map.high_pore': 'High pore-pressure & rainfall saturation. Safe corridor avoids road R2.',
     'map.safe_bypass': 'Safely bypasses unstable highwall sectors',
-    'map.direct_hazard': 'Direct rockfall hazard in',
+    'map.direct_hazard': 'Direct landslide hazard in',
     'map.capacity': 'Capacity:',
     'map.type': 'Type:',
     // Zone extras
