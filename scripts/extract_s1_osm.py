@@ -50,15 +50,15 @@ UA = {"User-Agent": "TALUS-SIH26001-prototype/1.0 (research use, contact via rep
 OUTPUT = Path("data/processed/terrain/s1_osm_nearest.json")
 
 
-def build_query() -> str:
-    return (
-        "[out:json][timeout:90];\n"
-        "(\n"
-        f'  way["highway"](around:{ROAD_RADIUS_M},{S1_LAT},{S1_LON});\n'
-        f'  way["waterway"~"^(river|stream)$"](around:{RIVER_RADIUS_M},{S1_LAT},{S1_LON});\n'
-        ");\n"
-        "out geom;\n"
-    )
+def build_query(lat: float = S1_LAT, lon: float = S1_LON,
+                road_radius: int = ROAD_RADIUS_M, river_radius: int = RIVER_RADIUS_M,
+                kinds: tuple[str, ...] = ("roads", "rivers")) -> str:
+    parts = []
+    if "roads" in kinds:
+        parts.append(f'  way["highway"](around:{road_radius},{lat},{lon});')
+    if "rivers" in kinds:
+        parts.append(f'  way["waterway"~"^(river|stream)$"](around:{river_radius},{lat},{lon});')
+    return "[out:json][timeout:90];\n(\n" + "\n".join(parts) + "\n);\nout geom;\n"
 
 
 def fetch(query: str) -> tuple[dict, str]:
@@ -75,10 +75,11 @@ def fetch(query: str) -> tuple[dict, str]:
     raise RuntimeError(f"All Overpass endpoints failed (last: {last_err})")
 
 
-def to_xy(lat: float, lon: float) -> tuple[float, float]:
-    kx = 111320.0 * math.cos(math.radians(S1_LAT))
+def to_xy(lat: float, lon: float, origin: tuple[float, float] | None = None) -> tuple[float, float]:
+    olat, olon = origin if origin is not None else (S1_LAT, S1_LON)
+    kx = 111320.0 * math.cos(math.radians(olat))
     ky = 110540.0
-    return ((lon - S1_LON) * kx, (lat - S1_LAT) * ky)
+    return ((lon - olon) * kx, (lat - olat) * ky)
 
 
 def seg_dist(px: float, py: float, ax: float, ay: float, bx: float, by: float) -> float:
@@ -89,7 +90,7 @@ def seg_dist(px: float, py: float, ax: float, ay: float, bx: float, by: float) -
     return math.hypot(px - (ax + t * dx), py - (ay + t * dy))
 
 
-def nearest(elements: list[dict], kind: str) -> tuple[dict, int]:
+def nearest(elements: list[dict], kind: str, origin: tuple[float, float] | None = None) -> tuple[dict, int]:
     best: dict | None = None
     best_d = math.inf
     examined = 0
@@ -108,7 +109,7 @@ def nearest(elements: list[dict], kind: str) -> tuple[dict, int]:
         if len(geom) < 1:
             continue
         examined += 1
-        pts = [to_xy(p["lat"], p["lon"]) for p in geom]
+        pts = [to_xy(p["lat"], p["lon"], origin) for p in geom]
         if len(pts) == 1:
             d = math.hypot(pts[0][0], pts[0][1])
         else:
@@ -128,23 +129,40 @@ def nearest(elements: list[dict], kind: str) -> tuple[dict, int]:
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description="S1 OSM nearest road/river extraction")
-    ap.parse_args()
-    query = build_query()
-    payload, endpoint = fetch(query)
-    elements = payload.get("elements", [])
-    print(f"[OK] endpoint: {endpoint}  elements: {len(elements)}")
-    road, n_road = nearest(elements, "road")
-    river, n_river = nearest(elements, "river")
+    ap = argparse.ArgumentParser(description="OSM nearest road/river extraction (default: S1)")
+    ap.add_argument("--zone", default="S1")
+    ap.add_argument("--lat", type=float, default=S1_LAT)
+    ap.add_argument("--lon", type=float, default=S1_LON)
+    ap.add_argument("--out", default=str(OUTPUT))
+    ap.add_argument("--road-radius", type=int, default=ROAD_RADIUS_M)
+    ap.add_argument("--river-radius", type=int, default=RIVER_RADIUS_M)
+    args = ap.parse_args()
+    origin = (args.lat, args.lon)
+    # Split queries: one heavy combined query 504s on loaded servers;
+    # two lighter queries (roads, then rivers) stay under the timeout.
+    queries = {
+        "roads": build_query(args.lat, args.lon, args.road_radius, args.river_radius, ("roads",)),
+        "rivers": build_query(args.lat, args.lon, args.road_radius, args.river_radius, ("rivers",)),
+    }
+    elements: list = []
+    endpoint = ""
+    for kind, query in queries.items():
+        payload, endpoint = fetch(query)
+        got = payload.get("elements", [])
+        print(f"[OK] {kind}: endpoint {endpoint} elements {len(got)}")
+        elements += got
+    print(f"[OK] total elements: {len(elements)}")
+    road, n_road = nearest(elements, "road", origin)
+    river, n_river = nearest(elements, "river", origin)
     print(f"[OK] ways examined: roads={n_road} rivers={n_river}")
     print(f"[OK] nearest road: {road}")
     print(f"[OK] nearest river: {river}")
     out = {
-        "s1": {"lat": S1_LAT, "lon": S1_LON},
+        "slope": {"zone_id": args.zone, "lat": args.lat, "lon": args.lon},
         "queried_at": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "endpoint": endpoint,
-        "overpass_query": query,
-        "radius_m": {"roads": ROAD_RADIUS_M, "rivers": RIVER_RADIUS_M},
+        "overpass_query": queries,
+        "radius_m": {"roads": args.road_radius, "rivers": args.river_radius},
         "road_filter": "highway=* except " + "|".join(sorted(ROAD_SKIP)),
         "ways_examined": {"roads": n_road, "rivers": n_river},
         "nearest_road": road,
@@ -155,13 +173,14 @@ def main() -> None:
         },
         "qa": "osm-qa-unverified",
     }
-    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT.write_text(json.dumps(out, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    out_path = Path(args.out)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(out, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print()
     print("=== S1 ROW VALUES ===")
     print(f"distance_to_road  = {out['row_values']['distance_to_road']}")
     print(f"distance_to_river = {out['row_values']['distance_to_river']}")
-    print(f"Saved: {OUTPUT}")
+    print(f"Saved: {out_path}")
 
 
 if __name__ == "__main__":

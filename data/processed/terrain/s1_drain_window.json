@@ -1,0 +1,21 @@
+{
+  "s1": {
+    "lat": 27.345,
+    "lon": 88.6
+  },
+  "queried_at": "2026-09-04T10:27:43Z",
+  "window": {
+    "file": "data\\processed\\terrain\\s1_dem_window.csv",
+    "side_m": [
+      267.4,
+      265.4
+    ],
+    "area_km2": 0.071
+  },
+  "in_window_stream_m": 0.0,
+  "ways_used": [],
+  "row_values": {
+    "drain_density": 0.0
+  },
+  "tag": "PROXY-window: 271-m window cannot see catchment drainage; OSM misses unmapped streams"
+}

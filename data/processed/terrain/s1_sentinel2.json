@@ -1,0 +1,41 @@
+{
+  "s1": {
+    "lat": 27.345,
+    "lon": 88.6
+  },
+  "queried_at": "2026-09-04T10:25:36Z",
+  "scene": {
+    "product_id": "S2B_45RXL_20241129_0_L2A",
+    "date": "2024-11-29",
+    "cloud_cover_pct": 0.019648,
+    "tile": "MGRS-45RXL"
+  },
+  "cogs": {
+    "red": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/45/R/XL/2024/11/S2B_45RXL_20241129_0_L2A/B04.tif",
+    "nir": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/45/R/XL/2024/11/S2B_45RXL_20241129_0_L2A/B08.tif",
+    "scl": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/45/R/XL/2024/11/S2B_45RXL_20241129_0_L2A/SCL.tif"
+  },
+  "dn": {
+    "red": 390.0,
+    "nir": 2380.0,
+    "scl": 4
+  },
+  "row_values": {
+    "ndvi": 0.718,
+    "lulc": null
+  },
+  "lulc_method": "no mappable landuse polygon in 300m — lulc stays STUB",
+  "lulc_map": {
+    "residential": "BUILT",
+    "commercial": "BUILT",
+    "industrial": "BUILT",
+    "retail": "BUILT",
+    "institutional": "BUILT",
+    "forest": "FOREST",
+    "farmland": "AGRI",
+    "meadow": "AGRI",
+    "orchard": "AGRI",
+    "farmyard": "AGRI"
+  },
+  "tag": "ndvi REAL from COG; lulc STUB"
+}
