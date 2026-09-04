@@ -1,15 +1,10 @@
-import { apiRequest, isLiveApiEnabled, simulateLatency } from './api';
-import { MOCK_MULTILINGUAL_ALERT } from '../data/mockData';
+import { apiRequest } from './api';
+
+/**
+ * Alerts — LIVE SIH26001 (real /api/alerts/dispatch, en/hi/ne fixture from backend).
+ */
 
 export async function dispatchAlerts() {
-  if (isLiveApiEnabled()) {
-    try {
-      const res = await apiRequest('/alerts/dispatch', { method: 'POST' });
-      return res;
-    } catch (e) {
-      console.warn('Live alert dispatch failed, falling back to fixture:', e);
-    }
-  }
-  await simulateLatency(250);
-  return MOCK_MULTILINGUAL_ALERT;
+  const res = await apiRequest('/alerts/dispatch', { method: 'POST' });
+  return res;
 }
