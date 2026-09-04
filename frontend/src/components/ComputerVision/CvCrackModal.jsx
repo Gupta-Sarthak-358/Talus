@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useMineContext } from '../../context/MineContext';
+import { useTalusContext } from '../../context/TalusContext';
 import { getCvCrackAnalysis } from '../../services/cv';
 import { Eye, X, Camera, ShieldCheck, Sparkles, Layers, ArrowRight, Info, AlertTriangle } from 'lucide-react';
 
 export default function CvCrackModal() {
-  const { isCvModalOpen, setIsCvModalOpen, selectedZoneId } = useMineContext();
+  const { isCvModalOpen, setIsCvModalOpen, selectedZoneId } = useTalusContext();
   const [analysis, setAnalysis] = useState(null);
   const [deferredMessage, setDeferredMessage] = useState(null);
   const [loading, setLoading] = useState(false);

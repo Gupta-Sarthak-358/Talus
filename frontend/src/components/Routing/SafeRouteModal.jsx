@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useMineContext } from '../../context/MineContext';
+import { useTalusContext } from '../../context/TalusContext';
 import RouteComparisonCard from './RouteComparisonCard';
 import { Navigation, X, Play, MapPin, Compass, ShieldAlert } from 'lucide-react';
 
@@ -19,7 +19,7 @@ export default function SafeRouteModal() {
     setIsRouteModalOpen,
     activeRoutePlan,
     executeRouting,
-  } = useMineContext();
+  } = useTalusContext();
 
   const [selectedRouteKey, setSelectedRouteKey] = useState('worker_zoneA_to_ap1');
   const [calculating, setCalculating] = useState(false);

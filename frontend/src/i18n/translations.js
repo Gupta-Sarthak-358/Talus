@@ -2,7 +2,7 @@
  * Talus i18n — NER multilingual support (MDoNER SIH26001)
  * Languages: en (English), hi (Hindi), ne (Nepali) — matches alerts.json fixture.
  * Extend with as (Assamese), bn (Bengali) later. Fallback to en.
- * Usage: t('header.whatIf') via useMineContext()
+ * Usage: t('header.whatIf') via useTalusContext()
  */
 
 export const SUPPORTED_LANGS = [

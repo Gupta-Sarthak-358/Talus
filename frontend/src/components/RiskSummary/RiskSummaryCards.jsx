@@ -1,11 +1,11 @@
 import React from 'react';
-import { useMineContext } from '../../context/MineContext';
+import { useTalusContext } from '../../context/TalusContext';
 import { AlertTriangle, ShieldAlert, CheckCircle2, Database, TrendingUp, Brain, FlaskConical } from 'lucide-react';
 
 const idsOf = (zones) => zones.map((z) => z.id).join(', ') || '—';
 
 export default function RiskSummaryCards() {
-  const { riskSummary, zones, selectZone, selectedZoneId } = useMineContext();
+  const { riskSummary, zones, selectZone, selectedZoneId } = useTalusContext();
 
   if (!riskSummary) return null;
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useMineContext } from '../../context/MineContext';
+import { useTalusContext } from '../../context/TalusContext';
 import RoleSelector from './RoleSelector';
 import LocationSelector from './LocationSelector';
 import LanguageSelector from './LanguageSelector';
@@ -30,7 +30,7 @@ export default function Header() {
     resetSimulation,
     t,
     lang,
-  } = useMineContext();
+  } = useTalusContext();
 
   const [currentTime, setCurrentTime] = useState(new Date());
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useMineContext } from '../../context/MineContext';
+import { useTalusContext } from '../../context/TalusContext';
 import { FileText, Send, X, Clock, MapPin, CheckCircle2, AlertCircle, RefreshCw, ShieldCheck } from 'lucide-react';
 
 const REPORT_TYPES = [
@@ -23,7 +23,7 @@ export default function ReportModal() {
     refreshReports,
     zones,
     selectedZoneId,
-  } = useMineContext();
+  } = useTalusContext();
 
   const [formZone, setFormZone] = useState(selectedZoneId || 'S2');
   const [reportType, setReportType] = useState('crack');

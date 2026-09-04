@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useMineContext } from '../../context/MineContext';
+import { useTalusContext } from '../../context/TalusContext';
 import { WHAT_IF_PRESETS } from '../../data/constants';
 import SimulationDiffCard from './SimulationDiffCard';
 import { runCausalWhatIf, getScenarioTemplates } from '../../services/scenario';
@@ -18,7 +18,7 @@ export default function WhatIfDrawer() {
     resetSimulation,
     activeSimulation,
     simulationLoading,
-  } = useMineContext();
+  } = useTalusContext();
 
   const [targetZoneId, setTargetZoneId] = useState(selectedZoneId || 'S3');
   const [params, setParams] = useState({

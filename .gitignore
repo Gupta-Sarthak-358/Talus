@@ -124,3 +124,7 @@ ml/sih26001/runs/
 
 # private presenter script — never commit (personal briefing, stays local)
 docs/PILOT_BRIEFING.md
+
+# pid files from start_all
+.backend.pid
+.frontend.pid

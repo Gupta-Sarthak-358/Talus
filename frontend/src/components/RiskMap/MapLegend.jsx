@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useMineContext } from '../../context/MineContext';
+import { useTalusContext } from '../../context/TalusContext';
 import { Layers, ChevronUp, ChevronDown, CheckSquare, Square } from 'lucide-react';
 
 const RISK_BAND_KEYS = [
@@ -17,7 +17,7 @@ const ROAD_LEGEND = [
 ];
 
 export default function MapLegend() {
-  const { mapLayers, toggleMapLayer } = useMineContext();
+  const { mapLayers, toggleMapLayer } = useTalusContext();
   const [isExpanded, setIsExpanded] = useState(true);
 
   return (

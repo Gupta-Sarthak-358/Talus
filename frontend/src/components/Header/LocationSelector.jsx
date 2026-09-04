@@ -1,9 +1,9 @@
 import React from 'react';
-import { useMineContext } from '../../context/MineContext';
+import { useTalusContext } from '../../context/TalusContext';
 import { MapPin, ChevronDown } from 'lucide-react';
 
 export default function LocationSelector() {
-  const { activeLocation, switchLocation, locations, locationData } = useMineContext();
+  const { activeLocation, switchLocation, locations, locationData } = useTalusContext();
 
   return (
     <div className="relative flex items-center gap-2">

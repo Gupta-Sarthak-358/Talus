@@ -1,5 +1,5 @@
 import React from 'react';
-import { useMineContext } from '../../context/MineContext';
+import { useTalusContext } from '../../context/TalusContext';
 import { Shield, Users, Briefcase, Flame, Navigation, AlertCircle, ArrowRight, CheckCircle, FileText, Sliders, Bell } from 'lucide-react';
 
 const ROLE_ICONS = {
@@ -17,7 +17,7 @@ export default function RoleActionCard({ roleActions = {}, zoneName = 'S1', risk
     setIsWhatIfOpen,
     setIsAlertsDrawerOpen,
     setIsReportModalOpen,
-  } = useMineContext();
+  } = useTalusContext();
 
   const action = roleActions[role] || {
     header: 'STANDARD OPERATIONAL PROTOCOL',

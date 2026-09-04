@@ -1,8 +1,8 @@
 import React from 'react';
-import { useMineContext } from '../context/MineContext';
+import { useTalusContext } from '../context/TalusContext';
 import RiskSummaryCards from '../components/RiskSummary/RiskSummaryCards';
 import QuickStatsBar from '../components/RiskSummary/QuickStatsBar';
-import MineMap from '../components/RiskMap/MineMap';
+import RiskMap from '../components/RiskMap/RiskMap';
 import ZoneIntelligencePanel from '../components/ZoneDetails/ZoneIntelligencePanel';
 import RoadStatusCard from '../components/Routing/RoadStatusCard';
 import ReportModal from '../components/Reports/ReportModal';
@@ -12,7 +12,7 @@ import AlertPanel from '../components/Alerts/AlertPanel';
 import { ErrorState } from '../components/Common/LoadingSkeleton';
 
 export default function Dashboard() {
-  const { error, refreshData } = useMineContext();
+  const { error, refreshData } = useTalusContext();
 
   if (error) {
     return (
@@ -34,7 +34,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
         {/* Left: Interactive Landslide GIS Map & Routing (7 cols on large displays) */}
         <div className="lg:col-span-7 xl:col-span-7 h-[640px] xl:h-[720px] sticky top-20">
-          <MineMap />
+          <RiskMap />
         </div>
 
         {/* Right: Selected Slope Risk Intelligence & Decision Actions (5 cols) */}

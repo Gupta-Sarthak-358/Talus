@@ -1,5 +1,5 @@
 import React from 'react';
-import { useMineContext } from '../../context/MineContext';
+import { useTalusContext } from '../../context/TalusContext';
 import RiskScoreGauge from './RiskScoreGauge';
 import ShapChart from './ShapChart';
 import RiskTrendChart from './RiskTrendChart';
@@ -17,7 +17,7 @@ export default function ZoneIntelligencePanel() {
     zoneLoading,
     activeSimulation,
     t,
-  } = useMineContext();
+  } = useTalusContext();
 
   if (!selectedZoneData && zoneLoading) {
     return (

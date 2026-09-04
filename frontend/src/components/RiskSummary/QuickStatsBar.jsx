@@ -1,9 +1,9 @@
 import React from 'react';
-import { useMineContext } from '../../context/MineContext';
+import { useTalusContext } from '../../context/TalusContext';
 import { CloudRain, Radio, Users, Compass } from 'lucide-react';
 
 export default function QuickStatsBar() {
-  const { zones, activeSimulation, selectedZoneData, locationData, t } = useMineContext();
+  const { zones, activeSimulation, selectedZoneData, locationData, t } = useTalusContext();
 
   // Live rainfall: from selected zone telemetry or active simulation override
   const liveRainfall = selectedZoneData?.telemetry?.rainfall_24h ?? selectedZoneData?.telemetry?.rainfall_24h_mm ?? null;

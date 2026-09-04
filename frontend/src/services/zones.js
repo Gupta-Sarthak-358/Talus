@@ -1,5 +1,5 @@
 import { apiRequest } from './api';
-import { MINE_ZONES_GEOJSON, LOCATIONS } from '../data/mineGeoData';
+import { MINE_ZONES_GEOJSON, LOCATIONS } from '../data/locations';
 
 /**
  * Zone services — LIVE SIH26001 (real NGEN + USGS/IMD/CCI/WorldCover).

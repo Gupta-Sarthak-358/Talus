@@ -1,5 +1,5 @@
 import { apiRequest } from './api';
-import { MINE_ZONES_GEOJSON } from '../data/mineGeoData';
+import { MINE_ZONES_GEOJSON } from '../data/locations';
 
 /**
  * Risk-aware routing — LIVE SIH26001.

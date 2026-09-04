@@ -1,5 +1,5 @@
 import React from 'react';
-import { useMineContext } from '../../context/MineContext';
+import { useTalusContext } from '../../context/TalusContext';
 import { AlertOctagon, CheckCircle2, AlertTriangle, Navigation, ShieldCheck, ArrowRight } from 'lucide-react';
 
 const STATUS_ICONS = {
@@ -9,7 +9,7 @@ const STATUS_ICONS = {
 };
 
 export default function RoadStatusCard() {
-  const { roads, setIsRouteModalOpen, activeRoutePlan } = useMineContext();
+  const { roads, setIsRouteModalOpen, activeRoutePlan } = useTalusContext();
 
   return (
     <div className="bg-mine-card border border-mine-border rounded-2xl p-4 sm:p-5 shadow-sm space-y-3.5">

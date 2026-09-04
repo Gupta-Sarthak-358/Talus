@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useMineContext } from '../../context/MineContext';
+import { useTalusContext } from '../../context/TalusContext';
 import { Languages, Check, ChevronDown } from 'lucide-react';
 
 export default function LanguageSelector() {
-  const { lang, setLang, supportedLangs } = useMineContext();
+  const { lang, setLang, supportedLangs } = useTalusContext();
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 

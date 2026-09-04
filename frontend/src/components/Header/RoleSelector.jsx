@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useMineContext } from '../../context/MineContext';
+import { useTalusContext } from '../../context/TalusContext';
 import { ROLES } from '../../data/constants';
 import { Shield, Users, Briefcase, Flame, ChevronDown, Check } from 'lucide-react';
 
@@ -11,7 +11,7 @@ const ROLE_ICONS = {
 };
 
 export default function RoleSelector() {
-  const { role, setRole, currentRoleMeta, t } = useMineContext();
+  const { role, setRole, currentRoleMeta, t } = useTalusContext();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 

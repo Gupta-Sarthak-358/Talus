@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useMineContext } from '../../context/MineContext';
+import { useTalusContext } from '../../context/TalusContext';
 import { Bell, ShieldAlert, AlertTriangle, CheckCircle2, X, ExternalLink, Filter, Globe, Send, Radio } from 'lucide-react';
 
 export default function AlertPanel() {
@@ -15,7 +15,7 @@ export default function AlertPanel() {
     dispatchAlertFixture,
     lang,
     t,
-  } = useMineContext();
+  } = useTalusContext();
 
   const [filterSeverity, setFilterSeverity] = useState('ALL');
   const [activeLang, setActiveLang] = useState(lang || 'en');
