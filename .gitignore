@@ -114,5 +114,13 @@ backend/app/_model.joblib
 # canonical trained Model v1 artifact (compressed; regenerated if deleted)
 !ml/models/talus_rf_v1.joblib
 
+# ── SIH26001 training lane (hackathon Sept 5) ──────────────────────────
+# Inventory-scale training matrix + caches stay out of git; only the
+# ≤20-row *.training.sample.csv + manifest.training.json + reports are committed.
+data/sih26001/processed/
+!data/sih26001/processed/.gitkeep
+ml/sih26001/models/
+ml/sih26001/runs/
+
 # private presenter script — never commit (personal briefing, stays local)
 docs/PILOT_BRIEFING.md
