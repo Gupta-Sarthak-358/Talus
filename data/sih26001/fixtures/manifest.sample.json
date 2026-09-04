@@ -36,6 +36,10 @@
       "method": "Horn-1981 slope/aspect + Laplacian curvature on 4.24m Web-Mercator grid; bilinear elevation at S1",
       "crosscheck": "Gangtok centre (27.3389,88.6065) reads 1509m vs ~1600-1650 nominal — grid trusted within SRTM steep-terrain limits",
       "limit": "mirror resampling smooths micro-relief; slopes may understate true slope; replace with USGS tile when landed",
+      "catchment": "z14 3x3 Terrarium mosaic ~6.5km (tiles x12223-12225/y6897-6899, centroid-centred) + priority-flood D8 + descending-order accumulation",
+      "catchment_files": ["data/processed/terrain/catchment_s234.json", "data/processed/terrain/terrarium_z14/z14_<x>_<y>.png (9 tiles)"],
+      "catchment_script": "scripts/extract_catchment.py (numpy only)",
+      "catchment_method": "TWI=ln(a/tanB), SPI=a*tanB, a=acc*dx; tanB floor 1e-4 logged; S2-S4 slope/elev/aspect/curv PROXY from same mosaic",
       "date": "2026-09-04"
     },
     "sentinel2": {
@@ -48,19 +52,22 @@
       "extract_script": "scripts/extract_s1_sentinel2.py (rasterio /vsicurl/ B04+B08+SCL, system py311)",
       "method": "ndvi=(NIR-R)/(NIR+R) at exact S1; DN red=390 nir=2380 scl=4 (vegetation); lulc from OSM landuse PROXY (none in 300m, stays STUB)",
       "ndvi_date_note": "scene 2024-11-29 post-monsoon vs row time_window 2024-06-16; NDVI treated as quasi-static state",
+      "s234_file": "data/processed/terrain/s234_ndvi.json",
+      "s234_script": "scripts/extract_s234_ndvi.py (same pinned scene: S2 ndvi 0.139 scl=bare, S3 0.817 veg, S4 0.468 veg)",
+      "lulc_attempt": "OSM landuse round 2026-09-04 (scripts/extract_landuse.py -> s234_landuse.json): nothing mappable within 300m of any slope (S3 residential 324m-to-centre noted, not used). lulc stays STUB.",
       "date": "2026-09-04"
     },
     "bhusanket": {
       "export": null,
       "status": "not_available",
       "ner_filter": true,
-      "attempt": "2026-09-04 Person-3: portal reachable (HTTP 200) but dashboard JS exposes no export endpoint; NASA COOLR FeatureServer 404 on both URL forms; ILSM Zenodo 10085272 hosts 6.6GB rasters only, no points file. Labels stay STUB (see provenance §3)."
+      "attempt": "2026-09-04 Person-3: portal reachable (HTTP 200) but dashboard JS exposes no export endpoint; NASA COOLR FeatureServer 404 on both URL forms; ILSM Zenodo 10085272 hosts 6.6GB rasters only, no points file; DesInventar DI_export pattern confirmed but code 033 = Tamil Nadu (7.9MB, wrong state) — Sikkim state code needs portal-index lookup. Labels stay STUB (see provenance §3)."
     },
     "bhukosh": {
       "export": null,
       "status": "not_available",
       "date": null,
-      "attempt": "2026-09-04 Person-3: https://bhukosh.gsi.gov.in/Bhukosh/Public unreachable from here (connection fail); same GSI infra as Bhusanket timeouts. Lithology stays STUB."
+      "attempt": "2026-09-04 Person-3: https://bhukosh.gsi.gov.in/Bhukosh/Public unreachable from here (connection fail, retried 2x); same GSI infra as Bhusanket timeouts. Lithology stays STUB."
     },
     "osm": {
       "extract": "data/processed/terrain/s1_osm_nearest.json",
@@ -94,6 +101,18 @@
     "s1_dem_window.csv": "sha256:9DF0B708FB6F25753EC45F4B753E5948CA1E5694B941AED33A4ADA7CE618377F",
     "s234_osm_nearest.json": "sha256:8638F6DC15C71169BA13109C0A0A685FD0CD7BA21450E9AD95D6A21F2E254C66",
     "s1_sentinel2.json": "sha256:E5E6F8B0FD4B2A1FE39B48456BF51FE051BEB2FC7D5EDAB2D827D44306D7EEC6",
-    "s1_drain_window.json": "sha256:0A5D19154B4C28B40ED81ECED2A497076B859E7A165BF966A04F9E33A826E67C"
+    "s1_drain_window.json": "sha256:0A5D19154B4C28B40ED81ECED2A497076B859E7A165BF966A04F9E33A826E67C",
+    "catchment_s234.json": "sha256:59005868617CC248964EBA25977B4D563B9BA8A6359EAB77C54EBD392C630E70",
+    "s234_ndvi.json": "sha256:8BACD19C3113314AFD60893690C7A82995FDABB2F07276E26CDD8E7E278",
+    "s234_landuse.json": "sha256:3654269AE5B6BDED8A8846112FDE017A80F48417A4FA93D00DF85177A514",
+    "z14_12223_6897.png": "sha256:1083F7E585A98672929F14AD707127F538B5C4E3AF8B5B8C7C9F07DF93A5B445",
+    "z14_12224_6897.png": "sha256:1E5E5CE39D04A32750236D30AB3F8331CADD26B7F0582D3AC6E3FA6AA6A03274",
+    "z14_12225_6897.png": "sha256:7C2AC698B78361DF4CD215D19E0BAACBF1Dba2282B49C29081C3539C1665AA16",
+    "z14_12223_6898.png": "sha256:E834FC0CF7785CCD8AE46231073283BAD113CF3BBF568346C849449FCF02031C",
+    "z14_12224_6898.png": "sha256:B576E2190D28BCA875BE7E0C83C5A21AB06737E7188D0AF01E37F80455C2A0B7",
+    "z14_12225_6898.png": "sha256:8112E0168F42E9F041F166CD1FE0DCABCbfC97993868D47E4C8DD01AFafAAEC7",
+    "z14_12223_6899.png": "sha256:DFB449865F6DFFE302AC736BD413051DD64E154658482F34B03279411C1EB28B",
+    "z14_12224_6899.png": "sha256:05CD73EC77AFE7F31A5E87D390D6673BFCC7E04932E035130762B65762404B08",
+    "z14_12225_6899.png": "sha256:489226AFF2EE44B9ABD67A23558E5678F41591F3C19C37C2332828E940448A2E"
   }
 }

@@ -21,7 +21,7 @@
 
 ---
 
-## 2. S1 row status — 6 REAL + 5 PROXY (2026-09-04), rest STUB/demo
+## 2. S1 row status — 6 REAL + 7 PROXY (2026-09-04), rest STUB/demo
 
 The S1 rainfall columns are **REAL direct extractions** from the committed
 IMD archive (see evidence below). S1 road/river distances are **REAL direct
@@ -33,10 +33,22 @@ the USGS N27E088 tile — as is S1 drain density (**PROXY-window**: measured
 zero mapped streams inside the 271-m window, catchment work pending). All
 other science features remain STUB/demo. S2–S4 road/river distances are REAL
 per-slope Overpass reads (same method, `s234_osm_nearest.json`, §3).
+Catchment round (Person 3, 2026-09-04): `scripts/extract_catchment.py` (z14
+3×3 Terrarium mosaic ~6.5 km, centroid-centred, priority-flood D8 +
+descending-order accumulation) → `catchment_s234.json` (sha256 in manifest):
+S1 TWI **4.24** / SPI **9.4** (PROXY); S2–S4 full DEM rows PROXY from the same
+mosaic (S2 1643 m/17.9°/TWI 3.96/SPI 5.5; S3 1367 m/37.0°/TWI 4.03/SPI 31.9;
+S4 1131 m/23.2°/TWI 5.47/SPI 43.7 — S4 concave + highest TWI matches its valley
+position; S1 z14 re-derivation reproduces the committed z15 values).
+`scripts/extract_s234_ndvi.py` (same pinned scene) → `s234_ndvi.json`: S2
+ndvi **0.139** (SCL bare — road-cut, consistent), S3 **0.817** (veg), S4
+**0.468** (veg) — all REAL. `scripts/extract_landuse.py` → `s234_landuse.json`:
+no mappable landuse within 300 m of any slope (nearest: S3 residential
+324 m-to-centre, noted not used) — lulc stays STUB everywhere.
 
 **CSV row (verbatim, `feature_matrix.sample.csv:2`):**
 ```
-S1,2024-06-16,22.1,1287,248,-0.0395,8.1,12.4,14.0,327.3,712.2,0.42,0.718,BUILT,schist,4,226,1.8,0.0,1,1,dated
+S1,2024-06-16,22.1,1287,248,-0.0395,4.24,9.4,14.0,327.3,712.2,0.42,0.718,BUILT,schist,4,226,1.8,0.0,1,1,dated
 ```
 Extraction (Person 3, 2026-09-04): `scripts/extract_s234_osm.py` drives
 `extract_s1_osm.py` per slope (split roads/rivers queries after combined
@@ -102,24 +114,24 @@ no Bhusanket Sikkim join exists, so `previous_landslide`/`event` stay STUB
 | 2 | `elevation` | 1287 | PROXY (mirror) | Bilinear at exact S1 from same mosaic; town-centre cross-check 1509 m (§2) | Same USGS tile |
 | 3 | `aspect` | 248 | PROXY (mirror) | Horn downslope aspect WSW (247.8), same mosaic; 68° uphill version corrected 2026-09-04 | Same USGS tile |
 | 4 | `curvature` | -0.0395 | PROXY (mirror) | Laplacian central differences, same mosaic | Same USGS tile |
-| 5 | `twi` | 8.1 | STUB/demo | Derived from DEM | Same SRTM tile + TWI calc |
-| 6 | `spi` | 12.4 | STUB/demo | Derived from DEM | Same SRTM tile + SPI calc |
+| 5 | `twi` | 4.24 | PROXY (mirror+window) | D8 accumulation on z14 6.5-km mosaic, ln(a/tanB) (`catchment_s234.json`) | USGS tile + catchment validation |
+| 6 | `spi` | 9.4 | PROXY (mirror+window) | Same mosaic, a·tanB (`catchment_s234.json`) | Same |
 | 7 | `rainfall_24h_mm` | 14.0 | REAL | IMD NetCDF `ind2024_rfp25.nc` → `gangtok_rainfall_2024.csv`, trailing 24h to 2024-06-16 | — verified (raw slice June 1–20 sums check) |
 | 8 | `rainfall_7d_mm` | 327.3 | REAL | Same extraction, trailing 7d (June 10–16 daily: 41.3+50.5+35.2+76.7+73.4+36.3+14.0) | — verified |
 | 9 | `rainfall_30d_mm` | 712.2 | REAL | Same extraction, trailing 30d to 2024-06-16 | — verified |
 | 10 | `soil_moisture` | 0.42 | STUB/demo | No CDS account on either python, no `~/.cdsapirc` (logged skip 2026-09-04) | ERA5 volumetric soil water CDS API request log + date/version, tagged `reanalysis-proxy` |
 | 11 | `ndvi` | 0.718 | REAL | Sentinel-2 L2A S2B_45RXL_20241129_0_L2A (0.02% cloud), rasterio /vsicurl/ DN red=390 nir=2380 scl=4 (`s1_sentinel2.json`) | — verified (scene 2024-11-29 post-monsoon vs June window, dated in manifest) |
-| 12 | `lulc` | BUILT | STUB/demo (constant) | No OSM landuse=* polygon within 300 m of S1 (queried 2026-09-04); no classifier | Sentinel-2 classification or containing landuse polygon + codebook freeze |
+| 12 | `lulc` | BUILT | STUB/demo (constant) | OSM landuse round 2026-09-04: nothing mappable within 300 m of any slope (`s234_landuse.json`); no classifier | Containing landuse polygon or classifier + codebook freeze |
 | 13 | `lithology` | schist | STUB/demo | Bhukosh portal unreachable from here 2026-09-04 (connection fail; attempt logged, rides with Person 3 labels follow-up) | GSI Bhukosh lithology export for pilot bbox + codebook |
 | 14 | `distance_to_road` | 4 | REAL | Overpass extract 2026-09-04: unnamed tertiary OSM-348966165, 48 ways examined, foot-path filter logged (`s1_osm_nearest.json`) | — verified (field-check + OSM QA pass still open, `osm-qa-unverified` kept) |
 | 15 | `distance_to_river` | 226 | REAL | Overpass extract 2026-09-04: unnamed stream OSM-129509880, 12 waterways in 4 km (`s1_osm_nearest.json`) | — verified |
 | 16 | `lineament_density` | 1.8 | STUB/demo | No GSI structure source tonight (rides with Person 3 labels follow-up) | GSI lineaments + DEM |
 | 17 | `drain_density` | 0.0 | PROXY-window | 0.0 m mapped streams inside the 271-m DEM window (`s1_drain_window.json`); window-scale only, catchment work pending | Catchment-scale DEM + flow routing |
-| 18 | `previous_landslide` | 1 | STUB/demo | Portal attempts 2026-09-04 all logged, none yielded Sikkim points (see §3) | GSI Bhusanket NER export + NER filter + S1 spatial join |
-| 19 | `event` | 1 | STUB/demo | Same — no dated inventory event proves a slide at S1 in this window | Same Bhusanket inventory + date window; else `evidence_quality=season-window` + `missing_evidence` tag |
+| 18 | `previous_landslide` | 1 | STUB/demo | Portal attempts 2026-09-04 all logged, none yielded Sikkim points (see §3; DesInventar code 033 = Tamil Nadu, wrong state) | Sikkim state DB code via portal index, or dated Sikkim paper inventory |
+| 19 | `event` | 1 | STUB/demo | Same — no dated inventory event proves a slide at S1 in this window | Same; else `evidence_quality=season-window` + `missing_evidence` tag |
 | 20 | `evidence_quality` | dated | PARTIAL (rainfall window dated-real; occurrence unproven) | Date 2024-06-16 is a real IMD window end; no Bhusanket ID proves a slide at S1 | Bhusanket Sikkim join, or retag occurrence claim |
 
-**6 of 17 science features are REAL (rainfall 24h/7d/30d + road/river distances + ndvi); 5 are PROXY (4 Terrarium-mirror DEM derivatives + drain PROXY-window); `time_window` is a REAL rainfall-window date. The rest remain STUB/demo.** S2–S4 road/river distances are REAL per-slope reads. Grid representativeness (~13 km nearest-cell) is disclosed in the manifest and stays a stated limit; DEM mirror pedigree, OSM QA limits, and the NDVI scene-date gap are stated with the values.
+**6 of 17 science features are REAL (rainfall 24h/7d/30d + road/river distances + ndvi); 7 are PROXY (4 Terrarium-mirror DEM derivatives + drain window + twi/spi); `time_window` is a REAL rainfall-window date. Only 4 science features stay STUB (soil, lulc, lithology, lineament) + 2 label STUBs.** S2–S4 rain/OSM/NDVI REAL, S2–S4 DEM derivatives PROXY. Grid representativeness (~13 km nearest-cell) is disclosed in the manifest and stays a stated limit; DEM mirror pedigree, OSM QA limits, and the NDVI scene-date gap are stated with the values.
 
 ---
 
@@ -129,6 +141,10 @@ no Bhusanket Sikkim join exists, so `previous_landslide`/`event` stay STUB
 *   ✅ OSM spatial: Overpass 2026-09-04 → S1 `scripts/extract_s1_osm.py` → `s1_osm_nearest.json`; S2–S4 `scripts/extract_s234_osm.py` (split queries after 504s, same filters/radii) → `s234_osm_nearest.json` (sha256s in manifest). QA stays `osm-qa-unverified`. Notable corrections: S3 river 180→1093 (Rongbe Chu), S4 river 90→460, S2 road 20→6.
 *   ✅ Sentinel-2 (NDVI REAL): Element84 STAC, no account → least-cloudy 2024 scene S2B_45RXL_20241129_0_L2A (0.02% cloud) → `scripts/extract_s1_sentinel2.py` (rasterio /vsicurl/, system py311) → `data/processed/terrain/s1_sentinel2.json` (sha256 in manifest). lulc stays STUB (no landuse polygon in 300 m, no classifier).
 *   ✅ Drain PROXY-window: fresh Overpass waterways clipped to the committed DEM window → `scripts/extract_s1_drain.py` → `data/processed/terrain/s1_drain_window.json` (0.0 m in-window, sha256 in manifest).
+*   ✅ Catchment (TWI/SPI PROXY + S2–S4 DEM): z14 3×3 Terrarium mosaic ~6.5 km (centroid-centred, 9 PNGs committed under `terrarium_z14/`) → `scripts/extract_catchment.py` (numpy-only: stdlib PNG decode reuse, priority-flood, D8, descending-order accumulation) → `catchment_s234.json` (sha256s in manifest). S1 z14 re-derivation reproduces committed z15 (1287/20.2 vs 1287/22.1).
+*   ✅ S2–S4 NDVI (REAL): same pinned scene → `scripts/extract_s234_ndvi.py` (rasterio /vsicurl/, py311) → `s234_ndvi.json` (sha256 in manifest).
+*   ✅ Landuse attempt (STUB kept): `scripts/extract_landuse.py` → `s234_landuse.json` — nothing mappable ≤300 m; S3 residential at 324 m-to-centre noted, not used (goalpost stays).
+*   No GSI Bhusanket Sikkim-filtered CSV (portal HTTP 200 but dashboard JS exposes no export endpoint; COOLR REST 404; ILSM points unpublished; DesInventar `DI_export_033.zip` = Tamil Nadu 7.9 MB, wrong state — Sikkim code needs portal-index lookup; all probed 2026-09-04, attempt logged; labels stay STUB)
 *   ✅ DEM mirror (PROXY): AWS Terrain Tiles Terrarium z15 3×3 (SRTM-derived, open, no account) → extraction `scripts/extract_s1_dem.py` (stdlib PNG decode + numpy Horn/Laplacian) → `data/processed/terrain/s1_dem_window.csv` (64×64 audit grid, sha256 in manifest). NOT the USGS N27E088 tile — see manifest `limit`.
 *   No USGS EarthExplorer / NASA Earthdata SRTM tile for Gangtok (Neyveli tiles in `data/processed/terrain/` only — unrelated, do not cite)
 *   No ERA5 CDS request for Sikkim (no account, no cdsapi, no `~/.cdsapirc` — logged skip 2026-09-04), no `soil_moisture` provenance
@@ -154,14 +170,14 @@ See honest manifest `data/sih26001/fixtures/manifest.sample.json:1` — IMD, OSM
 
 Per `03_DATA_PLAN_SIH26001.md:1` and `05_FEATURE_SCHEMA_SIH26001.md:1`:
 
-*   **SRTM terrain (slope/elevation/aspect/curvature/twi/spi):** ✅ PROXY done for 4 of 6 (2026-09-04) via Terrarium mirror (`extract_s1_dem.py` + committed 64×64 window + town-centre cross-check). Still open: USGS N27E088 tile via EarthExplorer/Earthdata → re-derive → promote PROXY→REAL. TWI/SPI stay STUB until catchment-scale flow routing exists (window calc would be edge-corrupted).
+*   **SRTM terrain (slope/elevation/aspect/curvature/twi/spi):** ✅ PROXY done for 6 of 6 — 4 via z15 window, twi/spi via z14 6.5-km catchment D8 (`extract_catchment.py` + 9 committed PNGs + town-centre cross-check). Still open: USGS N27E088 tile → re-derive → promote PROXY→REAL.
 *   **IMD rainfall (24h/7d/30d):** ✅ DONE for S1–S4 — `ind2024_rfp25.nc` → `extract_gangtok_rainfall.py` → `gangtok_rainfall_2024.csv`, window 2024-06-16, same cell 27.25/88.50 verified per slope.
-*   **Soil moisture:** STUB — no CDS account (logged skip 2026-09-04). When fetched: ERA5 volumetric soil water via CDS API for pilot period → store request JSON + version/date. Tag everywhere as `reanalysis-proxy` (`05_FEATURE_SCHEMA_SIH26001.md:50`).
-*   **NDVI/LULC:** ✅ NDVI DONE for S1 (2026-09-04) — Element84 STAC + rasterio /vsicurl/, 0.718, dated in manifest. lulc OPEN: needs a classifier or a containing OSM landuse polygon (none in 300 m); SCL=4 noted as context only.
+*   **Soil moisture:** STUB — no CDS account (logged skip) AND Open-Meteo archive-api probed 2026-09-04 (soil layers return all-nulls for 2024-06 window; forecast API date-walled to 2026-06+). When fetched: ERA5 via CDS → request JSON + version/date, tagged `reanalysis-proxy` (`05_FEATURE_SCHEMA_SIH26001.md:50`).
+*   **NDVI/LULC:** ✅ NDVI DONE for S1–S4 (2026-09-04) — Element84 STAC + rasterio /vsicurl/ (S1 0.718, S2 0.139 bare, S3 0.817, S4 0.468), dated in manifest. lulc OPEN everywhere: OSM landuse round found nothing mappable ≤300 m (nearest S3 residential 324 m-to-centre, not used); needs a classifier or containing polygon. SCL noted as context only.
 *   **Lithology:** STUB — Bhukosh unreachable (attempt logged 2026-09-04). When reachable: export GSI Bhukosh lithology for pilot bbox → log export date + codebook. Map to `05_FEATURE_SCHEMA_SIH26001.md:34`.
 *   **Roads/rivers:** ✅ DONE for S1–S4 (2026-09-04) — Overpass extracts + committed JSONs + manifest entries, QA kept `osm-qa-unverified` until field-checked.
 *   **Lineament/drain density:** drain ✅ PROXY-window for S1 (0.0 measured, catchment work pending). Lineament STUB — needs a GSI structure source.
-*   **previous_landslide / event:** STUB — all three portal paths probed and logged 2026-09-04 (Bhusanket dashboard has no export endpoint; COOLR REST 404; ILSM points not published). Next: Bhusanket export via a machine with portal access, or a dated Sikkim paper inventory. Negatives: `>300 m` buffer (`03_DATA_PLAN_SIH26001.md:135`) + `evidence_quality` tag. Spatial-cluster CV required later (`04_MODEL_PLAN_SIH26001.md`).
+*   **previous_landslide / event:** STUB — five portal paths probed and logged 2026-09-04 (Bhusanket dashboard has no export endpoint; COOLR REST 404; ILSM points unpublished; DesInventar 033 = Tamil Nadu, Sikkim code needs portal-index lookup). Next: Sikkim state DB or dated paper inventory. Negatives: `>300 m` buffer (`03_DATA_PLAN_SIH26001.md:135`) + `evidence_quality` tag. Spatial-cluster CV required later (`04_MODEL_PLAN_SIH26001.md`).
 *   **Every run:** Write `manifest.json` with source versions, download dates, seeds `[42]`, CRS/grid, sha256 — committed alongside code (`03_DATA_PLAN_SIH26001.md:145`). Full matrix stays git-ignored (`data/processed/*` ignored), only `*.sample.csv` in repo.
 
 ---
@@ -169,7 +185,7 @@ Per `03_DATA_PLAN_SIH26001.md:1` and `05_FEATURE_SCHEMA_SIH26001.md:1`:
 ## 6. Limitations and next steps
 
 **Current limitations (honest):**
-*   6 of 17 S1 values are REAL (rainfall + OSM + NDVI) and 5 are PROXY (4 DEM mirror + drain window); the rest are STUB/demo — not usable for model training beyond shape-checking. S2–S4 rain REAL, S2–S4 OSM REAL.
+*   6 of 17 S1 values are REAL (rainfall + OSM + NDVI) and 7 are PROXY (DEM mirror + drain window + TWI/SPI); only soil/lulc/lithology/lineament stay science-STUB + 2 label STUBs — not usable for model training beyond shape-checking. S2–S4 rain/OSM/NDVI REAL, S2–S4 DEM derivatives PROXY.
 *   IMD grid representativeness (~13 km nearest-cell) disclosed; Bhusanket IDs, tile names (DEM), and ERA5 requests still missing — verifiable from repo history.
 *   No `ngen/` pipeline exists yet (`Test-Path ngen` = False) — NGEN is documentation-only on this branch.
 *   CSV cannot carry per-feature tags without breaking frozen schema (`05_FEATURE_SCHEMA_SIH26001.md:59` boundary rule + `check_scaffold.py:24` header check). Tags live here until schema ADR adds a provenance sidecar.
@@ -177,11 +193,11 @@ Per `03_DATA_PLAN_SIH26001.md:1` and `05_FEATURE_SCHEMA_SIH26001.md:1`:
 **Next steps (no invention, no huge download):**
 1.  Person 1 (rain — REAL for S1–S4, same cell verified per slope): done. ERA5 soil moisture still needs a CDS fetch — stays STUB until then (no-account logged skip 2026-09-04).
 2.  Person 2 (terrain+satellite): 6 verified for S1 (2 REAL OSM + 4 PROXY DEM) + NDVI REAL via Person-3 follow-up. Remaining STUBs: TWI/SPI (catchment routing + USGS tile), lulc (classifier or containing polygon), all documented above.
-3.  Person 3 (2026-09-04): S2–S4 OSM REAL, S1 NDVI REAL, S1 drain PROXY-window; labels/lithology/lineament/soil stay STUB with portal attempts logged in §3 + manifest. Lithology + lineament ride with the labels follow-up (Bhukosh export + GSI structure source).
+3.  Person 3 (2026-09-04, second round): catchment TWI/SPI PROXY all slopes, S2–S4 DEM + NDVI done, landuse/labels/lithology/soil attempts logged. Remaining STUBs need accounts or portal access (CDS, Bhukosh/Bhusanket from an allowed network, USGS tile, classifier) — all documented with attempt trails; nothing left convertible from this machine tonight. Lithology + lineament ride with the labels follow-up (Bhukosh export + GSI structure source).
 4.  Do not claim production readiness — prototype honesty rules `docs/sih26001/08_LIMITATIONS_SIH26001.md:1` apply. Scores remain susceptibility bands, not P(landslide tomorrow).
 
 **Validation:** `python scripts/check_scaffold.py` passes, CSV has 22 cols and ≤20 rows with S1 present, manifest parses as JSON with no `FILL` strings. See `manifest.sample.json:1` for `status: not_available` convention used to remove misleading placeholders.
 
 ---
 
-*This fixture is training-ready in shape, with S1 rainfall + OSM + NDVI REAL-verified and DEM/drain derivatives as stated PROXY. It honestly documents what is missing so judges and teammates can verify progress without hidden fabrication.*
+*This fixture is training-ready in shape, with S1 rainfall + OSM + NDVI REAL-verified and DEM/drain/TWI/SPI derivatives as stated PROXY. It honestly documents what is missing so judges and teammates can verify progress without hidden fabrication.*

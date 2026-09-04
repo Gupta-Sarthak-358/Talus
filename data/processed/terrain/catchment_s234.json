@@ -1,0 +1,89 @@
+{
+  "mosaic": {
+    "z": 14,
+    "tiles": [
+      "z14/12223/6897",
+      "z14/12224/6897",
+      "z14/12225/6897",
+      "z14/12223/6898",
+      "z14/12224/6898",
+      "z14/12225/6898",
+      "z14/12223/6899",
+      "z14/12224/6899",
+      "z14/12225/6899"
+    ],
+    "pixel_m": 8.49,
+    "side_km": 6.52,
+    "method": "D8 steepest descent + iterative pit fill + descending-order accumulation"
+  },
+  "slopes": {
+    "S1": {
+      "mosaic_px": [
+        329,
+        95
+      ],
+      "edge_px": 95,
+      "elevation": 1287.0,
+      "slope_angle": 20.2,
+      "aspect": 248.0,
+      "curvature": -0.0235,
+      "catchment_cells": 3,
+      "twi": 4.24,
+      "spi": 9.4
+    },
+    "S2": {
+      "mosaic_px": [
+        469,
+        187
+      ],
+      "edge_px": 187,
+      "elevation": 1643.0,
+      "slope_angle": 17.9,
+      "aspect": 209.0,
+      "curvature": -0.0097,
+      "catchment_cells": 2,
+      "twi": 3.96,
+      "spi": 5.5
+    },
+    "S3": {
+      "mosaic_px": [
+        405,
+        357
+      ],
+      "edge_px": 357,
+      "elevation": 1367.0,
+      "slope_angle": 37.0,
+      "aspect": 266.0,
+      "curvature": -0.0018,
+      "catchment_cells": 5,
+      "twi": 4.03,
+      "spi": 31.9
+    },
+    "S4": {
+      "mosaic_px": [
+        271,
+        489
+      ],
+      "edge_px": 271,
+      "elevation": 1131.0,
+      "slope_angle": 23.2,
+      "aspect": 267.0,
+      "curvature": 0.0301,
+      "catchment_cells": 12,
+      "twi": 5.47,
+      "spi": 43.7
+    }
+  },
+  "formulas": {
+    "twi": "ln(a/tanB), a=acc*dx (specific catchment area)",
+    "spi": "a*tanB",
+    "slope/aspect": "Horn-1981",
+    "curvature": "Laplacian central differences"
+  },
+  "limits": [
+    "Terrarium mirror (NOT USGS tile) \u2014 PROXY",
+    "tanB floor 1e-4 on flats (logged)",
+    "outer-64px borders truncated (slopes interior)"
+  ],
+  "queried_at": "2026-09-04T10:44:18Z"
+}

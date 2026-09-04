@@ -1,0 +1,65 @@
+{
+  "slopes": {
+    "S1": {
+      "error": "All Overpass endpoints failed (last: HTTP Error 504: Gateway Timeout)",
+      "lulc": null
+    },
+    "S2": {
+      "nearest": {
+        "landuse": "recreation_ground",
+        "dist_m": 438.3,
+        "osm_id": 355442789,
+        "name": null
+      },
+      "lulc": null,
+      "how": "STUB (none in 300m)"
+    },
+    "S3": {
+      "nearest": {
+        "landuse": "residential",
+        "dist_m": 324.0,
+        "osm_id": 424918840,
+        "name": null
+      },
+      "lulc": null,
+      "how": "STUB (none in 300m)"
+    },
+    "S4": {
+      "nearest": {
+        "landuse": "residential",
+        "dist_m": 648.7,
+        "osm_id": 424918841,
+        "name": null
+      },
+      "lulc": null,
+      "how": "STUB (none in 300m)"
+    }
+  },
+  "row_values": {
+    "S1": {
+      "lulc": null
+    },
+    "S2": {
+      "lulc": null
+    },
+    "S3": {
+      "lulc": null
+    },
+    "S4": {
+      "lulc": null
+    }
+  },
+  "map": {
+    "residential": "BUILT",
+    "commercial": "BUILT",
+    "industrial": "BUILT",
+    "retail": "BUILT",
+    "institutional": "BUILT",
+    "forest": "FOREST",
+    "farmland": "AGRI",
+    "meadow": "AGRI",
+    "orchard": "AGRI",
+    "farmyard": "AGRI"
+  },
+  "queried_at": "2026-09-04T10:41:15Z"
+}
