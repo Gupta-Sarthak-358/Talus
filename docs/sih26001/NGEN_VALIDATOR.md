@@ -77,7 +77,7 @@ python scripts/check_scaffold.py
 *   **CONSTANT** = same as STUB but deliberately fixed for the demo (e.g. `ndvi=0.35`, `lulc=BUILT` — allowed by `docs/sih26001/TEAM_TASKS_SEPT5.md:27` if tagged).
 *   **REAL** = directly verified from a committed source file (e.g. SRTM tile `N27E088` → `elevation` at 27.3450,88.6000 with checksum).
 *   **PROXY** = indirect substitute, e.g. ERA5 `soil_moisture` (must be tagged `reanalysis-proxy` and have a CDS request log).
-*   Current sample: **13 of 17 science features are REAL on every slope** (rainfall 24h/7d/30d + road/river distances + NDVI + all six DEM derivatives + soil moisture) and **drain density is PROXY** (measured window) + `zone_id` REAL (frozen ID); only lulc/lithology/lineament + 2 labels stay STUB/demo. See `docs/sih26001/NGEN_PROVENANCE_S1.md` for the per-feature table and why.
+*   Current sample: **13 of 17 science features are REAL on every slope** (rainfall 24h/7d/30d + road/river distances + NDVI + all six DEM derivatives + soil moisture) and **drain density is PROXY** (measured window) + `zone_id` REAL (frozen ID) + **labels REAL-joined** (S2 previous_landslide=1 with Bhusanket ID; all events 0 with logged reason); only lulc/lithology/lineament stay STUB/demo. See `docs/sih26001/NGEN_PROVENANCE_S1.md` for the per-feature table and why.
 
 The sample is **not training-ready science data** — it is shape-only. The validator will fail if anyone labels a STUB as REAL without evidence.
 

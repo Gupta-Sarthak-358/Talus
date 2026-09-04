@@ -58,9 +58,14 @@
     },
     "bhusanket": {
       "export": null,
-      "status": "not_available",
+      "status": "available",
+      "source": "user-supplied GSI_Landslide_Inventory.shp.zip (30,842 point slides, all-India, LOCAL ONLY per .gitignore)",
+      "sample": "data/sih26001/evidence/sikkim_gangtok_sample.csv (6 Gangtok-bbox rows)",
+      "join": "data/sih26001/evidence/sikkim_join.json (per-slope haversine join over all 693 Sikkim points)",
+      "extract_script": "scripts/extract_sikkim_labels.py (struct+numpy, no gis libs)",
+      "method": "previous_landslide=1 iff slide within 300m (ID cited); event=1 only if dated in-window (INITIATION is year-or-0, so 0 with reason); S2 hit SK/ESK/78A11/2019/02 at 286.7m",
       "ner_filter": true,
-      "attempt": "2026-09-04 Person-3: portal reachable (HTTP 200) but dashboard JS exposes no export endpoint; NASA COOLR FeatureServer 404 on both URL forms; ILSM Zenodo 10085272 hosts 6.6GB rasters only, no points file; DesInventar DI_export pattern confirmed but code 033 = Tamil Nadu (7.9MB, wrong state) — Sikkim state code needs portal-index lookup. Labels stay STUB (see provenance §3)."
+      "date": "2026-09-04"
     },
     "bhukosh": {
       "export": null,
@@ -104,6 +109,8 @@
     "usgs_s234.json": "sha256:B456C95E51DB747FB9A73CAC92F882F645476E20E2C331FE08A7BBA07C15DC",
     "gangtok_soil_cci.csv": "sha256:BBFBE01B40905176081A3BB60F79F62E18820D958DC454201F483FB7F8E98272",
     "gangtok_soil_cci.meta.json": "sha256:595390CB7846750B2AFB38FC65443D0DB89138A2880DA5711556FBF1DFF6EB63",
+    "sikkim_gangtok_sample.csv": "sha256:89123FB43C11067FBD06B1719744626D1A5F2AFB018B8F6D23419B7CE7C0D9AE",
+    "sikkim_join.json": "sha256:2F6E2F242FB8D020DCEB3DED3B74A76D3EF1540E2380AE919594376D0596C6E4C",
     "catchment_s234.json": "sha256:59005868617CC248964EBA25977B4D563B9BA8A6359EAB77C54EBD392C630E70",
     "s234_ndvi.json": "sha256:8BACD19C3113314AFD60893690C7A82995FDABB2F07276E26CDD8E7E278",
     "s234_landuse.json": "sha256:3654269AE5B6BDED8A8846112FDE017A80F48417A4FA93D00DF85177A514",

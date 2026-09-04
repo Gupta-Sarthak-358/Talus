@@ -64,6 +64,7 @@ data/raw/imd/*
 data/raw/dem/*
 data/raw/crack_seg/*
 data/raw/soil/*
+data/raw/gsi/*
 
 # whitelist only small metadata/docs/schema/sample files inside data dirs
 !data/**/.gitkeep
