@@ -116,7 +116,7 @@ export default function RiskMap() {
   const infra = locationData.infra;
   const sensors = locationData.sensors;
 
-  const [tileMode, setTileMode] = useState('dark'); // 'dark' | 'osm' | 'light'
+  const [tileMode, setTileMode] = useState('osm'); // 'osm' default (no key) | 'dark' | 'light'
 
   // Zone colors lookup
   const getZoneFillColor = (band) => {
@@ -138,7 +138,7 @@ export default function RiskMap() {
       {/* Top-Right Map Controls: Reset View / Basemap Mode */}
       <div className="absolute top-3 right-3 z-[400] flex items-center gap-1.5 bg-mine-card border border-mine-border rounded-lg p-1 shadow-sm">
         <button
-          onClick={() => setTileMode(tileMode === 'dark' ? 'osm' : tileMode === 'osm' ? 'light' : 'dark')}
+          onClick={() => setTileMode(tileMode === 'osm' ? 'dark' : tileMode === 'dark' ? 'light' : 'osm')}
           className="px-2 py-1 bg-mine-darker hover:bg-mine-dark text-mine-text rounded text-[10px] font-mono font-semibold flex items-center gap-1 transition-colors"
           title="Switch Basemap Style"
         >
@@ -153,16 +153,17 @@ export default function RiskMap() {
         scrollWheelZoom={true}
         className="w-full h-full flex-1"
         zoomControl={false}
-        attributionControl={false}
+        attributionControl={true}
       >
         <MapController center={mapCenter} zoom={mapZoom} />
 
-        {/* Dynamic Basemap Layer with Graceful Offline Handling */}
+        {/* Basemap: OSM default (no key, most reliable). CARTO dark/light optional. */}
         {tileMode === 'dark' && (
           <TileLayer
             url="https://{s}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png"
             maxZoom={19}
             subdomains="abcd"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
           />
         )}
 
@@ -170,6 +171,7 @@ export default function RiskMap() {
           <TileLayer
             url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
             maxZoom={19}
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
         )}
 
@@ -178,6 +180,7 @@ export default function RiskMap() {
             url="https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}{r}.png"
             maxZoom={19}
             subdomains="abcd"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
           />
         )}
 
