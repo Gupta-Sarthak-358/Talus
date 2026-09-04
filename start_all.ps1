@@ -83,6 +83,6 @@ Write-Host "  Dashboard : http://localhost:5173  (live S1-S4 89/78/66/52)" -Fore
 Write-Host "  API docs  : http://localhost:8000/docs" -ForegroundColor White
 Write-Host "  API zones : http://127.0.0.1:8000/api/zones" -ForegroundColor White
 Write-Host ""
-Write-Host "Demo flow: map → click S1 (89 Critical) → SHAP → What-If S3 66→74 → Causal monga-mdl S3→High → Roads R2 avoided → Report S2 crack → queue → verify → Sync badge" -ForegroundColor Gray
+Write-Host "Demo flow: map -> click S1 (89 Critical) -> SHAP -> What-If S3 66->74 -> Causal monga-mdl S3->High -> Roads R2 avoided -> Report S2 crack -> queue -> verify -> Sync badge" -ForegroundColor Gray
 Write-Host "Logs: Get-Content backend.log -Tail 20; Get-Content frontend.log -Tail 20" -ForegroundColor DarkGray
-Write-Host "Stop: Get-Content .backend.pid,.frontend.pid | ForEach-Object { Stop-Process -Id `$_ -Force -ErrorAction SilentlyContinue } ; Remove-Item .backend.pid,.frontend.pid -Force -ErrorAction SilentlyContinue" -ForegroundColor DarkGray
+Write-Host 'Stop: Get-Content .backend.pid,.frontend.pid | ForEach-Object { Stop-Process -Id $_ -Force } ; Remove-Item .backend.pid,.frontend.pid -Force' -ForegroundColor DarkGray
