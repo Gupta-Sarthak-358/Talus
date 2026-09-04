@@ -1,6 +1,6 @@
 {
   "ngen": "pilot-manifest-format (fill per run, commit alongside code)",
-  "pilot": "Gangtok cluster, Sikkim + Darjeeling corridor, W Bengal (D1-D4 rows 5-8, same 22-col schema)",
+  "pilot": "Gangtok cluster, Sikkim + Darjeeling corridor, W Bengal (D1-D4 rows 5-8) + Lachung Valley, North Sikkim (N1-N4 rows 9-12, same 22-col schema)",
   "crs": "EPSG:4326 (demo)",
   "grid": "pilot-grid-v1 (freeze before training)",
   "seeds": [42],
@@ -133,6 +133,24 @@
       "row_values": {"D1": "18.9/2019m/238, twi 5.08 spi 18.9, prev 0", "D2": "29.8/1715m/43, twi 5.48 spi 78.7, prev 1", "D3": "27.0/1970m/145, twi 5.38 spi 56.0, prev 1", "D4": "40.6/2306m/126, twi 4.57 spi 70.9, prev 0"},
       "date": "2026-09-04"
     },
+    "lachung_ngen": {
+      "version": "Lachung Valley, North Sikkim N1-N4 (27.665-27.695N/88.730-88.747E, EPSG:4326)",
+      "status": "available",
+      "file": "data/processed/terrain/lachung_ngen.json",
+      "extract_script": "scripts/extract_lachung_ngen.py (same methods as Darjeeling driver, N coords from slopes.lachung.json)",
+      "time_window": "2024-06-17 (Lachung-cell wettest trailing-7d of 2024; per-corridor honest windows)",
+      "imd": "LOCAL ind2024_rfp25.nc nearest cell (27.75, 88.75), same-cell all N: 24h=43.2/7d=314.5/30d=669.8 REAL",
+      "usgs_dem6": "LOCAL n27_e088_1arc_v3.tif: bilinear elev, Horn anisotropic slope/aspect, Laplacian curv, D8 priority-flood TWI/SPI + channel drain density on Lachung window lat 27.64-27.72/lon 88.68-88.80 REAL; 28,011 high-Himalaya voids neighbour-mean filled (derivatives read off filled grid, logged)",
+      "cci_soil": "LOCAL C3S June 10-16 2024, same flag-mask: per-N-cell mean 0.264, 7/7 valid, cell (27.625, 88.625) REAL",
+      "worldcover": "SAME tile N27E087: N1 FOREST 9/9, N2 BUILT 7/9, N3 FOREST 9/9, N4 AGRI 6/9 REAL",
+      "sentinel2": "Element84 STAC least-cloudy 2024 covering all N: S2B_45RXL_20241129_0_L2A (SAME Gangtok granule, same date, cloud 0.02%), NDVI N1 0.605/N2 0.122 scl=5 bare/N3 0.782/N4 0.645 scl=4 REAL post-monsoon quasi-static",
+      "osm": "Overpass same filters/radii: N1 road=784/river=986, N2 15/285, N3 519/381, N4 17/154 (osm-qa-unverified)",
+      "lithology": "chungthang_subgroup_gneiss PROXY-published-map (CGWB 2025: Chungthang = North-Sikkim country rock; nearest verified map Gangtok town)",
+      "lineament": "0.8 PROXY-regional (literature basis; Lachung INSIDE verified Bhuvan SK_LN50K_0506 bbox 88.035/27.073-88.892/28.061, no per-slope clip)",
+      "labels": "GSI shapefile SIKKIM rows (693): all N prev=0 (nearest 800m+: N1 SKM/NS/78A10/2017/206 @1026m, N2 same @832m, N3 SKM/NS/78A10/2017/205 @801m, N4 same @1245m), event=0; evidence/lachung_join.json + lachung_bbox_sample.csv (10 rows)",
+      "row_values": {"N1": "35.9/3095m/46, twi 4.33 spi 39.6, prev 0", "N2": "24.4/2686m/265, twi 5.20 spi 37.3, prev 0", "N3": "37.9/2685m/346, twi 4.66 spi 64.0, prev 0", "N4": "27.9/2542m/163, twi 5.05 spi 43.4, prev 0"},
+      "date": "2026-09-04"
+    },
     "osm": {
       "extract": "data/processed/terrain/s1_osm_nearest.json",
       "extract_script": "scripts/extract_s1_osm.py",
@@ -160,6 +178,9 @@
     "cv": "spatial-cluster (no random split)"
   },
   "checksums": {
+    "lachung_ngen.json": "sha256:0764f5a2d9c69ee23299fcdb8e5781bf0a5625311b1d88d031f6809be28113a9",
+    "lachung_join.json": "sha256:66b1673f904e09ad47f40625fffd1fcea749495c5c6f457c471a4ef3ced9ba23",
+    "lachung_bbox_sample.csv": "sha256:701bbe7bf773513daed72bb495e76da231f640114f8bbfcfa966e39915289096",
     "darjeeling_ngen.json": "sha256:8a494f03ee30014b9d24407c03abe6abaae55f9c99a020371a60fdc28f0ec81c",
     "darjeeling_join.json": "sha256:2aa7d92f36795999bb73ce3ebb885bbc7dedb37b56189bdcfd829a317e1f790b",
     "darjeeling_bbox_sample.csv": "sha256:6cfaf0af0b91d7b2abb062f0c5344df5398cbd4b2162a73d12ab018f752a7b13",

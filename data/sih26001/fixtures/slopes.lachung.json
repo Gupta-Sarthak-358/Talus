@@ -1,8 +1,9 @@
 {
-  "pilot": "Lachung Valley, North Sikkim (27.69, 88.74, EPSG:4326 preview)",
+  "pilot": "Lachung Valley, North Sikkim (27.69, 88.74, EPSG:4326)",
   "frozen": true,
   "updated_at": "2026-09-03T00:00:00+05:30",
-  "provenance_footnote": "IMD rainfall + SRTM DEM + GSI Bhusanket + ERA5 soil moisture + Sentinel-2 NDVI/LULC + OSM roads/rivers. Soil = reanalysis proxy. Sensor = recorded fixture. Bands = prototype, not safety standard.",
+  "ngen_measured": "2026-09-04 (scripts/extract_lachung_ngen.py; see NGEN_PROVENANCE_LACHUNG.md; time_window 2024-06-17)",
+  "provenance_footnote": "IMD rainfall + USGS SRTM DEM-6 + GSI Bhusanket (SK rows) + CCI soil moisture + Sentinel-2 NDVI + WorldCover LULC + OSM roads/rivers. Soil = CCI satellite. Sensor = recorded fixture. Bands = prototype, not safety standard.",
   "zones": [
     {
       "zone_id": "N1",
@@ -35,7 +36,6 @@
         }
       ],
       "missing_evidence": [
-        "soil_moisture:reanalysis-proxy",
         "event-date:approximate"
       ]
     },

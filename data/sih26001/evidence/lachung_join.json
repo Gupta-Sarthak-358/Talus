@@ -1,0 +1,68 @@
+{
+  "bbox": [
+    88.65,
+    88.8,
+    27.6,
+    27.72
+  ],
+  "buffer_m": 300.0,
+  "join": {
+    "N1": {
+      "slide_no": "SKM/NS/78A10/2017/206",
+      "name": "",
+      "district": "North Sikkim",
+      "lon": 88.73875,
+      "lat": 27.686389,
+      "initiation": "0",
+      "triggering": "Rainfall",
+      "dist_m": 1026.2,
+      "previous_landslide": 0,
+      "event": 0,
+      "evidence_quality": "dated-only-negative",
+      "reason": "nearest slide SKM/NS/78A10/2017/206 at 1026.2 m, outside 300 m"
+    },
+    "N2": {
+      "slide_no": "SKM/NS/78A10/2017/206",
+      "name": "",
+      "district": "North Sikkim",
+      "lon": 88.73875,
+      "lat": 27.686389,
+      "initiation": "0",
+      "triggering": "Rainfall",
+      "dist_m": 831.8,
+      "previous_landslide": 0,
+      "event": 0,
+      "evidence_quality": "dated-only-negative",
+      "reason": "nearest slide SKM/NS/78A10/2017/206 at 831.8 m, outside 300 m"
+    },
+    "N3": {
+      "slide_no": "SKM/NS/78A10/2017/205",
+      "name": "",
+      "district": "North Sikkim",
+      "lon": 88.733417,
+      "lat": 27.675778,
+      "initiation": "0",
+      "triggering": "Rainfall",
+      "dist_m": 800.6,
+      "previous_landslide": 0,
+      "event": 0,
+      "evidence_quality": "dated-only-negative",
+      "reason": "nearest slide SKM/NS/78A10/2017/205 at 800.6 m, outside 300 m"
+    },
+    "N4": {
+      "slide_no": "SKM/NS/78A10/2017/205",
+      "name": "",
+      "district": "North Sikkim",
+      "lon": 88.733417,
+      "lat": 27.675778,
+      "initiation": "0",
+      "triggering": "Rainfall",
+      "dist_m": 1244.8,
+      "previous_landslide": 0,
+      "event": 0,
+      "evidence_quality": "dated-only-negative",
+      "reason": "nearest slide SKM/NS/78A10/2017/205 at 1244.8 m, outside 300 m"
+    }
+  },
+  "queried_at": "2026-09-04T17:57:40Z"
+}

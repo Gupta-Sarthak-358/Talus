@@ -1,0 +1,286 @@
+{
+  "zones": [
+    "N1",
+    "N2",
+    "N3",
+    "N4"
+  ],
+  "queried_at": "2026-09-04T17:57:11Z",
+  "imd": {
+    "cell": [
+      27.75,
+      88.75
+    ],
+    "window_end": "2024-06-17",
+    "rainfall_24h_mm": 43.2,
+    "rainfall_7d_mm": 314.5,
+    "rainfall_30d_mm": 669.8,
+    "tag": "REAL (IMD 0.25-deg nearest cell, same-cell all D, stated)"
+  },
+  "usgs": {
+    "N1": {
+      "elevation": 3095.0,
+      "slope_angle": 35.9,
+      "aspect": 46.0,
+      "curvature": -0.0586,
+      "twi": 4.33,
+      "spi": 39.6,
+      "drain_density": 0.97,
+      "catchment_cells": 2
+    },
+    "N2": {
+      "elevation": 2686.0,
+      "slope_angle": 24.4,
+      "aspect": 265.0,
+      "curvature": -0.0067,
+      "twi": 5.2,
+      "spi": 37.3,
+      "drain_density": 1.07,
+      "catchment_cells": 3
+    },
+    "N3": {
+      "elevation": 2685.0,
+      "slope_angle": 37.9,
+      "aspect": 346.0,
+      "curvature": 0.008,
+      "twi": 4.66,
+      "spi": 64.0,
+      "drain_density": 2.81,
+      "catchment_cells": 3
+    },
+    "N4": {
+      "elevation": 2542.0,
+      "slope_angle": 27.9,
+      "aspect": 163.0,
+      "curvature": 0.004,
+      "twi": 5.05,
+      "spi": 43.4,
+      "drain_density": 3.39,
+      "catchment_cells": 3
+    }
+  },
+  "soil": {
+    "N1": {
+      "soil_moisture": 0.264,
+      "valid_days": "7/7",
+      "cell": [
+        27.625,
+        88.625
+      ],
+      "flags_seen": [
+        0
+      ]
+    },
+    "N2": {
+      "soil_moisture": 0.264,
+      "valid_days": "7/7",
+      "cell": [
+        27.625,
+        88.625
+      ],
+      "flags_seen": [
+        0
+      ]
+    },
+    "N3": {
+      "soil_moisture": 0.264,
+      "valid_days": "7/7",
+      "cell": [
+        27.625,
+        88.625
+      ],
+      "flags_seen": [
+        0
+      ]
+    },
+    "N4": {
+      "soil_moisture": 0.264,
+      "valid_days": "7/7",
+      "cell": [
+        27.625,
+        88.625
+      ],
+      "flags_seen": [
+        0
+      ]
+    }
+  },
+  "labels": {
+    "N1": {
+      "previous_landslide": 0,
+      "event": 0,
+      "evidence_quality": "dated-only-negative"
+    },
+    "N2": {
+      "previous_landslide": 0,
+      "event": 0,
+      "evidence_quality": "dated-only-negative"
+    },
+    "N3": {
+      "previous_landslide": 0,
+      "event": 0,
+      "evidence_quality": "dated-only-negative"
+    },
+    "N4": {
+      "previous_landslide": 0,
+      "event": 0,
+      "evidence_quality": "dated-only-negative"
+    }
+  },
+  "static": {
+    "lithology": {
+      "N1": "chungthang_subgroup_gneiss",
+      "N2": "chungthang_subgroup_gneiss",
+      "N3": "chungthang_subgroup_gneiss",
+      "N4": "chungthang_subgroup_gneiss"
+    },
+    "lithology_basis": "CGWB_Gangtok_2025 describes Chungthang Subgroup (biotite gneiss, quartzite, impure marble, graphitic schist) as the North-Sikkim country rock; nearest verified map extent is Gangtok town (DRAP Fig 9-25). PROXY-published-map, not a Bhukosh vector clip.",
+    "lineament_density": {
+      "N1": 0.8,
+      "N2": 0.8,
+      "N3": 0.8,
+      "N4": 0.8
+    },
+    "lineament_basis": "Same Himalayan-50K literature basis as Gangtok (0.3-1.4, conservative 0.8); Lachung lies INSIDE the verified Bhuvan layer SK_LN50K_0506 bbox (88.035/27.073-88.892/28.061) but no per-slope vector clip was taken. PROXY-regional; Bhuvan clip is the upgrade path."
+  },
+  "osm": {
+    "N1": {
+      "distance_to_road": 784,
+      "distance_to_river": 986,
+      "nearest_road": {
+        "osm_id": 117990924,
+        "name": null,
+        "highway": "tertiary",
+        "waterway": null,
+        "dist_m": 784.4
+      },
+      "nearest_river": {
+        "osm_id": 170015107,
+        "name": "Lachung Chu",
+        "highway": null,
+        "waterway": "river",
+        "dist_m": 985.8
+      },
+      "endpoint": "https://overpass-api.de/api/interpreter"
+    },
+    "N2": {
+      "distance_to_road": 15,
+      "distance_to_river": 285,
+      "nearest_road": {
+        "osm_id": 117990949,
+        "name": null,
+        "highway": "tertiary",
+        "waterway": null,
+        "dist_m": 14.6
+      },
+      "nearest_river": {
+        "osm_id": 170015107,
+        "name": "Lachung Chu",
+        "highway": null,
+        "waterway": "river",
+        "dist_m": 284.6
+      },
+      "endpoint": "https://overpass-api.de/api/interpreter"
+    },
+    "N3": {
+      "distance_to_road": 519,
+      "distance_to_river": 381,
+      "nearest_road": {
+        "osm_id": 117990972,
+        "name": null,
+        "highway": "service",
+        "waterway": null,
+        "dist_m": 518.9
+      },
+      "nearest_river": {
+        "osm_id": 170015107,
+        "name": "Lachung Chu",
+        "highway": null,
+        "waterway": "river",
+        "dist_m": 380.9
+      },
+      "endpoint": "https://overpass-api.de/api/interpreter"
+    },
+    "N4": {
+      "distance_to_road": 17,
+      "distance_to_river": 154,
+      "nearest_road": {
+        "osm_id": 117990961,
+        "name": null,
+        "highway": "residential",
+        "waterway": null,
+        "dist_m": 17.4
+      },
+      "nearest_river": {
+        "osm_id": 680517785,
+        "name": null,
+        "highway": null,
+        "waterway": "stream",
+        "dist_m": 153.7
+      },
+      "endpoint": "https://overpass-api.de/api/interpreter"
+    }
+  },
+  "worldcover": {
+    "N1": {
+      "lulc": "FOREST",
+      "wc_mode": 10,
+      "wc_centre": 10,
+      "agree": 9,
+      "centre_agrees": true
+    },
+    "N2": {
+      "lulc": "BUILT",
+      "wc_mode": 50,
+      "wc_centre": 50,
+      "agree": 7,
+      "centre_agrees": true
+    },
+    "N3": {
+      "lulc": "FOREST",
+      "wc_mode": 10,
+      "wc_centre": 10,
+      "agree": 9,
+      "centre_agrees": true
+    },
+    "N4": {
+      "lulc": "AGRI",
+      "wc_mode": 30,
+      "wc_centre": 30,
+      "agree": 6,
+      "centre_agrees": true
+    }
+  },
+  "sentinel": {
+    "scene": {
+      "product_id": "S2B_45RXL_20241129_0_L2A",
+      "date": "2024-11-29",
+      "cloud_cover_pct": 0.019648,
+      "tile": "MGRS-45RXL"
+    },
+    "N1": {
+      "ndvi": 0.605,
+      "dn_red": 376.0,
+      "dn_nir": 1528.0,
+      "scl": 4
+    },
+    "N2": {
+      "ndvi": 0.122,
+      "dn_red": 1429.0,
+      "dn_nir": 1826.0,
+      "scl": 5
+    },
+    "N3": {
+      "ndvi": 0.782,
+      "dn_red": 618.0,
+      "dn_nir": 5061.0,
+      "scl": 4
+    },
+    "N4": {
+      "ndvi": 0.645,
+      "dn_red": 399.0,
+      "dn_nir": 1848.0,
+      "scl": 4
+    }
+  }
+}
