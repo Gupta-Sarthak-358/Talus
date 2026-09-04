@@ -36,33 +36,21 @@
     "previous_landslide": "nearest-OTHER-slide<=300m (sample rows only) \u2014 OMITTED from trainer X (leakage), delta logged"
   },
   "stats": {
-    "started": "2026-09-04T13:25:35Z",
+    "started": "2026-09-04T14:14:49Z",
     "seed": 42,
     "positives_deduped": 764,
     "positives_in_study": 764,
     "negatives": 764,
-    "ndvi_missing_imputed": 107,
-    "ndvi_outside_scene": 0,
-    "ndvi_cloud_masked": 107,
-    "lulc_missing_mode": 71,
-    "lulc_mix": {
-      "AGRI": 164,
-      "BARREN": 95,
-      "FOREST": 1082,
-      "BUILT": 61,
-      "WATER": 121,
-      "WETLAND": 5
-    },
     "matrix_shape": [
       1528,
       22
     ],
     "prev_rate_pos": 0.4372,
     "river_dem_fallback_pts": 0,
-    "matrix_sha256": "fb5cb8f7005e57b1e7aa03e135a227b52a8b9505b33c7aa6d5ac77a9e4e0567e",
-    "sidecar_sha256": "082df4edc5b2f4cebb45d5c4bab6b91c574c640ceb0da4115e402945c2045371",
+    "matrix_sha256": "eba79d138740a2568a58500c96b1603908a9478c2029152bf13691a3a018be77",
+    "sidecar_sha256": "de5308bc874eca679425104f734d962147eefcde60c933f6d60f80eb155f7caa",
     "sample_sha256": "4a559b103db2c048a2c50ef6e023f33b9e5b12f1753a5725ba8da25f84c594d6",
-    "finished": "2026-09-04T13:29:13Z"
+    "finished": "2026-09-04T14:14:50Z"
   },
   "sources": {
     "shapefile": "data/raw/gsi/GSI_Landslide_Inventory.shp.zip (LOCAL ONLY)",
@@ -78,7 +66,7 @@
   "training": {
     "seed": 42,
     "clusters": 8,
-    "started": "2026-09-04T13:57:05Z",
+    "started": "2026-09-04T14:15:07Z",
     "n": 1528,
     "n_pos": 764,
     "metrics": {
@@ -168,11 +156,16 @@
     },
     "temporal": {
       "rule": ">= 30 dated positives per side",
-      "n_train_pos_dated": 21,
-      "n_test_pos_dated": 71,
+      "n_train_pos_dated": 35,
+      "n_test_pos_dated": 73,
       "negatives_split": "seeded 50/50 (timeless background)",
-      "done": false,
-      "reason": "only 21 dated positives <=2018 / 71 >=2019 (672/764 positives undated) \u2014 below rule; skipped, not fudged"
+      "done": true,
+      "test_n": 455,
+      "rf_test": {
+        "auc": 0.9264,
+        "brier": 0.0867,
+        "ece10": 0.0491
+      }
     },
     "threshold_screen": {
       "june_total_separator_mm": 390.0,
@@ -822,7 +815,7 @@
     "has_xgb": true,
     "has_lgb": true,
     "has_shap": true,
-    "finished": "2026-09-04T13:58:13Z",
+    "finished": "2026-09-04T14:16:08Z",
     "clean": true
   },
   "demo_touch": "none \u2014 zero fixture/score/contract changes by this lane (frozen scores are validator-guarded; training is upside, not a demo blocker)"
