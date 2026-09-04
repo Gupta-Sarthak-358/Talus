@@ -91,6 +91,19 @@ def auc_score(y_true: np.ndarray, p: np.ndarray) -> float:
     return round(float(roc_auc_score(y_true, p)), 4)
 
 
+def _try_import(pkg: str):
+    try:
+        __import__(pkg)
+        return True
+    except ImportError:
+        return False
+
+
+HAS_XGB = _try_import("xgboost")
+HAS_LGB = _try_import("lightgbm")
+HAS_SHAP = _try_import("shap")
+
+
 def main() -> int:
     from sklearn.cluster import KMeans
     from sklearn.compose import ColumnTransformer
@@ -132,6 +145,8 @@ def main() -> int:
     gkf = GroupKFold(n_splits=N_CLUSTERS)
     oof_lr = np.full(len(y), np.nan)
     oof_rf = np.full(len(y), np.nan)
+    oof_xgb = np.full(len(y), np.nan) if HAS_XGB else None
+    oof_lgb = np.full(len(y), np.nan) if HAS_LGB else None
     fold_auc: dict = {}
     for tr, te in gkf.split(X, y, groups):
         lab = int(groups[te[0]])
@@ -142,28 +157,54 @@ def main() -> int:
         rf = RandomForestClassifier(n_estimators=500, random_state=SEED, n_jobs=-1)
         rf.fit(pre.fit_transform(X.iloc[tr]), y[tr])
         oof_rf[te] = rf.predict_proba(pre.transform(X.iloc[te]))[:, 1]
+        if HAS_XGB:
+            from xgboost import XGBClassifier
+            xgb = Pipeline([("pre", pre), ("clf", XGBClassifier(n_estimators=400, max_depth=6, learning_rate=0.05,
+                                                                subsample=0.8, colsample_bytree=0.8, eval_metric="logloss",
+                                                                random_state=SEED, n_jobs=-1))])
+            xgb.fit(X.iloc[tr], y[tr])
+            oof_xgb[te] = xgb.predict_proba(X.iloc[te])[:, 1]
+        if HAS_LGB:
+            from lightgbm import LGBMClassifier
+            lgb = Pipeline([("pre", pre), ("clf", LGBMClassifier(n_estimators=400, learning_rate=0.05, max_depth=-1,
+                                                                 random_state=SEED, n_jobs=-1, verbose=-1))])
+            lgb.fit(X.iloc[tr], y[tr])
+            oof_lgb[te] = lgb.predict_proba(X.iloc[te])[:, 1]
         # A held-out spatial cluster can be single-class (dense inventory pockets
         # or remote background) — AUC undefined there; accuracy always defined.
         if len(np.unique(y[te])) == 2:
-            fold_auc[lab] = (auc_score(y[te], oof_lr[te]), auc_score(y[te], oof_rf[te]))
+            a_lr, a_rf = auc_score(y[te], oof_lr[te]), auc_score(y[te], oof_rf[te])
+            a_xgb = auc_score(y[te], oof_xgb[te]) if HAS_XGB else None
+            a_lgb = auc_score(y[te], oof_lgb[te]) if HAS_LGB else None
+            fold_auc[lab] = (a_lr, a_rf, a_xgb, a_lgb)
         else:
-            fold_auc[lab] = (None, None)
+            fold_auc[lab] = (None, None, None, None)
             log(f"fold cluster_{lab}: single-class held-out (n={len(te)}, "
                 f"pos_rate={y[te].mean():.2f}) — AUC n/a, kept in pooled OOF")
     assert not np.isnan(oof_lr).any() and not np.isnan(oof_rf).any()
+    if HAS_XGB: assert not np.isnan(oof_xgb).any()  # type: ignore
+    if HAS_LGB: assert not np.isnan(oof_lgb).any()  # type: ignore
 
     prev_rate = float(y.mean())
     naive = np.full(len(y), prev_rate)
-    metrics = {
+    metrics: dict = {
         "lr_oof": {"auc": auc_score(y, oof_lr), "brier": brier(y, oof_lr), "ece10": ece_score(y, oof_lr),
                    "acc50": round(float(((oof_lr >= 0.5) == y).mean()), 4)},
         "rf_oof": {"auc": auc_score(y, oof_rf), "brier": brier(y, oof_rf), "ece10": ece_score(y, oof_rf),
                    "acc50": round(float(((oof_rf >= 0.5) == y).mean()), 4)},
         "naive_prevalence": {"brier": brier(y, naive), "ece10": ece_score(y, naive)},
         "per_cluster_auc": {f"cluster_{c}": {"lr": (round(a, 4) if a is not None else "n/a"),
-                                                     "rf": (round(b, 4) if b is not None else "n/a")}
-                            for c, (a, b) in sorted(fold_auc.items())},
+                                                     "rf": (round(b, 4) if b is not None else "n/a"),
+                                                     **({"xgb": round(cx, 4) if cx is not None else "n/a"} if HAS_XGB else {}),
+                                                     **({"lgb": round(lg, 4) if lg is not None else "n/a"} if HAS_LGB else {})}
+                            for c, (a, b, cx, lg) in sorted(fold_auc.items())},
     }
+    if HAS_XGB:
+        metrics["xgb_oof"] = {"auc": auc_score(y, oof_xgb), "brier": brier(y, oof_xgb), "ece10": ece_score(y, oof_xgb),  # type: ignore
+                               "acc50": round(float(((oof_xgb >= 0.5) == y).mean()), 4)}  # type: ignore
+    if HAS_LGB:
+        metrics["lgb_oof"] = {"auc": auc_score(y, oof_lgb), "brier": brier(y, oof_lgb), "ece10": ece_score(y, oof_lgb),  # type: ignore
+                               "acc50": round(float(((oof_lgb >= 0.5) == y).mean()), 4)}  # type: ignore
     log(f"OOF LR: {metrics['lr_oof']}")
     log(f"OOF RF: {metrics['rf_oof']}")
     log(f"naive: {metrics['naive_prevalence']}")
@@ -233,7 +274,7 @@ def main() -> int:
     }
     log(f"threshold screen: {thresh}")
 
-    # Final fits on full data (deployment-shape artifacts) + importances
+    # Final fits on full data (deployment-shape artifacts) + importances + SHAP
     from sklearn.inspection import permutation_importance
     Xn_full = pre.fit_transform(X)
     feat_names = NUMERIC + [f"lulc_{c}" for c in pre.named_transformers_["cat"].categories_[0][1:]]
@@ -241,12 +282,45 @@ def main() -> int:
     lr_full.fit(X, y)
     rf_full = RandomForestClassifier(n_estimators=500, random_state=SEED, n_jobs=-1)
     rf_full.fit(Xn_full, y)
+    # XGB/LGB full fits (if available)
+    xgb_full = lgb_full = None
+    if HAS_XGB:
+        from xgboost import XGBClassifier
+        xgb_full = Pipeline([("pre", clone(pre)), ("clf", XGBClassifier(n_estimators=400, max_depth=6, learning_rate=0.05,
+                                                                        subsample=0.8, colsample_bytree=0.8, eval_metric="logloss",
+                                                                        random_state=SEED, n_jobs=-1))])
+        xgb_full.fit(X, y)
+    if HAS_LGB:
+        from lightgbm import LGBMClassifier
+        lgb_full = Pipeline([("pre", clone(pre)), ("clf", LGBMClassifier(n_estimators=400, learning_rate=0.05, max_depth=-1,
+                                                                         random_state=SEED, n_jobs=-1, verbose=-1))])
+        lgb_full.fit(X, y)
     perm = permutation_importance(rf_full, Xn_full, y, n_repeats=5, random_state=SEED,
                                   scoring="roc_auc", n_jobs=-1)
     order = np.argsort(perm.importances_mean)[::-1]
     importance = [{"feature": feat_names[i], "perm_auc_drop": round(float(perm.importances_mean[i]), 4),
                    "impurity": round(float(rf_full.feature_importances_[i]), 4)} for i in order]
     log("top-5 permutation importance: " + str([(d["feature"], d["perm_auc_drop"]) for d in importance[:5]]))
+    shap_sample = None
+    if HAS_SHAP:
+        try:
+            import shap
+            explainer = shap.TreeExplainer(rf_full)
+            # 5 demo points (stratified) for per-prediction example
+            rng = np.random.default_rng(SEED)
+            pos_idx = np.where(y == 1)[0]
+            neg_idx = np.where(y == 0)[0]
+            demo_idx = np.concatenate([rng.choice(pos_idx, 3, replace=False), rng.choice(neg_idx, 2, replace=False)])
+            shap_vals = explainer.shap_values(Xn_full[demo_idx])
+            # shap 0.51 returns [neg, pos] for binary; take pos class
+            if isinstance(shap_vals, list):
+                shap_vals = shap_vals[1]
+            shap_sample = [{"zone_id": f"SHAP-{i}", "features": dict(zip(feat_names, Xn_full[demo_idx[i]].tolist())),
+                            "shap": dict(zip(feat_names, shap_vals[i].tolist()))} for i in range(len(demo_idx))]
+            log(f"SHAP sample computed for {len(demo_idx)} points (TreeExplainer on RF)")
+        except Exception as exc:  # noqa: BLE001
+            log(f"SHAP failed (non-fatal): {exc}")
+            shap_sample = None
 
     MODELDIR.mkdir(parents=True, exist_ok=True)
     joblib.dump({"model": rf_full, "encoder": pre, "features": feat_names, "seed": SEED,
@@ -255,19 +329,52 @@ def main() -> int:
     joblib.dump({"model": lr_full, "seed": SEED}, MODELDIR / "sih26001_lr_v1.joblib", compress=3)
     joblib.dump({"isotonic": iso, "fit_on": "RF spatial-OOF (same-OOF optimism caveat)"},
                 MODELDIR / "sih26001_iso_v1.joblib", compress=3)
-    log(f"models -> {MODELDIR}/sih26001_{{rf,lr,iso}}_v1.joblib (git-ignored)")
+    if xgb_full is not None:
+        joblib.dump({"model": xgb_full, "seed": SEED}, MODELDIR / "sih26001_xgb_v1.joblib", compress=3)
+    if lgb_full is not None:
+        joblib.dump({"model": lgb_full, "seed": SEED}, MODELDIR / "sih26001_lgb_v1.joblib", compress=3)
+    log(f"models -> {MODELDIR}/sih26001_{{rf,lr,iso{',xgb' if xgb_full is not None else ''}{',lgb' if lgb_full is not None else ''}}}_v1.joblib (git-ignored)")
 
+    shap_meta = {"done": shap_sample is not None, "n_demo": len(shap_sample) if shap_sample else 0}
     RESULTS.update({"n": int(len(y)), "n_pos": int(y.sum()), "metrics": metrics,
                     "temporal": temporal, "threshold_screen": thresh,
-                    "importance": importance, "lulc_classes": lulc_cats,
+                    "importance": importance, "shap_sample": shap_sample, "shap_meta": shap_meta,
+                    "lulc_classes": lulc_cats,
                     "dropped_from_X": {"uniform_proxy": DROP_CONST, "leakage": DROP_LEAK, "keys": DROP_KEYS},
-                    "deferred": ["xgboost", "lightgbm", "shap (TreeSHAP per-prediction deferred; "
-                                 "permutation+impurity reported instead)"],
+                    "deferred": ([] if (HAS_XGB and HAS_LGB and HAS_SHAP) else
+                                 [d for d, ok in [("xgboost", HAS_XGB), ("lightgbm", HAS_LGB), ("shap", HAS_SHAP)] if not ok]),
+                    "has_xgb": HAS_XGB, "has_lgb": HAS_LGB, "has_shap": HAS_SHAP,
                     "finished": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")})
 
     # ---- reports (committed) ----
     REPORTDIR.mkdir(parents=True, exist_ok=True)
     date = RESULTS["finished"][:10]
+    # metrics table rows
+    header = "| model | AUC | Brier | ECE10 | acc@0.5 |\n|---|---|---|---|---|\n"
+    rows = [
+        f"| LR baseline | {metrics['lr_oof']['auc']} | {metrics['lr_oof']['brier']} | {metrics['lr_oof']['ece10']} | {metrics['lr_oof']['acc50']} |",
+        f"| RF 500 trees | {metrics['rf_oof']['auc']} | {metrics['rf_oof']['brier']} | {metrics['rf_oof']['ece10']} | {metrics['rf_oof']['acc50']} |",
+    ]
+    if "xgb_oof" in metrics:
+        rows.append(f"| XGB | {metrics['xgb_oof']['auc']} | {metrics['xgb_oof']['brier']} | {metrics['xgb_oof']['ece10']} | {metrics['xgb_oof']['acc50']} |")
+    if "lgb_oof" in metrics:
+        rows.append(f"| LGBM | {metrics['lgb_oof']['auc']} | {metrics['lgb_oof']['brier']} | {metrics['lgb_oof']['ece10']} | {metrics['lgb_oof']['acc50']} |")
+    rows.append(f"| naive prevalence | — | {metrics['naive_prevalence']['brier']} | {metrics['naive_prevalence']['ece10']} | — |")
+    per_cluster_header = "| held-out cluster | LR | RF"
+    if "xgb_oof" in metrics:
+        per_cluster_header += " | XGB"
+    if "lgb_oof" in metrics:
+        per_cluster_header += " | LGBM"
+    per_cluster_header += " |\n|---|---|---" + ("|---" if "xgb_oof" in metrics else "") + ("|---" if "lgb_oof" in metrics else "") + "|\n"
+    per_cluster_rows = ""
+    for c, v in enumerate(metrics["per_cluster_auc"].values()):
+        row = f"| cluster_{c} | {v['lr']} | {v['rf']}"
+        if "xgb_oof" in metrics:
+            row += f" | {v.get('xgb', 'n/a')}"
+        if "lgb_oof" in metrics:
+            row += f" | {v.get('lgb', 'n/a')}"
+        per_cluster_rows += row + " |\n"
+    shap_note = (f"SHAP sample: {len(shap_sample)} points TreeSHAP on RF (see manifest shap_sample)" if shap_sample else "SHAP deferred (package absent); permutation+impurity above instead.")
     (REPORTDIR / "metrics.md").write_text(
         f"# SIH26001 Phase-1 training metrics ({date})\n\n"
         f"Target: `event` season-window proxy (positives = inventoried Sikkim slides, "
@@ -276,22 +383,14 @@ def main() -> int:
         f"(drop_first); lithology/lineament omitted (uniform PROXY), previous_landslide "
         f"omitted (leakage — positives ARE inventory slides).\n\n"
         f"## Spatial GroupKFold(8) out-of-fold (clusters = KMeans-8 on coords, seed 42)\n\n"
-        f"| model | AUC | Brier | ECE10 | acc@0.5 |\n|---|---|---|---|---|\n"
-        f"| LR baseline | {metrics['lr_oof']['auc']} | {metrics['lr_oof']['brier']} | "
-        f"{metrics['lr_oof']['ece10']} | {metrics['lr_oof']['acc50']} |\n"
-        f"| RF 500 trees | {metrics['rf_oof']['auc']} | {metrics['rf_oof']['brier']} | "
-        f"{metrics['rf_oof']['ece10']} | {metrics['rf_oof']['acc50']} |\n"
-        f"| naive prevalence | — | {metrics['naive_prevalence']['brier']} | "
-        f"{metrics['naive_prevalence']['ece10']} | — |\n\n"
+        + header + "\n".join(rows) + "\n\n"
         f"## Per-held-out-cluster AUC (leave-one-cluster-out shape, KMeans labels)\n\n"
-        f"| held-out cluster | LR | RF |\n|---|---|---|\n"
-        + "".join(f"| cluster_{c} | {v['lr']} | {v['rf']} |\n"
-                  for c, v in enumerate(metrics["per_cluster_auc"].values()))
+        + per_cluster_header + per_cluster_rows
         + f"\n## Temporal holdout\n\n{json.dumps(temporal, indent=2)}\n\n"
         f"## Threshold-consistency screen\n\n{json.dumps(thresh, indent=2)}\n\n"
         f"## Permutation importance (in-sample screening, RF full-data fit)\n\n"
         + "".join(f"| {d['feature']} | {d['perm_auc_drop']} | {d['impurity']} |\n" for d in importance)
-        + f"\nSHAP deferred (package absent); permutation+impurity above instead.\n",
+        + f"\n{shap_note}\n",
         encoding="utf-8")
     (REPORTDIR / "calibration.md").write_text(
         f"# SIH26001 Phase-1 calibration ({date})\n\n"
@@ -308,14 +407,20 @@ def main() -> int:
         f"Confidence = calibrated P(elevated susceptibility) under the prototype "
         f"season-window target — never 'probability a landslide will occur here tomorrow'.\n",
         encoding="utf-8")
+    # benchmarks: include best of RF/XGB/LGBM (exclude calibrated which has no auc/acc)
+    oof_models = [k for k in metrics if k.endswith("_oof") and k not in {"lr_oof", "rf_calibrated_oof"} and "auc" in metrics[k]]
+    best_auc = max(metrics[k]["auc"] for k in oof_models)
+    best_acc = max(metrics[k]["acc50"] for k in oof_models)
     (REPORTDIR / "benchmarks.md").write_text(
         f"# SIH26001 Phase-1 benchmarks ({date})\n\n"
         f"Published bars are targets, not promises (04_MODEL_PLAN:61-71).\n\n"
         f"| published bar | ours (spatial OOF) | verdict |\n|---|---|---|\n"
-        f"| Dibang XGBoost AUC 0.96 | RF {metrics['rf_oof']['auc']} | "
-        f"{'match/exceed' if metrics['rf_oof']['auc'] >= 0.96 else 'below — prototype, reported honestly'} |\n"
-        f"| Meghalaya ensemble >90% acc | RF acc@0.5 {metrics['rf_oof']['acc50']} | "
-        f"{'match/exceed' if metrics['rf_oof']['acc50'] >= 0.90 else 'below — prototype, reported honestly'} |\n"
+        f"| Dibang XGBoost AUC 0.96 | best {best_auc} (RF {metrics['rf_oof']['auc']}"
+        + (f" XGB {metrics['xgb_oof']['auc']}" if "xgb_oof" in metrics else "")
+        + (f" LGBM {metrics['lgb_oof']['auc']}" if "lgb_oof" in metrics else "") + ") | "
+        f"{'match/exceed' if best_auc >= 0.96 else 'below — prototype, reported honestly'} |\n"
+        f"| Meghalaya ensemble >90% acc | best {best_acc} (RF {metrics['rf_oof']['acc50']}) | "
+        f"{'match/exceed' if best_acc >= 0.90 else 'below — prototype, reported honestly'} |\n"
         f"| v1 calibration Brier 0.081 (own corpus, not inherited) | RF cal Brier "
         f"{metrics['rf_calibrated_oof']['brier']} (same-OOF optimism noted) | for the record |\n"
         f"| Monga E=-11.10+0.62D / Dahal >144mm | threshold screen in metrics.md "
@@ -343,8 +448,7 @@ def main() -> int:
             f"vs naive {metrics['naive_prevalence']['brier']}.\n\n"
             f"Validation: spatial GroupKFold(8) OOF (no random splits); temporal holdout "
             f"skipped (only {n_tr_pos} dated positives <=2018 — INITIATION year-or-0); "
-            f"TreeSHAP per-prediction deferred (package absent; permutation importance in "
-            f"ml/sih26001/reports/metrics.md).\n\n"
+            f"{'TreeSHAP per-prediction sample computed ('+str(len(shap_sample))+' points, see manifest shap_sample)' if shap_sample else 'TreeSHAP per-prediction deferred (package absent; permutation importance in ml/sih26001/reports/metrics.md)'}.\n\n"
             f"Limitations: climatology/quasi-static proxies (rain/soil/NDVI tagged); uniform "
             f"lithology/lineament omitted from X; OSM center-approx distances "
             f"(osm-qa-unverified); demo fixtures/scores untouched by this lane.\n",
