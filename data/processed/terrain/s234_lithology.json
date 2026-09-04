@@ -1,0 +1,16 @@
+{
+  "source_pdf": "data/raw/docs/Gangtok_Disaster_Resilience_Action_Plan.pdf",
+  "pages_cited": "p71 \u00a73.4.9, p118 \u00a75.4.5 + Figures 25/48 Lithology Map, Gangtok (Source: NESAC; SSDMA+GSI)",
+  "phrase": "main Gangtok town stands over the intrusive lingtse granite gneiss (highly weathered, soil <1 to ~10 m)",
+  "corroboration_pdf": "data/raw/docs/CGWB_Gangtok_2025.pdf \u2014 Chungthang Subgroup major town unit (biotite gneiss etc.)",
+  "pilot_points": "S1 27.3450/88.6000, S2 27.3380/88.6120, S3 27.3250/88.6065, S4 27.3150/88.5950 \u2014 all central Gangtok (Fig 9-25)",
+  "row_values": {
+    "S1": "lingtse_granite_gneiss",
+    "S2": "lingtse_granite_gneiss",
+    "S3": "lingtse_granite_gneiss",
+    "S4": "lingtse_granite_gneiss"
+  },
+  "tag": "PROXY-published-map (digitized NESAC figure, not Bhukosh vector)",
+  "codebook": "GSI/Bhukosh lithology names verbatim; lingtse_granite_gneiss is intrusive gneiss family",
+  "limit": "50K figure resolution; Chungthang/Darjeeling/Phyllite nearby but not at pilot points per map"
+}

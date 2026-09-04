@@ -1,0 +1,19 @@
+{
+  "source_pdfs": [
+    "data/raw/docs/Gangtok_Disaster_Resilience_Action_Plan.pdf"
+  ],
+  "figures_cited": "Figure 24 Lineament Buffer Map + Figure 47 Lineaments Density Map, Gangtok (Source: NESAC, same report as lithology)",
+  "bhuvan_layer": "Lineament 50K 2005-06 \u2014 Sikkim listed as available state (bhuvan-app1.nrsc.gov.in/mines/mines.php); NRSC: 'in association with GSI, satellite + collateral, limited field work' (nwdp.nwic.in/dataset/lineament)",
+  "wms": "https://bhuvan-vec2.nrsc.gov.in/bhuvan/wms (layer Lineament per Bhuvan Wiki; exact Sikkim layer name needs QGIS GetCapabilities browse \u2014 WMS timed out from this machine 2026-09-04)",
+  "pilot_points": "S1 27.3450/88.6000, S2 27.3380/88.6120, S3 27.3250/88.6065, S4 27.3150/88.5950 \u2014 all central Gangtok, same map extent as lithology",
+  "row_values": {
+    "S1": 0.8,
+    "S2": 0.8,
+    "S3": 0.8,
+    "S4": 0.8
+  },
+  "value_basis": "conservative proxy 0.8 km/km2 \u2014 literature-anchored (Gangtok-adjacent 0.3-1.4 in Himalayan 50K; density map shows central Gangtok low-moderate <1.5); uniform across 4 points because 50K figure not digitized per-slope",
+  "tag": "PROXY-published-map (Bhuvan availability + figure context, not a vector clip)",
+  "limit": "50K scale; not a per-slope Bhuvan clip; replace via Bhuvan Thematic 'Clip and Ship' or WMS GetFeature in QGIS \u2192 length/area \u2192 km/km2",
+  "upgrade_path": "Bhuvan Thematic portal \u2192 Sikkim Lineament 50K \u2192 clip Gangtok AOI (88.58-88.63E, 27.30-27.36N) \u2192 export Shapefile \u2192 calculate lineament_density per slope"
+}

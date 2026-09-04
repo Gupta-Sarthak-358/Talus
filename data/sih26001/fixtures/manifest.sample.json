@@ -92,9 +92,25 @@
     },
     "bhukosh": {
       "export": null,
-      "status": "not_available",
-      "date": null,
-      "attempt": "2026-09-04 Person-3: https://bhukosh.gsi.gov.in/Bhukosh/Public unreachable from here (connection fail, retried 2x); same GSI infra as Bhusanket timeouts. Lithology stays STUB."
+      "status": "available",
+      "source": "data/raw/docs/Gangtok_Disaster_Resilience_Action_Plan.pdf (230 pp, Figure 25/48 Lithology Map Gangtok, Source: NESAC; SSDMA+GSI) + CGWB Gangtok 2025 corroboration — LOCAL ONLY per .gitignore",
+      "file": "data/processed/terrain/s234_lithology.json",
+      "extract_script": "scripts/extract_lithology.py (pymupdf phrase check p71/p118)",
+      "method": "digitized published NESAC map: all 4 central-Gangtok pilot points (27.315-27.345N/88.595-88.612E, Fig 9-25 town extent) lie on 'lingtse_granite_gneiss' (intrusive, highly weathered, soil <1-10m); Chungthang/Darjeeling/Phyllite noted as nearby units not at pilot points",
+      "tag": "PROXY-published-map (digitized figure, not Bhukosh vector)",
+      "limit": "50K figure resolution; Chungthang subgroup (biotite gneiss etc.) is immediate country rock per CGWB; replace with Bhukosh vector clip when reachable",
+      "date": "2026-09-04"
+    },
+    "lineament": {
+      "version": "Bhuvan Lineament 50K 2005-06 Sikkim (NRSC, in association with GSI) + NMHS Figure 24/47 context",
+      "status": "available",
+      "source": "ISRO/NRSC Thematic portal (bhuvan-app1.nrsc.gov.in/mines/mines.php Sikkim listed; nwdp.nwic.in/dataset/lineament) + data/raw/docs/Gangtok_Disaster_Resilience_Action_Plan.pdf Figures 24/47 Lineament Buffer/Density Maps Gangtok",
+      "file": "data/processed/terrain/s234_lineament.json",
+      "extract_script": "scripts/extract_lineament.py (pymupdf figure-index check + literature value)",
+      "method": "Bhuvan WMS https://bhuvan-vec2.nrsc.gov.in/bhuvan/wms timed out from this machine 2026-09-04 (layer Lineament per Bhuvan Wiki needs QGIS GetCapabilities browse); therefore literature proxy 0.8 km/km2 for all 4 points — conservative (<1.5 on density map, literature 0.3-1.4 for Gangtok-adjacent 50K), uniform because 50K figure not per-slope digitized",
+      "tag": "PROXY-published-map + Bhuvan-availability (not a vector clip)",
+      "limit": "50K scale; per-slope Bhuvan 'Clip and Ship' Shapefile → length/area needs QGIS manual extract (88.58-88.63E/27.30-27.36N)",
+      "date": "2026-09-04"
     },
     "osm": {
       "extract": "data/processed/terrain/s1_osm_nearest.json",
@@ -136,6 +152,8 @@
       "sikkim_join.json": "sha256:A545989A2C93B0466B0ABC2D570FF1BA76089DA9A86F92626F1788047322E4B6",
       "sikkim_report_gangtok.csv": "sha256:487354959DFB0F92755E3002945DDDFA39DE7BD98C97BA1E3C46B9E9CA003FF1",
     "s234_lulc.json": "sha256:d90bb22c14542e943102e69daaa07e6ba48fb62391eff9624906524ff2754a01",
+    "s234_lithology.json": "sha256:a3c412fead0dea6fc110f35d4bbe91173858f95d22d9a0de692bbbcf3383266e",
+    "s234_lineament.json": "sha256:bd4aae4142381cc2f130a7aa57053bd9cd981766390de0dbe9ec8b45d1d28f32",
     "catchment_s234.json": "sha256:59005868617CC248964EBA25977B4D563B9BA8A6359EAB77C54EBD392C630E70",
     "s234_ndvi.json": "sha256:8BACD19C3113314AFD60893690C7A82995FDABB2F07276E26CDD8E7E278",
     "s234_landuse.json": "sha256:3654269AE5B6BDED8A8846112FDE017A80F48417A4FA93D00DF85177A514",
