@@ -3,17 +3,19 @@
     "data/raw/docs/Gangtok_Disaster_Resilience_Action_Plan.pdf"
   ],
   "figures_cited": "Figure 24 Lineament Buffer Map + Figure 47 Lineaments Density Map, Gangtok (Source: NESAC, same report as lithology)",
-  "bhuvan_layer": "Lineament 50K 2005-06 \u2014 Sikkim listed as available state (bhuvan-app1.nrsc.gov.in/mines/mines.php); NRSC: 'in association with GSI, satellite + collateral, limited field work' (nwdp.nwic.in/dataset/lineament)",
-  "wms": "https://bhuvan-vec2.nrsc.gov.in/bhuvan/wms (layer Lineament per Bhuvan Wiki; exact Sikkim layer name needs QGIS GetCapabilities browse \u2014 WMS timed out from this machine 2026-09-04)",
-  "pilot_points": "S1 27.3450/88.6000, S2 27.3380/88.6120, S3 27.3250/88.6065, S4 27.3150/88.5950 \u2014 all central Gangtok, same map extent as lithology",
+  "bhuvan_layer_exact": "lineament:SK_LN50K_0506 — verified live 2026-09-04 via WMS GetCapabilities (https://bhuvan-vec2.nrsc.gov.in/bhuvan/wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.1.1, 5.2 MB, bbox 88.035/27.073-88.892/28.061 covers all 4 pilot points)",
+  "bhuvan_catalog": "Lineament 50K 2005-06 Sikkim listed as available state (bhuvan-app1.nrsc.gov.in/mines/mines.php; nwdp.nwic.in/dataset/lineament: 'in association with GSI, satellite + collateral, limited field work'); Bhuvan Wiki confirms WMS https://bhuvan-vec2.nrsc.gov.in/bhuvan/wms",
+  "wms_probe_2026-09-04": "GetCapabilities OK (found SK_LN50K_0506, queryable=1); WFS disabled (ServiceUnavailable); GetMap KML forbidden (ForbiddenFormat); GetFeatureInfo application/json/text/plain at Gangtok AOI (88.58/27.30-88.63/27.36, 1024x1024) and at state centre returned 0 features — WMS renders but does not expose vector via GetFeatureInfo from this client; QGIS manual browse + Clip and Ship remains the verified upgrade path",
+  "pilot_points": "S1 27.3450/88.6000, S2 27.3380/88.6120, S3 27.3250/88.6065, S4 27.3150/88.5950 — all inside SK_LN50K_0506 bbox",
   "row_values": {
     "S1": 0.8,
     "S2": 0.8,
     "S3": 0.8,
     "S4": 0.8
   },
-  "value_basis": "conservative proxy 0.8 km/km2 \u2014 literature-anchored (Gangtok-adjacent 0.3-1.4 in Himalayan 50K; density map shows central Gangtok low-moderate <1.5); uniform across 4 points because 50K figure not digitized per-slope",
-  "tag": "PROXY-published-map (Bhuvan availability + figure context, not a vector clip)",
-  "limit": "50K scale; not a per-slope Bhuvan clip; replace via Bhuvan Thematic 'Clip and Ship' or WMS GetFeature in QGIS \u2192 length/area \u2192 km/km2",
-  "upgrade_path": "Bhuvan Thematic portal \u2192 Sikkim Lineament 50K \u2192 clip Gangtok AOI (88.58-88.63E, 27.30-27.36N) \u2192 export Shapefile \u2192 calculate lineament_density per slope"
+  "value_basis": "conservative proxy 0.8 km/km2 — literature-anchored (Gangtok-adjacent 0.3-1.4 in Himalayan 50K; density map shows central Gangtok low-moderate <1.5); uniform because 50K figure not per-slope digitized and WMS vector not exposed via GetFeatureInfo; stronger than DEM-edge fabrication, weaker than QGIS vector clip",
+  "tag": "PROXY-published-map + Bhuvan-availability (verified layer SK_LN50K_0506, not a vector clip)",
+  "limit": "50K scale; WMS vector not exposed via GetFeatureInfo (0 features at pilot + state centre probes); replace via Bhuvan Thematic portal → Sikkim Lineament 50K → clip Gangtok AOI (88.58-88.63E, 27.30-27.36N) → export Shapefile/KML (GWC demo lists KML) → length/area → km/km2 in projected CRS",
+  "upgrade_path": "QGIS: Layer → Add WMS/WMTS → https://bhuvan-vec2.nrsc.gov.in/bhuvan/wms → connect → select lineament:SK_LN50K_0506 → clip to Gangtok AOI → save as GeoPackage → per-slope intersect → sum lengths / area",
+  "calculation_note": "lineament_density = total lineament length inside slope unit / slope-unit area (LD_km_per_km2), per published Sikkim recharge-zonation method; must use projected CRS (metres) before dividing"
 }
