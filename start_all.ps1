@@ -1,5 +1,5 @@
-# TALUS one-command launcher — PowerShell (Windows, primary for SIH demo)
-# SIH26001 @ 68c0c28 — Gangtok S1-S4 89/78/66/52, 16/17 REAL/PROXY, 1528×22 RF 0.921 XGB 0.9256
+# TALUS one-command launcher - PowerShell (Windows, primary for SIH demo)
+# SIH26001 @ 68c0c28 - Gangtok S1-S4 89/78/66/52, 16/17 REAL/PROXY, 1528x22 RF 0.921 XGB 0.9256
 # Usage:
 #   powershell -ExecutionPolicy Bypass -File .\start_all.ps1
 #   powershell -ExecutionPolicy Bypass -File .\start_all.ps1 -Build
@@ -20,7 +20,7 @@ if (-not (Test-Path $py311)) { $py311 = $venvPython }
 Write-Host "=== TALUS one-command launcher (PS) ===" -ForegroundColor Cyan
 Write-Host "Root: $root  Branch: SIH26001 @ 68c0c28" -ForegroundColor DarkGray
 
-# 0) validators — must stay green
+# 0) validators - must stay green
 Write-Host "[0/3] validators..." -ForegroundColor Yellow
 & $py311 scripts/check_scaffold.py
 if ($LASTEXITCODE -ne 0) { throw "check_scaffold FAILED" }
@@ -31,13 +31,12 @@ if ($LASTEXITCODE -ne 0) { Write-Host "  WARNING: test_reports not green" -Foreg
 
 # 1) backend :8000
 Write-Host "[1/3] backend FastAPI :8000 ..." -ForegroundColor Yellow
-# kill old :8000 if any
 try { Get-NetTCPConnection -LocalPort 8000 -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue } } catch {}
 $backendLog = Join-Path $root "backend.log"
 if (Test-Path $backendLog) { Remove-Item $backendLog -Force -ErrorAction SilentlyContinue }
 $proc = Start-Process -FilePath $venvPython -ArgumentList "-m uvicorn app.main:app --host 0.0.0.0 --port 8000" -WorkingDirectory "$root\backend" -PassThru -WindowStyle Hidden
 $proc | Out-File (Join-Path $root ".backend.pid") -Force
-Write-Host "  backend pid $($proc.Id) → backend.log" -ForegroundColor DarkGray
+Write-Host "  backend pid $($proc.Id) -> backend.log" -ForegroundColor DarkGray
 
 $ok = $false
 for ($i=0; $i -lt 30; $i++) {
@@ -51,7 +50,7 @@ if ($ok) {
   Write-Host "  backend UP -- live predictions:" -ForegroundColor Green
   foreach ($z in $r.zones) { Write-Host ("    Zone {0}: {1} {2} (confidence {3})" -f $z.zone_id, $z.risk_score, $z.risk_band, $z.confidence) }
 } else {
-  Write-Host "  WARNING: backend not up in 30s — see backend.log" -ForegroundColor Red
+  Write-Host "  WARNING: backend not up in 30s -- see backend.log" -ForegroundColor Red
   Get-Content $backendLog -Tail 20 -ErrorAction SilentlyContinue | Write-Host -ForegroundColor DarkGray
 }
 
@@ -73,7 +72,7 @@ if ($NoFrontend) {
   if (Test-Path $frontLog) { Remove-Item $frontLog -Force -ErrorAction SilentlyContinue }
   $fproc = Start-Process -FilePath "powershell.exe" -WorkingDirectory "$root\frontend" -ArgumentList @("-NoExit","-Command","npm run dev") -PassThru
   $fproc.Id | Out-File (Join-Path $root ".frontend.pid") -Force
-  Write-Host "  frontend pid $($fproc.Id) → frontend.log (VITE_USE_LIVE_API=true)" -ForegroundColor DarkGray
+  Write-Host "  frontend pid $($fproc.Id) -> frontend.log (VITE_USE_LIVE_API=true)" -ForegroundColor DarkGray
   Start-Sleep -Seconds 3
 }
 
@@ -83,6 +82,6 @@ Write-Host "  Dashboard : http://localhost:5173  (live S1-S4 89/78/66/52)" -Fore
 Write-Host "  API docs  : http://localhost:8000/docs" -ForegroundColor White
 Write-Host "  API zones : http://127.0.0.1:8000/api/zones" -ForegroundColor White
 Write-Host ""
-Write-Host "Demo flow: map -> click S1 (89 Critical) -> SHAP -> What-If S3 66->74 -> Causal monga-mdl S3->High -> Roads R2 avoided -> Report S2 crack -> queue -> verify -> Sync badge" -ForegroundColor Gray
+Write-Host "Demo flow: map to S1 89 Critical to SHAP to What-If S3 66 to 74 to Causal monga-mdl S3 to High to Roads R2 avoided to Report S2 crack to queue to verify" -ForegroundColor Gray
 Write-Host "Logs: Get-Content backend.log -Tail 20; Get-Content frontend.log -Tail 20" -ForegroundColor DarkGray
-Write-Host 'Stop: Get-Content .backend.pid,.frontend.pid | ForEach-Object { Stop-Process -Id $_ -Force } ; Remove-Item .backend.pid,.frontend.pid -Force' -ForegroundColor DarkGray
+Write-Host "Stop: ./stop_all.sh or ./stop_all.bat or Remove-Item .backend.pid,.frontend.pid" -ForegroundColor DarkGray
