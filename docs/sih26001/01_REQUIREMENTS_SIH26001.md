@@ -1,4 +1,4 @@
-# TALUS v2 Requirements — SIH26001
+# TALUS Requirements — SIH26001
 
 **Status:** Built — hackathon freeze 2026-09-04 · **Branch:** `SIH26001 @ 68c0c28` · **Trace to:** `00_PROJECT_BRIEF_SIH26001.md`,
 `docs/SIH26001_RESEARCH.md` §2.2
@@ -127,19 +127,19 @@ committing.)*
 ## Non-Functional Requirements
 
 - **Local-first development** — core pipeline + demo run on a standard
-  laptop; no paid services required for the prototype.
+ laptop; no paid services required for the prototype.
 - **Fast API response for demo** — unit/score/route endpoints respond quickly
-  (target < 1 s) for the pilot extent.
+ (target < 1 s) for the pilot extent.
 - **Reproducible pipeline** — NGEN is deterministic (fixed seeds, versioned
-  configs, pinned dataset versions); every record tagged with source version.
+ configs, pinned dataset versions); every record tagged with source version.
 - **Reproducible demo** — fixed pilot extent + fixed scenario, known outputs
-  in advance (see `06_DEMO_SCENARIO_SIH26001.md` once frozen).
+ in advance (see `06_DEMO_SCENARIO_SIH26001.md` once frozen).
 - **No live-service dependency during demo** — all data and models local;
-  network not required to run the demo (live IMD API shown as recorded
-  fixture, not a live call).
+ network not required to run the demo (live IMD API shown as recorded
+ fixture, not a live call).
 - **Reproducible environment** — dependency manifests committed.
 - **Traceable data** — every feature maps to a provenance entry in
-  `03_DATA_PLAN_SIH26001.md`.
+ `03_DATA_PLAN_SIH26001.md`.
 
 ### Real-time definition (prototype targets — freeze at build)
 
@@ -147,14 +147,14 @@ The PS says "real-time" four times; the prototype is explicit about what that
 means without live sensors:
 
 - **Ingest cadence:** daily IMD/GPM batch ingest; optional 3-hourly GPM pass
-  during an active monsoon escalation.
+ during an active monsoon escalation.
 - **Escalation latency:** < 30 min from ingest completion to decision output +
-  alert-queue entry (local prototype target).
+ alert-queue entry (local prototype target).
 - **Dashboard refresh:** on every ingest, plus push on any escalation event.
 - **SMS dispatch:** < 15 min from escalation (adapter fixture in demo; real
-  gateway is post-hackathon work).
+ gateway is post-hackathon work).
 - **Not claimed:** continuous sensor streaming. "Real-time" in the prototype =
-  daily ingest + event-driven escalation, never a silent batch delay.
+ daily ingest + event-driven escalation, never a silent batch delay.
 
 ---
 

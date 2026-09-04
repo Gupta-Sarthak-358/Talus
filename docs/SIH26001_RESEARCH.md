@@ -1,9 +1,9 @@
 # SIH26001 — Complete Research & Strategy Document
 
-**TALUS: Physics-Informed Landslide Risk Intelligence and Decision Support System for NER**
+**TALUS: Landslide Risk Intelligence and Decision Support System for NER**
 
 > This document consolidates all research, analysis, and strategic planning for
-> migrating TALUS from open-pit mine rockfall (SIH25071) to NER landslide
+> building TALUS for NER landslide
 > monitoring (SIH26001). It covers the problem statement, domain research,
 > existing systems audit, data availability, architecture mapping, validation
 > strategy, competitive positioning, and roadmap.

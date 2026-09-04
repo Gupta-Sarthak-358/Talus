@@ -1,4 +1,4 @@
-# TALUS v2 Data Plan — SIH26001
+# TALUS Data Plan — SIH26001
 
 **Status:** Built — pilot + training complete 2026-09-04 · **Branch:** `SIH26001 @ 68c0c28` · **Trace to:** `05_FEATURE_SCHEMA_SIH26001.md`,
 `04_MODEL_PLAN_SIH26001.md` · **Source:** `docs/SIH26001_RESEARCH.md` §6, §9
@@ -128,13 +128,13 @@ coverage varies; reanalysis moisture is coarse vs slope scale.
 
 ```text
 Positive samples (event):
-  inventory location + event date (where dated; else season-window with tag)
-  + antecedent rainfall (7d, 30d) + triggering rainfall (24h)
-  + soil moisture at event time + static terrain/geology/LULC/proximity
+ inventory location + event date (where dated; else season-window with tag)
+ + antecedent rainfall (7d, 30d) + triggering rainfall (24h)
+ + soil moisture at event time + static terrain/geology/LULC/proximity
 
 Negative samples (no-event):
-  random locations >300 m from any known landslide
-  + same temporal conditioning + same static features
+ random locations >300 m from any known landslide
+ + same temporal conditioning + same static features
 ```
 
 Sampling ratio, buffer distance, and date-window rules freeze in
@@ -145,11 +145,11 @@ split) is mandatory — spatial autocorrelation makes random splits lie
 ## D. NGEN versioning + data rules
 
 - Every NGEN run writes a manifest: source versions, download dates,
-  seeds, CRS/grid, checksums → committed alongside code.
+ seeds, CRS/grid, checksums → committed alongside code.
 - Raw downloads + feature matrices live outside git (Drive / HF / LFS);
-  small samples only in-repo. Same `.gitignore` policy as v1.
+ small samples only in-repo. Same `.gitignore` policy as v1.
 - `previous_landslide` and any season-window positives carry an
-  `evidence_quality` tag consumed by missing-evidence reporting.
+ `evidence_quality` tag consumed by missing-evidence reporting.
 
 ## E. Phase-0 download checklist (built — Gangtok pilot frozen 2026-09-04)
 

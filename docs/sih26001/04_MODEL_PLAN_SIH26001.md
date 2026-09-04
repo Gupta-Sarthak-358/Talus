@@ -1,4 +1,4 @@
-# TALUS v2 Model Plan — SIH26001
+# TALUS Model Plan — SIH26001
 
 **Status:** Built — Phase-1 complete 2026-09-04 · **Branch:** `SIH26001 @ 68c0c28` · **Trace to:** `03_DATA_PLAN_SIH26001.md`,
 `05_FEATURE_SCHEMA_SIH26001.md` · **Source:** `docs/SIH26001_RESEARCH.md`
@@ -9,12 +9,12 @@
 ## 1. Target definition
 
 - **Primary:** landslide susceptibility — binary event / no-event per spatial
-  unit + time window.
+ unit + time window.
 - **Secondary:** 5-band severity (very low / low / moderate / high / very high)
-  mapped from the calibrated score. Band edges freeze after calibration, not
-  before.
+ mapped from the calibrated score. Band edges freeze after calibration, not
+ before.
 - **Not predicted:** exact location/time of individual landslides. We predict
-  susceptibility, not specific events. (Say this to judges before they ask.)
+ susceptibility, not specific events. (Say this to judges before they ask.)
 
 ## 2. Model family selection
 
@@ -45,12 +45,12 @@ no model ships without beating it.
 ## 4. Scenario / physics engine
 
 - Rainfall-threshold scenarios: Monga 2026 MDL curve + Dahal–Hasegawa
-  intensity-duration + monsoon 13 mm/day separator (research §3.3).
+ intensity-duration + monsoon 13 mm/day separator (research §3.3).
 - NER physics chain: rainfall (antecedent + triggering) → infiltration /
-  wetting state → pore pressure → shear-strength reduction → FoS → score
-  (Iverson 2000 infiltration theory; infinite-slope model).
+ wetting state → pore pressure → shear-strength reduction → FoS → score
+ (Iverson 2000 infiltration theory; infinite-slope model).
 - **Labeling rule (from v1, enforced):** ML counterfactuals are labeled
-  counterfactual, never causal. Causal claims go through the scenario engine.
+ counterfactual, never causal. Causal claims go through the scenario engine.
 
 ## 5. Benchmarks to beat
 
@@ -68,19 +68,19 @@ LHASA doubles as fallback prior for sparse-data pixels (blend, don't hide).
 
 - Tree SHAP per prediction; base value + top contributions logged.
 - Confidence = calibrated P(elevated susceptibility) under the prototype
-  target — never "probability a landslide will occur here tomorrow."
+ target — never "probability a landslide will occur here tomorrow."
 - Off-manifold caveat (v1 lesson): single-feature overrides that break
-  realistic feature correlations get a warning, not a silent number.
+ realistic feature correlations get a warning, not a silent number.
 - Missing-evidence list on every score (proxy tags, undated-inventory tags,
-  OSM-QA tags flow through).
+ OSM-QA tags flow through).
 
 ## 7. Artifacts (built — committed 2026-09-04)
 
 ```text
-ngen outputs:   data/sih26001/processed/feature_matrix.training.csv (1528×22, 764+764, git-ignored) + data/sih26001/evidence/feature_matrix.training.sample.csv (20 rows, committed) + data/sih26001/manifest.training.json (committed)
-models:         ml/models/sih26001_{rf,xgb,lgb,lr,iso}_v1.joblib (git-ignored, sha256 in manifest)
-reports:        ml/sih26001/reports/{metrics,calibration,benchmarks}.md (committed) — RF OOF 0.921 XGB 0.9256 LGBM 0.9207, cal Brier 0.1019, temporal test AUC 0.9264 (35/73 dated)
-model card:     docs/sih26001/ML_MODEL_CARD_V2.md (committed draft, clean=true)
+ngen outputs: data/sih26001/processed/feature_matrix.training.csv (1528×22, 764+764, git-ignored) + data/sih26001/evidence/feature_matrix.training.sample.csv (20 rows, committed) + data/sih26001/manifest.training.json (committed)
+models: ml/models/sih26001_{rf,xgb,lgb,lr,iso}_v1.joblib (git-ignored, sha256 in manifest)
+reports: ml/sih26001/reports/{metrics,calibration,benchmarks}.md (committed) — RF OOF 0.921 XGB 0.9256 LGBM 0.9207, cal Brier 0.1019, temporal test AUC 0.9264 (35/73 dated)
+model card: docs/sih26001/ML_MODEL_CARD_V2.md (committed draft, clean=true)
 ```
 
 Built: `scripts/build_training_matrix.py:1` 1528 rows + `scripts/train_sih26001.py:1` RF500/XGB/LGBM + SHAP 5-pt `manifest.training.json:shap_sample` on `mnemo` venv (`xgb 3.2/lgbm 4.7/shap 0.51`).

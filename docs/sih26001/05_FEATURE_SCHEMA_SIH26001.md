@@ -1,4 +1,4 @@
-# TALUS v2 Feature Schema — SIH26001 (ML-facing contract)
+# TALUS Feature Schema — SIH26001 (ML-facing contract)
 
 **Status:** Frozen — built 2026-09-04 · **Branch:** `SIH26001 @ 68c0c28` · **Trace to:**
 `03_DATA_PLAN_SIH26001.md` · **Source:** `docs/SIH26001_RESEARCH.md` §7.3
@@ -46,12 +46,12 @@ Spatial unit (`zone_id` grain: pilot point `S1-S4` + training `T0000` grid) froz
 ## Missingness contract
 
 - Any feature may be null. Nulls are **reported** (`missing_evidence`), never
-  silently imputed in the response path. (Imputation inside the model, if any,
-  is documented in the model card and surfaced as lowered confidence.)
+ silently imputed in the response path. (Imputation inside the model, if any,
+ is documented in the model card and surfaced as lowered confidence.)
 - Proxy/incompleteness tags that must flow to `missing_evidence`:
-  `soil_moisture:reanalysis-proxy`, `previous_landslide:inventory-incomplete`,
-  `distance_to_road:osm-qa-unverified`, season-window positives:
-  `event-date:approximate`.
+ `soil_moisture:reanalysis-proxy`, `previous_landslide:inventory-incomplete`,
+ `distance_to_road:osm-qa-unverified`, season-window positives:
+ `event-date:approximate`.
 
 ## Boundary rule
 

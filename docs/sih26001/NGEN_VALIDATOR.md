@@ -9,15 +9,15 @@
 
 `scripts/validate_ngen_sample.py` (stdlib only) checks the honest demo fixtures — not science:
 
-1.  Exact 22-column header in frozen order (no add/remove/reorder)
-2.  No unexpected columns
-3.  ≤20 rows
-4.  S1, S2, S3, S4 all present
-5.  zone_ids unique
-6.  Required fields not empty
-7.  Numeric fields are valid numbers (`slope_angle`, `elevation`, `aspect`, `curvature`, `twi`, `spi`, `rainfall_24h/7d/30d_mm`, `soil_moisture` 0–1, `ndvi` −1 to 1, `distance_to_road/river`, `lineament/drain_density`, `previous_landslide`/`event` 0/1)
-8.  Categorical fields are text (`lulc`, `lithology`, `evidence_quality`)
-9.  No uppercase placeholder `FILL` in CSV or manifest
+1. Exact 22-column header in frozen order (no add/remove/reorder)
+2. No unexpected columns
+3. ≤20 rows
+4. S1, S2, S3, S4 all present
+5. zone_ids unique
+6. Required fields not empty
+7. Numeric fields are valid numbers (`slope_angle`, `elevation`, `aspect`, `curvature`, `twi`, `spi`, `rainfall_24h/7d/30d_mm`, `soil_moisture` 0–1, `ndvi` −1 to 1, `distance_to_road/river`, `lineament/drain_density`, `previous_landslide`/`event` 0/1)
+8. Categorical fields are text (`lulc`, `lithology`, `evidence_quality`)
+9. No uppercase placeholder `FILL` in CSV or manifest
 10. `manifest.sample.json` is valid JSON
 11. Manifest declares `pilot` contains `Gangtok` and `crs` contains `EPSG:4326`
 12. No source with `status:not_available` claims a real `date`/`tiles`/`export`/`extract`
@@ -49,7 +49,7 @@ NGEN SAMPLE OK: schema 22 cols, S1-S4 present, ≤20 rows, honest manifest, no F
 Expected failure example (missing column):
 ```
 VALIDATION FAILED: 1 issue(s) found:
-  1. CSV header mismatch...
+ 1. CSV header mismatch...
 Fix the issues above, then re-run: python scripts/validate_ngen_sample.py
 ```
 
@@ -73,11 +73,11 @@ python scripts/check_scaffold.py
 
 ## What STUB/demo means
 
-*   **STUB** = temporary placeholder value to prove the pipeline shape. The number looks plausible but has no source file behind it.
-*   **CONSTANT** = same as STUB but deliberately fixed for the demo (e.g. `ndvi=0.35`, `lulc=BUILT` — allowed by `docs/sih26001/TEAM_TASKS_SEPT5.md:27` if tagged).
-*   **REAL** = directly verified from a committed source file (e.g. SRTM tile `N27E088` → `elevation` at 27.3450,88.6000 with checksum).
-*   **PROXY** = indirect substitute, e.g. ERA5 `soil_moisture` (must be tagged `reanalysis-proxy` and have a CDS request log).
-*   Current sample: **14 of 17 science features are REAL on every slope** (rainfall 24h/7d/30d + road/river distances + NDVI + LULC + all six DEM derivatives + soil moisture) and **drain density is PROXY** (measured window) + `zone_id` REAL (frozen ID) + **labels REAL-joined** (S2 previous_landslide=1 with Bhusanket ID; all events 0 with logged reason); only lithology/lineament stay STUB/demo. See `docs/sih26001/NGEN_PROVENANCE_S1.md` for the per-feature table and why.
+* **STUB** = temporary placeholder value to prove the pipeline shape. The number looks plausible but has no source file behind it.
+* **CONSTANT** = same as STUB but deliberately fixed for the demo (e.g. `ndvi=0.35`, `lulc=BUILT` — allowed by `docs/sih26001/TEAM_TASKS_SEPT5.md:27` if tagged).
+* **REAL** = directly verified from a committed source file (e.g. SRTM tile `N27E088` → `elevation` at 27.3450,88.6000 with checksum).
+* **PROXY** = indirect substitute, e.g. ERA5 `soil_moisture` (must be tagged `reanalysis-proxy` and have a CDS request log).
+* Current sample: **14 of 17 science features are REAL on every slope** (rainfall 24h/7d/30d + road/river distances + NDVI + LULC + all six DEM derivatives + soil moisture) and **drain density is PROXY** (measured window) + `zone_id` REAL (frozen ID) + **labels REAL-joined** (S2 previous_landslide=1 with Bhusanket ID; all events 0 with logged reason); only lithology/lineament stay STUB/demo. See `docs/sih26001/NGEN_PROVENANCE_S1.md` for the per-feature table and why.
 
 The sample is **not training-ready science data** — it is shape-only. The validator will fail if anyone labels a STUB as REAL without evidence.
 
@@ -87,13 +87,13 @@ The sample is **not training-ready science data** — it is shape-only. The vali
 
 Per `docs/sih26001/03_DATA_PLAN_SIH26001.md` + `docs/sih26001/05_FEATURE_SCHEMA_SIH26001.md`:
 
-*   **Terrain** `slope_angle/elevation/aspect/curvature/twi/spi`: SRTM 30m tile covering 27.3–27.4°N,88.5–88.7°E (USGS EarthExplorer) + `rasterio`/`GDAL` derivation + committed `*.sample.tif` checksum + tile name/date/CRS in `manifest.json`.
-*   **Rainfall** `24h/7d/30d_mm`: IMD 0.25° daily NetCDF for pilot bbox + `imdlib` extract log + file name/grid/date.
-*   **Soil moisture** `0–1`: CCI TCDR daily download + per-slope window-mean extract → REAL (done 2026-09-04).
-*   **NDVI/LULC**: Sentinel-2 L2A composite product ID + date + NDVI calc; codebook frozen with schema.
-*   **Lithology**: GSI Bhukosh export for pilot bbox + export date + codebook.
-*   **Road/river**: OSM Overpass/Geofabrik sikkim extract + extract date + QA tag `osm-qa-unverified` + distance calc in metres.
-*   **Labels** `previous_landslide/event/evidence_quality`: GSI Bhusanket NER-filtered CSV + export date + S1 spatial join; negatives `>300 m` buffer.
+* **Terrain** `slope_angle/elevation/aspect/curvature/twi/spi`: SRTM 30m tile covering 27.3–27.4°N,88.5–88.7°E (USGS EarthExplorer) + `rasterio`/`GDAL` derivation + committed `*.sample.tif` checksum + tile name/date/CRS in `manifest.json`.
+* **Rainfall** `24h/7d/30d_mm`: IMD 0.25° daily NetCDF for pilot bbox + `imdlib` extract log + file name/grid/date.
+* **Soil moisture** `0–1`: CCI TCDR daily download + per-slope window-mean extract → REAL (done 2026-09-04).
+* **NDVI/LULC**: Sentinel-2 L2A composite product ID + date + NDVI calc; codebook frozen with schema.
+* **Lithology**: GSI Bhukosh export for pilot bbox + export date + codebook.
+* **Road/river**: OSM Overpass/Geofabrik sikkim extract + extract date + QA tag `osm-qa-unverified` + distance calc in metres.
+* **Labels** `previous_landslide/event/evidence_quality`: GSI Bhusanket NER-filtered CSV + export date + S1 spatial join; negatives `>300 m` buffer.
 
 Every upgrade must also fill the honest `manifest.sample.json` entry: real `date` (not null), real `tiles`/`export`/`extract`, computed `checksums` — never invented. Until then, keep `status:not_available`, `date:null`, `tiles:[]`, `export:null`, `checksums:{}`.
 

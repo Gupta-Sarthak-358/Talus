@@ -1,4 +1,4 @@
-# TALUS v2 Project Brief — SIH26001
+# TALUS Project Brief — SIH26001
 
 **Status:** Built — hackathon freeze 2026-09-04 · **Branch:** `SIH26001 @ 68c0c28` · **Context:** SIH 2026, SIH26001
 track · **Date:** 2026-09-03 → 2026-09-04 · **Trace to:** `docs/SIH26001_RESEARCH.md` §1–§2
@@ -21,9 +21,9 @@ The current state:
 
 - **Reactive monitoring** — dependent on manual reporting after events.
 - **Threshold-only forecasting** — GSI RLFS uses rainfall thresholds; no
-  AI/ML, no soil moisture, no satellite, no per-slope prediction.
+ AI/ML, no soil moisture, no satellite, no per-slope prediction.
 - **No decision layer** — no role-based emergency prioritisation, no road
-  connectivity tracking, no risk-aware routing, no offline support.
+ connectivity tracking, no risk-aware routing, no offline support.
 
 GSI has publicly listed "integration of AI/ML as a decision-support layer" as
 their next advancement initiative. That gap is this project.
@@ -35,10 +35,10 @@ their next advancement initiative. That gap is this project.
 
 ## Solution
 
-TALUS v2 converts scattered NER geospatial signals into **explainable
+TALUS converts scattered NER geospatial signals into **explainable
 susceptibility** and **actionable emergency decisions**.
 
-TALUS v2 produces a slope/zone-level susceptibility score with stated
+TALUS produces a slope/zone-level susceptibility score with stated
 confidence, explains *why* (SHAP), tracks monsoon-driven escalation, and
 converts the result into **role-specific actions**:
 
@@ -77,8 +77,8 @@ Detect → Understand → Escalate → Decide → Act
 ## Core Modules
 
 1. **NGEN data pipeline** — IMD rainfall, ERA5/SMAP soil moisture, SRTM DEM
-   derivatives, Sentinel-2 NDVI/LULC, GSI lithology, OSM roads/rivers,
-   historical landslide inventories → unified feature matrix.
+ derivatives, Sentinel-2 NDVI/LULC, GSI lithology, OSM roads/rivers,
+ historical landslide inventories → unified feature matrix.
 2. **Feature processing** — 17 NER features per spatial unit, with missingness.
 3. **Risk engine** — susceptibility score + calibrated confidence.
 4. **Explainability** — SHAP feature contributions per prediction.
@@ -86,11 +86,11 @@ Detect → Understand → Escalate → Decide → Act
 6. **Decision engine** — role-specific recommendations (4 NER roles).
 7. **Risk-aware routing** — Dijkstra over road graph weighted by slope risk.
 8. **Rainfall scenario engine** — threshold-based what-if (Monga 2026,
-   Dahal & Hasegawa 2008).
+ Dahal & Hasegawa 2008).
 9. **Field reporting** — geo-tagged photo/video upload (camera + GPS, offline).
 10. **Alerts** — SMS/app, multilingual, offline-sync capable.
 11. **Dashboard** — NER GIS heatmap: risk bands, road status, villages,
-    weather-linked forecast, emergency priority.
+ weather-linked forecast, emergency priority.
 
 ## MVP (built — frozen 2026-09-04, `SIH26001 @ 68c0c28`)
 
@@ -105,13 +105,13 @@ Detect → Understand → Escalate → Decide → Act
 ## Explicitly Out of Scope
 
 - Physical IoT sensor deployment (prototype uses satellite/reanalysis proxies;
-  a sensor-ingestion adapter is API-ready — see `02_ARCHITECTURE_SIH26001.md` §5)
+ a sensor-ingestion adapter is API-ready — see `02_ARCHITECTURE_SIH26001.md` §5)
 - InSAR ground-deformation monitoring (requires hardware)
 - Flash-flood prediction (needs a hydrological routing model; rainfall here is
-  a landslide-trigger proxy only — road blockages are covered as a derived
-  road-status overlay, not flood mapping)
+ a landslide-trigger proxy only — road blockages are covered as a derived
+ road-status overlay, not flood mapping)
 - Exact location/time prediction of individual landslides (we predict
-  susceptibility, not specific events)
+ susceptibility, not specific events)
 - Hardware installation (PS is Software category)
 - Replacing GSI RLFS — we complement it with the AI/ML layer GSI asked for
 - Production-grade safety certification
@@ -119,7 +119,7 @@ Detect → Understand → Escalate → Decide → Act
 
 ## Data Honesty (do not remove)
 
-Unlike v1 (synthetic-only), v2 trains on **real documented events**: GSI
+Talus trains on **real documented events**: GSI
 Bhusanket (37,903+ NER → `693` Sikkim `sikkim_join.json:6` + `764` deduped Sikkim `manifest.training.json:42` + `7` Gangtok report `sikkim_report_gangtok.csv:1`), NASA COOLR/GLC, ISRO Landslide Atlas (80,000+),
 published inventories (Dibang 537, Meghalaya 1,330+, NEH 490 with rainfall
 records), IMD 0.25° gridded rainfall (1901–present) + daily records at 8 NER

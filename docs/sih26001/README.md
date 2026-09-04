@@ -1,16 +1,16 @@
-# TALUS v2 — SIH26001 (NER Landslide Risk Intelligence)
+# TALUS — SIH26001 (NER Landslide Risk Intelligence)
 
 **Branch:** `SIH26001` · **Problem statement:** AI-Based Early Warning and
 Landslide Risk Monitoring System in NER · **Org:** MDoNER, Disaster Management
 · **Category:** Software
 
 This folder is the **single source of truth for the SIH26001 track**.
-TALUS v1 docs (`docs/00_*`–`08_*`, mine rockfall, SIH25071) stay frozen on
+TALUS v1 docs (`docs/00_*`–`08_*`, landslide, SIH26001) stay frozen on
 `main` and are referenced — never edited — from here.
 
 ## Relationship to TALUS v1
 
-| Layer | v1 (mine rockfall) | v2 (NER landslide) | Status |
+| Layer | v1 | v2 (NER landslide) | Status |
 |---|---|---|---|
 | Architecture pattern (ML + physics sim, calibrated confidence, SHAP, role decisions, risk-weighted Dijkstra, missing-evidence) | mine | NER | **Survives intact** |
 | Data pipeline | synthetic generator v1.4.0 | **NGEN** — real NER geospatial ETL | Rewrite |
@@ -46,9 +46,9 @@ TALUS v1 docs (`docs/00_*`–`08_*`, mine rockfall, SIH25071) stay frozen on
 ## Rules (inherit from `/CONTRIBUTING.md`)
 
 - This branch is the integration branch for the SIH26001 track. Feature work
-  branches off it as `feature/sih26001/<name>`.
+ branches off it as `feature/sih26001/<name>`.
 - Conventional commits (`feat:`, `fix:`, `docs:`, …).
 - Never commit datasets or model weights — metadata only.
 - If behavior changes, update the matching doc in this folder in the same PR.
 - `docs/SIH26001_RESEARCH.md` is evidence; these docs are the build contract.
-  If they conflict, the contract wins and the research doc gets a correction note.
+ If they conflict, the contract wins and the research doc gets a correction note.

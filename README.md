@@ -1,7 +1,7 @@
 # Talus — Risk-Aware Decision Support
 
-**Current track: `SIH26001` — NER Landslide Risk Intelligence (MDoNER, Disaster Management, Software)**
-`V1 (mine rockfall, SIH25071)` is frozen on `main` — see `docs/00_*`–`08_*`. This README describes **V2 (NER landslide, SIH26001)** on `SIH26001 @ 68c0c28`.
+**`SIH26001` — NER Landslide Risk Intelligence (MDoNER, Disaster Management, Software) — `SIH26001 @ 68c0c28`**
+*Single track, single source of truth. No legacy track mentioned here.*
 
 Talus converts scattered geospatial signals into explainable risk and actionable safety decisions.
 
@@ -11,7 +11,7 @@ Talus converts scattered geospatial signals into explainable risk and actionable
 
 *(Unchanged from V1. The pattern survives; the data and physics change.)*
 
-### What Talus V2 Does (SIH26001)
+### What Talus Does
 
 1. Collects multi-source NER signals: IMD rainfall, CCI soil moisture, SRTM DEM + derivatives, Sentinel-2 NDVI / WorldCover LULC, GSI lithology/lineament, OSM roads/rivers, GSI/Bhusanket + report-PDF landslide inventories.
 2. Produces slope-level susceptibility `0–100` + calibrated confidence + `missing_evidence`.
@@ -23,7 +23,7 @@ Talus converts scattered geospatial signals into explainable risk and actionable
 
 The key differentiation: from **"What is the risk?"** → **"What should we do now, and what are we missing?"**
 
-### MVP — Built & Frozen 2026-09-04 (`SIH26001 @ 68c0c28`)
+### MVP — Built & Frozen 2026-09-04
 
 - NGEN over Gangtok pilot `S1 89 S2 78 S3 66 S4 52` — `16/17 REAL/PROXY, zero STUBs` (`feature_matrix.sample.csv:1`, `manifest.sample.json:1`)
 - Inventory-scale training `1528×22` (`764+764` Sikkim `feature_matrix.training.csv:1`, `manifest.training.json:1`) — `RF OOF 0.921 XGB 0.9256 LGBM 0.9207` `ml/sih26001/reports/metrics.md:9`, `temporal 35/73 → RF test 0.9264`, `cal Brier 0.1019`, SHAP 5-pt sample
@@ -31,32 +31,29 @@ The key differentiation: from **"What is the risk?"** → **"What should we do n
 - FastAPI `backend` `S1-S4` + `POST /simulation/what-if` `66→74` + `GET /roads/status` `R2 at-risk` + `POST /routes/safe`
 - React + Leaflet (fixtures), offline `localStorage talus_report_outbox` + `en/hi/ne` alerts (fixture)
 
-### Important Limitation (V2)
+### Important Limitation
 
 The prototype is **not a live warning system**. It validates the decision-support architecture on **real documented Sikkim events** (`693 shp + 777 PDF → 764 deduped`, `CCI soil 0.271`, `USGS n27_e088`, `WorldCover N27E087`, `IMD 0.25° 1901–2024`) with `1991-2020` climatology / quasi-static proxies for time-varying inputs (tagged `approximate`). In-situ rain/soil sensors are **adapter-fixture only** (`02_ARCHITECTURE:5`); live feeds and cloud are post-hackathon swaps. See `docs/sih26001/08_LIMITATIONS_SIH26001.md` and `docs/sih26001/NGEN_PROVENANCE_S1.md`.
 
-`V1 limitation (legacy):` synthetic mine data only, no real mine telemetry — see `docs/07_ASSUMPTIONS.md` on `main`.
-
-### Repository Structure — V2 (`SIH26001`)
+### Repository Structure
 
 ```text
 talus/
-├── README.md            ← you are here (V2)
-├── docs/sih26001/       ← single source of truth for SIH26001 (NER)
+├── README.md            ← you are here
+├── docs/sih26001/       ← single source of truth (NER)
 │   ├── 00_PROJECT_BRIEF_SIH26001.md
 │   ├── 01_REQUIREMENTS_SIH26001.md
 │   ├── 02_ARCHITECTURE_SIH26001.md
 │   ├── 03_DATA_PLAN_SIH26001.md
 │   ├── 04_MODEL_PLAN_SIH26001.md
-│   ├── 05_FEATURE_SCHEMA_SIH26001.md  (17 NER features)
+│   ├── 05_FEATURE_SCHEMA_SIH26001.md  (17 features)
 │   ├── 06_DEMO_SCENARIO_SIH26001.md
 │   ├── 07_ASSUMPTIONS_SIH26001.md
 │   ├── 08_LIMITATIONS_SIH26001.md
-│   ├── NGEN_PROVENANCE_S1.md  ← per-feature REAL/PROXY/STUB + evidence
+│   ├── NGEN_PROVENANCE_S1.md  ← per-feature REAL/PROXY + evidence
 │   ├── ML_MODEL_CARD_V2.md    ← RF500 + XGB + LGBM + SHAP
 │   ├── SCAFFOLD_CONTRACT_SEPT5.md  ← frozen S1–S4 89/78/66/52
 │   └── decisions/ADR-001-sih26001-scope.md
-├── docs/                ← V1 (mine) frozen on main
 ├── data/sih26001/
 │   ├── fixtures/        ← committed samples (S1–S4, roads, reports, forecast, manifests)
 │   ├── evidence/        ← sikkim_join.json, sikkim_report_gangtok.csv, training sample
@@ -71,7 +68,7 @@ talus/
 └── SIH26001_RESEARCH.md ← 966-line fact-checked strategy
 ```
 
-### Running Locally — V2 (`SIH26001`)
+### Running Locally
 
 ```text
 # Validators (must stay green)
@@ -97,25 +94,23 @@ C:\Users\satvi\AppData\Local\Programs\Python\Python311\python.exe scripts/build_
 C:\Users\satvi\Desktop\mnemo\.venv\Scripts\python.exe scripts/train_sih26001.py  # RF 0.921 XGB 0.9256 → ml/sih26001/reports/
 ```
 
-### Related Docs — V2
+### Related Docs
 
-- [Project Brief V2](docs/sih26001/00_PROJECT_BRIEF_SIH26001.md) — scope firewall (Gangtok pilot, 1528-row training, reporting LIVE)
-- [Requirements V2](docs/sih26001/01_REQUIREMENTS_SIH26001.md) — `R1–R13 → FR-01–13` built + acceptance `✅`
-- [Architecture V2](docs/sih26001/02_ARCHITECTURE_SIH26001.md) — deltas, sensor adapter `§5`, report capture/queue
-- [Data Plan V2](docs/sih26001/03_DATA_PLAN_SIH26001.md) — Phase 0 all `[x]` Gangtok
-- [Model Plan V2](docs/sih26001/04_MODEL_PLAN_SIH26001.md) — Phase-1 complete `RF/XGB/LGBM` `temporal 35/73`
-- [Feature Schema V2](docs/sih26001/05_FEATURE_SCHEMA_SIH26001.md) — frozen `17 + 2 keys` slope-point
-- [Demo Scenario V2](docs/sih26001/06_DEMO_SCENARIO_SIH26001.md) — live Screens 1–6 (`S1 89 → High`, `66→74`, `R2 avoided`, report queue)
-- [Assumptions V2](docs/sih26001/07_ASSUMPTIONS_SIH26001.md) — validated `5: 16` rescue, `35/73` temporal
-- [Limitations V2](docs/sih26001/08_LIMITATIONS_SIH26001.md) — `CCI quasi-static`, `672/764 undated`, `center-approx` OSM
+- [Project Brief](docs/sih26001/00_PROJECT_BRIEF_SIH26001.md) — scope firewall (Gangtok pilot, 1528-row training, reporting LIVE)
+- [Requirements](docs/sih26001/01_REQUIREMENTS_SIH26001.md) — `R1–R13 → FR-01–13` built + acceptance `✅`
+- [Architecture](docs/sih26001/02_ARCHITECTURE_SIH26001.md) — sensor adapter `§5`, report capture/queue
+- [Data Plan](docs/sih26001/03_DATA_PLAN_SIH26001.md) — Phase 0 all `[x]` Gangtok
+- [Model Plan](docs/sih26001/04_MODEL_PLAN_SIH26001.md) — Phase-1 complete `RF/XGB/LGBM` `temporal 35/73`
+- [Feature Schema](docs/sih26001/05_FEATURE_SCHEMA_SIH26001.md) — frozen `17 + 2 keys` slope-point
+- [Demo Scenario](docs/sih26001/06_DEMO_SCENARIO_SIH26001.md) — live Screens 1–6 (`S1 89 → High`, `66→74`, `R2 avoided`, report queue)
+- [Assumptions](docs/sih26001/07_ASSUMPTIONS_SIH26001.md) — validated `5: 16` rescue, `35/73` temporal
+- [Limitations](docs/sih26001/08_LIMITATIONS_SIH26001.md) — `CCI quasi-static`, `672/764 undated`, `center-approx` OSM
 - [Provenance S1](docs/sih26001/NGEN_PROVENANCE_S1.md) — `16/17 REAL/PROXY` per-feature evidence
-- [Model Card V2](docs/sih26001/ML_MODEL_CARD_V2.md) — `RF500 + XGB + LGBM + SHAP` `clean:true`
+- [Model Card](docs/sih26001/ML_MODEL_CARD_V2.md) — `RF500 + XGB + LGBM + SHAP` `clean:true`
 - [Research & Strategy](docs/SIH26001_RESEARCH.md) — PS decomposition, gap analysis, data inventory (updated 2026-09-04)
 - [Scaffold Contract](docs/sih26001/SCAFFOLD_CONTRACT_SEPT5.md) — frozen `S1-S4` + API shapes + merge rules
 
-**V1 docs (legacy, frozen on `main`):** `docs/00_PROJECT_BRIEF.md` … `08_LIMITATIONS.md`, `GENERATOR_V1_SPEC.md`, `docs/source/Complete_Context.md` — referenced but not edited from `SIH26001`.
-
-**New to the project?** Branch is `SIH26001`. Start with `docs/sih26001/00_PROJECT_BRIEF_SIH26001.md` and `01_REQUIREMENTS_SIH26001.md`. For the full NER strategy, read `docs/SIH26001_RESEARCH.md`.
+**New to the project?** Start with `docs/sih26001/00_PROJECT_BRIEF_SIH26001.md` and `01_REQUIREMENTS_SIH26001.md`. For the full NER strategy, read `docs/SIH26001_RESEARCH.md`.
 
 ## Navigating the Repository
 
