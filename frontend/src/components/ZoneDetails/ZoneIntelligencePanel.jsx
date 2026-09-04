@@ -16,6 +16,7 @@ export default function ZoneIntelligencePanel() {
     selectZone,
     zoneLoading,
     activeSimulation,
+    role,
     t,
   } = useTalusContext();
 
@@ -65,19 +66,31 @@ export default function ZoneIntelligencePanel() {
                 }`}
               >
                 <span>Slope {z.id}</span>
-                <span
-                  className={`text-[10px] font-semibold ${
-                    z.risk_band === 'CRITICAL'
-                      ? 'text-risk-critical font-bold'
-                      : z.risk_band === 'HIGH'
-                      ? 'text-risk-high font-bold'
-                      : z.risk_band === 'MODERATE'
-                      ? 'text-risk-moderate'
-                      : 'text-risk-verylow'
-                  }`}
-                >
-                  {z.risk_score}
-                </span>
+                {role === 'villager' ? (
+                  <span
+                    className={`text-[10px] font-bold uppercase ${
+                      z.risk_band === 'CRITICAL' || z.risk_band === 'HIGH'
+                        ? 'text-risk-critical'
+                        : 'text-risk-verylow'
+                    }`}
+                  >
+                    {z.risk_band}
+                  </span>
+                ) : (
+                  <span
+                    className={`text-[10px] font-semibold ${
+                      z.risk_band === 'CRITICAL'
+                        ? 'text-risk-critical font-bold'
+                        : z.risk_band === 'HIGH'
+                        ? 'text-risk-high font-bold'
+                        : z.risk_band === 'MODERATE'
+                        ? 'text-risk-moderate'
+                        : 'text-risk-verylow'
+                    }`}
+                  >
+                    {z.risk_score}
+                  </span>
+                )}
                 {isCriticalOrHigh && (
                   <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-risk-critical animate-ping"></span>
                 )}
@@ -130,23 +143,31 @@ export default function ZoneIntelligencePanel() {
         riskBand={zone.risk_band}
       />
 
-      {/* 3. SHAP Feature Contribution (Why is this risk high?) */}
-      <ShapChart
-        shap={zone.shap}
-        baseRisk={zone.base_risk || 15}
-        currentRisk={zone.risk_score}
-        zoneName={zone.name}
-      />
+      {/* 3. SHAP — hidden for villager (means nothing), shown for officer/state/rescue collapsed */}
+      {role !== 'villager' && (
+        <ShapChart
+          shap={zone.shap}
+          baseRisk={zone.base_risk || 15}
+          currentRisk={zone.risk_score}
+          zoneName={zone.name}
+        />
+      )}
 
-      {/* 4. Risk Escalation Timeline */}
-      <RiskTrendChart trend={zone.trend} zoneName={zone.name} />
+      {/* 4. Risk Escalation Timeline — hidden for villager */}
+      {role !== 'villager' && <RiskTrendChart trend={zone.trend} zoneName={zone.name} />}
 
-      {/* 5. Missing Evidence & Uncertainty Warning */}
-      <MissingEvidenceCard
-        missingEvidence={zone.missing_evidence}
-        confidence={zone.confidence}
-        warningText={zone.missing_evidence_warning}
-      />
+      {/* 5. Missing Evidence — villager sees simple caution, officer sees full */}
+      {role !== 'villager' ? (
+        <MissingEvidenceCard
+          missingEvidence={zone.missing_evidence}
+          confidence={zone.confidence}
+          warningText={zone.missing_evidence_warning}
+        />
+      ) : zone.missing_evidence?.length > 0 && (
+        <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 text-xs text-amber-900">
+          <span className="font-bold">Note:</span> {t('villager.caution') || 'Some sensor data is from satellite proxy — follow officer instructions, not the number.'}
+        </div>
+      )}
     </div>
   );
 }

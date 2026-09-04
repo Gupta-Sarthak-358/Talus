@@ -8,6 +8,10 @@ import ReportsPage from './pages/ReportsPage';
 import LabPage from './pages/LabPage';
 import RoutesPage from './pages/RoutesPage';
 import Dashboard from './pages/Dashboard';
+import VillagerPage from './pages/roles/VillagerPage';
+import DistrictPage from './pages/roles/DistrictPage';
+import StatePage from './pages/roles/StatePage';
+import RescuePage from './pages/roles/RescuePage';
 
 // Modals stay global so deep links can open them
 import WhatIfDrawer from './components/Simulation/WhatIfDrawer';
@@ -26,6 +30,11 @@ export default function App() {
             <Route path="reports" element={<ReportsPage />} />
             <Route path="lab" element={<LabPage />} />
             <Route path="routes" element={<RoutesPage />} />
+            {/* Role-specific demo pages: each role sees only what it needs */}
+            <Route path="role/villager" element={<VillagerPage />} />
+            <Route path="role/district_officer" element={<DistrictPage />} />
+            <Route path="role/state_manager" element={<StatePage />} />
+            <Route path="role/rescue_team" element={<RescuePage />} />
             {/* legacy single-screen still reachable for compare */}
             <Route path="dashboard" element={<Dashboard />} />
           </Route>

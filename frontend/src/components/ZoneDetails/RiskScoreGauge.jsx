@@ -2,7 +2,16 @@ import React from 'react';
 import RiskBadge from '../Common/RiskBadge';
 import { ShieldCheck, AlertTriangle, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
+import { useTalusContext } from '../../context/TalusContext';
 export default function RiskScoreGauge({ score = 0, band = 'LOW', confidence = 85, trend = {}, isSimulated = false }) {
+  const { role, t } = useTalusContext();
+  const isVillager = role === 'villager';
+  const rawHigh = t('confidence.high');
+  const rawMed = t('confidence.medium');
+  const rawLow = t('confidence.low');
+  const confidenceLabel = confidence >= 75 ? (rawHigh === 'confidence.high' ? 'High certainty' : rawHigh) : confidence >= 60 ? (rawMed === 'confidence.medium' ? 'Medium certainty' : rawMed) : (rawLow === 'confidence.low' ? 'Low certainty' : rawLow);
+  const certaintyLabel = t('zone.certainty');
+  const certaintyText = certaintyLabel === 'zone.certainty' ? 'Certainty:' : certaintyLabel;
   // Score color
   const getScoreColor = () => {
     if (score >= 85) return 'text-risk-critical';
@@ -22,6 +31,29 @@ export default function RiskScoreGauge({ score = 0, band = 'LOW', confidence = 8
 
   const TrendIcon = trend.direction === 'rising' ? TrendingUp : trend.direction === 'falling' ? TrendingDown : Minus;
   const trendColor = trend.direction === 'rising' ? 'text-risk-critical' : trend.direction === 'falling' ? 'text-risk-verylow' : 'text-mine-muted';
+
+  if (isVillager) {
+    return (
+      <div className="bg-mine-darker border border-mine-border rounded-xl p-4 shadow-sm space-y-3">
+        <div className="flex items-center justify-between">
+          <RiskBadge band={band} size="lg" />
+          {isSimulated && (
+            <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-risk-moderate/20 text-mine-text border border-risk-moderate/40 animate-pulse">
+              SIMULATED
+            </span>
+          )}
+          <span className="text-xs font-bold text-mine-text">{confidenceLabel}</span>
+        </div>
+        {/* Simple bar, no numbers */}
+        <div className="w-full h-2.5 bg-mine-dark rounded-full overflow-hidden p-0.5 border border-mine-border">
+          <div
+            className={`h-full rounded-full transition-all duration-700 ease-out ${getProgressColor()}`}
+            style={{ width: `${Math.min(100, Math.max(5, score))}%` }}
+          ></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-mine-darker border border-mine-border rounded-xl p-4 shadow-sm space-y-3">
@@ -68,22 +100,22 @@ export default function RiskScoreGauge({ score = 0, band = 'LOW', confidence = 8
         </div>
       </div>
 
-      {/* Model Confidence & Telemetry Reliability */}
+      {/* Model Confidence — villager sees words, officer sees % + certainty */}
       <div className="flex items-center justify-between pt-2 border-t border-mine-border text-xs">
         <div className="flex items-center gap-1.5 text-mine-muted">
           <ShieldCheck className="w-3.5 h-3.5 text-talus-600" />
-          <span>Model Confidence:</span>
+          <span>{isVillager ? certaintyText : 'Model Confidence:'}</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-16 h-1.5 bg-mine-dark rounded-full overflow-hidden">
-            <div
-              className="h-full bg-talus-600 rounded-full"
-              style={{ width: `${confidence}%` }}
-            ></div>
-          </div>
-          <span className="font-mono font-bold text-mine-text">{confidence}%</span>
+          {!isVillager && (
+            <div className="w-16 h-1.5 bg-mine-dark rounded-full overflow-hidden">
+              <div className="h-full bg-talus-600 rounded-full" style={{ width: `${confidence}%` }}></div>
+            </div>
+          )}
+          <span className={`font-bold ${isVillager ? 'text-mine-text text-xs' : 'font-mono text-mine-text'}`}>{isVillager ? confidenceLabel : `${confidence}%`}</span>
         </div>
       </div>
+      {!isVillager && <div className="text-[10px] text-mine-muted font-mono pl-5">Calibrated (isotonic, Brier 0.10) — see Model Card</div>}
     </div>
   );
 }

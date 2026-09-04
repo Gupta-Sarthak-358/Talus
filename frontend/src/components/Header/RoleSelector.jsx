@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useTalusContext } from '../../context/TalusContext';
 import { ROLES } from '../../data/constants';
 import { Shield, Users, Briefcase, Flame, ChevronDown, Check } from 'lucide-react';
@@ -12,8 +13,19 @@ const ROLE_ICONS = {
 
 export default function RoleSelector() {
   const { role, setRole, currentRoleMeta, t } = useTalusContext();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
+
+  const pickRole = (newRole) => {
+    setRole(newRole);
+    setIsOpen(false);
+    // Demo: choosing a role shows its dedicated page (admin panel later)
+    if (location.pathname.startsWith('/role/') || location.pathname === '/') {
+      navigate(`/role/${newRole}`);
+    }
+  };
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -57,10 +69,7 @@ export default function RoleSelector() {
               return (
                 <button
                   key={r.id}
-                  onClick={() => {
-                    setRole(r.id);
-                    setIsOpen(false);
-                  }}
+                  onClick={() => pickRole(r.id)}
                   className={`w-full flex items-start gap-2.5 p-2.5 rounded-lg text-left transition-all ${
                     isSelected
                       ? 'bg-talus-600 border border-talus-700 text-white'
