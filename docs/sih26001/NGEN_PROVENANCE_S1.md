@@ -104,7 +104,7 @@ no Bhusanket Sikkim join exists, so `previous_landslide`/`event` stay STUB
 
 ## 3. Gangtok source evidence in this repository (2026-09-04)
 
-*   ✅ IMD rainfall: `data/raw/imd/ind2024_rfp25.nc` (national 0.25° grid, covers NER) → extraction `scripts/extract_gangtok_rainfall.py` → `data/processed/imd/gangtok_rainfall_2024.csv` (366 rows, sha256 in manifest). Grid cell 27.25N 88.50E, nearest to S1.
+*   ✅ IMD rainfall: `data/raw/imd/ind2024_rfp25.nc` (national 0.25° grid, covers NER) → extraction `scripts/extract_gangtok_rainfall.py` → `data/processed/imd/gangtok_rainfall_2024.csv` (366 rows, sha256 in manifest). Grid cell 27.25N 88.50E — verified nearest cell for **all four slopes** (S2 27.338/88.612, S3 27.325/88.6065, S4 27.315/88.595 all resolve to 27.25/88.50), so S2–S4 carry identical REAL rain values for window 2024-06-16. Consequence of 0.25° coarseness, disclosed: rain does not differentiate slopes; static terrain features do.
 *   ✅ OSM spatial: Overpass `overpass-api.de` 2026-09-04 → extraction `scripts/extract_s1_osm.py` → `data/processed/terrain/s1_osm_nearest.json` (query + endpoint + counts + nearest ids, sha256 in manifest). QA stays `osm-qa-unverified`.
 *   ✅ DEM mirror (PROXY): AWS Terrain Tiles Terrarium z15 3×3 (SRTM-derived, open, no account) → extraction `scripts/extract_s1_dem.py` (stdlib PNG decode + numpy Horn/Laplacian) → `data/processed/terrain/s1_dem_window.csv` (64×64 audit grid, sha256 in manifest). NOT the USGS N27E088 tile — see manifest `limit`.
 *   No USGS EarthExplorer / NASA Earthdata SRTM tile for Gangtok (Neyveli tiles in `data/processed/terrain/` only — unrelated, do not cite)
