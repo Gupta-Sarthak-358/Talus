@@ -27,7 +27,7 @@
 
 ---
 
-## 1. Executive Summary
+## 1. Executive Summary — UPDATE 2026-09-04 (built, `SIH26001 @ 68c0c28`)
 
 **Problem:** The North Eastern Region (NER) of India faces frequent landslides
 during monsoon seasons, causing loss of life, infrastructure damage, and
@@ -42,12 +42,13 @@ System in NER) under the Ministry of Development of North Eastern Region
 built for mine rockfall — maps almost perfectly onto SIH26001's requirements.
 What changes is the data layer and physics; the architecture survives intact.
 
-**Key finding:** Unlike the mine problem (where no public dataset existed), NER
+**Key finding (validated 2026-09-04):** Unlike the mine problem (where no public dataset existed), NER
 has real, documented landslide data from multiple sources — GSI Bhusanket
-(91,000+ mapped landslides India-wide, 37,903+ in NER), NASA COOLR, ISRO
+(91,000+ mapped landslides India-wide, 37,903+ in NER → `764` Sikkim `manifest.training.json:42` + `693` Sikkim `sikkim_join.json:6`), NASA COOLR, ISRO
 Landslide Atlas (80,000+), published academic inventories (490-1,330+ events
 with rainfall records), and IMD 0.25° gridded rainfall (1901–present) plus
-daily records at 8 NER stations (1980-2019). This means we can train on real
+daily records at 8 NER stations (1980-2019). This means we *did* train on real
+events: `1528×22` inventory-scale `feature_matrix.training.csv:1` `RF 0.921 XGB 0.9256` `metrics.md:9` `temporal test AUC 0.9264` `manifest.training.json:144`.
 events, not
 synthetic data — a stronger evidence base than TALUS v1.
 
@@ -845,21 +846,21 @@ Negative samples (no landslide):
 
 ---
 
-## 12. Roadmap & Next Steps
+## 12. Roadmap & Next Steps — UPDATE 2026-09-04 (built, `SIH26001 @ 68c0c28`)
 
-### 12.1 Phase 0: Data assembly (NOW — before hackathon)
+### 12.1 Phase 0: Data assembly (DONE — Gangtok pilot)
 
-| Task | Source | Priority |
+| Task | Source | Status |
 |---|---|---|
-| Download IMD 0.25° gridded daily rainfall for NER (pilot period first, then full 1901–present record) | imdpune.gov.in | Critical |
-| Download SRTM DEM 30m for NER states | USGS Earth Explorer | Critical |
-| Compile GSI Bhusanket NER landslide inventory | bhukosh.gsi.gov.in | Critical |
-| Download ERA5 soil moisture for NER (2000-2024) | Copernicus CDS | High |
-| Download Sentinel-2 NDVI/LULC for NER | ESA Copernicus | High |
-| Download GSI lithology maps for NER | bhukosh.gsi.gov.in | High |
-| Download OSM road/river network for NER | OpenStreetMap | High |
-| Download published inventories (Mizoram, Meghalaya, Dibang) | Zenodo / papers | High |
-| Compute terrain features (slope, aspect, curvature, TWI, SPI) from DEM | GIS tools | Critical |
+| IMD 0.25° gridded daily rainfall (pilot period first, then full 1901–present record) | `124` files `ind*.nc` 1901–2024 `data/raw/imd/` → `gangtok_rainfall_2024.csv` + 30-yr climatology | ✅ |
+| SRTM DEM 30m for NER states | USGS `n27_e088_1arc_v3.tif` → `usgs_s234.json` | ✅ |
+| GSI Bhusanket NER landslide inventory | `30,842` pts `GSI_Landslide_Inventory.shp.zip` + `777` PDF rows `p659-676` → `764` Sikkim | ✅ |
+| Soil moisture | CCI `C3S-SOILMOISTURE` `0.271` `gangtok_soil_cci.csv` (ERA5 path never needed) | ✅ |
+| Sentinel-2 NDVI/LULC | `S2B_45RXL_20241129` + `WorldCover N27E087` → `s234_ndvi/lulc.json` | ✅ |
+| GSI lithology maps | NESAC map `s234_lithology.json` `lingtse_granite_gneiss` PROXY-published-map | ✅ |
+| OSM road/river network | `606` test bbox + `6698/1320` training bulk `out center` | ✅ |
+| Published inventories | via shapefile + PDF above | ✅ |
+| Terrain features (slope, aspect, curvature, TWI, SPI) | `usgs_s234.json` + `catchment_s234.json` | ✅ |
 
 ### 12.2 Phase 1: Core ML (hackathon sprint 1)
 

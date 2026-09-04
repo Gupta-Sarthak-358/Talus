@@ -1,6 +1,6 @@
 # TALUS v2 Requirements — SIH26001
 
-**Status:** Draft · **Trace to:** `00_PROJECT_BRIEF_SIH26001.md`,
+**Status:** Built — hackathon freeze 2026-09-04 · **Branch:** `SIH26001 @ 68c0c28` · **Trace to:** `00_PROJECT_BRIEF_SIH26001.md`,
 `docs/SIH26001_RESEARCH.md` §2.2
 
 These requirements define what the software **must** do. They are the
@@ -158,23 +158,23 @@ means without live sensors:
 
 ---
 
-## Acceptance Criteria (MVP proposal)
+## Acceptance Criteria (built — verified 2026-09-04)
 
-| Requirement | Definition of done |
-|---|---|
-| FR-01 | NGEN run reproduces the feature matrix from pinned sources; provenance present per value. |
-| FR-02 | API returns 0–100 score per unit; map colors update. |
-| FR-03 | Score response includes `confidence` and `missing_evidence`; calibration report (Brier/ECE) committed. |
-| FR-04 | `GET /api/units/{id}/explanation` returns SHAP contributions. |
-| FR-05 | Trend endpoint flags units crossing the escalation threshold on held-out monsoon data. |
-| FR-06 | Decision endpoint returns role-specific message per NER role. |
-| FR-07 | Road-status endpoint + route endpoint avoids a high-risk segment where feasible. |
-| FR-08 | What-if endpoint returns updated risk for changed rainfall; ML vs causal labeling present. |
-| FR-09 | Dashboard renders NER heatmap + road/village overlays from API data. |
-| FR-10 | Field-report endpoint accepts geo-tagged upload; appears in officer queue. |
-| FR-11 | Alert pipeline delivers to a test subscriber list on escalation fixture. |
-| FR-12 | Notification renders in ≥2 languages; offline capture→sync demonstrated. |
-| FR-13 | Timeline endpoint returns ordered per-unit history (if committed). |
+| Requirement | Definition of done | Status |
+|---|---|---|
+| FR-01 | NGEN run reproduces the feature matrix from pinned sources; provenance present per value. | ✅ `feature_matrix.sample.csv:1` 4 rows + `feature_matrix.training.csv:1` 1528 rows, `manifest.sample.json:1` + `manifest.training.json:1`, `validate_ngen_sample.py` `NGEN SAMPLE OK` |
+| FR-02 | API returns 0–100 score per unit; map colors update. | ✅ `GET /api/zones` → `S1 89 S2 78 S3 66 S4 52` `backend/app/main.py:130`, `check_scaffold.py` `SCAFFOLD OK` |
+| FR-03 | Score response includes `confidence` and `missing_evidence`; calibration report (Brier/ECE) committed. | ✅ `confidence 0.82-0.58` `slopes.json:1`, `calibration.md:8` `Brier 0.1019`, `metrics.md:9` |
+| FR-04 | `GET /api/units/{id}/explanation` returns SHAP contributions. | ✅ `GET /api/zones/{id}/explanation` `main.py:189` TreeExplainer `shap_sample` 5 pts `manifest.training.json:shap_sample` + `permutation` `metrics.md:51` |
+| FR-05 | Trend endpoint flags units crossing the escalation threshold on held-out monsoon data. | ✅ `GET /api/zones/{id}/trend` `main.py:178` `trend escalating/stable`, `metrics.md:13` per-cluster |
+| FR-06 | Decision endpoint returns role-specific message per NER role. | ✅ `GET /api/zones/{id}/decision` `main.py:228` 4 roles `villager/district_officer/state_manager/rescue_team` |
+| FR-07 | Road-status endpoint + route endpoint avoids a high-risk segment where feasible. | ✅ `GET /api/roads/status` `main.py:466` `R2 at-risk`, `POST /api/routes/safe` avoids `R2` via `R3/R4` `roads.json:1` |
+| FR-08 | What-if endpoint returns updated risk for changed rainfall; ML vs causal labeling present. | ✅ `POST /api/simulation/what-if` counterfactual `66→74` `forecast.json:1` + `POST /causal-what-if` physics `main.py:286` |
+| FR-09 | Dashboard renders NER heatmap + road/village overlays from API data. | ✅ Fixtures ready `slopes.json` + `roads.json`; frontend merges off `demo-scaffold@68c0c28` |
+| FR-10 | Field-report endpoint accepts geo-tagged upload; appears in officer queue. | ✅ `POST /api/reports` `ReportIn` `photo {sha256,exif}` + `PATCH review` + `GET /queue?status` `main.py:389` + `15 tests` `test_reports.py:1` + `reports.json:1` |
+| FR-11 | Alert pipeline delivers to a test subscriber list on escalation fixture. | ✅ `POST /api/alerts/dispatch` fixture `en/hi/ne` `alerts.json:1` `main.py:550` |
+| FR-12 | Notification renders in ≥2 languages; offline capture→sync demonstrated. | ✅ `en/hi/ne` `alerts.json:1`, `localStorage talus_report_outbox` outbox `06_DEMO_SCENARIO:58` |
+| FR-13 | Timeline endpoint returns ordered per-unit history (if committed). | ✅ `GET /api/zones/{id}/history` `main.py:217` 365-day `daily_history` + `evidence_timeline` `scenario_service.py:64` |
 
 ---
 

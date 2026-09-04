@@ -1,6 +1,6 @@
 # ADR-001: SIH26001 Scope — Migrate TALUS, Don't Fork
 
-**Status:** Proposed · **Date:** 2026-09-03 · **Branch:** `SIH26001`
+**Status:** Accepted — built 2026-09-04 · **Date:** 2026-09-03 · **Branch:** `SIH26001 @ 68c0c28`
 
 ## Context
 
@@ -40,12 +40,12 @@ Full research: `docs/SIH26001_RESEARCH.md` (fact-checked, 5 rounds).
 - Freezes required before build: spatial unit, pilot extent, CRS/grid, map
   library, sampling/buffer rules, band edges (post-calibration).
 
-## To-freeze list (promote each to decision or assumption)
+## To-freeze list (frozen 2026-09-04)
 
-- [ ] Spatial unit (pixel / slope unit / admin zone)
-- [ ] Pilot extent
-- [ ] CRS + grid + resampling rules
-- [ ] Map library (Leaflet vs Mapbox GL)
-- [ ] Positive/negative sampling + buffer + date-window rules
-- [ ] SMS provider adapter + language matrix
-- [ ] v2 API spec (extend vs version)
+- [x] Spatial unit — slope-point `S1-S4` `SCAFFOLD_CONTRACT_SEPT5.md:14` + training `T0000` `manifest.training.json:5` study area `88.06-88.96/27.08-27.999` (inside `n27_e088`)
+- [x] Pilot extent — Gangtok `27.3389/88.6065` `27.315-27.345N/88.595-88.612E` `NGEN_PROVENANCE_S1.md:10`
+- [x] CRS + grid + resampling — `EPSG:4326` demo, `111km*cos(lat)*res` anisotropic `extract_usgs.py:1`, `bilinear` elev
+- [x] Map library — Leaflet `frontend/package.json:1` `leaflet 1.9.4` + `react-leaflet`
+- [x] Positive/negative sampling + buffer + date-window — `>300m` `seed 42` `50:50` `season-window` `approximate` + year rescue `16` clusters `build_training_matrix.py:294`, `35/73 dated` temporal `metrics.md:32`
+- [x] SMS provider adapter + language matrix — `en/hi/ne` fixture `alerts.json:1` `adapter` `02_ARCHITECTURE:155`
+- [x] v2 API spec — `POST /reports` + `PATCH` + `queue?status` `main.py:389`, `GET /zones` etc. v1 shapes intact

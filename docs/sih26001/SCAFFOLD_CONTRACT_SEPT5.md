@@ -1,6 +1,6 @@
-# TALUS v2 Sept-5 Scaffold Contract (frozen for hackathon)
+# TALUS v2 Sept-5 Scaffold Contract (frozen for hackathon — built)
 
-**Branch:** `feature/sih26001/demo-scaffold` · **Base:** `SIH26001 @ a1debe1`
+**Branch:** `SIH26001 @ 68c0c28` (former `feature/sih26001/demo-scaffold` @ `a1debe1` merged) · **Base:** `SIH26001 @ a1debe1` → `68c0c28`
 **Pilot (frozen for demo):** Gangtok cluster, Sikkim — 4 slopes S1–S4.
 Centre: 27.3389, 88.6065. CRS: EPSG:4326 for demo (NGEN reprojection deferred).
 **Rule:** demo runs fully offline on these fixtures. No live network.
@@ -53,10 +53,11 @@ GET  /api/simulation/templates           → { templates: [{id:"monga-mdl", ...}
 POST /api/simulation/causal-what-if      → { zone_id, divergence_fos, escalated_units[], timeline[] } (threshold replay)
 POST /api/routes/safe                    → { risk_aware_route{path, total_cost, max_risk_exposed}, shortest_route{}, avoided_zones[] }
 GET  /api/roads/status                   → { segments: [{id, status: open|at-risk|blocked, adjacent_slope}] } (NEW, fixture)
-POST /api/reports                        → { id, status:"queued" } (NEW, in-memory)
-GET  /api/reports/queue                  → { reports: [...] } (NEW, in-memory)
-POST /api/alerts/dispatch                → { queued: n, languages: ["en","hi","ne"], fixture: true } (NEW, no live SMS)
-GET  /api/forecast/rainfall              → { source:"IMD-fixture", daily_mm[], preset_ref:"monga-mdl" } (NEW, fixture)
+POST /api/reports                        → ReportOut (ReportIn: zone_id/type/text/lat/lon/captured_at/reporter_role/photo{sha256,exif}+consent → queued|flagged; 422 on bbox/consent/type) (LIVE `main.py:471`, 15 tests)
+GET  /api/reports/queue                  → { reports: [...] } `?status=queued|verified|dismissed|flagged` (LIVE)
+PATCH /api/reports/{id}                 → {status: verified|dismissed|flagged} (LIVE, terminal guard 409)
+POST /api/alerts/dispatch                → { queued: n, languages: ["en","hi","ne"], fixture: true } (LIVE)
+GET  /api/forecast/rainfall              → { source:"IMD-fixture", daily_mm[], preset_ref:"monga-mdl" } (LIVE)
 ```
 
 Roles (frozen strings — backend `DECISIONS_BY_BAND` keys stay Critical/High/Moderate):

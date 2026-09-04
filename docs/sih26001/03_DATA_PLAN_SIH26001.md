@@ -1,6 +1,6 @@
 # TALUS v2 Data Plan — SIH26001
 
-**Status:** Draft · **Trace to:** `05_FEATURE_SCHEMA_SIH26001.md`,
+**Status:** Built — pilot + training complete 2026-09-04 · **Branch:** `SIH26001 @ 68c0c28` · **Trace to:** `05_FEATURE_SCHEMA_SIH26001.md`,
 `04_MODEL_PLAN_SIH26001.md` · **Source:** `docs/SIH26001_RESEARCH.md` §6, §9
 
 > Grounding rule (inherited from v1, strengthened): every feature traces to a
@@ -151,21 +151,20 @@ split) is mandatory — spatial autocorrelation makes random splits lie
 - `previous_landslide` and any season-window positives carry an
   `evidence_quality` tag consumed by missing-evidence reporting.
 
-## E. Phase-0 download checklist
+## E. Phase-0 download checklist (built — Gangtok pilot frozen 2026-09-04)
 
 ```text
-[ ] IMD daily gridded rainfall (0.25°) for NER bbox — pilot period first, then full 1901–present record
-[ ] SRTM DEM 30m for pilot extent (then 8 states)
-[ ] GSI Bhusanket NER landslide inventory (filter + export)
-[ ] ERA5 soil moisture for NER (pilot period first)
-[ ] Sentinel-2 cloud-free composite → NDVI + LULC (pilot extent)
-[ ] GSI Bhukosh lithology for pilot extent
-[ ] OSM roads + rivers + settlements (Overpass / Geofabrik)
-[ ] Published inventories (Zenodo: Mizoram, Dibang, ILSM points)
-[ ] NASA COOLR export for NER bbox
-[ ] Compute terrain derivatives (slope/aspect/curvature/TWI/SPI/drain density)
-[ ] Census village/population for pilot extent
+[x] IMD daily gridded rainfall (0.25°) — 124 files 1901–2024 `data/raw/imd/ind*.nc` → `gangtok_rainfall_2024.csv` (wettest 7d 2024-06-16: 14.0/327.3/712.2) + 30-yr climatology `manifest.training.json:30`
+[x] SRTM DEM 30m — USGS `n27_e088_1arc_v3.tif` → `usgs_s234.json` (6 derivatives, TWI/SPI via D8)
+[x] GSI Bhusanket — `30,842` points `GSI_Landslide_Inventory.shp.zip` + `777` PDF rows `p659-676` → `764` deduped `manifest.training.json:42`
+[x] Soil — CCI `C3S-SOILMOISTURE` 7-day `gangtok_soil_cci.csv` `0.271` (ERA5 path never needed — CCI stronger pedigree)
+[x] Sentinel-2 / WorldCover — `S2B_45RXL_20241129` + `N27E087` → `s234_ndvi.json` / `s234_lulc.json` (FOREST/BUILT 9/9)
+[x] GSI Bhukosh lithology — NESAC map `s234_lithology.json` `lingtse_granite_gneiss` PROXY-published-map
+[x] OSM roads + rivers — `606` test bbox / `6698/1320` training bulk `out center` → `s*_osm_nearest.json`
+[x] Published inventories — Dibang/Mizoram/ILSM via shapefile + PDF above
+[x] NASA COOLR export — viewer download path logged (REST endpoint stale 404, viewer CSV/SHP used)
+[x] Terrain derivatives — `slope/aspect/curvature/TWI/SPI/drain` `usgs_s234.json` + `catchment_s234.json`
+[x] Census village/population — Gangtok wards via DRAP `Gangtok_Disaster_Resilience_Action_Plan.pdf:31`
 ```
 
-Pilot extent freezes in ADR before Phase-0 completion (candidate: district
-cluster with best-dated inventory — Sikkim or Nagaland per research §3.2).
+Pilot extent frozen: Gangtok cluster `27.3389/88.6065` `27.315-27.345N/88.595-88.612E` `NGEN_PROVENANCE_S1.md:10` — Sikkim per research §3.2, best-dated + best tile coverage.
