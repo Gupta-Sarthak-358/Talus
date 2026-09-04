@@ -89,6 +89,36 @@ def main() -> int:
             fail("reports.json needs >=1 report with valid zone_id")
         if any("lat" not in r or "lon" not in r for r in reps):
             fail("reports.json entries need lat+lon (geo-tagged)")
+        # FR-10 schema checks: geo-tagged + consent + photo meta honesty
+        for r in reps:
+            if "captured_at" not in r:
+                fail(f"reports.json {r.get('id','?')} missing captured_at")
+            if r.get("consent") is not True:
+                fail(f"reports.json {r.get('id','?')} consent must be true")
+            if r.get("status") not in {"queued", "verified", "dismissed", "flagged"}:
+                fail(f"reports.json {r.get('id','?')} status must be queued|verified|dismissed|flagged")
+            # type/reporter_role/text validation (pilot demo)
+            if r.get("type") not in {"crack", "slope_movement", "blocked_road", "other"}:
+                fail(f"reports.json {r.get('id','?')} type must be crack|slope_movement|blocked_road|other")
+            if r.get("reporter_role") not in {"villager", "field_officer"}:
+                fail(f"reports.json {r.get('id','?')} reporter_role must be villager|field_officer")
+            if not isinstance(r.get("text"), str) or len(r.get("text", "")) < 10:
+                fail(f"reports.json {r.get('id','?')} text must be >=10 chars")
+            # photo must be metadata object or null (never a raw string/binary per contract §4)
+            photo = r.get("photo")
+            if photo is not None and not isinstance(photo, dict):
+                fail(f"reports.json {r.get('id','?')} photo must be metadata object or null (no binary in repo)")
+            if isinstance(photo, dict) and photo.get("sha256"):
+                sha = photo.get("sha256")
+                if not isinstance(sha, str) or len(sha) != 64:
+                    fail(f"reports.json {r.get('id','?')} photo.sha256 must be 64 hex chars")
+            # pilot bbox sanity (Gangtok cluster)
+            try:
+                lat_f = float(r.get("lat", 0)); lon_f = float(r.get("lon", 0))
+                if not (27.20 <= lat_f <= 27.40 and 88.40 <= lon_f <= 88.70):
+                    fail(f"reports.json {r.get('id','?')} lat/lon outside pilot bbox 27.20-27.40/88.40-88.70")
+            except Exception:
+                fail(f"reports.json {r.get('id','?')} lat/lon must be numeric")
 
     if alerts:
         if alerts.get("fixture") is not True:

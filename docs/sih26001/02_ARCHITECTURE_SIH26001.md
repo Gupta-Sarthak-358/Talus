@@ -90,9 +90,9 @@ GIS Dashboard
   ├── AlertPanel    (role-based, multilingual)
   ├── RouteView     (shortest vs risk-aware)
   └── ScenarioPanel (rainfall sliders + threshold presets)
-Field app (progressive web app first)
-  ├── Capture       (photo/video + GPS + timestamp, offline)
-  ├── Queue         (pending sync)
+Field app (progressive web app first — reporting lane LIVE on backend, UI pending frontend merge)
+  ├── Capture       (photo/video + GPS + timestamp, offline — ReportForm + PhotoMeta {sha256,exif_lat,exif_lon} + consent + pilot-bbox gate)
+  ├── Queue         (pending sync — GET /api/reports/queue?status= + PATCH review queued|flagged→verified|dismissed, terminal guard)
   └── Alerts        (cached warnings, local language)
 ```
 

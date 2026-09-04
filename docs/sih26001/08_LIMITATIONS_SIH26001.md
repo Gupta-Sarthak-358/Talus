@@ -33,6 +33,12 @@ weakness) · **Source:** `docs/SIH26001_RESEARCH.md` §11.3–§11.4
 9. **Prototype bands ≠ safety standards.** Operational decisions remain with
    qualified authorities.
 
+## Field reporting — demo honesty (new in this build)
+
+*   Citizen/field reports are **unverified input** — `verified` status requires an officer `PATCH` review (demo role-toggle only; real auth + moderation are post-hackathon). Until verified, a report never promotes to a training `event` or a `previous_landslide` label — it lives in a candidate sidecar with `crowd-verified` + photo SHA256.
+*   Photo/video **bytes are never committed** (metadata-only lane per contract §4 + `.gitignore:46`); only `{filename,mime,size_bytes,sha256,exif_lat,exif_lon}` is stored, with an explicit `consent: true` gate. EXIF vs claimed >200m is flagged; unsupported mime is flagged; per-boot rate cap 20 is a demo guard, not production moderation.
+*   Offline outbox is `localStorage` + retry + sync badge (no service worker — `6` below). Full PWA + background sync + content moderation are post-hackathon.
+
 ## Carryover discipline from v1
 
 - Confidence is calibrated P(elevated susceptibility), never "probability of

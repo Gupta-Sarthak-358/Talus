@@ -223,3 +223,51 @@ class CausalWhatIfResponse(BaseModel):
     provenance: Optional[ScenarioProvenance] = None
     evidence_timeline: list[EvidenceEvent] = []
     trajectory: list[TrajectoryPoint]
+
+
+# ---- field reporting (SIH26001 PS e -> FR-10, Screen 6) -----------------
+
+REPORT_TYPES = ["crack", "slope_movement", "blocked_road", "other"]
+REPORTER_ROLES = ["villager", "field_officer"]
+REPORT_STATUSES = ["queued", "verified", "dismissed", "flagged"]
+
+# Pilot bbox — Gangtok cluster central extent (SCAFFOLD_CONTRACT_SEPT5.md:4)
+PILOT_LAT_MIN, PILOT_LAT_MAX = 27.20, 27.40
+PILOT_LON_MIN, PILOT_LON_MAX = 88.40, 88.70
+
+# Allowed photo mime whitelist (metadata-only lane; bytes never committed per .gitignore + contract §4)
+ALLOWED_PHOTO_MIME = ["image/jpeg", "image/png", "image/webp", "video/mp4"]
+
+
+class PhotoMeta(BaseModel):
+    filename: Optional[str] = Field(default=None, max_length=120)
+    mime: Optional[str] = None
+    size_bytes: Optional[int] = Field(default=None, ge=0, le=10_000_000)
+    sha256: Optional[str] = Field(default=None, pattern=r"^[a-fA-F0-9]{64}$")
+    exif_lat: Optional[float] = Field(default=None, ge=-90, le=90)
+    exif_lon: Optional[float] = Field(default=None, ge=-180, le=180)
+
+
+class ReportIn(BaseModel):
+    zone_id: Literal["S1", "S2", "S3", "S4"]
+    type: Literal["crack", "slope_movement", "blocked_road", "other"]
+    text: str = Field(min_length=10, max_length=500)
+    lat: float = Field(ge=PILOT_LAT_MIN, le=PILOT_LAT_MAX)
+    lon: float = Field(ge=PILOT_LON_MIN, le=PILOT_LON_MAX)
+    captured_at: str = Field(description="ISO-8601 timestamp, honest capture time")
+    reporter_role: Literal["villager", "field_officer"] = "field_officer"
+    photo: Optional[PhotoMeta] = None
+    consent: bool = Field(description="Must be true — consent to share photo + location with authorities")
+
+
+class ReportOut(ReportIn):
+    id: str
+    status: Literal["queued", "verified", "dismissed", "flagged"]
+    created_at: str
+    flagged_reason: Optional[str] = None
+
+
+class ReportReviewIn(BaseModel):
+    status: Literal["verified", "dismissed", "flagged"]
+    reviewer_role: Optional[str] = Field(default=None, description="Demo role toggle; real auth is post-hackathon")
+    reason: Optional[str] = Field(default=None, max_length=300)
