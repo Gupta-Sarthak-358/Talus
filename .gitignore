@@ -110,3 +110,6 @@ backend/app/_model.joblib
 
 # canonical trained Model v1 artifact (compressed; regenerated if deleted)
 !ml/models/talus_rf_v1.joblib
+
+# private presenter script — never commit (personal briefing, stays local)
+docs/PILOT_BRIEFING.md

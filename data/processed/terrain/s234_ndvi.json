@@ -1,0 +1,49 @@
+{
+  "scene": {
+    "product_id": "S2B_45RXL_20241129_0_L2A",
+    "date": "2024-11-29",
+    "cloud_cover_pct": 0.019648,
+    "tile": "MGRS-45RXL"
+  },
+  "slopes": {
+    "S2": {
+      "dn": {
+        "red": 822.0,
+        "nir": 1088.0,
+        "scl": 5
+      },
+      "ndvi": 0.139,
+      "note": "SCL non-vegetation (context, value still reported)"
+    },
+    "S3": {
+      "dn": {
+        "red": 172.0,
+        "nir": 1709.0,
+        "scl": 4
+      },
+      "ndvi": 0.817,
+      "note": "SCL vegetation"
+    },
+    "S4": {
+      "dn": {
+        "red": 553.0,
+        "nir": 1525.0,
+        "scl": 4
+      },
+      "ndvi": 0.468,
+      "note": "SCL vegetation"
+    }
+  },
+  "row_values": {
+    "S2": {
+      "ndvi": 0.139
+    },
+    "S3": {
+      "ndvi": 0.817
+    },
+    "S4": {
+      "ndvi": 0.468
+    }
+  },
+  "queried_at": "2026-09-04T10:44:34Z"
+}

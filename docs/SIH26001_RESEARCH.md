@@ -551,7 +551,7 @@ All primary data sources confirmed accessible:
 | ERA5 soil moisture | cds.climate.copernicus.eu (CDS API) | Free CDS account | ✅ |
 | SRTM DEM 30m | USGS EarthExplorer or NASA Earthdata | Free account | ✅ |
 | NASA COOLR landslides | landslides.nasa.gov/viewer (CSV/SHP/GDB download) | No | ✅ |
-| COOLR REST API | gis.earthdata.nasa.gov/gis05/rest/services/Landslides/COOLR_Events_Points/FeatureServer | No | ✅ |
+| COOLR REST API | gis.earthdata.nasa.gov/gis05/rest/services/Landslides/COOLR_Events_Points/FeatureServer (as verified Aug 2026) | No | ⚠️ STALE as of 2026-09-04 — 404 on re-probe; use the viewer CSV/SHP/GDB download until the endpoint is re-verified |
 | GSI Bhusanket inventory | bhusanket.gsi.gov.in (NLSM maps + landslide polygons) | No | ✅ |
 | GSI Bhukosh geology | bhukosh.gsi.gov.in/Bhukosh/Public | No | ✅ |
 | Sentinel-2 NDVI | ESA Copernicus Open Access Hub | Free account | ✅ |
