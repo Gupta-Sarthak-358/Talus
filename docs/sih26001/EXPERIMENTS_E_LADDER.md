@@ -599,6 +599,11 @@ Integrity audit (`championship_audit.py`, `runs/championship_audit.json`): 20 ev
 15 episodes, 0 errors; all rows dual+ convergence; seasons 16/3/1 monsoon/post/pre;
 recurrent-site rows 6, edge rows 1 (Pubung); all T-30 IMD files present.
 Watch items: 2022-heavy (7/20, reporting bias), Gangtok 5-site concentration.
+Mining pass 9 (`trackA_mining10.py`): zero-promotion pass, pool holds 20 (filters working,
+not stuck — steer windows returned aggregates/Yuksam-no-date/Rangma-single).
+Provenance: DARJ-20150701 += TOI-2015 gauges + Saureni-2015/Soureni-2025 10yr-recurrence
+observation; MAJWA duplicate confirmed by Telegraph-2024. +1 provisional (SadaPhamtam-20260725
+post-archive) + 1 rejected (Samardung tunnel, 4th excavation-rule application). Gap 10.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;
