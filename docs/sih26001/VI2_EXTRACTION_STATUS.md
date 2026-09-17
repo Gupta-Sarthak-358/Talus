@@ -35,6 +35,16 @@ on 200, run the paced runbook. If durable, check COMET portal news.
    `runs/phase_v/vi2/sar_features.json` + audit; model fitting stays closed
    until the extraction audit passes.
 
+## Breakthrough + new finding (`.public` XML → dap enclosure)
+
+The `.public` pair dirs carry `.tif.xml` EPOS records whose enclosure URL is
+`https://dap.ceda.ac.uk/...` (NOT `data.ceda.ac.uk` — index vs download hosts,
+per CEDA's own docs), with bonus metadata: baselines, 0.001° resolution,
+footprint polygon, CC-BY-4.0. A full 4,092,260-byte TIFF + PNG served 200 via dap.
+Minutes later ALL dap pair reads 404 (touched and untouched URLs, both UAs) —
+upstream flapping, not client state. Verdict: correct host found, backend unstable
+tonight. STOP probing; resume = single PNG GET on dap enclosure URL, then runbook.
+
 ## Scope guard
 
 Extraction extracts. No scores, no fusion, no threshold talk until the audit

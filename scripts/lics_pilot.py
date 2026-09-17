@@ -10,7 +10,7 @@ import time
 import urllib.request
 
 UA = {"User-Agent": "TALUS-research-feasibility"}
-ROOT = "https://data.ceda.ac.uk/neodc/comet/data/licsar_products"
+ROOT = "https://dap.ceda.ac.uk/neodc/comet/data/licsar_products"
 FR = "48/048D_06252_131313"
 LAT, LON = 27.5397, 88.5007
 PAIRS = ["20160730_20160811", "20160718_20160730", "20160718_20160811"]
