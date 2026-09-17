@@ -604,6 +604,12 @@ not stuck — steer windows returned aggregates/Yuksam-no-date/Rangma-single).
 Provenance: DARJ-20150701 += TOI-2015 gauges + Saureni-2015/Soureni-2025 10yr-recurrence
 observation; MAJWA duplicate confirmed by Telegraph-2024. +1 provisional (SadaPhamtam-20260725
 post-archive) + 1 rejected (Samardung tunnel, 4th excavation-rule application). Gap 10.
+Mining pass 10 (`trackA_mining11.py`, GSI/district-report layer): +1 provisional (SoBhir-20160803:
+NESAC peer-reviewed GPS+490mm, needs 2nd source; oldest candidate, N.Mangan); Rongey += SSDMA
+Tier-1 menu match. `ceiling` column live on all non-eligible rows: YES-corroboration 13,
+NO-box 10, NO-mechanism 4, rest terminal (duplicate/aggregate/post-rule) or conditional
+(archive/coordinate). Dateless leads logged not rowed (SSDMA menu: Sokpay/Namchi-40/Bey?/Tsong;
+Wadia table; GSI-2019 Darjeeling field inventory). Audit still 20/15/0.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;
