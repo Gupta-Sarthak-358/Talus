@@ -696,6 +696,10 @@ FoS over frozen 324-combo ensemble for 23×6 states. Wet-event FoS_med<1 (DARJ-2
 20MILE 0.50, NH10-Oct21 0.51, Mantam 0.79), dry-event >1.5 (Sokpay 2.49, Pathing 1.82, Lingchom
 2.03); T-7→T median changes tiny (±0.03) — FoS carries STATE not TIMING. 2 ABSTAIN-flat
 (NH10-Oct22 0.8°, Tsong 0.0°: infinite-slope invalid, recorded not fudged). Fusion gated separately.
+VI-2P-B PASS AS BRANCH (not predictor): FoS<1 ≠ alert — monsoon slopes sit unstable for weeks;
+FoS is stability STATE (wet 0.5–0.97 vs dry 1.8–4.1), trigger must come from environment/SAR.
+Frozen: NO FoS threshold ever; modality roles environment=forcing / physics=susceptibility /
+SAR=response-pending; missing SAR reads as unavailable evidence, never as no-deformation.
 VI-1 (`train_vi1.py`, `runs/phase_v/vi1/`, GRU-16 1-layer, 300ep, pos_weight 72, CUDA):
 dev-OOF AUC 0.79, op thr 0.0062 (non-degenerate). Held-out: WATCH/ALERT/CRIT 0.5/0.5/0.5
 BUT AUC 0.388, Brier 0.615 — indiscriminate-loud replaces blind-quiet; novel 0.4 is the
