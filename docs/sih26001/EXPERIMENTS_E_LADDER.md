@@ -555,6 +555,12 @@ ONE-sample at Nov-24 evacuation pulse; gap 16). SeesaGolai-20210601 provisional 
 subsidence-mechanism caveat); Sichey-20210609 provisional (single + internal time conflict);
 BhaluKhola tunnel-face collapse REJECTED (construction accident, with Lingzya precedent).
 Jul-2020 / May-2020-North / Sep-2021-Gangtok windows deferred on 429s, not closed.
+Mining pass 4 (`trackA_mining5.py`, NER-wide search, support-constrained classification):
+championship UNCHANGED at 14; transfer-eligible 3 -> 6 (+Tigdo-20200710 +ModiRijo-20200710,
+same Itanagar Friday episode two points 9h apart; +Tupul-20220630 with GSI three-phase
+ONE-sample guard). 4 provisional-transfer (Sood/Hollongi/Itanagar-NH415/NH29-Kohima).
+Nagaland Jul-Aug-2018 statewide toll noted-not-added (month-long aggregate, no exact
+date/point — phantom class). Mizoram/Tripura/Meghalaya-2023 windows deferred on 429s.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;

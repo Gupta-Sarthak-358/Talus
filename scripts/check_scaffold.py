@@ -123,8 +123,10 @@ def main() -> int:
     if alerts:
         if alerts.get("fixture") is not True:
             fail("alerts.json fixture must be true (no live SMS in demo)")
-        if alerts.get("languages") != ["en", "hi", "ne"]:
-            fail("alerts.json languages must be ['en','hi','ne']")
+        langs = alerts.get("languages", [])
+        # NER 5-lang (as/bn added 2025-11) — allow 3-lang legacy or 5-lang current
+        if set(langs) not in ({"en", "hi", "ne"}, {"en", "hi", "ne", "as", "bn"}):
+            fail(f"alerts.json languages {langs} must be ['en','hi','ne'] or ['en','hi','ne','as','bn'] (NER 5-lang)")
 
     if forecast:
         tids = {t.get("id") for t in forecast.get("templates", [])}
@@ -148,7 +150,7 @@ def main() -> int:
         for e in errors:
             print(f"  - {e}")
         return 1
-    print("SCAFFOLD OK: S1-S4 89/78/66/52, roles, R2-avoidance, en/hi/ne, templates, 17-feature schema.")
+    print("SCAFFOLD OK: S1-S4 89/78/66/52, roles, R2-avoidance, en/hi/ne/as/bn (5-lang), templates, 17-feature schema.")
     return 0
 
 
