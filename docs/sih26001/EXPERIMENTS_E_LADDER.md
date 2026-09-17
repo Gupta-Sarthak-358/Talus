@@ -620,6 +620,11 @@ NH cut, 18 families) -> pool 21 -> 22 (17 episodes, audit clean); FIRST MARCH pr
 event (seasons now 17/3/2). Onset schema live (Mantam populated as precedent).
 SadaPhamtam triple-sourced (still post-archive). Readiness: 20 ready + 2 conditional
 (Dipudara same-episode overlap) + 0 blocked. Gap 8.
+Mining pass 13 (`trackA_mining14.py`): SeesaGolai REJECTED (mechanism resolves against:
+CE cites valley-side construction/traffic, formation cave-in not cut-slope failure;
+reversible only on geotech evidence — provisionals convert, not accumulate).
+Sichey slope doubly peer-attested (ASCE-2024 debris-flow model) but event still single.
+MyongKyong unchanged. Pool holds 22, audit 22/17/0.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;
