@@ -3,7 +3,7 @@
 Checks the frozen contract:
 - fixture JSONs parse + IDs/scores/bands/roles match SCAFFOLD_CONTRACT_SEPT5.md
 - roads demo route avoids the at-risk segment
-- alerts cover en/hi/ne with fixture:true
+- alerts cover en/hi/ne/as/bn (5-lang NER) with fixture:true
 - forecast templates include monga-mdl + dahal-144
 - feature_matrix.sample.csv has all 17 features + keys in order
 Run: python scripts/check_scaffold.py

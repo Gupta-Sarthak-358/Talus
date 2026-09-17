@@ -1622,6 +1622,39 @@ def isolation(location: str = "gangtok"):
     return _isolation_for_location(location)
 
 
+# Model-support regime (Phase IV): the RF was trained/validated on Sikkim + Darjeeling
+# geography only (2936 rows). All 8 corridors serve live NGEN features through the same
+# pipeline, but corridors outside the training regime are operational inference, NOT
+# calibrated predictive validity. The UI must render this distinction, never a flat LIVE.
+_VALIDATED_REGIME = {"gangtok", "lachung", "darjeeling"}
+_PROXY_GLD = ["lithology (uniform published-map name)", "lineament_density (0.8 uniform)",
+              "groundwater (rainfall-derived)"]
+_PROXY_NEW5 = _PROXY_GLD + ["drain_density (1.2 constant)"]
+_MISSING_GEO = ["digitized lithology polygons (no downloadable shapefile)",
+                "digitized lineament density (50K figure not digitized)"]
+
+
+def _support_block(location: str) -> dict:
+    validated = location in _VALIDATED_REGIME
+    return {
+        "model_support": "validated-regime" if validated else "outside-validated-regime",
+        "prediction_status": ("calibrated-validity" if validated
+                              else "operational-inference-unvalidated"),
+        "feature_provenance": {
+            "real": ["terrain (SRTM DEM)", "rain (IMD)", "soil (CCI)",
+                     "lulc/ndvi (WorldCover/S2)", "distances (OSM/DEM)",
+                     "seismic (USGS)"] + (["drain_density (DEM accumulation)"] if validated else []),
+            "proxy": _PROXY_GLD if validated else _PROXY_NEW5,
+            "missing": _MISSING_GEO,
+        },
+        "support_note": ("Trained + validated in this regime."
+                         if validated else
+                         "Live NGEN data, same pipeline — but the model was never "
+                         "trained or validated here. Scores are operational inference, "
+                         "not calibrated validity."),
+    }
+
+
 @app.get("/api/warning/state")
 def warning_state(location: str = "gangtok", lang: str = "en"):
     if location not in data.stores:
@@ -1809,7 +1842,8 @@ def warning_state(location: str = "gangtok", lang: str = "en"):
         iso_zone = iso["isolated_zones"][0] if iso["isolated_zones"] else states[top]["zone_id"]
         return {"location": location, "states": states,
                 "corridor_state": "EVACUATE", "corridor_zone": iso_zone,
-                "generated_at": data.now_iso(), "isolation": iso}
+                "generated_at": data.now_iso(), "isolation": iso,
+                **_support_block(location)}
     elif iso["corridor_may_isolate"]:
         for s in states:
             if s["zone_id"] in iso["at_risk_zones"]:
@@ -1822,11 +1856,13 @@ def warning_state(location: str = "gangtok", lang: str = "en"):
             top = max(range(len(states)), key=lambda i: _WARN_STATES.index(states[i]["state"]))
             return {"location": location, "states": states,
                     "corridor_state": states[top]["state"], "corridor_zone": states[top]["zone_id"],
-                    "generated_at": data.now_iso(), "isolation": iso}
+                    "generated_at": data.now_iso(), "isolation": iso,
+                    **_support_block(location)}
     return {"location": location, "states": states,
             "corridor_state": states[top]["state"],
             "corridor_zone": states[top]["zone_id"],
-            "generated_at": data.now_iso(), "isolation": iso}
+            "generated_at": data.now_iso(), "isolation": iso,
+            **_support_block(location)}
 
 
 _AUTO_LAST: dict[str, float] = {}

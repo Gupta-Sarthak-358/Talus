@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTalusContext } from '../../context/TalusContext';
+import { REGION_SUPPORT } from '../../data/locations';
 import { MapPin, ChevronDown } from 'lucide-react';
 
 export default function LocationSelector() {
@@ -31,6 +32,12 @@ export default function LocationSelector() {
       </div>
       <span className="hidden sm:inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold border bg-emerald-500/15 text-emerald-700 border-emerald-500/30">
         {locationData?.live ? t('common.live_ngen') : t('common.no_data')}
+      </span>
+      <span
+        title={t(REGION_SUPPORT[activeLocation] === 'validated' ? 'location.validated_note' : 'location.unvalidated_note')}
+        className={`hidden md:inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold border ${REGION_SUPPORT[activeLocation] === 'validated' ? 'bg-emerald-500/15 text-emerald-700 border-emerald-500/30' : 'bg-amber-500/15 text-amber-800 border-amber-500/30'}`}
+      >
+        {t(REGION_SUPPORT[activeLocation] === 'validated' ? 'location.validated' : 'location.unvalidated')}
       </span>
     </div>
   );

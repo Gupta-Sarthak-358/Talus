@@ -577,6 +577,21 @@ export function getLocationData(locationId) {
   return LOCATIONS[locationId] || LOCATIONS.gangtok;
 }
 
+// Model-support regime — the RF was trained/validated on Sikkim + Darjeeling only.
+// The other five corridors serve live NGEN data through the same pipeline, but their
+// scores are operational inference, NOT calibrated validity. Backend /api/warning/state
+// is authoritative per-response (model_support/prediction_status/feature_provenance).
+export const REGION_SUPPORT = {
+  gangtok: 'validated',
+  lachung: 'validated',
+  darjeeling: 'validated',
+  arunachal: 'unvalidated',
+  assam: 'unvalidated',
+  manipur: 'unvalidated',
+  meghalaya: 'unvalidated',
+  mizoram: 'unvalidated',
+};
+
 // SIH26001 aliases — prefer GANGTOK_*/SIH_* names (MINE_* kept for backward compat)
 export const GANGTOK_CENTER = MINE_CENTER;
 export const GANGTOK_ZOOM = MINE_ZOOM;

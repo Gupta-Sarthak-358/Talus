@@ -561,6 +561,14 @@ same Itanagar Friday episode two points 9h apart; +Tupul-20220630 with GSI three
 ONE-sample guard). 4 provisional-transfer (Sood/Hollongi/Itanagar-NH415/NH29-Kohima).
 Nagaland Jul-Aug-2018 statewide toll noted-not-added (month-long aggregate, no exact
 date/point — phantom class). Mizoram/Tripura/Meghalaya-2023 windows deferred on 429s.
+Regime honesty shipped (Phase IV system track): `/api/warning/state` now carries
+`model_support` (validated-regime vs outside-validated-regime), `prediction_status`
+(calibrated-validity vs operational-inference-unvalidated) and `feature_provenance`
+(REAL/PROXY/MISSING — verified: lithology + lineament 0.8 uniform PROXY everywhere,
+drain_density REAL in G/L/D but 1.2-constant PROXY in AR/AS/MN/ML/MZ; digitized
+geology MISSING). Header selector shows Validated/Outside-validated-regime badge in
+5 languages; CorridorComparison covers all 8 corridors with per-corridor regime tags
+(stale NGEN-pending footer removed). 62 passed 2 skipped, build green. No new model.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;
