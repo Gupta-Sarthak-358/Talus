@@ -637,6 +637,12 @@ not a slide. Pool holds 22, audit 22/17/0.
 Mining pass 16 (`trackA_mining17.py`): Tsong-20190916 PROMOTED (Tier-1 IPR + 4 outlets:
 Sep-16 cloudburst, whole-village washout, 300 homeless, 1 dead; Mangtabung = context)
 -> pool 22 -> 23 (18 episodes, audit clean, Gyalshing = 10th district). Gap 7.
+FREEZE (`runs/championship_freeze.json`, 2026-09-18): final admin sweep converted nothing
+(Tsong already in; MyongKyong still single; Dentam closed 2023-flood/2024-aggregate/2012-preS2;
+Kalimpong/Dentam retries 429). **Championship frozen at evidence ceiling 23** (30 unmet by
+rule, not effort). Added 29MILE-20200827 provisional (5th series hit, same-side law noted).
+Experiment registry live (`runs/experiment_registry.md`). Audit 23/18/0; readiness 21+2+0.
+Next: split manifest -> daily reconstruction -> M0.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;
