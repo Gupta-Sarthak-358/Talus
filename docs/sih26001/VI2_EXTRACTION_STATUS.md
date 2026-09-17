@@ -56,6 +56,15 @@ Minutes later ALL dap pair reads 404 (touched and untouched URLs, both UAs) —
 upstream flapping, not client state. Verdict: correct host found, backend unstable
 tonight. STOP probing; resume = single PNG GET on dap enclosure URL, then runbook.
 
+## CDSE escape hatch assessed (2026-09-18)
+
+- GRD-change via CDSE/GEE: REJECTED as experiment — M1-A closed the amplitude-change
+  observable (sat-only AUC 0.500); a different host tests nothing new.
+- SLC self-processing: RAW MATERIAL CONFIRMED (CDSE holds both Mantam pair SLCs,
+  3.6–8 GB each) but requires user CDSE registration + ISCE/GAMMA chain + validation
+  ≈ weeks. Parked unless LiCSAR stays down long-term AND scope is explicitly approved.
+- Primary remains LiCSAR resume probe (4 MB products vs 8 GB raws).
+
 ## Scope guard
 
 Extraction extracts. No scores, no fusion, no threshold talk until the audit
