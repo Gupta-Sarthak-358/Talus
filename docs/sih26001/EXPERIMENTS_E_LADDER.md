@@ -691,6 +691,11 @@ AUCs 0.79); iso on episode-grouped OOF; dev-fixed Youden op rawP>=0.0001. Held-o
 ALERT 0.2, CRIT 0.1, AUC 0.468, Brier 0.595, novel 0.0, burden hot-frac 0.0. 20%+ dev positives
 score raw 0.0 (op rule degenerated twice before Youden). VERDICT NEGATIVE: tabular temporal
 retraining does not fix M0 — answers spec question against VI-0-as-sufficient. VI-1 unstarted.
+VI-1 (`train_vi1.py`, `runs/phase_v/vi1/`, GRU-16 1-layer, 300ep, pos_weight 72, CUDA):
+dev-OOF AUC 0.79, op thr 0.0062 (non-degenerate). Held-out: WATCH/ALERT/CRIT 0.5/0.5/0.5
+BUT AUC 0.388, Brier 0.615 — indiscriminate-loud replaces blind-quiet; novel 0.4 is the
+only bright spot and rides the hair-trigger. VERDICT REJECT: sequence representation
+without new evidence fails. Ladder points to VI-2 (SAR coherence/deformation), not nets.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;
