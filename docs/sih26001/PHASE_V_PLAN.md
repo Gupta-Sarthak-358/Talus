@@ -66,5 +66,5 @@ No E17 before final Phase-IV scorecards. No multimodal production before M0 base
 Roles locked: susceptibility=where, environment=forcing, physics=state (FoS never a
 threshold), SAR=response-pending, exposure downstream, OOD/provenance as trust layer.
 No new branches (no PINN, no second physics, no new modalities). Open gates only:
-VI-2 SAR extraction (infra-blocked) then one tiny fusion experiment (env vs
+VI-2 SAR extraction (route cracked via browser chain; batch in flight, pilot validated) then one tiny fusion experiment (env vs
 env+physics vs env+physics+SAR). After that: build product, not machinery.

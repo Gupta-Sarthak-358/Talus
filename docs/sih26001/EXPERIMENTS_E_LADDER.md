@@ -705,6 +705,14 @@ dev-OOF AUC 0.79, op thr 0.0062 (non-degenerate). Held-out: WATCH/ALERT/CRIT 0.5
 BUT AUC 0.388, Brier 0.615 — indiscriminate-loud replaces blind-quiet; novel 0.4 is the
 only bright spot and rides the hair-trigger. VERDICT REJECT: sequence representation
 without new evidence fails. Ladder points to VI-2 (SAR coherence/deformation), not nets.
+VI-2 EXTRACTION IN FLIGHT: browser-chain route cracked it (GWS page → CEDA link → 302 →
+dap via curl -L; lesson: follow links, never hardcode hosts). Manifest-driven batch
+(`download_licsar_manifest.py`, invariant-checked, paced, Mantam-first): ~9 files/~93 MB
+down by 01:12 IST, Mantam nearly complete; 137 pairs ≈ 2.5 GB ≈ 4 h ETA. Pilot validated
+(unw radians, cc 0–255, coherence decline 13→11→9 toward T, unw 2.5% coverage on monsoon
+slopes). Root landing zone untracked (one accidental 50 MB data commit reverted via
+`--cached` + `/*.tif` ignore; tracked fixtures untouched). Sequential clients only while
+flowing (parallelism capped at 2, unneeded). No scores until extraction audit passes.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;

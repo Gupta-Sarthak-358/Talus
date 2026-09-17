@@ -65,6 +65,13 @@ tonight. STOP probing; resume = single PNG GET on dap enclosure URL, then runboo
   ≈ weeks. Parked unless LiCSAR stays down long-term AND scope is explicitly approved.
 - Primary remains LiCSAR resume probe (4 MB products vs 8 GB raws).
 
+## Parallelism decision (recorded): sequential stays
+
+Multiple concurrent clients would finish faster but re-risks the exact throttling
+that cost us hours today, against a backend already mid-migration. Max 2 workers
+with ≥5 s pacing each is the ceiling IF ever needed; while the sequential run
+flows at ~9 MB/min, do not touch it.
+
 ## Batch in flight (manifest downloader, browser-chain route)
 
 `scripts/download_licsar_manifest.py` (reviewed, invariant-correct) drives Selenium/curl
@@ -72,7 +79,10 @@ through GWS page → CEDA link → 302 → dap. Mantam 048D triples landed + val
 (files stay in root until run ends — mover would trigger re-download):
 baseline 0531_0612 (cc med 13, unw med 0.423, n=17), mid 0612_0718 (cc 11, unw 2.371, n=5),
 recent 0730_0811 (cc 9, unw 0.608, n=3). Coherence declines toward T; unw sparse throughout
-(mon-tonsoon decorrelation, anticipated). Hashes recorded per landing batch.
+(monsoon decorrelation, anticipated). Hashes recorded per landing batch.
+Status ~01:12 IST: 9 files (~93 MB) on disk, Mantam nearly complete (048D triple + 012A
+0715_0808 done, 0528_0715 unw in flight); full manifest = 137 pairs ≈ 2–2.5 GB ≈ 3.5–5 h
+at measured ~9 MB/min. Root TIFFs untracked (gitignore /*.tif; landing zone, filed post-validation).
 
 ## First payload landed via browser (2026-09-18)
 
