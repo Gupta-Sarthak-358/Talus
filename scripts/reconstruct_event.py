@@ -101,18 +101,32 @@ def main() -> int:
         r24 = round(float(w.iloc[-1]), 1)
         r7 = round(float(w.iloc[-7:].sum()), 1)
         r30 = round(float(w.iloc[-30:].sum()), 1)
-        # soil: v09.2 daily nearest cell, file date <= end
-        sm, smprov, smts = None, "MISSING", None
+        # soil: v09.2 daily, gap chain cell -> 3x3 spatial mean -> MISSING.
+        # Cell = REAL; spatial mean = PROXY-spatial (documented, not silent).
+        sm, smprov, smts = None, "MISSING (file-absent)", None
         fp = SOILDIR / f"ESACCI-SOILMOISTURE-L3S-SSMV-COMBINED-{end:%Y%m%d}000000-fv09.2.nc"
         if fp.exists():
             try:
                 sds = xr.open_dataset(str(fp))
                 latn = next(v for v in ("lat", "latitude", "LAT") if v in sds.variables)
                 lonn = next(v for v in ("lon", "longitude", "LON") if v in sds.variables)
-                var = [v for v in sds.data_vars if "sm" in v.lower() or "soil" in v.lower()][0]
-                val = sds[var].sel({latn: lat, lonn: lon}, method="nearest").values
-                sm = round(float(np.nanmean(val)), 4)
-                smprov, smts = "REAL", str(end)
+                var = "sm" if "sm" in sds.data_vars else \
+                    [v for v in sds.data_vars if "sm" in v.lower() or "soil" in v.lower()][0]
+                da = sds[var]
+                cell = float(da.sel({latn: lat, lonn: lon}, method="nearest").values.flat[0])
+                if np.isfinite(cell):
+                    sm, smprov, smts = round(cell, 4), "REAL", str(end)
+                else:
+                    la = np.asarray(sds[latn].values).ravel()
+                    lo = np.asarray(sds[lonn].values).ravel()
+                    ii, jj = int(np.argmin(np.abs(la - lat))), int(np.argmin(np.abs(lo - lon)))
+                    blk = da.isel({latn: slice(max(0, ii - 1), ii + 2),
+                                         lonn: slice(max(0, jj - 1), jj + 2)}).values
+                    m = float(np.nanmean(blk))
+                    if np.isfinite(m):
+                        sm, smprov, smts = round(m, 4), "PROXY-spatial", str(end)
+                    else:
+                        smprov = "MISSING (all-NaN neighborhood)"
                 sds.close()
             except Exception as ex:
                 smprov = f"MISSING ({str(ex)[:60]})"

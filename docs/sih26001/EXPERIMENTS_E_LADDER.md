@@ -653,6 +653,12 @@ seismic USGS REAL (0 events ≤T), terrain SRTM REAL (1223m/48.8°; fixed a wind
 that gave -4427m — index-based windows now), satellite era-validated PENDING-scene,
 disturbance MISSING (no 2016 wound map). Invariant asserted in code + independently
 verified. T-day grid excluded (post-onset). Contract: `runs/phase_v/daily_replay/`.
+V-B batch audit (`runs/phase_v/reconstruction_audit.json`): 23/23 events, 138/138 snapshots,
+assertions PASS, 0 post-event leakage, soil 93 REAL-cell + 45 PROXY-spatial (Himalayan
+retrieval gaps, gap chain documented) + 0 MISSING, seismic REAL all 23 (USGS through T),
+satellite era-validated scene-PENDING, terrain anomalies 0. Fixed en route: NaN-cell
+provenance lie (now gap chain), 2 corrupt CCI downloads (re-fetched), off-season archive
+gaps filled (Oct-Nov 2022, Feb-Mar 2023, Apr 2020 via CEDA). Registry updated. M0 UNSTARTED.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;
