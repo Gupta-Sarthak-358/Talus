@@ -615,6 +615,11 @@ RESOLUTION (NESAC Aug-3 early onset vs Aug-13 ~1230 catastrophic damming collaps
 T = Aug-13, onset logged) and 8+ corroboration incl GSI-at-site + CWC/NRSC + HC PIL
 -> pool 20 -> 21 (16 episodes, audit clean, oldest event 2016, Mangan ties Gangtok 5-5).
 Bey lead CLOSED (2011-earthquake-triggered, mechanism + pre-S2). Gap 9.
+Mining pass 12 (`trackA_mining13.py`): Sokpay-20230326 PROMOTED (5 outlets, Sunday ~0230,
+NH cut, 18 families) -> pool 21 -> 22 (17 episodes, audit clean); FIRST MARCH pre-monsoon
+event (seasons now 17/3/2). Onset schema live (Mantam populated as precedent).
+SadaPhamtam triple-sourced (still post-archive). Readiness: 20 ready + 2 conditional
+(Dipudara same-episode overlap) + 0 blocked. Gap 8.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;

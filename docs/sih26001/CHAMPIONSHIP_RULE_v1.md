@@ -37,4 +37,6 @@ No event admitted after this date may move the boundary. Attractive candidates
 
 Development/held-out assignment is frozen BEFORE any held-out scoring.
 Held-out events become untouchable: no calibration, threshold, OOD-rule, or
-feature decision may use them afterwards.
+feature decision may use them afterwards. Same-episode rows (e.g. Dipudara
+Aug-20/Aug-21, overlapping T-30 at one point) must fall on the SAME side of
+the split — never one in dev and one in held-out.
