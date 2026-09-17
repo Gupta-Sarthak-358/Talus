@@ -10,17 +10,18 @@
   `<pair>.geo.cc.tif` (coherence 0–1), `<pair>.geo.diff_pha.tif` (wrapped filtered).
 - GWS index pages are throttled together with file reads; STAC/IMD/CCI unaffected.
 
-## The block (updated: NOT IP throttle, NOT login)
+## The block (updated: COMET migration in flight, NOT IP/auth/throttle)
 
-Fresh-IP retest: identical 404s. Discriminating probes show CEDA root (200),
-listings (200), and small metadata files (200) all serve anonymously — while
-every file under `interferograms/` 404s (PNG+TIFF, old+`.future` paths).
-No 401s anywhere. Diagnosis revised: the interferogram file subtree itself is
-unavailable (backend migration/outage; portal warned of `LiCSAR_products` →
-`.future` moves), not client throttling and not an auth wall. Feasibility PASS
-stands (availability proven from listings + one completed GeoTIFF open).
-Resume probe: single PNG GET; on 200, run the paced runbook. If durable, check
-COMET portal news / CEDA status before any further action.
+Fresh-IP retest + `.future`-repo investigation: the new repo
+(`gws-access/.../LiCSAR_products.future/`) EXISTS with frame/pair-dir indexes,
+but pair file reads 404 on both old (`data.ceda.ac.uk/.../LiCSAR_products/...`)
+and new paths; small metadata files + all listings still serve (200, anonymous,
+no 401s anywhere). Diagnosis: index migrated, file payloads not yet transferred
+— mid-migration breakage on COMET's side. LiCSBAS01_get_geotiff.py would resolve
+to the same file backends and fail identically; cloning it changes nothing until
+the payloads land. Feasibility PASS stands (pair census + one completed GeoTIFF
+open pre-date the breakage). Resume probe: single pair-PNG GET on EITHER path;
+on 200, run the paced runbook. If durable, check COMET portal news.
 
 ## Resume runbook (single client, off-peak)
 
