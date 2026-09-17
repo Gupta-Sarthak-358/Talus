@@ -634,6 +634,9 @@ washaway of labour camp — flood-dominant + occupational). 29-Mile rows adopt f
 27.0144,88.4359 (in-box confirmed; Rambi town itself out — good thing the marker won).
 Sichey press budget exhausted (admin-archive avenue remains). SetiJhora = toe erosion,
 not a slide. Pool holds 22, audit 22/17/0.
+Mining pass 16 (`trackA_mining17.py`): Tsong-20190916 PROMOTED (Tier-1 IPR + 4 outlets:
+Sep-16 cloudburst, whole-village washout, 300 homeless, 1 dead; Mangtabung = context)
+-> pool 22 -> 23 (18 episodes, audit clean, Gyalshing = 10th district). Gap 7.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;
