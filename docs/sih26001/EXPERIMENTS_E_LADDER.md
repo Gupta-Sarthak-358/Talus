@@ -549,6 +549,12 @@ quad-source; +BirikDara-20220802 dual with timed detail; gap 17). Pooled Oct-202
 peer-reviewed scar study (Das et al Curr Sci 2022: Birik Dara 10pm Oct-20-2021, same chronic site
 as Aug-2022 recurrence). 29-Mile held provisional (localization search rate-limited).
 event_type metadata added (fatal / non-fatal / road-block / high-exposure / multi-slide).
+Mining pass 3 (`trackA_mining4.py`, 3 of 6 windows answered, 3 rate-limited): pool 13 -> 14
+(+Pathing/Gaguney-20221124: PTI rescue + field GPS 27.2955,88.3924 + peer paper, chronic-slide
+ONE-sample at Nov-24 evacuation pulse; gap 16). SeesaGolai-20210601 provisional (single +
+subsidence-mechanism caveat); Sichey-20210609 provisional (single + internal time conflict);
+BhaluKhola tunnel-face collapse REJECTED (construction accident, with Lingzya precedent).
+Jul-2020 / May-2020-North / Sep-2021-Gangtok windows deferred on 429s, not closed.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;
