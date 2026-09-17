@@ -569,6 +569,13 @@ drain_density REAL in G/L/D but 1.2-constant PROXY in AR/AS/MN/ML/MZ; digitized
 geology MISSING). Header selector shows Validated/Outside-validated-regime badge in
 5 languages; CorridorComparison covers all 8 corridors with per-corridor regime tags
 (stale NGEN-pending footer removed). 62 passed 2 skipped, build green. No new model.
+Mining pass 5 (`trackA_mining6.py`): 29-Mile LOCALIZED (Teesta-Rambi via 3 outlets +
+mile-marker math; 60km-from-Rangpo outweighed as reporter error) -> pool 14 -> 16
+(+29Mile-20210711 quad, +29Mile-20210906 dual; 4th hit Sep-23-2020 provisional).
+Transfer 6 -> 9 (+Tripura May-18 pair, +Nongstoin-20230617 quad-source).
+Provisional-transfer +5 (Tripura May-20 pair, Lumshong, Pynthor, Rngain-road-cut).
+Skipped with reason: Mawsynram truck gorge (accident), Guwahati guard-wall (structural).
+Mizoram + Jul-2020-Sikkim deferred on 429s. Gap 14.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;
