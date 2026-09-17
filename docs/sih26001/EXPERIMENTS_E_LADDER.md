@@ -543,6 +543,12 @@ not a slide; Chungthang-20231004 rejected (GLOF cascade, trigger 5200m outside r
 Chronic-site repeats now visible (29-Mile Sep-2021 + Oct-2021; 20-Mile Sep-2022 + Oct-2022):
 distinct dates, non-overlapping T-30 windows, legitimate separate samples.
 Also fixed a bool-vs-string filter bug that undercounted eligible 10 as 4.
+Mining pass 2b (`trackA_mining3.py`): pool 10 -> 13 eligible (+Pubung-20190708 on Chataidhura
+GPS 27.0044, edge-flagged with 0.5km margin documented, NOT silently promoted; +17Mile-20220615
+quad-source; +BirikDara-20220802 dual with timed detail; gap 17). Pooled Oct-2021 event gains
+peer-reviewed scar study (Das et al Curr Sci 2022: Birik Dara 10pm Oct-20-2021, same chronic site
+as Aug-2022 recurrence). 29-Mile held provisional (localization search rate-limited).
+event_type metadata added (fatal / non-fatal / road-block / high-exposure / multi-slide).
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;
