@@ -675,6 +675,12 @@ ALERT 0.30, CRITICAL 0.00, AUC 0.53, Brier 0.317 (worse than constant); dev near
 (20MILE T: raw 68 WATCH vs P_cal 0.855). OOD 30 snaps / 5 events, invariant holds. Burden reused
 from frozen-scorer runs (monsoon 28/60-5.8d, off-season 0/60). 7 held-out misses typed in ledger.
 Nothing tuned. M1 gate open against the ledger only.
+V-D M1-A (`sat_features.py` + `m1_fusion.py`, `runs/phase_v/m1/`): S1 VV/VH change for
+23/23 events (same-track pairs, GCP-geocoded window means, no bulk downloads; optical
+blocked by Requester-Pays + monsoon-blind). Held-out ALERT 0.30→0.60, 4/7 rescued — BUT
+Brier 0.317→0.384, AUC flat, sat-only AUC exactly 0.500, rescues mostly sat-evidence-none
+with window-edge leads. VERDICT REJECT: gain is dev-overfit recalibration, not satellite
+complementarity. No M2. Residual hypothesis: coherence-phase SAR / optical-when-clear.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;

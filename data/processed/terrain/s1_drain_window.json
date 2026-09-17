@@ -3,19 +3,23 @@
     "lat": 27.345,
     "lon": 88.6
   },
-  "queried_at": "2026-09-04T10:27:43Z",
-  "window": {
-    "file": "data\\processed\\terrain\\s1_dem_window.csv",
-    "side_m": [
-      267.4,
-      265.4
-    ],
-    "area_km2": 0.071
+  "queried_at": "2026-09-17T16:47:52Z",
+  "catchment": {
+    "radius_m": 2500,
+    "area_km2": 19.635
   },
-  "in_window_stream_m": 0.0,
-  "ways_used": [],
+  "stream_m": 7900.9,
+  "ways_used": [
+    129509880,
+    129735609,
+    129776801,
+    416534058,
+    1084683258,
+    1084683262,
+    1084683263
+  ],
   "row_values": {
-    "drain_density": 0.0
+    "drain_density": 0.402
   },
-  "tag": "PROXY-window: 271-m window cannot see catchment drainage; OSM misses unmapped streams"
+  "tag": "REAL catchment 2.5km radius \u2014 total stream length / pi*r^2, OSM waterways within radius (catchment proxy, not window)"
 }

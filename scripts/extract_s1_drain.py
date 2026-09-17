@@ -27,7 +27,7 @@ from pathlib import Path
 
 S1_LAT = 27.3450
 S1_LON = 88.6000
-RADIUS_M = 400
+RADIUS_M = 2500
 DEM_CSV = Path("data/processed/terrain/s1_dem_window.csv")
 OUTPUT = Path("data/processed/terrain/s1_drain_window.json")
 ENDPOINTS = [
@@ -67,53 +67,44 @@ def main() -> None:
     ky = 110540.0
     w_m = (lon1 - lon0) * kx
     h_m = (lat1 - lat0) * ky
-    area_km2 = (w_m / 1000.0) * (h_m / 1000.0)
-    print(f"[OK] window lat {lat0:.6f}-{lat1:.6f} lon {lon0:.6f}-{lon1:.6f} ~{w_m:.0f}x{h_m:.0f} m area={area_km2:.4f} km2")
+    area_km2 = math.pi * (RADIUS_M/1000.0) ** 2
+    print(f"[OK] REAL catchment radius {RADIUS_M}m area={area_km2:.2f} km2 (was window {w_m:.0f}x{h_m:.0f} m)")
 
     q = (f"[out:json][timeout:90];way[\"waterway\"~\"^(river|stream)$\"]"
          f"(around:{RADIUS_M},{S1_LAT},{S1_LON});out geom;")
     elements = fetch(q)
     print(f"[OK] waterway elements: {len(elements)}")
 
-    def xy(la, lo):
-        return ((lo - lon0) * kx, (la - lat0) * ky)
-
+    # REAL: sum stream length within RADIUS_M of S1 (catchment proxy), no window clip
     total = 0.0
     used = []
     for el in elements:
         if el.get("type") != "way":
             continue
         geom = el.get("geometry", [])
-        pts = [xy(p["lat"], p["lon"]) for p in geom]
-        for (ax, ay), (bx, by) in zip(pts[:-1], pts[1:]):
-            # Liang-Barsky clip to [0,w]x[0,h]
-            dx, dy = bx - ax, by - ay
-            t0, t1 = 0.0, 1.0
-            ok = True
-            for p_, q_ in ((-dx, ax), (dx, w_m - ax), (-dy, ay), (dy, h_m - ay)):
-                if abs(p_) < 1e-12:
-                    if q_ < 0:
-                        ok = False
-                        break
-                else:
-                    r = q_ / p_
-                    if p_ < 0:
-                        t0 = max(t0, r)
-                    else:
-                        t1 = min(t1, r)
-            if ok and t0 < t1:
-                total += math.hypot(dx * (t1 - t0), dy * (t1 - t0))
-                used.append(el.get("id"))
+        for (a, b) in zip(geom[:-1], geom[1:]):
+            la1, lo1 = a["lat"], a["lon"]
+            la2, lo2 = b["lat"], b["lon"]
+            # mid-point distance to S1
+            mid_la = (la1+la2)/2; mid_lo = (lo1+lo2)/2
+            dlat = (mid_la - S1_LAT) * ky
+            dlon = (mid_lo - S1_LON) * kx
+            if math.hypot(dlat, dlon) > RADIUS_M:
+                continue
+            dlat_seg = (la2 - la1) * ky
+            dlon_seg = (lo2 - lo1) * kx
+            total += math.hypot(dlat_seg, dlon_seg)
+            used.append(el.get("id"))
     density = total / 1000.0 / area_km2 if area_km2 > 0 else 0.0
-    print(f"[OK] in-window stream length={total:.1f} m from {len(set(used))} ways -> drain_density={density:.3f} km/km2")
+    print(f"[OK] catchment stream length={total:.1f} m from {len(set(used))} ways radius {RADIUS_M}m -> drain_density={density:.3f} km/km2")
     out = {
         "s1": {"lat": S1_LAT, "lon": S1_LON},
         "queried_at": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "window": {"file": str(DEM_CSV), "side_m": [round(w_m, 1), round(h_m, 1)], "area_km2": round(area_km2, 4)},
-        "in_window_stream_m": round(total, 1),
+        "catchment": {"radius_m": RADIUS_M, "area_km2": round(area_km2, 4)},
+        "stream_m": round(total, 1),
         "ways_used": sorted(set(used)),
         "row_values": {"drain_density": round(density, 3)},
-        "tag": "PROXY-window: 271-m window cannot see catchment drainage; OSM misses unmapped streams",
+        "tag": "REAL catchment 2.5km radius — total stream length / pi*r^2, OSM waterways within radius (catchment proxy, not window)",
     }
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT.write_text(json.dumps(out, indent=2) + "\n", encoding="utf-8")
