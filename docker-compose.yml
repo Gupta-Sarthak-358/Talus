@@ -1,0 +1,28 @@
+services:
+  api:
+    build: .
+    ports: ["8000:8000"]
+    env_file: [.env]
+    environment:
+      CORS_ORIGINS: ${CORS_ORIGINS:-*}
+      # Live SMS provider (env-gated): set to enable real sends, else simulated+logged
+      SMS_PROVIDER: ${SMS_PROVIDER:-}
+      SMS_API_KEY: ${SMS_API_KEY:-}
+      SMS_SENDER_ID: ${SMS_SENDER_ID:-TALUS}
+    volumes:
+      - ./runs:/app/runs
+      - ./data/sih26001/evidence:/app/data/sih26001/evidence:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # Optional: local sensor simulator (seeded, labeled SIMULATED)
+  simulator:
+    build: .
+    command: ["python", "scripts/local_sensor_sim.py", "--interval", "30"]
+    volumes: ["./runs:/app/runs"]
+    depends_on: [api]
+    profiles: ["sim"]

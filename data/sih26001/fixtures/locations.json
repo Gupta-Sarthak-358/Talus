@@ -56,6 +56,101 @@
       "file": "slopes.darjeeling.json",
       "live": true,
       "badge": "LIVE \u2014 NGEN"
+    },
+    {
+      "id": "arunachal",
+      "label": "Arunachal Pradesh",
+      "state": "Arunachal Pradesh",
+      "center": [
+        27.0844,
+        93.6053
+      ],
+      "zoom": 8,
+      "zones": [
+        "AR1",
+        "AR2",
+        "AR3",
+        "AR4"
+      ],
+      "file": "slopes.arunachal.json",
+      "live": true,
+      "badge": "LIVE \u2014 NGEN"
+    },
+    {
+      "id": "assam",
+      "label": "Assam Hills",
+      "state": "Assam",
+      "center": [
+        26.14,
+        91.73
+      ],
+      "zoom": 8,
+      "zones": [
+        "AS1",
+        "AS2",
+        "AS3",
+        "AS4"
+      ],
+      "file": "slopes.assam.json",
+      "live": true,
+      "badge": "LIVE \u2014 NGEN"
+    },
+    {
+      "id": "manipur",
+      "label": "Manipur Hills",
+      "state": "Manipur",
+      "center": [
+        24.817,
+        93.936
+      ],
+      "zoom": 8,
+      "zones": [
+        "MN1",
+        "MN2",
+        "MN3",
+        "MN4"
+      ],
+      "file": "slopes.manipur.json",
+      "live": true,
+      "badge": "LIVE \u2014 NGEN"
+    },
+    {
+      "id": "meghalaya",
+      "label": "Meghalaya Hills",
+      "state": "Meghalaya",
+      "center": [
+        25.578,
+        91.893
+      ],
+      "zoom": 8,
+      "zones": [
+        "ML1",
+        "ML2",
+        "ML3",
+        "ML4"
+      ],
+      "file": "slopes.meghalaya.json",
+      "live": true,
+      "badge": "LIVE \u2014 NGEN"
+    },
+    {
+      "id": "mizoram",
+      "label": "Mizoram Hills",
+      "state": "Mizoram",
+      "center": [
+        23.73,
+        92.717
+      ],
+      "zoom": 8,
+      "zones": [
+        "MZ1",
+        "MZ2",
+        "MZ3",
+        "MZ4"
+      ],
+      "file": "slopes.mizoram.json",
+      "live": true,
+      "badge": "LIVE \u2014 NGEN"
     }
   ]
 }

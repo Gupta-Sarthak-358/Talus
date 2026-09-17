@@ -1,0 +1,81 @@
+{
+  "zones": [
+    {
+      "zone_id": "MN1",
+      "name": "MN1 \u2014 Manipur Hills Zone 1",
+      "geometry": {
+        "lat": 24.825,
+        "lon": 93.932
+      },
+      "risk_score": 55,
+      "risk_band": "Low",
+      "confidence": 0.62,
+      "trend": "stable",
+      "missing_evidence": [],
+      "contributions": [
+        {
+          "feature": "slope_angle",
+          "shap": 0.12
+        }
+      ]
+    },
+    {
+      "zone_id": "MN2",
+      "name": "MN2 \u2014 Manipur Hills Zone 2",
+      "geometry": {
+        "lat": 24.82,
+        "lon": 93.942
+      },
+      "risk_score": 55,
+      "risk_band": "Low",
+      "confidence": 0.62,
+      "trend": "stable",
+      "missing_evidence": [],
+      "contributions": [
+        {
+          "feature": "slope_angle",
+          "shap": 0.12
+        }
+      ]
+    },
+    {
+      "zone_id": "MN3",
+      "name": "MN3 \u2014 Manipur Hills Zone 3",
+      "geometry": {
+        "lat": 24.809,
+        "lon": 93.938
+      },
+      "risk_score": 55,
+      "risk_band": "Low",
+      "confidence": 0.62,
+      "trend": "stable",
+      "missing_evidence": [],
+      "contributions": [
+        {
+          "feature": "slope_angle",
+          "shap": 0.12
+        }
+      ]
+    },
+    {
+      "zone_id": "MN4",
+      "name": "MN4 \u2014 Manipur Hills Zone 4",
+      "geometry": {
+        "lat": 24.802,
+        "lon": 93.924
+      },
+      "risk_score": 55,
+      "risk_band": "Low",
+      "confidence": 0.62,
+      "trend": "stable",
+      "missing_evidence": [],
+      "contributions": [
+        {
+          "feature": "slope_angle",
+          "shap": 0.12
+        }
+      ]
+    }
+  ],
+  "histories": {}
+}

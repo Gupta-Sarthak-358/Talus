@@ -5,7 +5,7 @@ docs/sih26001/04_MODEL_PLAN_SIH26001.md:37-50. Defaults: season-window proxy
 target (tagged approximate in the matrix — never invented dates).
 
 Design (frozen before running):
-  X = 14 numeric (spi as log1p, documented) + lulc one-hot(drop_first).
+  X = 17 numeric (spi as log1p + 3 seismic-memory, documented) + lulc one-hot(drop_first).
   DROPPED from X (logged delta): lithology + lineament_density (uniform PROXY
   constants — asserted constant, zero signal), previous_landslide (leakage:
   positives ARE inventory slides; negatives are >300m by construction),
@@ -56,7 +56,8 @@ TEMP_MIN_PER_SIDE = 30
 NUMERIC = ["slope_angle", "elevation", "aspect", "curvature", "twi", "spi_log",
            "rainfall_24h_mm", "rainfall_7d_mm", "rainfall_30d_mm",
            "soil_moisture", "ndvi", "distance_to_road", "distance_to_river",
-           "drain_density"]
+           "drain_density", "seismic_dist_km", "seismic_n50_rate",
+           "seismic_years_since", "recent_disturbance"]
 DROP_CONST = ["lithology", "lineament_density"]
 DROP_LEAK = ["previous_landslide"]
 DROP_KEYS = ["zone_id", "time_window", "evidence_quality"]
@@ -128,7 +129,8 @@ def main() -> int:
     X = mat[["slope_angle", "elevation", "aspect", "curvature", "twi", "spi",
              "rainfall_24h_mm", "rainfall_7d_mm", "rainfall_30d_mm",
              "soil_moisture", "ndvi", "distance_to_road", "distance_to_river",
-             "drain_density", "lulc"]].copy()
+             "drain_density", "seismic_dist_km", "seismic_n50_rate",
+             "seismic_years_since", "recent_disturbance", "lulc"]].copy()
     X["spi_log"] = np.log1p(X["spi"].clip(lower=0))
     X = X.drop(columns=["spi"])
     pre = ColumnTransformer([
@@ -380,7 +382,7 @@ def main() -> int:
         f"Target: `event` season-window proxy (positives = inventoried Sikkim + "
         f"Darjeeling-hills (WB) slides, tagged `approximate`; negatives = >300m "
         f"background, seed 42). "
-        f"n={len(y)} (pos={int(y.sum())}). X = 14 numeric (spi log1p) + lulc one-hot "
+        f"n={len(y)} (pos={int(y.sum())}). X = 17 numeric (spi log1p + seismic x3) + lulc one-hot "
         f"(drop_first); lithology/lineament omitted (uniform PROXY), previous_landslide "
         f"omitted (leakage — positives ARE inventory slides).\n\n"
         f"## Spatial GroupKFold(8) out-of-fold (clusters = KMeans-8 on coords, seed 42)\n\n"

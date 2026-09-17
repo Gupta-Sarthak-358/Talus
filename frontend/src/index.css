@@ -118,3 +118,36 @@
 .glow-emerald {
   box-shadow: 0 0 15px rgba(94, 127, 58, 0.25);
 }
+
+/* Villager high-contrast mode — 48px tap, no jargon */
+.villager-hero {
+  @apply text-villager-hero tracking-tight;
+}
+.villager-tap {
+  min-height: 48px;
+  @apply text-villager-body;
+}
+
+/* Ops density — compact cards, sticky command bar */
+.ops-dense {
+  @apply text-xs leading-tight;
+}
+.ops-sticky-top {
+  position: sticky;
+  top: 68px;
+  z-index: 30;
+}
+
+/* Focus visible for keyboard nav (a11y) */
+:focus-visible {
+  outline: 2px solid #664930;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Reduce motion for villagers/low-bandwidth */
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse, .animate-ping, .pulse-critical {
+    animation: none !important;
+  }
+}

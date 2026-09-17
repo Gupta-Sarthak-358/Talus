@@ -95,7 +95,7 @@ export default function WhatIfDrawer() {
   const targetZone = zones.find((z) => z.id === targetZoneId) || selectedZoneData;
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-sm transition-opacity">
+    <div className="fixed inset-0 z-[2000] flex justify-end bg-black/40 backdrop-blur-sm transition-opacity">
       <div className="w-full max-w-lg bg-mine-card border-l border-mine-border h-full flex flex-col shadow-2xl overflow-hidden animate-in slide-in-from-right duration-300">
         {/* Drawer Header */}
         <div className="p-4 bg-mine-darker border-b border-mine-border flex items-center justify-between">

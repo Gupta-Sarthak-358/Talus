@@ -1,0 +1,81 @@
+{
+  "zones": [
+    {
+      "zone_id": "MZ1",
+      "name": "MZ1 \u2014 Mizoram Hills Zone 1",
+      "geometry": {
+        "lat": 23.738,
+        "lon": 92.713
+      },
+      "risk_score": 55,
+      "risk_band": "Low",
+      "confidence": 0.62,
+      "trend": "stable",
+      "missing_evidence": [],
+      "contributions": [
+        {
+          "feature": "slope_angle",
+          "shap": 0.12
+        }
+      ]
+    },
+    {
+      "zone_id": "MZ2",
+      "name": "MZ2 \u2014 Mizoram Hills Zone 2",
+      "geometry": {
+        "lat": 23.733,
+        "lon": 92.723
+      },
+      "risk_score": 55,
+      "risk_band": "Low",
+      "confidence": 0.62,
+      "trend": "stable",
+      "missing_evidence": [],
+      "contributions": [
+        {
+          "feature": "slope_angle",
+          "shap": 0.12
+        }
+      ]
+    },
+    {
+      "zone_id": "MZ3",
+      "name": "MZ3 \u2014 Mizoram Hills Zone 3",
+      "geometry": {
+        "lat": 23.722,
+        "lon": 92.719
+      },
+      "risk_score": 55,
+      "risk_band": "Low",
+      "confidence": 0.62,
+      "trend": "stable",
+      "missing_evidence": [],
+      "contributions": [
+        {
+          "feature": "slope_angle",
+          "shap": 0.12
+        }
+      ]
+    },
+    {
+      "zone_id": "MZ4",
+      "name": "MZ4 \u2014 Mizoram Hills Zone 4",
+      "geometry": {
+        "lat": 23.715,
+        "lon": 92.705
+      },
+      "risk_score": 55,
+      "risk_band": "Low",
+      "confidence": 0.62,
+      "trend": "stable",
+      "missing_evidence": [],
+      "contributions": [
+        {
+          "feature": "slope_angle",
+          "shap": 0.12
+        }
+      ]
+    }
+  ],
+  "histories": {}
+}

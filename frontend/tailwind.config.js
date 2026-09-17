@@ -52,6 +52,10 @@ export default {
         mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
         sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
       },
+      fontSize: {
+        'villager-hero': ['1.75rem', { lineHeight: '1.2', fontWeight: '800' }],
+        'villager-body': ['1.05rem', { lineHeight: '1.5', fontWeight: '600' }],
+      },
       animation: {
         'pulse-fast': 'pulse 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'radar-sweep': 'radarSweep 4s linear infinite',

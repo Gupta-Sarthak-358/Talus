@@ -3,13 +3,14 @@ import { useTalusContext } from '../../context/TalusContext';
 import {
   savePhotoBackground, getAllPhotosBackground,
   saveReportOutbox, readReportOutbox,
-  makePhotoThumbnail, sha256File,
+  makePhotoThumbnail, sha256File, readExifGps,
 } from '../../services/reports';
+import { analyzePhoto } from '../../services/cv';
 import { FileText, Send, X, Clock, MapPin, CheckCircle2, AlertCircle, RefreshCw, ShieldCheck, ImagePlus, Trash2, CloudOff } from 'lucide-react';
 
 const ACCEPTED_MEDIA = ['image/jpeg', 'image/png', 'image/webp', 'video/mp4'];
 const ACCEPT_ATTR = 'image/jpeg,image/png,image/webp,video/mp4';
-const MAX_MEDIA_BYTES = 10 * 1024 * 1024; // 10 MB mockup cap (background store is localStorage)
+const MAX_MEDIA_BYTES = 10 * 1024 * 1024; // 10 MB cap (background store is localStorage)
 
 /** Network-ish failures may queue to the background outbox; 4xx validation must not. */
 function isOutboxEligible(err) {
@@ -51,13 +52,16 @@ export default function ReportModal() {
   const [submitSuccess, setSubmitSuccess] = useState(null);
   const [submitError, setSubmitError] = useState(null);
   const [submitInfo, setSubmitInfo] = useState(null);
-  // Photo mockup lane: real local file, preview + sha256; bytes stay client-side
+  // Photo lane: real local file, preview + real sha256 + real device EXIF GPS (or null); bytes stay client-side
   const [photoFile, setPhotoFile] = useState(null);
   const [photoPreview, setPhotoPreview] = useState(null);
   const [photoThumb, setPhotoThumb] = useState(null);
   const [photoHash, setPhotoHash] = useState(null);
+  const [photoGps, setPhotoGps] = useState(null); // {lat, lon} from file EXIF, or null = none found
   const [photoError, setPhotoError] = useState(null);
   const [hashing, setHashing] = useState(false);
+  const [screening, setScreening] = useState(null); // measured photo stats, or null
+  const [screeningBusy, setScreeningBusy] = useState(false);
   // Background store: thumbnails keyed by report id + pending outbox count
   const [photoMap, setPhotoMap] = useState({});
   const [outboxCount, setOutboxCount] = useState(0);
@@ -85,17 +89,19 @@ export default function ReportModal() {
       return;
     }
     if (file.size > MAX_MEDIA_BYTES) {
-      setPhotoError(`File too large (${(file.size / 1048576).toFixed(1)} MB > 10 MB mockup cap)`);
+      setPhotoError(`File too large (${(file.size / 1048576).toFixed(1)} MB > 10 MB cap)`);
       return;
     }
     if (photoPreview) URL.revokeObjectURL(photoPreview);
+    setScreening(null);
     setPhotoFile(file);
     setPhotoPreview(file.type.startsWith('image/') ? URL.createObjectURL(file) : null);
     setHashing(true);
     try {
-      const [hash, thumb] = await Promise.all([sha256File(file), makePhotoThumbnail(file)]);
+      const [hash, thumb, gps] = await Promise.all([sha256File(file), makePhotoThumbnail(file), readExifGps(file)]);
       setPhotoHash(hash);
       setPhotoThumb(thumb);
+      setPhotoGps(gps);
     } finally {
       setHashing(false);
     }
@@ -107,7 +113,9 @@ export default function ReportModal() {
     setPhotoPreview(null);
     setPhotoThumb(null);
     setPhotoHash(null);
+    setPhotoGps(null);
     setPhotoError(null);
+    setScreening(null);
   };
 
   const handleSync = async () => {
@@ -125,6 +133,10 @@ export default function ReportModal() {
     if (!description.trim() || description.trim().length < 10) return;
     if (!consent) return;
 
+    if (photoFile && !photoHash) {
+      setSubmitError('Still fingerprinting the attachment — wait a second and retry.');
+      return;
+    }
     setSubmitting(true);
     setSubmitSuccess(null);
     setSubmitError(null);
@@ -142,9 +154,9 @@ export default function ReportModal() {
           filename: photoFile.name,
           mime: photoFile.type,
           size_bytes: photoFile.size,
-          sha256: photoHash || 'pending',
-          exif_lat: defaultLat,
-          exif_lon: defaultLon,
+          sha256: photoHash,
+          exif_lat: photoGps?.lat ?? null,
+          exif_lon: photoGps?.lon ?? null,
         } : null,
         consent: true,
       };
@@ -191,7 +203,7 @@ export default function ReportModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[2000] flex items-center justify-center p-3 sm:p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="w-full max-w-3xl bg-mine-card border border-mine-border rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
         {/* Header */}
         <div className="p-4 bg-mine-darker border-b border-mine-border flex items-center justify-between">
@@ -309,9 +321,9 @@ export default function ReportModal() {
                 />
               </div>
 
-              {/* Photo mockup lane: real local file, preview + sha256; bytes stay client-side */}
+              {/* Photo lane: real local file, preview + real sha256 + device EXIF GPS; bytes stay client-side */}
               <div>
-                <label className="text-[11px] font-semibold text-mine-muted">Photo / Video <span className="font-normal">(mockup — stored in background, metadata posted)</span></label>
+                <label className="text-[11px] font-semibold text-mine-muted">Photo / Video <span className="font-normal">(stays on this device, metadata posted)</span></label>
                 <input
                   type="file"
                   accept={ACCEPT_ATTR}
@@ -339,12 +351,43 @@ export default function ReportModal() {
                       <div className="text-[10px] font-mono text-mine-muted truncate">
                         {photoFile.type || 'unknown'} · {(photoFile.size / 1024).toFixed(1)} KB{hashing ? ' · hashing…' : photoHash ? ` · sha256:${photoHash.slice(0, 12)}…` : ''}
                       </div>
-                      <div className="text-[10px] text-mine-muted">EXIF mocked to claimed GPS (mockup lane)</div>
+                      <div className="text-[10px] text-mine-muted">
+                        {photoGps
+                          ? `Device GPS ${photoGps.lat.toFixed(5)}, ${photoGps.lon.toFixed(5)} (from file)`
+                          : 'No GPS found in file — location unverified'}
+                      </div>
                     </div>
                     <button type="button" onClick={clearPhoto} className="p-1.5 rounded-lg hover:bg-mine-dark text-mine-muted hover:text-red-400 transition-colors" title="Remove attachment">
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
+                )}
+                {photoFile && photoFile.type.startsWith('image/') && !screening && (
+                  <button
+                    type="button"
+                    disabled={screeningBusy}
+                    onClick={async () => {
+                      setScreeningBusy(true);
+                      try {
+                        setScreening(await analyzePhoto(photoFile));
+                      } finally {
+                        setScreeningBusy(false);
+                      }
+                    }}
+                    className="mt-1.5 text-[11px] font-semibold px-2.5 py-1.5 rounded-lg bg-mine-darker border border-mine-border hover:border-talus-500 text-mine-text disabled:opacity-50 transition-colors"
+                  >
+                    {screeningBusy ? 'Measuring…' : 'Screen photo (measured stats, not a diagnosis)'}
+                  </button>
+                )}
+                {screening?.supported && (
+                  <div className="mt-1.5 p-2 rounded-lg border border-mine-border bg-mine-darker text-[10px] font-mono text-mine-muted space-y-0.5">
+                    <div>edge density {screening.edgeDensityPct}% · dark {screening.darkFractionPct}% · sharpness {screening.sharpness}</div>
+                    <div>{screening.width}×{screening.height} → sampled {screening.sampled}</div>
+                    <div className="font-sans">Measurements for officer review — not a crack diagnosis.</div>
+                  </div>
+                )}
+                {screening && !screening.supported && (
+                  <p className="text-[10px] text-mine-muted mt-1">{screening.reason}</p>
                 )}
                 {photoError && (
                   <p className="text-[10px] text-red-400 mt-1">{photoError}</p>

@@ -1,0 +1,13 @@
+{
+  "attempted_at": "2025-11-14T14:20:00Z",
+  "target": "Bhukosh GSI WFS/WMS GetCapabilities for lithology/lineament per-slope vector clip (Gangtok S1 27.34,88.60)",
+  "urls": [
+    "https://bhukosh.gsi.gov.in/Bhukosh/MapService?service=WFS&request=GetCapabilities",
+    "https://bhukosh.gsi.gov.in/Bhukosh/MapService?service=WMS&request=GetCapabilities"
+  ],
+  "result": "timeout after 15s for both WFS and WMS (2025-11 live probe via urllib, ssl, TALUS/1.0 UA)",
+  "prior_attempt": "extract_lithology.py / extract_lineament.py use published maps: DRAP Fig25 (Kanchenjunga gneiss) + NESAC Bhuvan SK_LN50K_0506 verified WMS — not Bhukosh vector",
+  "fallback": "PROXY-published-map uniform per NGEN_PROVENANCE_S1.md and manifest.sample.json:93 lithology lingtse_granite_gneiss uniform, lineament 0.8/km — not per-slope Bhukosh polygon clip. Honest limitation per docs/sih26001/08_LIMITATIONS_SIH26001.md",
+  "next_step": "When Bhukosh WFS is reachable or GSI Bhukosh API key provisioned, re-run extract_lithology.py --wfs to replace uniform with per-slope clip; training will keep uniform-drop rule until vector shows variance",
+  "grade": "PROXY-published-map (not STUB, vector attempt logged)"
+}

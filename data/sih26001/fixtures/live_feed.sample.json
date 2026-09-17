@@ -1,0 +1,93 @@
+{
+  "mode": "simulated",
+  "sim": "scripts/local_sensor_sim.py v1",
+  "seed": 42,
+  "tick": 0,
+  "issued_at": "2026-09-15T15:06:08+00:00",
+  "zones": {
+    "S1": {
+      "rain_1h_mm": 2.77,
+      "soil_delta": 0.0006,
+      "battery_pct": 97.4,
+      "rssi_dbm": -68.4,
+      "status": "ok"
+    },
+    "S2": {
+      "rain_1h_mm": 3.15,
+      "soil_delta": 0.0047,
+      "battery_pct": 97.2,
+      "rssi_dbm": -71.6,
+      "status": "stale"
+    },
+    "S3": {
+      "rain_1h_mm": 1.32,
+      "soil_delta": 0.0113,
+      "battery_pct": 97.9,
+      "rssi_dbm": -67.3,
+      "status": "ok"
+    },
+    "S4": {
+      "rain_1h_mm": 2.15,
+      "soil_delta": 0.004,
+      "battery_pct": 96.4,
+      "rssi_dbm": -62.1,
+      "status": "stale"
+    },
+    "N1": {
+      "rain_1h_mm": 4.46,
+      "soil_delta": -0.0096,
+      "battery_pct": 97.3,
+      "rssi_dbm": -61.6,
+      "status": "ok"
+    },
+    "N2": {
+      "rain_1h_mm": 4.27,
+      "soil_delta": 0.005,
+      "battery_pct": 96.3,
+      "rssi_dbm": -68.5,
+      "status": "ok"
+    },
+    "N3": {
+      "rain_1h_mm": 2.04,
+      "soil_delta": -0.0101,
+      "battery_pct": 96.9,
+      "rssi_dbm": -64.2,
+      "status": "ok"
+    },
+    "N4": {
+      "rain_1h_mm": 1.35,
+      "soil_delta": 0.0073,
+      "battery_pct": 96.3,
+      "rssi_dbm": -77.3,
+      "status": "ok"
+    },
+    "D1": {
+      "rain_1h_mm": 5.12,
+      "soil_delta": -0.0004,
+      "battery_pct": 97.5,
+      "rssi_dbm": -70.6,
+      "status": "ok"
+    },
+    "D2": {
+      "rain_1h_mm": 3.66,
+      "soil_delta": 0.0072,
+      "battery_pct": 96.7,
+      "rssi_dbm": -67.1,
+      "status": "ok"
+    },
+    "D3": {
+      "rain_1h_mm": 1.67,
+      "soil_delta": 0.006,
+      "battery_pct": 97.5,
+      "rssi_dbm": -62.0,
+      "status": "ok"
+    },
+    "D4": {
+      "rain_1h_mm": 1.45,
+      "soil_delta": 0.0081,
+      "battery_pct": 97.7,
+      "rssi_dbm": -61.5,
+      "status": "ok"
+    }
+  }
+}

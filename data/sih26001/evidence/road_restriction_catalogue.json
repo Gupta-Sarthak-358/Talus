@@ -1,0 +1,11 @@
+{
+  "method": "Pre-emptive restriction catalogue (RESEARCH:58) — historical slide → segment closure rule before disaster. Like JMA's pre-emptive restriction sections. Restrictions are advisory (RESTRICT) even when segment is physically open, based on forecast + SWI + local threshold.",
+  "updated_at": "2025-11-14T00:00:00Z",
+  "segments": {
+    "R1": {"historical_slides": 12, "emergency_route": false, "rule": "Restrict if effective_rain ≥ local_threshold and SWI ≥0.35 or isolation may_isolate", "typical_closure_hours": 24},
+    "R2": {"historical_slides": 8, "emergency_route": false, "rule": "Restrict if ridge shortcut S1 score ≥65 (Moderate) and isolated or SWI ≥0.40; never emergency route", "typical_closure_hours": 48},
+    "R3": {"historical_slides": 5, "emergency_route": true, "rule": "Restrict only if effective_rain ≥450 and SWI ≥0.45 — valley emergency route stays open", "typical_closure_hours": 12},
+    "R4": {"historical_slides": 3, "emergency_route": true, "rule": "Restrict if effective_rain ≥500 or SWI ≥0.50 — last egress, highest bar", "typical_closure_hours": 12}
+  },
+  "catalogue_note": "Counts from GSI Bhusanket 30k vs OSM highway buffer 200m (data/sih26001/evidence/sikkim_join.json). Not a legal order — officer confirms via field queue."
+}

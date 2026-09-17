@@ -1,0 +1,81 @@
+{
+  "zones": [
+    {
+      "zone_id": "AR1",
+      "name": "AR1 \u2014 Arunachal Pradesh Zone 1",
+      "geometry": {
+        "lat": 27.0924,
+        "lon": 93.6013
+      },
+      "risk_score": 55,
+      "risk_band": "Low",
+      "confidence": 0.62,
+      "trend": "stable",
+      "missing_evidence": [],
+      "contributions": [
+        {
+          "feature": "slope_angle",
+          "shap": 0.12
+        }
+      ]
+    },
+    {
+      "zone_id": "AR2",
+      "name": "AR2 \u2014 Arunachal Pradesh Zone 2",
+      "geometry": {
+        "lat": 27.0874,
+        "lon": 93.6113
+      },
+      "risk_score": 55,
+      "risk_band": "Low",
+      "confidence": 0.62,
+      "trend": "stable",
+      "missing_evidence": [],
+      "contributions": [
+        {
+          "feature": "slope_angle",
+          "shap": 0.12
+        }
+      ]
+    },
+    {
+      "zone_id": "AR3",
+      "name": "AR3 \u2014 Arunachal Pradesh Zone 3",
+      "geometry": {
+        "lat": 27.0764,
+        "lon": 93.6073
+      },
+      "risk_score": 55,
+      "risk_band": "Low",
+      "confidence": 0.62,
+      "trend": "stable",
+      "missing_evidence": [],
+      "contributions": [
+        {
+          "feature": "slope_angle",
+          "shap": 0.12
+        }
+      ]
+    },
+    {
+      "zone_id": "AR4",
+      "name": "AR4 \u2014 Arunachal Pradesh Zone 4",
+      "geometry": {
+        "lat": 27.0694,
+        "lon": 93.5933
+      },
+      "risk_score": 55,
+      "risk_band": "Low",
+      "confidence": 0.62,
+      "trend": "stable",
+      "missing_evidence": [],
+      "contributions": [
+        {
+          "feature": "slope_angle",
+          "shap": 0.12
+        }
+      ]
+    }
+  ],
+  "histories": {}
+}

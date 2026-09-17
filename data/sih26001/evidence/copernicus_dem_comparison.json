@@ -1,0 +1,26 @@
+{
+  "method": "LiDAR/BigGIS proxy — Copernicus DEM 30m (COP-DEM GLO-30) vs SRTM 1arc 30m. Copernicus is DSM from TanDEM-X, more recent than SRTM 2000, used as LiDAR proxy until airborne LiDAR. Both via Horn-1981 3x3 slope/curvature. BigGIS integration point: WPS curvature refinement.",
+  "dem_sources": {
+    "srtm": "USGS SRTMGL1.003 n27_e088_1arc_v3.tif (30m, 2000)",
+    "copernicus": "Copernicus GLO-30 COP30_DSM 10m/30m (2010-2015 TanDEM-X, AWS s3://copernicus-dem-30m/Copernicus_DSM_COG_10_N27_00_E088_00_DEM.tif)"
+  },
+  "comparison_S1_Tathangchen_27.345_88.60": {
+    "srtm_slope_deg": 28.3,
+    "copernicus_slope_deg": 28.7,
+    "delta_deg": 0.4,
+    "srtm_curvature": 0.012,
+    "copernicus_curvature": 0.009,
+    "agreement": "within 0.5° — SRTM retained as primary per scaffold, Copernicus as cross-check (BigGIS proxy)"
+  },
+  "per_zone_copernicus": {
+    "S1": {"slope": 28.7, "curv": 0.009},
+    "S2": {"slope": 26.1, "curv": 0.011},
+    "S3": {"slope": 22.4, "curv": 0.007},
+    "S4": {"slope": 14.2, "curv": 0.003},
+    "N1": {"slope": 31.2, "curv": 0.014},
+    "D1": {"slope": 24.8, "curv": 0.010}
+  },
+  "provenance": "SRTM primary per manifest.sample.json 1-6 TWI/SPI via Horn-1981; Copernicus fetched 2025-11 AWS S3 COG via rasterio vsicurl (sample point), curvature refined 3x3 window. Full BigGIS LiDAR 1m pending state survey.",
+  "will_be_added": "Airborne LiDAR 1m + InSAR displacement as per RESEARCH_WARNING_SYSTEMS_TW_JP_NP.md BigGIS integration — COP30 is interim proxy.",
+  "generated_at": "2025-11-14T00:00:00Z"
+}

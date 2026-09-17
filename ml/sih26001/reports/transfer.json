@@ -1,0 +1,26 @@
+{
+  "date": "2026-09-15",
+  "seed": 42,
+  "reference_oof": {
+    "rf_auc": 0.9308,
+    "lr_auc": 0.8945
+  },
+  "directions": {
+    "train-SK_test-WB": {
+      "n_train": 2019,
+      "n_test": 917,
+      "rf_auc": 0.7097,
+      "rf_brier": 0.2986,
+      "lr_auc": 0.7276,
+      "lr_brier": 0.2096
+    },
+    "train-WB_test-SK": {
+      "n_train": 917,
+      "n_test": 2019,
+      "rf_auc": 0.9108,
+      "rf_brier": 0.1632,
+      "lr_auc": 0.9112,
+      "lr_brier": 0.1166
+    }
+  }
+}

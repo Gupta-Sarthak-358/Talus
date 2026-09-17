@@ -46,7 +46,7 @@ export default function Dashboard() {
       {/* 4. Road Network Status (R1-R4) with R2 Avoidance */}
       <RoadStatusCard />
 
-      {/* Drawers & Modals — CvCrackModal hidden for NER (mine drone imagery, not Gangtok); ReportModal is Screen 6 live */}
+      {/* Drawers & Modals — ReportModal is Screen 6 live */}
       <WhatIfDrawer />
       <SafeRouteModal />
       <ReportModal />

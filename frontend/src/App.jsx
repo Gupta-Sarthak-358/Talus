@@ -1,17 +1,19 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import React, { Suspense, lazy } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { TalusProvider } from './context/TalusContext';
 import Layout from './components/Layout';
-import Overview from './pages/Overview';
-import MapPage from './pages/MapPage';
-import ReportsPage from './pages/ReportsPage';
-import LabPage from './pages/LabPage';
-import RoutesPage from './pages/RoutesPage';
-import Dashboard from './pages/Dashboard';
-import VillagerPage from './pages/roles/VillagerPage';
-import DistrictPage from './pages/roles/DistrictPage';
-import StatePage from './pages/roles/StatePage';
-import RescuePage from './pages/roles/RescuePage';
+import ErrorBoundary from './components/Common/ErrorBoundary';
+import { LoadingSkeleton } from './components/Common/LoadingSkeleton';
+const MapPage = lazy(() => import('./pages/MapPage'));
+const ReportsPage = lazy(() => import('./pages/ReportsPage'));
+const LabPage = lazy(() => import('./pages/LabPage'));
+const RoutesPage = lazy(() => import('./pages/RoutesPage'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const VillagerPage = lazy(() => import('./pages/roles/VillagerPage'));
+const DistrictPage = lazy(() => import('./pages/roles/DistrictPage'));
+const StatePage = lazy(() => import('./pages/roles/StatePage'));
+const RescuePage = lazy(() => import('./pages/roles/RescuePage'));
+const AdminPage = lazy(() => import('./pages/AdminPage'));
 
 // Modals stay global so deep links can open them
 import WhatIfDrawer from './components/Simulation/WhatIfDrawer';
@@ -21,30 +23,34 @@ import AlertPanel from './components/Alerts/AlertPanel';
 
 export default function App() {
   return (
-    <TalusProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route index element={<Overview />} />
-            <Route path="map" element={<MapPage />} />
-            <Route path="reports" element={<ReportsPage />} />
-            <Route path="lab" element={<LabPage />} />
-            <Route path="routes" element={<RoutesPage />} />
-            {/* Role-specific demo pages: each role sees only what it needs */}
-            <Route path="role/villager" element={<VillagerPage />} />
-            <Route path="role/district_officer" element={<DistrictPage />} />
-            <Route path="role/state_manager" element={<StatePage />} />
-            <Route path="role/rescue_team" element={<RescuePage />} />
-            {/* legacy single-screen still reachable for compare */}
-            <Route path="dashboard" element={<Dashboard />} />
-          </Route>
-        </Routes>
-        {/* Global drawers/modals — URL + state driven */}
-        <WhatIfDrawer />
-        <SafeRouteModal />
-        <ReportModal />
-        <AlertPanel />
-      </BrowserRouter>
-    </TalusProvider>
+    <ErrorBoundary>
+      <TalusProvider>
+        <BrowserRouter>
+          <Suspense fallback={<div className="max-w-[1920px] mx-auto p-6"><LoadingSkeleton lines={6} /></div>}>
+            <Routes>
+              <Route element={<Layout />}>
+                <Route index element={<Navigate to="/role/villager" replace />} />
+                <Route path="map" element={<MapPage />} />
+                <Route path="reports" element={<ReportsPage />} />
+                <Route path="lab" element={<LabPage />} />
+                <Route path="routes" element={<RoutesPage />} />
+                {/* Role shells — selection via Admin Panel only */}
+                <Route path="role/villager" element={<VillagerPage />} />
+                <Route path="role/district_officer" element={<DistrictPage />} />
+                <Route path="role/state_manager" element={<StatePage />} />
+                <Route path="role/rescue_team" element={<RescuePage />} />
+                <Route path="admin" element={<AdminPage />} />
+                <Route path="dashboard" element={<Dashboard />} />
+              </Route>
+            </Routes>
+          </Suspense>
+          {/* Global drawers/modals — URL + state driven */}
+          <WhatIfDrawer />
+          <SafeRouteModal />
+          <ReportModal />
+          <AlertPanel />
+        </BrowserRouter>
+      </TalusProvider>
+    </ErrorBoundary>
   );
 }

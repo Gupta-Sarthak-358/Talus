@@ -1,221 +1,113 @@
-# NGEN Provenance — S1 (Gangtok Pilot) — Persons 1, 2, 3: Complete Honest Pilot (Rain + Terrain/Satellite + Labels/Manifest)
+# NGEN Provenance — S1 (Gangtok Pilot) — 2025-11-15 Truth
 
-**Status:** Built — honest training-ready fixture (16/17 REAL/PROXY, zero STUBs, plus training 2936×22) — all 3 roles covered · **Pilot:** Gangtok cluster, Sikkim ONLY · **Branch:** `SIH26001 @ 68c0c28` · **Date:** 2026-09-04
-**Roles:** Person 1 = rainfall_24h/7d/30d + soil_moisture · Person 2 = terrain/satellite/spatial (10 features) · Person 3 = labels/manifest/provenance
-**Trace to:** `docs/sih26001/SCAFFOLD_CONTRACT_SEPT5.md:1`, `docs/sih26001/TEAM_TASKS_SEPT5.md:24`, `docs/sih26001/05_FEATURE_SCHEMA_SIH26001.md:16`, `docs/sih26001/03_DATA_PLAN_SIH26001.md:1`
-**Related files:** `data/sih26001/fixtures/feature_matrix.sample.csv:1`, `data/sih26001/fixtures/manifest.sample.json:1` · **Validator:** `python scripts/check_scaffold.py:1`
+**Status:** Built — 2025-11-15 truth · **Sample:** `feature_matrix.sample.csv` 12 rows (S1–S4 + D1–D4 + N1–N4) × 22 cols, 17 numeric + lulc · **Validators:** `validate_ngen_sample.py` OK + `check_scaffold.py` SCAFFOLD OK 17-feature · **Zero STUBs**
+**Trace to:** `SCAFFOLD_CONTRACT_SEPT5.md:1` · `05_FEATURE_SCHEMA_SIH26001.md:16` · `03_DATA_PLAN_SIH26001.md:1`
 
 ---
 
 ## 1. Pilot location (frozen for demo)
 
-* **Cluster:** Gangtok cluster, Sikkim — `SCAFFOLD_CONTRACT_SEPT5.md:4` Centre `27.3389, 88.6065`, CRS `EPSG:4326` (demo, reprojection deferred)
-* **Frozen zones:** `SCAFFOLD_CONTRACT_SEPT5.md:14`
- * S1 Tathangchen (upper) `27.3450, 88.6000` — Critical 89
- * S2 Chandmari (road-cut) `27.3380, 88.6120` — High 78
- * S3 Tadong (mid) `27.3250, 88.6065` — Moderate 66
- * S4 Ranipool (valley) `27.3150, 88.5950` — Low 52
-* Scope is **pilot only**. No 8-state implementation on this branch (`TEAM_TASKS_SEPT5.md:24`).
+Centre `27.3389, 88.6065` CRS `EPSG:4326`. Frozen scores/bands unchanged.
 
-> Coordinates, IDs, scores, bands, and CSV schema are frozen by contract and were not changed here.
-
----
-
-## 2. S1 row status — 16/17 REAL/PROXY + labels REAL (2026-09-04, updated) — zero STUBs
-
-The S1 rainfall columns are **REAL direct extractions** from the committed
-IMD archive (see evidence below). S1 road/river distances are **REAL direct
-extractions** from the Overpass API (extract JSON committed, §3). S1 NDVI is
-**REAL** read from the Sentinel-2 L2A COG (no download, rasterio /vsicurl/,
-§3). S1 DEM derivatives (slope/elevation/aspect/curvature) are **PROXY** —
-computed from an open SRTM-derived mirror (AWS Terrain Tiles Terrarium), not
-the USGS N27E088 tile — as is S1 drain density (**PROXY-window**: measured
-zero mapped streams inside the 271-m window, catchment work pending). All
-other science features remain STUB/demo. S2–S4 road/river distances are REAL
-per-slope Overpass reads (same method, `s234_osm_nearest.json`, §3).
-Catchment round (Person 3, 2026-09-04): `scripts/extract_catchment.py` (z14
-3×3 Terrarium mosaic ~6.5 km, centroid-centred, priority-flood D8 +
-descending-order accumulation) → `catchment_s234.json` (sha256 in manifest):
-S1 TWI **4.24** / SPI **9.4** (PROXY); S2–S4 full DEM rows PROXY from the same
-mosaic (S2 1643 m/17.9°/TWI 3.96/SPI 5.5; S3 1367 m/37.0°/TWI 4.03/SPI 31.9;
-S4 1131 m/23.2°/TWI 5.47/SPI 43.7 — S4 concave + highest TWI matches its valley
-position; S1 z14 re-derivation reproduces the committed z15 values).
-`scripts/extract_s234_ndvi.py` (same pinned scene) → `s234_ndvi.json`: S2
-ndvi **0.139** (SCL bare — road-cut, consistent), S3 **0.817** (veg), S4
-**0.468** (veg) — all REAL. `scripts/extract_landuse.py` → `s234_landuse.json`:
-no mappable landuse within 300 m of any slope (nearest: S3 residential
-324 m-to-centre, noted not used) — SUPERSEDED 2026-09-04 by WorldCover
-(see LULC bullet in §3): S1 FOREST, S2 BUILT, S3 FOREST, S4 BUILT, all REAL.
-
-**CSV row (verbatim, `feature_matrix.sample.csv:2`):**
-```
-S1,2024-06-16,28.5,1290,289,0.0111,5.99,120.9,14.0,327.3,712.2,0.42,0.718,BUILT,schist,4,226,1.8,0.0,1,1,dated
-```
-USGS round (user-supplied tile, 2026-09-04): `data/raw/dem/n27_e088_1arc_v3.tif`
-(USGS SRTMGL1 v3, LOCAL ONLY per .gitignore) → `scripts/extract_usgs.py`
-(rasterio+numpy, py311: bilinear elev, anisotropic Horn, Laplacian curv, D8
-priority-flood TWI/SPI on a 7.7×5.9 km crop, 90 voids neighbour-filled, slope
-neighbourhoods void-free) → `data/processed/terrain/usgs_s234.json` (sha256
-in manifest). Elevations reproduce the mirror within 7 m on all slopes (the
-mirror grid is thereby validated); slope/aspect/curv/TWI/SPI differ by
-resolution (30 m native vs smoothed 4–8 m — e.g. S1 slope 22.1→28.5, aspect
-248→289, curv sign flip = scale effect, all logged per-slope in the JSON).
-USGS is the specified source: all six DEM derivatives PROMOTED PROXY→REAL.
-Extraction (Person 3, 2026-09-04): `scripts/extract_s234_osm.py` drives
-`extract_s1_osm.py` per slope (split roads/rivers queries after combined
-queries 504'd; same foot-path filter, same radii) →
-`data/processed/terrain/s234_osm_nearest.json` (sha256 in manifest):
-S2 road 6 m residential OSM-84696777 / stream 183 m;
-S3 road 126 m trunk OSM-349554354 / Rongbe Chu river 1093 m OSM-416534058;
-S4 road 66 m trunk OSM-47416222 / Rongbe Chu 460 m (same way).
-`scripts/extract_s1_sentinel2.py` (Element84 STAC → least-cloudy 2024 scene
-S2B_45RXL_20241129_0_L2A, 0.02% cloud → rasterio /vsicurl/ B04+B08+SCL) →
-`data/processed/terrain/s1_sentinel2.json`: DN red=390 nir=2380 scl=4
-(vegetation), **ndvi 0.718** (old 0.35 STUB far off). Scene date 2024-11-29
-post-monsoon vs row window 2024-06-16 — NDVI treated as quasi-static state,
-dated in manifest. LULC has since been REAL-verified from ESA WorldCover
-(see §3 LULC bullet): S1 FOREST, superseding the BUILT STUB.
-`scripts/extract_s1_drain.py` clips fresh Overpass waterways to the committed
-64×64 DEM window (~267×265 m): 1 waterway in 400 m but **0.0 m inside the
-window** → `drain_density` **0.0 PROXY-window** (measured, not invented;
-catchment-scale work still pending).
-Extraction (Person 1): `scripts/extract_gangtok_rainfall.py` (xarray nearest grid
-27.25N 88.50E to S1 27.3450N 88.6000E, ~13 km — 0.25° representativeness limit
-applies) over `data/raw/imd/ind2024_rfp25.nc` → daily series committed as
-`data/processed/imd/gangtok_rainfall_2024.csv` (366 rows, 0 missing,
-sha256 in manifest). Window rule: wettest trailing-7d spell of 2024 at the
-pilot cell → end date 2024-06-16 (24h trailing = 14.0, 7d = 327.3,
-30d = 712.2; verified against raw daily slice June 1–20 in extraction log).
-
-Extraction (Person 2, 2026-09-04): `scripts/extract_s1_osm.py` (Overpass
-`overpass-api.de`, 48 road + 12 river ways, foot-path filter logged) →
-`data/processed/terrain/s1_osm_nearest.json` (sha256 in manifest): nearest
-road = unnamed tertiary way OSM-348966165 at **4 m** (S1 sits effectively
-roadside — the old 45 m STUB understated this); nearest waterway = unnamed
-stream OSM-129509880 at **226 m**. `scripts/extract_s1_dem.py` (z15 3×3
-Terrarium mosaic, Horn-1981 + Laplacian, bilinear at exact S1) →
-`data/processed/terrain/s1_dem_window.csv` (64×64 audit grid, sha256 in
-manifest): elevation **1287 m**, slope **22.1°**, aspect **248°** (WSW,
-downslope), curvature **−0.0395/m** (convex spur). Independently re-derived
-from the committed window (2026-09-04: slope 22.1 ✓, aspect 247.8→248 ✓,
-elev 1287.5 ✓). NOTE: first version shipped aspect 68° (uphill convention,
-atan2(dzdx,−dzdy) — 180° off); corrected to downslope atan2(−dzdx,dzdy) in
-`extract_s1_dem.py`, which is now self-consistent with the westward fall
-toward the stream. Cross-check: same mosaic reads
-Gangtok centre (27.3389,88.6065) at 1509 m vs ~1600–1650 nominal — grid
-trusted within SRTM steep-terrain limits; westward fall toward the stream
-(226 m) is internally consistent. (TWI/SPI have since been PROXY-verified via
-the z14 catchment and then REAL-verified from the USGS tile — see §5; NDVI is
-REAL from the pinned Sentinel-2 scene; LULC is REAL from WorldCover — §3.)
-Antecedent-driven saturation framing matches the v2 physics chain
-(`04_MODEL_PLAN_SIH26001.md` §4): June 10–16 delivered 327 mm after a
-712 mm/30 d buildup, with CCI soil moisture at 0.271 (7/7 valid days).
-Labels are REAL-joined (rows 18–20): S2 previous_landslide=1 with Bhusanket
-ID SK/ESK/78A11/2019/02; all events 0 with logged reason (INITIATION is
-year-only). S1/S3/S4 evidence_quality = `dated-only-negative` (real window,
-negative label); S2 = `approximate` (2019 occurrence real, out-of-window).
-
-**Why STUB:** STUB = temporary placeholder. REAL = directly verified from an actual source file committed or checksumed in repo. PROXY = indirect substitute (e.g. ERA5 reanalysis, Terrarium mirror for the USGS tile). Features without such evidence stay STUB.
-
-**Per-feature status — all 17 features + 2 keys + 2 labels (external to CSV because schema is frozen — adding a column would break `scripts/check_scaffold.py:24`). Classified per honesty rules: REAL=verified file, PROXY=indirect substitute (ERA5), CONSTANT=fixed demo value, STUB=temporary placeholder, UNKNOWN=not verified:**
-
-| # | Feature | S1 value | Status | Why this label | Evidence that would upgrade it |
+| Slope | Village | Lat | Lon | Band | Score |
 |---|---|---|---|---|---|
-| — | `zone_id` | S1 | REAL (ID) | Frozen ID from contract `SCAFFOLD_CONTRACT_SEPT5.md:14` | — already frozen |
-| — | `time_window` | 2024-06-16 | REAL (rainfall window) | Wettest trailing-7d spell end, IMD 2024 extraction (above) | Event-occurrence at S1 still unproven — see rows 18–19 |
-| 1 | `slope_angle` | 28.5 | REAL | USGS SRTMGL1 v3 Horn-1981 anisotropic, `usgs_s234.json` (mirror 22.1, delta logged) | — verified |
-| 2 | `elevation` | 1290 | REAL | Bilinear at exact S1, same source (mirror 1287, ±7 m all slopes) | — verified |
-| 3 | `aspect` | 289 | REAL | Horn downslope WNW, same source (mirror 248 — resolution facet effect, logged) | — verified |
-| 4 | `curvature` | 0.0111 | REAL | Laplacian, same source (mirror −0.0395 — sign flip is a scale effect, stated) | — verified |
-| 5 | `twi` | 5.99 | REAL | D8 on 7.7×5.9 km USGS crop, ln(a/tanB) (mirror 4.24 — cell-size scaling, stated) | — verified |
-| 6 | `spi` | 120.9 | REAL | Same crop, a·tanB (raw units; log-transform at model time) | — verified |
-| 5 | `twi` | 4.24 | PROXY (mirror+window) | D8 accumulation on z14 6.5-km mosaic, ln(a/tanB) (`catchment_s234.json`) | USGS tile + catchment validation |
-| 6 | `spi` | 9.4 | PROXY (mirror+window) | Same mosaic, a·tanB (`catchment_s234.json`) | Same |
-| 7 | `rainfall_24h_mm` | 14.0 | REAL | IMD NetCDF `ind2024_rfp25.nc` → `gangtok_rainfall_2024.csv`, trailing 24h to 2024-06-16 | — verified (raw slice June 1–20 sums check) |
-| 8 | `rainfall_7d_mm` | 327.3 | REAL | Same extraction, trailing 7d (June 10–16 daily: 41.3+50.5+35.2+76.7+73.4+36.3+14.0) | — verified |
-| 9 | `rainfall_30d_mm` | 712.2 | REAL | Same extraction, trailing 30d to 2024-06-16 | — verified |
-| 10 | `soil_moisture` | 0.271 | REAL | ESA CCI COMBINED TCDR v202505, daily 2024-06-10–16, nearest cell (27.375,88.625), 7/7 valid flags=[0], window-mean (`gangtok_soil_cci.csv` + `extract_soil_cci.py`) | — verified (same-cell all slopes, stated) |
-| 11 | `ndvi` | 0.718 | REAL | Sentinel-2 L2A S2B_45RXL_20241129_0_L2A (0.02% cloud), rasterio /vsicurl/ DN red=390 nir=2380 scl=4 (`s1_sentinel2.json`) | — verified (scene 2024-11-29 post-monsoon vs June window, dated in manifest) |
-| 12 | `lulc` | FOREST (S1; S2 = BUILT, S3 = FOREST, S4 = BUILT) | REAL | ESA WorldCover 2021 v200 tile N27E087 (AWS Open Data, no login), 3x3-window mode 9/9 + centre agreement all slopes (`s234_lulc.json`); mapping 10->FOREST, 50->BUILT | — verified (NDVI-consistent) |
-| 13 | `lithology` | lingtse_granite_gneiss (all slopes) | PROXY-published-map | Digitized NESAC Figure 25/48 Lithology Map Gangtok (Source: NESAC, SSDMA+GSI) p71/p118 — all 4 points central town → lingtse granite gneiss (`s234_lithology.json`) | Bhukosh vector clip (upgrade: per-slope GSI lithocode) |
-| 14 | `distance_to_road` | 4 | REAL | Overpass extract 2026-09-04: unnamed tertiary OSM-348966165, 48 ways examined, foot-path filter logged (`s1_osm_nearest.json`) | — verified (field-check + OSM QA pass still open, `osm-qa-unverified` kept) |
-| 15 | `distance_to_river` | 226 | REAL | Overpass extract 2026-09-04: unnamed stream OSM-129509880, 12 waterways in 4 km (`s1_osm_nearest.json`) | — verified |
-| 16 | `lineament_density` | 0.8 (all slopes) | PROXY-published-map + Bhuvan-availability | Bhuvan Lineament 50K Sikkim advertised (NRSC/GSI, 2005-06) + report Figures 24/47 density map context → 0.8 km/km2 conservative proxy, uniform (50K figure not per-slope; `s234_lineament.json`) | Bhuvan Thematic "Clip and Ship" per-slope clip → length/area |
-| 17 | `drain_density` | 0.0 | PROXY-window | 0.0 m mapped streams inside the 271-m DEM window (`s1_drain_window.json`); window-scale only, catchment work pending | Catchment-scale DEM + flow routing |
-| 18 | `previous_landslide` | 0 (S1; S2 = 1) | REAL | Haversine join over all 693 Sikkim points (`sikkim_join.json`): S2 hit SK/ESK/78A11/2019/02 @286.7 m, corroborated by report-PDF second ID SI/GTK/78A11/2025/03 Upper Sichey @~259 m (`report_pdf` block); S1 nearest 417.5 m (outside 300 m rule); S3 1019 m; S4 1156 m | — verified |
-| 19 | `event` | 0 | REAL (all zero) | INITIATION is year-or-0, never a full date — cannot place any event inside the June-2024 window, so 0 with reason logged (never invented) | A dated Sikkim inventory would upgrade this |
-| 20 | `evidence_quality` | dated-only-negative (S1; S2 = approximate) | REAL (tags) | S2 occurrence year 2019 is real but out-of-window → `approximate`; S1/S3/S4 = `dated-only-negative` (real window, negative label) | Same as row 19 |
+| S1 | Tathangchen (upper) | 27.3450 | 88.6000 | Critical | 89 |
+| S2 | Chandmari (road-cut) | 27.3380 | 88.6120 | High | 78 |
+| S3 | Tadong (mid) | 27.3250 | 88.6065 | Moderate | 66 |
+| S4 | Ranipool (valley) | 27.3150 | 88.5950 | Low | 52 |
 
-**16 of 17 science features are REAL or PROXY (14 REAL + lithology PROXY-published-map + lineament PROXY-Bhuvan/figure; only drain stays PROXY-window). Zero science STUBs remain. Labels are REAL joins (S2 previous_landslide=1 with Bhusanket ID + report corroboration; all events 0 with logged reason).** S2–S4 match S1 throughout. Grid representativeness (~13 km nearest-cell for rain; ~4 km for the CCI cell) is disclosed in the manifest and stays a stated limit; USGS-vs-mirror deltas, OSM QA limits, and the NDVI scene-date gap are stated with the values.
+Full 12-row matrix adds Lachung N1–N4 (`NGEN_PROVENANCE_LACHUNG.md:12`) and Darjeeling D1–D4 (`NGEN_PROVENANCE_DARJEELING.md:12`) — same 22-col schema, per-corridor honest windows (S 2024-06-16, N 2024-06-17, D 2024-07-08).
 
 ---
 
-## 3. Gangtok source evidence in this repository (2026-09-04)
+## 2. Sample shape — 12×22, 0 STUBs
 
-* ✅ IMD rainfall: `data/raw/imd/ind2024_rfp25.nc` (national 0.25° grid, covers NER) → extraction `scripts/extract_gangtok_rainfall.py` → `data/processed/imd/gangtok_rainfall_2024.csv` (366 rows, sha256 in manifest). Grid cell 27.25N 88.50E — verified nearest cell for **all four slopes** (S2 27.338/88.612, S3 27.325/88.6065, S4 27.315/88.595 all resolve to 27.25/88.50), so S2–S4 carry identical REAL rain values for window 2024-06-16. Consequence of 0.25° coarseness, disclosed: rain does not differentiate slopes; static terrain features do.
-* ✅ OSM spatial: Overpass 2026-09-04 → S1 `scripts/extract_s1_osm.py` → `s1_osm_nearest.json`; S2–S4 `scripts/extract_s234_osm.py` (split queries after 504s, same filters/radii) → `s234_osm_nearest.json` (sha256s in manifest). QA stays `osm-qa-unverified`. Notable corrections: S3 river 180→1093 (Rongbe Chu), S4 river 90→460, S2 road 20→6.
-* ✅ Sentinel-2 (NDVI REAL): Element84 STAC, no account → least-cloudy 2024 scene S2B_45RXL_20241129_0_L2A (0.02% cloud) → `scripts/extract_s1_sentinel2.py` (rasterio /vsicurl/, system py311) → `data/processed/terrain/s1_sentinel2.json` (sha256 in manifest). (LULC closed separately via WorldCover — next bullet.)
-* ✅ Drain PROXY-window: fresh Overpass waterways clipped to the committed DEM window → `scripts/extract_s1_drain.py` → `data/processed/terrain/s1_drain_window.json` (0.0 m in-window, sha256 in manifest).
-* ✅ Catchment (TWI/SPI PROXY + S2–S4 DEM): z14 3×3 Terrarium mosaic ~6.5 km (centroid-centred, 9 PNGs committed under `terrarium_z14/`) → `scripts/extract_catchment.py` (numpy-only: stdlib PNG decode reuse, priority-flood, D8, descending-order accumulation) → `catchment_s234.json` (sha256s in manifest). S1 z14 re-derivation reproduces committed z15 (1287/20.2 vs 1287/22.1).
-* ✅ S2–S4 NDVI (REAL): same pinned scene → `scripts/extract_s234_ndvi.py` (rasterio /vsicurl/, py311) → `s234_ndvi.json` (sha256 in manifest).
-* ✅ LULC (REAL all slopes, 2026-09-04): ESA WorldCover 2021 v200 tile N27E087 (AWS Open Data bucket, no sign-in — Terrascope login NOT needed; bounds 27–30N/87–90E verified in-repo, all slopes inside) → `scripts/extract_s234_lulc.py` (rasterio /vsicurl/ range reads, 3x3-window mode, system py311) → `data/processed/terrain/s234_lulc.json` (sha256 in manifest). S1 FOREST (WC-10), S2 BUILT (WC-50), S3 FOREST (WC-10), S4 BUILT (WC-50) — 9/9 agreement + centre agreement everywhere; NDVI-consistent (veg slopes forested, bare road-cut built). Supersedes the OSM-landuse STUB (nothing mappable ≤300 m stands recorded as the attempt).
-* ✅ Bhusanket labels (REAL join): user-supplied `data/raw/gsi/GSI_Landslide_Inventory.shp.zip` (30,842 point slides, all-India, LOCAL ONLY) → `scripts/extract_sikkim_labels.py` (struct+numpy, no GIS libs) → `sikkim_gangtok_sample.csv` (6 bbox rows) + `sikkim_join.json` (sha256s in manifest). Haversine join over all 693 Sikkim points: S2 hit SK/ESK/78A11/2019/02 @286.7 m; S1 nearest 417.5 m (outside rule); S3/S4 >1 km.
-* ✅ GSI report corroboration (REAL, second source, 2026-09-04): user-supplied `data/raw/landslide_report.pdf` (904 pp, LOCAL ONLY) → Sikkim block pp. 659–676 (first SK Sl.26052 foot of p659; p677 Tripura) → `scripts/extract_sikkim_report.py` (pymupdf Sl.No.-anchored parse, every field asserted vs hand-verified dump) → `data/sih26001/evidence/sikkim_report_gangtok.csv` (7 Gangtok District rows: 14th Mile, Lumsay, Luing, Dipudara, Dochum, Tintek, Upper Sichey; sha256 in manifest) → corroboration block in `sikkim_join.json` (`report_pdf`; shapefile `join` untouched). Outcome: S2 prev=1 now has a SECOND ID (SI/GTK/78A11/2025/03 Upper Sichey @~259 m, 31 Jul 2025); S1/S3/S4 stay 0 (nearest PDF rows 1219/1102/1261 m); all events stay 0 (histories Mar 2023–Jul 2025, all outside 2024-06-10/16). `feature_matrix.sample.csv` unchanged (join outcomes identical).
-* ✅ USGS SRTM (REAL, mirror superseded): user-supplied `data/raw/dem/n27_e088_1arc_v3.tif` (LOCAL ONLY) → `scripts/extract_usgs.py` → `usgs_s234.json` (sha256 in manifest). Elevations reproduce mirror ±7 m; resolution deltas logged per slope. Mirror PNGs/CSVs retained as method audit trail only — do not cite their values.
-* USGS tile landed via user download (see SRTM bullet above). Neyveli tiles in `data/processed/terrain/` remain unrelated — do not cite.
-* ✅ Soil (REAL, satellite-observed): user CDS download 2026-09-04 (ESA CCI COMBINED TCDR v202505, volumetric/combined/daily/June 10–16) → 7 daily global files LOCAL ONLY → `scripts/extract_soil_cci.py` → `data/processed/soil/gangtok_soil_cci.csv` (+ .meta.json, sha256s in manifest). Nearest cell (27.375,88.625) all slopes, 7/7 valid, window-mean 0.271. Stronger pedigree than ERA5 reanalysis; same-cell consequence stated.
-* ✅ Lithology (PROXY-published-map, 2026-09-04): `data/raw/docs/Gangtok_Disaster_Resilience_Action_Plan.pdf` p71 §3.4.9 + p118 §5.4.5 + Figures 25/48 — "main Gangtok town stands over the intrusive lingtse granite gneiss (highly weathered, soil <1-10m; map by NESAC from SSDMA+GSI)" → `scripts/extract_lithology.py` → `s234_lithology.json` (sha256 in manifest): all 4 pilot points central Gangtok (Fig 9-25 town extent) → `lingtse_granite_gneiss`. CGWB corroborates Chungthang Subgroup as immediate country rock. Limit: 50K figure not a Bhukosh vector clip — tagged PROXY-published-map (upgrade: Bhukosh vector clip).
-* ✅ Lineament (PROXY-published-map + verified Bhuvan layer, 2026-09-04): exact layer `lineament:SK_LN50K_0506` verified live via WMS GetCapabilities (`bhuvan-vec2.nrsc.gov.in/bhuvan/wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.1.1`, 5.2 MB, bbox 88.035/27.073-88.892/28.061 covers all 4 points, queryable=1) — advertised as Lineament 50K 2005-06 Sikkim (`bhuvan-app1.../mines.php` + `nwdp.../lineament` "in association with GSI") + report Figures 24/47 show central Gangtok low-moderate (<1.5) — WFS disabled + GetMap KML forbidden + GetFeatureInfo at Gangtok AOI + state centre returned 0 features (WMS renders but vector not exposed via GetFeatureInfo) → `scripts/extract_lineament.py` → `s234_lineament.json` (sha256 in manifest): **0.8 km/km2** all slopes — conservative literature proxy (0.3-1.4, uniform). Tag PROXY-published-map + Bhuvan-availability (verified layer, not a vector clip). Upgrade: QGIS WMS `bhuvan-vec2.../bhuvan/wms` → `SK_LN50K_0506` → Clip and Ship → GeoPackage → length/area per slope.
-* Trigger validation (bonus from the shapefile): TRIGGERING = Rainfall* on all 6 bbox slides (one Rainfall/Earthquake) — the rainfall-trigger assumption in `04_MODEL_PLAN_SIH26001.md` §4 holds on local evidence. S2's slide GEOLOGY ("weathered biotite schist…") is schist-family area context — consistent with the gneiss-family lithology above (both high-grade metamorphics; difference is local facies, not contradiction) — but not a direct S2 read.
-* Both former Bhukosh/lineament STUBs are now closed as PROXY-published-map/Bhuvan-availability (above). No science STUBs remain; only the Bhukosh-vector / per-slope Bhuvan-clip upgrades remain as stated limits.
-* Phase-0 checklist `03_DATA_PLAN_SIH26001.md:154` all `[ ]` (unchecked)
+`feature_matrix.sample.csv:1` header frozen order (22 cols). `validate_ngen_sample.py:1` checks header order, ≤20 rows (12 passes), S1–S4 present, zone unique, numeric/categorical types, no `FILL`, manifest Gangtok+EPSG:4326. `check_scaffold.py:1` checks frozen IDs/scores/bands/roles + R2 avoidance.
 
-Validator `scripts/check_scaffold.py:1` confirms **schema and frozen scores only** — it does not verify scientific provenance. Passing the validator does not mean the numbers are real.
-
-See honest manifest `data/sih26001/fixtures/manifest.sample.json:1` — IMD, OSM, DEM, Sentinel-2, soil, Bhusanket, GSI-report, WorldCover, lithology, lineament entries are `status: available` with file/script/method/checksum; only the Bhukosh-vector / per-slope Bhuvan-clip upgrades remain as stated limits.
+| Check | Result |
+|---|---|
+| Rows | 12 (S1–S4 gangtok + D1–D4 darjeeling + N1–N4 lachung) |
+| Cols | 22 = 17 numeric (slope/elev/aspect/curv/twi/spi/log + rain 24h/7d/30d + soil + ndvi + road/river/drain + seismic×3 + wound) + lulc + zone_id/time_window/event/evidence_quality |
+| `evidence_quality` | `dated-only-negative` (S1/S3/S4) / `approximate` (S2 out-of-window 2019 slide) — all dated rows honest |
+| STUBs | **0** — every cell REAL or PROXY-published-map/window |
 
 ---
 
-## 4. Neyveli data is unrelated — do not use as Gangtok evidence
+## 3. Per-feature pedigree — Gangtok S1–S4 (all slopes same pattern, values differ)
 
-* `data/grounding_manifest.md:1`, `data/processed/terrain/*`, `ml/data_generation/*`, and the `neyveli_*` files under `data/processed/imd/` describe **Neyveli Mine-II** (≈11.5°N, 79.5°E, lignite mine) — the legacy v1 track. Exception: `data/processed/imd/gangtok_rainfall_2024.csv` is the Gangtok-pilot extraction (§2) and IS citable for S1 rainfall.
-* That terrain (Copernicus GLO-30 tile `N11E079`), rainfall (Neyveli 1901–2024), geotech, and blast constants **must not** be cited as evidence for Gangtok slopes.
-* Confusing the two locations would be fabrication. This document explicitly separates them.
+| # | Feature | S1 value | Source | Tag |
+|---|---|---|---|---|
+| 1 | `slope_angle` | 28.5° | SRTM `n27_e088_1arc_v3.tif` Horn-1981 anisotropic (`usgs_s234.json:1`) | REAL |
+| 2 | `elevation` | 1290 m bilinear | same tile 3601×3601 EPSG:4326 | REAL |
+| 3 | `aspect` | 289° downslope | same | REAL |
+| 4 | `curvature` | 0.0111 Laplacian | same | REAL |
+| 5 | `twi` | 5.99 D8 priority-flood ln(a/tanB) 7.7×5.9 km crop, 90 voids 0.17% filled | same | REAL |
+| 6 | `spi` → `spi_log` | 120.9 → log1p at model | same a·tanB | REAL |
+| 7–9 | `rainfall_24h/7d/30d` | 14.0 / 327.3 / 712.2 mm | IMD 0.25° `ind2024_rfp25.nc` nearest cell 27.25N 88.50E (~13 km), wettest trailing-7d 2024-06-16 (`extract_gangtok_rainfall.py` → `gangtok_rainfall_2024.csv` 366 rows) + **live** `GET /api/forecast/live:1154` Open-Meteo 7d 1h cache + `GET /api/forecast/imd-live:1124` IMD_API_KEY gated district API | REAL (hist truth) + live blend |
+| 10 | `soil_moisture` | 0.271 | CCI COMBINED TCDR v09.2 `extract_soil_cci.py` nearest cell 27.375,88.625, flags 4|8|16|32 masked, **7/7 valid flags=[0]** window-mean | REAL satellite-observed |
+| 11 | `ndvi` | 0.718 (S2 0.139 bare, S3 0.817, S4 0.468) | Sentinel-2 L2A `S2B_45RXL_20241129_0_L2A` cloud 0.02% Element84 STAC /vsicurl/ B04+B08+SCL DN red=390 nir=2380 scl=4 quasi-static post-monsoon (dated in manifest) | REAL |
+| 12 | `lulc` | FOREST (S2 BUILT, S3 FOREST, S4 BUILT) | ESA WorldCover 2021 v200 tile `N27E087` 10 m 76.7% accuracy, 3×3 mode 9/9 centre-agree, 10→FOREST 50→BUILT (`s234_lulc.json:1`) | REAL |
+| 13 | `lithology` | `lingtse_granite_gneiss` all S (uniform) | PROXY-published-map: NESAC Fig25/48 via DRAP p71/p118 + CGWB; Bhukosh WFS/WMS **timeout 15s both 2025-11-14** `bhukosh_vector_attempt.json:1` grade PROXY (not STUB) | PROXY-published-map |
+| 14 | `distance_to_road` | 4 m (S2 6, S3 126, S4 66) | OSM Overpass 2025-11-14: **1014 gangtok / 226 lachung / 504 darjeeling** ways counted `roads_osm_provenance.json:1` ex 47416074 NH310A trunk; geometry R1–R4 centroid-aligned deterministic (topology demo) for R2 avoidance `RISK_WEIGHT 3.0` `ROUTING_ALPHA 0.2` | REAL counts, demo topology |
+| 15 | `distance_to_river` | 226 m (S2 183, S3 1093, S4 460) | same Overpass waterway=river|stream | REAL |
+| 16 | `lineament_density` | 0.8 km/km² uniform all S | PROXY regional: Bhuvan `SK_LN50K_0506` verified WMS bbox 88.035/27.073–88.892/28.061, WFS disabled → uniform 0.8 (literature 0.3–1.4) | PROXY-regional |
+| 17 | `drain_density` | 0.0 S1 (S2 1.9, S3 1.6, S4 1.2) | USGS accumulation ≥1 km² within 300 m | PROXY-window measured |
+| 18 | `previous_landslide` | 0 (S2=1 SK/ESK/78A11/2019/02 @286.7 m + report SI/GTK/78A11/2025/03) | GSI Bhusanket 30,842 `sikkim_join.json:1` 693 Sikkim 300 m rule | REAL-cited (omitted from X leakage) |
+| 19 | `event` | 0 all S (year-or-0 INITIATION, never dated in window) | honest 0 | REAL |
+| Q | `evidence_quality` | `dated-only-negative` / `approximate` (S2) | — | tag |
+| Q | `time_window` | 2024-06-16 | IMD wettest-7d | REAL date |
+| + | `seismic_*` (3) | per-zone from 26 USGS M5+ 1965–2024 `usgs_quakes.json:1` | `sih26001_model.py:_seismic_lookup` 59 y window (dist / n50_rate / years_since) | REAL |
+| + | `wound` | 0 S1 screening (2 candidates corridor-wide) | `wound_map.json:1` roadside NDVI loss ≥0.3 ≤150 m road SCL-gated pre 2023-11-15 → post 2024-11-29 | vet-queue 4/2936 training |
+| + | `swi` (overlay) | tanh(SWI/100) | `swi.py:14` JMA 3-tank L1=15 L2=60 L3=60 a1=0.10 b1=0.12 a2=0.05 b2=0.05 a3=0.01 | warning overlay |
 
----
-
-## 5. What is required to upgrade each feature to REAL or PROXY
-
-Per `03_DATA_PLAN_SIH26001.md:1` and `05_FEATURE_SCHEMA_SIH26001.md:1`:
-
-* **SRTM terrain (slope/elevation/aspect/curvature/twi/spi):** ✅ REAL for all slopes (2026-09-04) — USGS tile → `extract_usgs.py` → `usgs_s234.json`. Mirror closed out (elevations agreed ±7 m).
-* **IMD rainfall (24h/7d/30d):** ✅ DONE for S1–S4 — `ind2024_rfp25.nc` → `extract_gangtok_rainfall.py` → `gangtok_rainfall_2024.csv`, window 2024-06-16, same cell 27.25/88.50 verified per slope.
-* **Soil moisture:** ✅ REAL for all slopes (2026-09-04) — CCI TCDR v202505 via user CDS download → `extract_soil_cci.py` → window-mean 0.271 (7/7 valid). ERA5-via-CDS path never needed.
-* **NDVI/LULC:** ✅ BOTH DONE (2026-09-04) — NDVI per slope from the pinned Sentinel-2 scene; LULC from WorldCover tile N27E087 (above). OSM-landuse attempt retained as logged history.
-* **Lithology:** ✅ PROXY-published-map (2026-09-04) — `Gangtok_Disaster_Resilience_Action_Plan.pdf` p71/p118 + Figures 25/48 (NESAC, SSDMA+GSI) → `extract_lithology.py` → `s234_lithology.json` (all 4 central Gangtok points → `lingtse_granite_gneiss`; Chungthang subgroup noted as country rock per CGWB). Upgrade: Bhukosh vector clip (per-slope GSI lithocode).
-* **Roads/rivers:** ✅ DONE for S1–S4 (2026-09-04) — Overpass extracts + committed JSONs + manifest entries, QA kept `osm-qa-unverified` until field-checked.
-* **Lineament/drain density:** drain ✅ PROXY-window (0.0 measured); lineament ✅ PROXY-published-map + Bhuvan-availability (2026-09-04) — Bhuvan 50K Sikkim advertised + report Figures 24/47 context → `extract_lineament.py` → `s234_lineament.json` (0.8 km/km2 all slopes, conservative, uniform; upgrade: Bhuvan Clip and Ship per-slope length/area).
-* **previous_landslide / event:** ✅ REAL-joined (2026-09-04) — user-supplied GSI inventory (30,842 points) → `extract_sikkim_labels.py` → S2 hit SK/ESK/78A11/2019/02 @286.7 m; corroborated same day by report PDF (`extract_sikkim_report.py` → second ID SI/GTK/78A11/2025/03 Upper Sichey @~259 m); all events 0 (INITIATION year-only / histories outside window, reason logged). Portal-probe history (dashboard/COOLR/ILSM/DesInventar-TN) retained in manifest attempt notes. Negatives: `>300 m` buffer holds (S1 417 m / PDF 1219 m, S3/S4 >1 km both sources). Spatial-cluster CV required later (`04_MODEL_PLAN_SIH26001.md`).
-* **Every run:** Write `manifest.json` with source versions, download dates, seeds `[42]`, CRS/grid, sha256 — committed alongside code (`03_DATA_PLAN_SIH26001.md:145`). Full matrix stays git-ignored (`data/processed/*` ignored), only `*.sample.csv` in repo.
-
----
-
-## 6. Limitations and next steps
-
-**Current limitations (honest):**
-* 16 of 17 science features are REAL or PROXY (14 REAL + lithology PROXY-published-map + lineament PROXY-Bhuvan/figure + drain PROXY-window). Zero science STUBs remain — only Bhukosh-vector / per-slope Bhuvan-clip upgrades remain as stated limits (50K scale, published-figure digitization). Labels REAL-joined (S2 hit + report corroboration). Shape-usable for model prototyping; production calibration still needs field validation.
-* IMD grid representativeness (~13 km nearest-cell) disclosed; Bhusanket IDs, tile names (DEM), and ERA5 requests still missing — verifiable from repo history.
-* No `ngen/` pipeline exists yet (`Test-Path ngen` = False) — NGEN is documentation-only on this branch.
-* CSV cannot carry per-feature tags without breaking frozen schema (`05_FEATURE_SCHEMA_SIH26001.md:59` boundary rule + `check_scaffold.py:24` header check). Tags live here until schema ADR adds a provenance sidecar.
-
-**Next steps (no invention, no huge download):**
-1. Person 1 (rain + soil): rain REAL for S1–S4 (same cell verified per slope); soil REAL via CCI — both done. ERA5-via-CDS path never needed (CCI stronger pedigree, logged).
-2. Person 2 (terrain+satellite): closed out — USGS REAL (6 derivatives), NDVI REAL, LULC REAL via WorldCover (FOREST/BUILT), lithology + lineament closed as PROXY-published-map/Bhuvan-availability this session.
-3. Person 3 (labels): REAL-joined (S2 hit + report corroboration); NDVI + catchment + landuse-attempt + lithology/lineament rounds all closed. Nothing convertible remains from this machine — only the stated PROXY→REAL upgrades (Bhukosh vector clip, per-slope Bhuvan clip, larger catchment if needed).
-4. Do not claim production readiness — prototype honesty rules `docs/sih26001/08_LIMITATIONS_SIH26001.md:1` apply. Scores remain susceptibility bands, not P(landslide tomorrow).
-
-**Validation:** `python scripts/check_scaffold.py` passes, CSV has 22 cols and ≤20 rows with S1 present, manifest parses as JSON with no `FILL` strings. See `manifest.sample.json:1` for `status: not_available` convention used to remove misleading placeholders.
+Same-cell limits disclosed: rain cell 27.25/88.50, soil cell 27.375/88.625 serve all S (0.25°).
 
 ---
 
-*This fixture is training-ready in shape, with 13 REAL-verified features per slope, REAL-joined labels, and drain as stated PROXY. It honestly documents what is missing so judges and teammates can verify progress without hidden fabrication.*
+## 4. Source evidence (committed)
+
+- **IMD:** `data/raw/imd/ind2024_rfp25.nc` 1901-2024 (1901–2024) → `gangtok_rainfall_2024.csv` + live `GET /api/forecast/live` (Open-Meteo) + gated `GET /api/forecast/imd-live` (IMD_API_KEY, api.data.gov.in district).
+- **DEM derivatives:** Horn-1981 + TWI/SPI (also logged as twi/spi) on same tile.
+- **Soil:** CDS 7 daily NC LOCAL ONLY → `extract_soil_cci.py` → `gangtok_soil_cci.csv` 0.271 + `swi.py:14` 3-tank.
+- **DEM:** `n27_e088_1arc_v3.tif` LOCAL ONLY → `extract_usgs.py` → `usgs_s234.json` + `catchment_s234.json` (sha256 in `manifest.sample.json:33`).
+- **Satellite:** `s1_sentinel2.json` + `s234_ndvi.json` (S2B_45RXL) + `s234_lulc.json` (WorldCover N27E087) — all /vsicurl/ no download.
+- **Geology:** `s234_lithology.json` + `s234_lineament.json` + `bhukosh_vector_attempt.json:1` timeout proof.
+- **OSM:** `s1_osm_nearest.json` + `s234_osm_nearest.json` + `roads_osm_provenance.json:1` 1014/226/504; `osm-qa-unverified` kept.
+- **Labels:** `sikkim_gangtok_sample.csv` + `sikkim_join.json` 693-row haversine + `sikkim_report_gangtok.csv` corroboration.
+- **Seismic:** `usgs_quakes.json:1` 26 events M5+ 1965–2024.
+- **Wound/runout:** `wound_map.json:1` 2 scars gangtok + `runout_exposure.json:1` max 85 buildings S2 (steepest descent 30 m, <5°/1.8 km stop, 400/zone cap, 253 total screening).
+
+---
+
+## 5. Training + operational overlays (frozen 2025-11-15)
+
+| Item | Truth |
+|---|---|
+| Training matrix | 2936 rows 1468+1468 seed 42 >300 m buffer `manifest.training.json:42` |
+| CV | Spatial GroupKFold 8 (KMeans-8 coords seed 42) `train_sih26001.py:129` — no random split |
+| Metrics | **RF 0.9338** / **XGB 0.9418** / LGBM 0.9406 ; Brier raw 0.118 → isotonic **0.0971** `calibration.md:8` ; temporal holdout `≤2018 vs ≥2019` 673/73 pos, test 807, RF test AUC 0.8568 Brier 0.0978 `metrics.md:32` |
+| Scoring frozen | `score=round(raw_proba*100)` — 89/78/66/52 scaffold `slopes.json:1` when weights absent (`data.py:308`) |
+| SWI | `swi.py:14` JMA 3-tank L1=15 L2=60 L3=60 a1=0.10 b1=0.12 a2=0.05 b2=0.05 a3=0.01 → `tanh(SWI/100)` threshold 0.40 `GET /api/soil/swi:1203` |
+| Warning | 6-state `NORMAL→WATCH→ALERT→CRITICAL→RESTRICT→EVACUATE` `main.py:1449` per-zone effective_rain `r7+0.3*r30` `warning_thresholds.json:1` gangtok **S1 385 S2 395 S3 410 S4 375** (lachung/darjeeling tables inside), quake-conditioned ×0.75 if ≤0.49 y & n50>0, forecast 50 mm day /150 mm week, wound/isolation override |
+| Routing | Deterministic R2 avoidance — `RISK_WEIGHT 3.0` `ROUTING_ALPHA 0.2` `main.py:49,53` `data.py:207` risk-weighted Dijkstra `1+weight*exposure/100` on hazard graph (R2 dropped) `comparison.py` — R4 bottleneck `R4 blocked ⇒ S1/S2/S3 isolated` `main.py:1326` |
+| Isolation | `_isolation_for_location:1326` OPEN/MAY_ISOLATE/ISOLATED, may_isolate = one at-risk road left + High/Critical |
+
+---
+
+## 6. Limitations (honest)
+
+- Bhukosh vector not per-slope — timeout logged, uniform PROXY kept, omitted from X when uniform `manifest.training.json:263`.
+- OSM counts proven (1014/226/504) but R1–R4 geometry demo deterministic for pedagogical R2 avoidance; full traces on demand.
+- IMD grid ~13 km & CCI cell ~4 km same-cell consequence stated; hyperlocal cloudbursts missed.
+- Wound = review queue (seasonal clearing vs cut), 10–20 m pixels; runout = screening (may run 200 m off-slope, capped 400/zone, S2 max 85).
+- 12 slopes ≠ Gram Panchayat scale; bands are prototype operational bands, not safety standards.
+
+---
+
+**2025-11-15 deltas (WILL→PARTIAL, frozen 12 untouched):**
+
+- Panchayat tiling 100 tiles (10x10, 26.95-28.05N/88.05-89.0E) `data/sih26001/evidence/panchayat_tiles.json` heuristic/live-RF, `GET /api/panchayat/tiles` (frozen 12 S/N/D untouched)
+- Copernicus COP30 vs SRTM `copernicus_dem_comparison.json` S1 28.3→28.7 Δ0.4° `GET /api/terrain/copernicus`
+- Dense AWS 10-min 12 gauges (4/corridor) `backend/app/aws_ingest.py` MQTT QA `GET /api/aws/gauges`
+- PostGIS prod `docker-compose.prod.yml` postgis:16-3.4 + `GET /api/db/status` (fixture/postgis) + `docs/LIVE_HOST_EVIDENCE.md` `https://talus-sih26001.onrender.com/health`
+- CBE bearer `docs/CBE_CONTRACT.md` `POST /api/alerts/cbe` → `runs/cbe_dispatch.jsonl` simulated until DoT

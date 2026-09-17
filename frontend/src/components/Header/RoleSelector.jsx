@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTalusContext } from '../../context/TalusContext';
 import { ROLES } from '../../data/constants';
-import { Shield, Users, Briefcase, Flame, ChevronDown, Check } from 'lucide-react';
+import { Shield, Users, Briefcase, Flame, ChevronDown, Check, Settings } from 'lucide-react';
+import LoginModal from '../Auth/LoginModal';
 
 const ROLE_ICONS = {
   villager: Users,
@@ -18,10 +19,26 @@ export default function RoleSelector() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
+  const [loginFor, setLoginFor] = useState(null);
   const pickRole = (newRole) => {
+    // Villager open; others need PIN; admin can go to /admin
+    if (newRole === 'admin') {
+      setIsOpen(false);
+      const auth = JSON.parse(localStorage.getItem('talus_auth')||'{"role":"villager"}');
+      if (auth.role !== 'admin') { setLoginFor('admin'); return; }
+      navigate('/admin');
+      return;
+    }
+    if (newRole !== 'villager') {
+      const auth = JSON.parse(localStorage.getItem('talus_auth')||'{"role":"villager"}');
+      if (auth.role !== newRole && auth.role !== 'admin') {
+        setLoginFor(newRole);
+        return;
+      }
+    }
     setRole(newRole);
+    try { localStorage.setItem('talus_auth', JSON.stringify({ role: newRole, at: new Date().toISOString() })); } catch {}
     setIsOpen(false);
-    // Demo: choosing a role shows its dedicated page (admin panel later)
     if (location.pathname.startsWith('/role/') || location.pathname === '/') {
       navigate(`/role/${newRole}`);
     }
@@ -98,8 +115,12 @@ export default function RoleSelector() {
             <span className="w-1.5 h-1.5 rounded-full bg-talus-600"></span>
             {t('role.allAdapt')}
           </div>
+          <button onClick={()=>{ setIsOpen(false); setLoginFor('admin'); }} className="w-full mt-1 flex items-center gap-2 px-2.5 py-2 rounded-lg bg-mine-darker hover:bg-mine-dark border border-mine-border text-xs font-semibold text-mine-text">
+            <Settings className="w-3.5 h-3.5 text-mine-muted" /> Admin panel — credentials required
+          </button>
         </div>
       )}
+      {loginFor && <LoginModal wantedRole={loginFor} onClose={()=>setLoginFor(null)} onSuccess={()=> setLoginFor(null)} />}
     </div>
   );
 }

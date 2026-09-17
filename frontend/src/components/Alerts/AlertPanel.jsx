@@ -20,7 +20,9 @@ export default function AlertPanel() {
   const [filterSeverity, setFilterSeverity] = useState('ALL');
   const [activeLang, setActiveLang] = useState(lang || 'en');
   const [dispatching, setDispatching] = useState(false);
-  const [dispatchSent, setDispatchSent] = useState(false);
+  const [dispatchSent, setDispatchSent] = useState(null);
+  const [dispatchChannel, setDispatchChannel] = useState('app');
+  const [smsLog, setSmsLog] = useState(null);
 
   if (!isAlertsDrawerOpen) return null;
 
@@ -32,9 +34,19 @@ export default function AlertPanel() {
   const handleDispatch = async () => {
     setDispatching(true);
     try {
-      await dispatchAlertFixture();
-      setDispatchSent(true);
-      setTimeout(() => setDispatchSent(false), 4000);
+      if (dispatchChannel==='cbe') {
+        const { apiRequest } = await import('../../services/api');
+        const res = await apiRequest('/alerts/cbe', { method:'POST', body: JSON.stringify({area:'S1', message:{[activeLang]: selectedMessage.text}, severity:'Severe'}) });
+        setDispatchSent({...res, channel:'CB', simulated: res.simulated});
+        setTimeout(() => setDispatchSent(null), 6000);
+        return;
+      }
+      const res = await dispatchAlertFixture({ channel: dispatchChannel, lang: activeLang });
+      setDispatchSent(res);
+      setTimeout(() => setDispatchSent(null), 6000);
+      if (dispatchChannel==='sms') {
+        try { const { getDispatchLog } = await import('../../services/alerts'); const l=await getDispatchLog(5); setSmsLog(l.entries||[]); } catch {}
+      }
     } finally {
       setDispatching(false);
     }
@@ -44,7 +56,7 @@ export default function AlertPanel() {
     alertDispatchData?.messages?.[0] || { lang: 'en', text: t('alerts.fallback') };
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-sm transition-opacity">
+    <div className="fixed inset-0 z-[2000] flex justify-end bg-black/40 backdrop-blur-sm transition-opacity">
       <div className="w-full max-w-lg bg-mine-card border-l border-mine-border h-full flex flex-col shadow-xl overflow-hidden animate-in slide-in-from-right duration-300">
         {/* Drawer Header */}
         <div className="p-4 bg-mine-darker border-b border-mine-border flex items-center justify-between">
@@ -84,45 +96,44 @@ export default function AlertPanel() {
             </button>
           </div>
 
-          {/* 3 Languages Selector: English, Hindi, Nepali */}
-          <div className="grid grid-cols-3 gap-1.5 bg-mine-darker p-1 rounded-lg border border-mine-border text-xs">
-            <button
-              onClick={() => setActiveLang('en')}
-              className={`py-1.5 px-2 rounded-md font-semibold text-center transition-all ${
-                activeLang === 'en'
-                  ? 'bg-talus-600 text-white shadow-sm'
-                  : 'text-mine-muted hover:text-mine-text'
-              }`}
-            >
-              English (EN)
-            </button>
-            <button
-              onClick={() => setActiveLang('hi')}
-              className={`py-1.5 px-2 rounded-md font-semibold text-center transition-all ${
-                activeLang === 'hi'
-                  ? 'bg-talus-600 text-white shadow-sm'
-                  : 'text-mine-muted hover:text-mine-text'
-              }`}
-            >
-              हिन्दी (HI)
-            </button>
-            <button
-              onClick={() => setActiveLang('ne')}
-              className={`py-1.5 px-2 rounded-md font-semibold text-center transition-all ${
-                activeLang === 'ne'
-                  ? 'bg-talus-600 text-white shadow-sm'
-                  : 'text-mine-muted hover:text-mine-text'
-              }`}
-            >
-              नेपाली (NE)
-            </button>
+          {/* Languages: en/hi/ne + NER as/bn */}
+          <div className="grid grid-cols-5 gap-1 bg-mine-darker p-1 rounded-lg border border-mine-border text-[11px]">
+            {[
+              ['en','EN'],['hi','HI'],['ne','NE'],['as','AS'],['bn','BN']
+            ].map(([id,lab])=>(
+              <button key={id} onClick={()=>setActiveLang(id)}
+                className={`py-1.5 px-1 rounded-md font-semibold text-center transition-all ${activeLang===id?'bg-talus-600 text-white shadow-sm':'text-mine-muted hover:text-mine-text'}`}>
+                {lab}
+              </button>
+            ))}
           </div>
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex gap-1 text-[11px]">
+              {['app','sms','cbe'].map(c=>(
+                <button key={c} onClick={()=>setDispatchChannel(c)}
+                  className={`px-2 py-1 rounded border font-mono text-[11px] ${dispatchChannel===c?'bg-mine-card border-talus-600 text-mine-text':'bg-mine-darker border-mine-border text-mine-muted'}`}>
+                  {c==='app'?'APP (fixture)':c==='sms'?'SMS (env-gated)':'CB (SIMULATED)'}
+                </button>
+              ))}
+            </div>
+            {dispatchSent && (
+              <span className={`text-[10px] font-mono px-2 py-1 rounded border ${dispatchSent.sms_attempted===false?'bg-amber-500/15 text-amber-300 border-amber-500/30':dispatchSent.sms_ok?'bg-emerald-500/15 text-emerald-300 border-emerald-500/30':'bg-mine-darker text-mine-muted border-mine-border'}`}>
+                {dispatchSent.simulated?'SIMULATED':dispatchSent.sms_ok?'SENT':'DISPATCHED'} {dispatchSent.provider?`· ${dispatchSent.provider}`:''}
+              </span>
+            )}
+          </div>
+          {smsLog && dispatchChannel==='sms' && (
+            <div className="text-[10px] font-mono text-mine-muted border border-mine-border rounded-lg p-2 bg-mine-darker max-h-24 overflow-auto">
+              <div className="font-bold text-mine-text mb-1">Dispatch log (last {smsLog.length})</div>
+              {smsLog.map((e,i)=><div key={i} className="truncate">{e.ts} {e.channel} {e.lang} {e.zone_id} {e.sms_attempted?'SMS':''} {e.simulated?'SIM':''}</div>)}
+            </div>
+          )}
 
           {/* Active Language Preview Message */}
           <div className="p-3 bg-mine-card rounded-xl border border-risk-critical/30 space-y-1.5">
             <div className="flex items-center justify-between text-[10px] text-mine-muted font-mono">
               <span className="text-risk-critical font-bold uppercase">
-                {activeLang === 'en' ? t('alerts.englishBroadcast') : activeLang === 'hi' ? t('alerts.hindiBroadcast') : t('alerts.nepaliBroadcast')}
+                {activeLang === 'en' ? t('alerts.englishBroadcast') : activeLang === 'hi' ? t('alerts.hindiBroadcast') : activeLang === 'ne' ? t('alerts.nepaliBroadcast') : activeLang === 'as' ? 'অসমীয়া সম্প্ৰচাৰ' : 'বাংলা সম্প্রচার'}
               </span>
               <span>{t('alerts.trigger')}</span>
             </div>
@@ -131,6 +142,14 @@ export default function AlertPanel() {
             </p>
           </div>
 
+          {/* CB badge + QR — judge scans phone, sees EN/HI/NE/AS/BN in 2 sec */}
+          {dispatchChannel==='cbe' && (
+            <div className="flex items-center gap-2 text-[10px] px-2.5 py-1.5 rounded-lg bg-sky-500/10 border border-sky-500/25 text-sky-300">
+              <Radio className="w-3 h-3" />
+              <span>SIMULATED Cell Broadcast — Not NDMA CB-API (needs DoT CBE bearer). QR below shows live EN/HI/NE/AS/BN same translations.js:8</span>
+              <span className="ml-auto font-mono font-bold uppercase text-[9px] px-1 bg-sky-500/20 rounded">SIM CB</span>
+            </div>
+          )}
           {/* Offline Sync Badge */}
           <div className="flex items-center justify-between text-[10px] px-2.5 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/25 text-emerald-300">
             <span className="flex items-center gap-1.5">

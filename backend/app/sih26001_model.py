@@ -3,8 +3,9 @@
 Loads the Phase-1 trained artifacts (ml/models/sih26001_rf_v1.joblib +
 sih26001_iso_v1.joblib, git-ignored) and scores the frozen NGEN sample rows
 (data/sih26001/fixtures/feature_matrix.sample.csv) through the SAME recipe
-as scripts/train_sih26001.py: 14 base cols, spi -> spi_log, encoder
-transform, RF predict_proba, isotonic calibration.
+ as scripts/train_sih26001.py: 14 base cols (+3 seismic-memory when the
+bundle was trained with them), spi -> spi_log, encoder transform, RF
+predict_proba, isotonic calibration.
 
 Contract:
 - score = int(round(raw_proba * 100)); confidence = calibrated P (0-1 float,
@@ -15,6 +16,11 @@ Contract:
   True only when every served zone scored cleanly.
 - SHAP is optional (shap lib may be absent where the server runs); caller
   keeps the fixture-SHAP fallback.
+- Seismic-memory cols (17-feature bundle): per-zone as-of-2024 values resolved
+  from the committed evidence/usgs_quakes.json + fixture geometries at import.
+  Documented demo-pilot approximation (fixture NGEN rows carry no seismic cols);
+  per-row seismic arrives with the NGEN refresh. Encoder mismatch (old 14-col
+  bundle) -> score_row returns None per zone (honest fallback, never crash).
 """
 from __future__ import annotations
 
@@ -28,13 +34,60 @@ ISO_BLOB = REPO / "ml" / "models" / "sih26001_iso_v1.joblib"
 BASE_COLS = ["slope_angle", "elevation", "aspect", "curvature", "twi", "spi",
              "rainfall_24h_mm", "rainfall_7d_mm", "rainfall_30d_mm",
              "soil_moisture", "ndvi", "distance_to_road", "distance_to_river",
-             "drain_density"]
+             "drain_density", "recent_disturbance"]
+SEISMIC_COLS = ["seismic_dist_km", "seismic_n50_rate", "seismic_years_since"]
+QUAKES_FP = REPO / "data" / "sih26001" / "evidence" / "usgs_quakes.json"
+_SLOPES_FPS = [REPO / "data" / "sih26001" / "fixtures" / f for f in
+               ("slopes.json", "slopes.lachung.json", "slopes.darjeeling.json",
+                "slopes.arunachal.json", "slopes.assam.json", "slopes.manipur.json",
+                "slopes.meghalaya.json", "slopes.mizoram.json")]
+
+
+def _seismic_lookup() -> dict[str, dict[str, float]]:
+    """Per-zone as-of-2024 seismic values from committed quake table + geometries."""
+    import json
+    import math as _math
+    try:
+        quakes = json.loads(QUAKES_FP.read_text(encoding="utf-8"))["events"]
+    except Exception:
+        return {}
+    zones: dict[str, tuple[float, float]] = {}
+    for fp in _SLOPES_FPS:
+        try:
+            for z in json.loads(fp.read_text(encoding="utf-8"))["zones"]:
+                zones[z["zone_id"]] = (float(z["geometry"]["lat"]),
+                                       float(z["geometry"]["lon"]))
+        except Exception:
+            continue
+    out: dict[str, dict[str, float]] = {}
+    for zid, (la, lo) in zones.items():
+        best_d, n50, last_yr = math.inf, 0, None
+        for q in quakes:
+            d = 2 * 6371.0 * _math.asin(_math.sqrt(
+                _math.sin(_math.radians(q["lat"] - la) / 2) ** 2
+                + _math.cos(_math.radians(la)) * _math.cos(_math.radians(q["lat"]))
+                * _math.sin(_math.radians(q["lon"] - lo) / 2) ** 2))
+            best_d = min(best_d, d)
+            if d <= 50.0 and q["year"] < 2024:
+                n50 += 1
+                last_yr = q["year"] if last_yr is None else max(last_yr, q["year"])
+        out[zid] = {"seismic_dist_km": round(best_d, 2),
+                    # rate = count / observable years (2024-1965 = 59 for all demo zones)
+                    "seismic_n50_rate": round(n50 / 59.0, 4),
+                    "seismic_years_since": float(min(2024 - last_yr, 60)) if last_yr else 60.0}
+    return out
+
+
+_SEISMIC_BY_ZONE = _seismic_lookup()
 
 
 def _valid_row(row: dict) -> bool:
     try:
         for c in BASE_COLS:
-            v = float(row[c])
+            # recent_disturbance is new 18th col — sample.csv 12 rows have no col, default 0 (wound 4/2936)
+            if c == "recent_disturbance" and c not in row:
+                continue
+            v = float(row.get(c, 0))
             if not math.isfinite(v):
                 return False
         if not str(row.get("lulc", "")).strip():
@@ -57,8 +110,19 @@ class Sih26001Live:
 
     def _frame(self, row: dict):
         import pandas as pd
-        rec = {c: float(row[c]) for c in BASE_COLS}
+        rec = {c: float(row.get(c, 0)) for c in BASE_COLS}
         rec["lulc"] = str(row["lulc"]).strip()
+        # Seismic cols: prefer row values (WhatIf/future NGEN rows); else the
+        # committed as-of-2024 per-zone lookup (documented approximation).
+        if all(c in row for c in SEISMIC_COLS):
+            for c in SEISMIC_COLS:
+                rec[c] = float(row[c])
+        else:
+            seis = _SEISMIC_BY_ZONE.get(str(row.get("zone_id", ""))) if _SEISMIC_BY_ZONE else None
+            if not seis:
+                # Pending NER states fallback — conservative 60km/0/60 (no nearby M5.5 <50km)
+                seis = {"seismic_dist_km": 60.0, "seismic_n50_rate": 0.0, "seismic_years_since": 60.0}
+            rec.update(seis)
         X = pd.DataFrame([rec])
         X["spi_log"] = X["spi"].clip(lower=0).apply(lambda v: math.log1p(v))
         X = X.drop(columns=["spi"])
@@ -76,9 +140,15 @@ class Sih26001Live:
             p = min(max(p, 0.0), 1.0)
             cal = float(self.iso.predict([p])[0])
             cal = min(max(cal, 0.0), 1.0)
+            # Prevalence-corrected confidence for ~1% field base rate (Bayes)
+            # pi_train=0.5 (balanced matrix) -> pi_real=0.01 (NER hillslope-day)
+            # p_real = p_cal*0.02 / (p_cal*0.02 + (1-p_cal)*1.98)
+            p_real = cal * 0.02 / (cal * 0.02 + (1 - cal) * 1.98) if 0 < cal < 1 else cal
+            p_real = min(max(float(p_real), 0.0), 1.0)
             score = int(round(p * 100))
             from . import model_service
             return {"score": score, "confidence": round(cal, 3),
+                    "confidence_real_1pct": round(p_real, 4),
                     "band": model_service.band_for_score(score),
                     "raw_proba": round(p, 4)}
         except Exception:

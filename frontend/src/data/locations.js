@@ -437,7 +437,122 @@ export const LOCATIONS = {
     live: true,
     badge: "LIVE — NGEN",
   },
-  darjeeling: {
+
+  arunachal: {
+    id: "arunachal",
+    label: "Arunachal Pradesh",
+    state: "Arunachal Pradesh",
+    center: [27.0844, 93.6053],
+    zoom: 8,
+    zones: [
+      { id: "AR1", name: "AR1 — Arunachal Zone 1", village: "AR1", type: "Hillside Slope", benches: "Ridge", coordinates: [[27.0954,93.5983],[27.0954,93.6043],[27.0894,93.6043],[27.0894,93.5983]], centroid: [27.0924,93.6013], area_hectares: 15.0, sensorIds: ["AR1-01"] },
+      { id: "AR2", name: "AR2 — Arunachal Zone 2", village: "AR2", type: "Hillside Slope", benches: "Ridge", coordinates: [[27.0904,93.6083],[27.0904,93.6143],[27.0844,93.6143],[27.0844,93.6083]], centroid: [27.0874,93.6113], area_hectares: 15.0, sensorIds: ["AR2-01"] },
+      { id: "AR3", name: "AR3 — Arunachal Zone 3", village: "AR3", type: "Hillside Slope", benches: "Ridge", coordinates: [[27.0794,93.6043],[27.0794,93.6103],[27.0734,93.6103],[27.0734,93.6043]], centroid: [27.0764,93.6073], area_hectares: 15.0, sensorIds: ["AR3-01"] },
+      { id: "AR4", name: "AR4 — Arunachal Zone 4", village: "AR4", type: "Hillside Slope", benches: "Ridge", coordinates: [[27.0724,93.5903],[27.0724,93.5963],[27.0664,93.5963],[27.0664,93.5903]], centroid: [27.0694,93.5933], area_hectares: 15.0, sensorIds: ["AR4-01"] }
+    ],
+    roads: [
+      { id: "R1", name: "AR1 link", status: "open", adjacent_slope: "AR1", description: "AR1 link — LIVE from AR1", coordinates: [[27.0894,93.5983],[27.0874,93.6013]] },
+      { id: "R2", name: "Ridge shortcut AR1-AR4", status: "open", adjacent_slope: "AR1", description: "Ridge shortcut — LIVE from AR1", coordinates: [[27.0924,93.6013],[27.0694,93.5933]] },
+      { id: "R3", name: "Valley road AR3-AR4", status: "open", adjacent_slope: "AR3", description: "Valley road — LIVE from AR3", coordinates: [[27.0764,93.6073],[27.0694,93.5933]] },
+      { id: "R4", name: "Valley staging approach", status: "open", adjacent_slope: "AR4", description: "Valley staging — LIVE from AR4", coordinates: [[27.0764,93.6073],[27.0694,93.5933]] }
+    ],
+    infra: [],
+    sensors: [],
+    live: true,
+    badge: "LIVE — NGEN",
+  },
+  assam: {
+    id: "assam",
+    label: "Assam Hills",
+    state: "Assam",
+    center: [26.14, 91.73],
+    zoom: 8,
+    zones: [
+      { id: "AS1", name: "AS1 — Assam Zone 1", village: "AS1", type: "Hillside Slope", benches: "Ridge", coordinates: [[26.151,91.723],[26.151,91.729],[26.145,91.729],[26.145,91.723]], centroid: [26.148,91.726], area_hectares: 15.0, sensorIds: ["AS1-01"] },
+      { id: "AS2", name: "AS2 — Assam Zone 2", village: "AS2", type: "Hillside Slope", benches: "Ridge", coordinates: [[26.146,91.733],[26.146,91.739],[26.14,91.739],[26.14,91.733]], centroid: [26.143,91.736], area_hectares: 15.0, sensorIds: ["AS2-01"] },
+      { id: "AS3", name: "AS3 — Assam Zone 3", village: "AS3", type: "Hillside Slope", benches: "Ridge", coordinates: [[26.135,91.729],[26.135,91.735],[26.129,91.735],[26.129,91.729]], centroid: [26.132,91.732], area_hectares: 15.0, sensorIds: ["AS3-01"] },
+      { id: "AS4", name: "AS4 — Assam Zone 4", village: "AS4", type: "Hillside Slope", benches: "Ridge", coordinates: [[26.128,91.715],[26.128,91.721],[26.122,91.721],[26.122,91.715]], centroid: [26.125,91.718], area_hectares: 15.0, sensorIds: ["AS4-01"] }
+    ],
+    roads: [
+      { id: "R1", name: "AS1 link", status: "open", adjacent_slope: "AS1", description: "AS1 link — LIVE from AS1", coordinates: [[26.145,91.723],[26.148,91.726]] },
+      { id: "R2", name: "Ridge shortcut AS1-AS4", status: "open", adjacent_slope: "AS1", description: "Ridge shortcut — LIVE from AS1", coordinates: [[26.148,91.726],[26.125,91.718]] },
+      { id: "R3", name: "Valley road AS3-AS4", status: "open", adjacent_slope: "AS3", description: "Valley road — LIVE from AS3", coordinates: [[26.132,91.732],[26.125,91.718]] },
+      { id: "R4", name: "Valley staging approach", status: "open", adjacent_slope: "AS4", description: "Valley staging — LIVE from AS4", coordinates: [[26.132,91.732],[26.125,91.718]] }
+    ],
+    infra: [],
+    sensors: [],
+    live: true,
+    badge: "LIVE — NGEN",
+  },
+  manipur: {
+    id: "manipur",
+    label: "Manipur Hills",
+    state: "Manipur",
+    center: [24.817, 93.936],
+    zoom: 8,
+    zones: [
+      { id: "MN1", name: "MN1 — Manipur Zone 1", village: "MN1", type: "Hillside Slope", benches: "Ridge", coordinates: [[24.828,93.929],[24.828,93.935],[24.822,93.935],[24.822,93.929]], centroid: [24.825,93.932], area_hectares: 15.0, sensorIds: ["MN1-01"] },
+      { id: "MN2", name: "MN2 — Manipur Zone 2", village: "MN2", type: "Hillside Slope", benches: "Ridge", coordinates: [[24.823,93.939],[24.823,93.945],[24.817,93.945],[24.817,93.939]], centroid: [24.82,93.942], area_hectares: 15.0, sensorIds: ["MN2-01"] },
+      { id: "MN3", name: "MN3 — Manipur Zone 3", village: "MN3", type: "Hillside Slope", benches: "Ridge", coordinates: [[24.812,93.935],[24.812,93.941],[24.806,93.941],[24.806,93.935]], centroid: [24.809,93.938], area_hectares: 15.0, sensorIds: ["MN3-01"] },
+      { id: "MN4", name: "MN4 — Manipur Zone 4", village: "MN4", type: "Hillside Slope", benches: "Ridge", coordinates: [[24.805,93.921],[24.805,93.927],[24.799,93.927],[24.799,93.921]], centroid: [24.802,93.924], area_hectares: 15.0, sensorIds: ["MN4-01"] }
+    ],
+    roads: [
+      { id: "R1", name: "MN1 link", status: "open", adjacent_slope: "MN1", description: "MN1 link — LIVE from MN1", coordinates: [[24.822,93.929],[24.825,93.932]] },
+      { id: "R2", name: "Ridge shortcut MN1-MN4", status: "open", adjacent_slope: "MN1", description: "Ridge shortcut — LIVE from MN1", coordinates: [[24.825,93.932],[24.802,93.924]] },
+      { id: "R3", name: "Valley road MN3-MN4", status: "open", adjacent_slope: "MN3", description: "Valley road — LIVE from MN3", coordinates: [[24.809,93.938],[24.802,93.924]] },
+      { id: "R4", name: "Valley staging approach", status: "open", adjacent_slope: "MN4", description: "Valley staging — LIVE from MN4", coordinates: [[24.809,93.938],[24.802,93.924]] }
+    ],
+    infra: [],
+    sensors: [],
+    live: true,
+    badge: "LIVE — NGEN",
+  },
+  meghalaya: {
+    id: "meghalaya",
+    label: "Meghalaya Hills",
+    state: "Meghalaya",
+    center: [25.578, 91.893],
+    zoom: 8,
+    zones: [
+      { id: "ML1", name: "ML1 — Meghalaya Zone 1", village: "ML1", type: "Hillside Slope", benches: "Ridge", coordinates: [[25.589,91.886],[25.589,91.892],[25.583,91.892],[25.583,91.886]], centroid: [25.586,91.889], area_hectares: 15.0, sensorIds: ["ML1-01"] },
+      { id: "ML2", name: "ML2 — Meghalaya Zone 2", village: "ML2", type: "Hillside Slope", benches: "Ridge", coordinates: [[25.584,91.896],[25.584,91.902],[25.578,91.902],[25.578,91.896]], centroid: [25.581,91.899], area_hectares: 15.0, sensorIds: ["ML2-01"] },
+      { id: "ML3", name: "ML3 — Meghalaya Zone 3", village: "ML3", type: "Hillside Slope", benches: "Ridge", coordinates: [[25.573,91.892],[25.573,91.898],[25.567,91.898],[25.567,91.892]], centroid: [25.57,91.895], area_hectares: 15.0, sensorIds: ["ML3-01"] },
+      { id: "ML4", name: "ML4 — Meghalaya Zone 4", village: "ML4", type: "Hillside Slope", benches: "Ridge", coordinates: [[25.566,91.878],[25.566,91.884],[25.56,91.884],[25.56,91.878]], centroid: [25.563,91.881], area_hectares: 15.0, sensorIds: ["ML4-01"] }
+    ],
+    roads: [
+      { id: "R1", name: "ML1 link", status: "open", adjacent_slope: "ML1", description: "ML1 link — LIVE from ML1", coordinates: [[25.583,91.886],[25.586,91.889]] },
+      { id: "R2", name: "Ridge shortcut ML1-ML4", status: "open", adjacent_slope: "ML1", description: "Ridge shortcut — LIVE from ML1", coordinates: [[25.586,91.889],[25.563,91.881]] },
+      { id: "R3", name: "Valley road ML3-ML4", status: "open", adjacent_slope: "ML3", description: "Valley road — LIVE from ML3", coordinates: [[25.57,91.895],[25.563,91.881]] },
+      { id: "R4", name: "Valley staging approach", status: "open", adjacent_slope: "ML4", description: "Valley staging — LIVE from ML4", coordinates: [[25.57,91.895],[25.563,91.881]] }
+    ],
+    infra: [],
+    sensors: [],
+    live: true,
+    badge: "LIVE — NGEN",
+  },
+  mizoram: {
+    id: "mizoram",
+    label: "Mizoram Hills",
+    state: "Mizoram",
+    center: [23.73, 92.717],
+    zoom: 8,
+    zones: [
+      { id: "MZ1", name: "MZ1 — Mizoram Zone 1", village: "MZ1", type: "Hillside Slope", benches: "Ridge", coordinates: [[23.741,92.71],[23.741,92.716],[23.735,92.716],[23.735,92.71]], centroid: [23.738,92.713], area_hectares: 15.0, sensorIds: ["MZ1-01"] },
+      { id: "MZ2", name: "MZ2 — Mizoram Zone 2", village: "MZ2", type: "Hillside Slope", benches: "Ridge", coordinates: [[23.736,92.72],[23.736,92.726],[23.73,92.726],[23.73,92.72]], centroid: [23.733,92.723], area_hectares: 15.0, sensorIds: ["MZ2-01"] },
+      { id: "MZ3", name: "MZ3 — Mizoram Zone 3", village: "MZ3", type: "Hillside Slope", benches: "Ridge", coordinates: [[23.725,92.716],[23.725,92.722],[23.719,92.722],[23.719,92.716]], centroid: [23.722,92.719], area_hectares: 15.0, sensorIds: ["MZ3-01"] },
+      { id: "MZ4", name: "MZ4 — Mizoram Zone 4", village: "MZ4", type: "Hillside Slope", benches: "Ridge", coordinates: [[23.718,92.702],[23.718,92.708],[23.712,92.708],[23.712,92.702]], centroid: [23.715,92.705], area_hectares: 15.0, sensorIds: ["MZ4-01"] }
+    ],
+    roads: [
+      { id: "R1", name: "MZ1 link", status: "open", adjacent_slope: "MZ1", description: "MZ1 link — LIVE from MZ1", coordinates: [[23.735,92.71],[23.738,92.713]] },
+      { id: "R2", name: "Ridge shortcut MZ1-MZ4", status: "open", adjacent_slope: "MZ1", description: "Ridge shortcut — LIVE from MZ1", coordinates: [[23.738,92.713],[23.715,92.705]] },
+      { id: "R3", name: "Valley road MZ3-MZ4", status: "open", adjacent_slope: "MZ3", description: "Valley road — LIVE from MZ3", coordinates: [[23.722,92.719],[23.715,92.705]] },
+      { id: "R4", name: "Valley staging approach", status: "open", adjacent_slope: "MZ4", description: "Valley staging — LIVE from MZ4", coordinates: [[23.722,92.719],[23.715,92.705]] }
+    ],
+    infra: [],
+    sensors: [],
+    live: true,
+    badge: "LIVE — NGEN",
+  },  darjeeling: {
     id: "darjeeling",
     label: "Darjeeling Hills, W Bengal",
     state: "W Bengal",

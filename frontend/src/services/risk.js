@@ -13,19 +13,14 @@ function cap(s) {
   return String(s || '').charAt(0).toUpperCase() + String(s || '').slice(1).toLowerCase();
 }
 
-const ZONE_DISPLAY = {
-  S1: 'Tathangchen (upper)',
-  S2: 'Chandmari (road-cut)',
-  S3: 'Tadong (mid)',
-  S4: 'Ranipool (valley)'
-};
-function mockName(id) {
-  return ZONE_DISPLAY[id] || 'slope';
+/** Live display name from /api/zones (getZones maps z.name); id fallback keeps N/D corridors honest. */
+function zoneDisplayName(z) {
+  return z.name || z.id;
 }
 
-export async function getRiskSummary() {
-  const { zones } = await getZones();
-  return summarize(zones);
+export async function getRiskSummary(zones = null) {
+  const list = zones || (await getZones()).zones;
+  return summarize(list);
 }
 
 function summarize(zones) {
@@ -44,7 +39,6 @@ function summarize(zones) {
     lowCount,
     totalZones: zones.length,
     dataQualityConfidence: avgConfidence,
-    activePersonnelInHazard: 0,
     systemStatus: criticalCount > 0 ? 'CRITICAL_ALERT' : highCount > 0 ? 'HIGH_ALERT' : 'NORMAL_OPERATIONS',
   };
 }
@@ -63,8 +57,8 @@ export async function getAlerts() {
       alerts.push({
         id: `zone-${z.id}-${band.toLowerCase()}`,
         zoneId: z.id,
-        zoneName: `${z.id} — ${mockName(z.id)}`,
-        title: `${cap(band)} risk detected on ${z.id} (${mockName(z.id)})`,
+        zoneName: `${z.id} — ${zoneDisplayName(z)}`,
+        title: `${cap(band)} risk detected on ${z.id} (${zoneDisplayName(z)})`,
         summary: decision?.message || `${z.id} is ${band.toLowerCase()} risk`,
         severity: band,
         action: decision?.action || 'monitor',
@@ -77,6 +71,13 @@ export async function getAlerts() {
   return { alerts };
 }
 
+/**
+ * Real server-side acknowledgement (POST /api/alerts/ack). Offline the call
+ * throws and the caller must NOT mark the alert — no fake acks.
+ */
 export async function acknowledgeAlert(alertId) {
-  return { status: 'success', acknowledgedId: alertId, timestamp: new Date().toISOString() };
+  return apiRequest('/alerts/ack', {
+    method: 'POST',
+    body: JSON.stringify({ alert_id: alertId }),
+  });
 }

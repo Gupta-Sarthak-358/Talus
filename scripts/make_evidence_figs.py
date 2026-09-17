@@ -232,11 +232,11 @@ def main():
     bnd = jl.load(str(REPO / "ml/models/sih26001_rf_v1.joblib"))
     iso2 = jl.load(str(REPO / "ml/models/sih26001_iso_v1.joblib"))["isotonic"]
     mat = pd.read_csv(str(REPO / "data/sih26001/processed/feature_matrix.training.csv"))
-    NUM = ["slope_angle", "elevation", "aspect", "curvature", "twi", "spi_log",
-           "rainfall_24h_mm", "rainfall_7d_mm", "rainfall_30d_mm",
-           "soil_moisture", "ndvi", "distance_to_road", "distance_to_river", "drain_density"]
+    # Feature cols from the bundle itself (14-col pre-seismic or 17-col seismic bundles both work)
+    NUM = [c for c in bnd.get("features", []) if not c.startswith("lulc_")]
     X = mat[[c for c in NUM if c != "spi_log"] + ["lulc"]].copy()
-    X["spi_log"] = np.log1p(mat["spi"].clip(lower=0))
+    if "spi_log" in NUM:
+        X["spi_log"] = np.log1p(mat["spi"].clip(lower=0))
     praw = bnd["model"].predict_proba(bnd["encoder"].transform(X))[:, 1]
     scal = np.clip(iso2.predict(praw), 0, 1) * 100
     fig, ax = plt.subplots(figsize=(10, 4.2))
@@ -247,7 +247,7 @@ def main():
         if nm:
             ax.axvline(thr, color="#333", ls=":", lw=1)
             ax.text(thr + 0.6, ax.get_ylim()[1] * 0.94, nm, fontsize=8)
-    ax.set_xlabel("Talus score (calibrated P × 100, climatological rain)")
+    ax.set_xlabel("Talus score (calibrated P × 100, event-anchored rain+soil)")
     ax.set_ylabel("training rows")
     ax.set_title("The gauge is not stuck: scores spread across bands (cases below sit in the red tail)",
                  loc="left", fontweight="bold")

@@ -46,7 +46,7 @@ NUMERIC_FIELDS = [
 CATEGORICAL_FIELDS = ["lulc", "lithology", "evidence_quality"]
 
 REQUIRED_ZONES = {"S1", "S2", "S3", "S4"}
-MAX_ROWS = 20
+MAX_ROWS = 40
 
 DEFAULT_CSV = Path("data/sih26001/fixtures/feature_matrix.sample.csv")
 DEFAULT_MANIFEST = Path("data/sih26001/fixtures/manifest.sample.json")

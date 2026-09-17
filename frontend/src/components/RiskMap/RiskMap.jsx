@@ -3,8 +3,9 @@ import { MapContainer, TileLayer, Polygon, Polyline, Marker, Popup, Tooltip, use
 import L from 'leaflet';
 import { useTalusContext } from '../../context/TalusContext';
 import { RISK_BANDS } from '../../data/constants';
+import { apiRequest } from '../../services/api';
 import MapLegend from './MapLegend';
-import { AlertOctagon, Navigation, Shield, Radio, ShieldAlert, Maximize2, Compass, Layers } from 'lucide-react';
+import { AlertOctagon, Navigation, Radio, ShieldAlert, Maximize2, Compass, Layers } from 'lucide-react';
 
 // Custom Leaflet DivIcon helpers
 function createCustomIcon(htmlContent, className = '', size = [28, 28]) {
@@ -16,13 +17,6 @@ function createCustomIcon(htmlContent, className = '', size = [28, 28]) {
     popupAnchor: [0, -size[1] / 2],
   });
 }
-
-const assemblyIcon = createCustomIcon(
-  `<div class="w-7 h-7 rounded-full bg-[#5e7f3a]/20 border-2 border-[#5e7f3a] flex items-center justify-center text-[#5e7f3a] shadow-md backdrop-blur-sm">
-    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-  </div>`,
-  'assembly-point-pin'
-);
 
 const sensorIcon = createCustomIcon(
   `<div class="w-6 h-6 rounded-full bg-[#664930]/20 border border-[#664930] flex items-center justify-center text-[#664930] shadow-md">
@@ -58,46 +52,6 @@ function MapController({ center, zoom }) {
   return null;
 }
 
-// Gangtok Ridge Topographic Contours (SRTM DEM Elevations)
-const GANGTOK_CONTOURS = [
-  {
-    name: 'Gangtok Ridge Crest (1,850m)',
-    coords: [
-      [27.3520, 88.5920],
-      [27.3485, 88.5960],
-      [27.3450, 88.6000],
-      [27.3415, 88.6080],
-      [27.3380, 88.6140],
-    ],
-    color: '#997e67',
-    dash: '6, 4',
-  },
-  {
-    name: 'Mid-Slope Contour (1,600m)',
-    coords: [
-      [27.3450, 88.5900],
-      [27.3380, 88.5980],
-      [27.3320, 88.6050],
-      [27.3250, 88.6090],
-      [27.3200, 88.6150],
-    ],
-    color: '#b8a695',
-    dash: '4, 4',
-  },
-  {
-    name: 'Valley Base / River Line (1,380m)',
-    coords: [
-      [27.3350, 88.5850],
-      [27.3280, 88.5900],
-      [27.3200, 88.5950],
-      [27.3150, 88.5950],
-      [27.3100, 88.5920],
-    ],
-    color: '#7fa4b8',
-    dash: '3, 3',
-  },
-];
-
 export default function RiskMap() {
   const {
     zones,
@@ -110,19 +64,66 @@ export default function RiskMap() {
     activeLocation,
     roads: liveRoads,
     t,
+    role,
   } = useTalusContext();
 
-  const mapCenter = locationData.center;
-  const mapZoom = locationData.zoom;
+  const mapCenter = locationData?.center || [27.3389, 88.6065];
+  const mapZoom = locationData?.zoom || 13;
   // Live per-corridor segments from GET /api/roads/status?location= (carry
   // coordinates); fall back to the static fixture geometry pre-load.
   const roadSegments = (Array.isArray(liveRoads) && liveRoads.length > 0 && liveRoads[0]?.coordinates)
     ? liveRoads
-    : locationData.roads;
-  const infra = locationData.infra;
-  const sensors = locationData.sensors;
+    : (locationData?.roads || []);
 
   const [tileMode, setTileMode] = useState('osm'); // 'osm' default (no key) | 'dark' | 'light'
+
+  // Live sensor feed (local simulator or committed sample via /api/live/feed).
+  // Pins render ONLY from this feed, labeled SIMULATED — no static instruments.
+  const [liveFeed, setLiveFeed] = useState(null);
+  useEffect(() => {
+    let stop = false;
+    const poll = async () => {
+      try {
+        const res = await apiRequest('/live/feed');
+        if (!stop) setLiveFeed(res.feed || null);
+      } catch {
+        if (!stop) setLiveFeed(null);
+      }
+    };
+    poll();
+    const timer = setInterval(poll, 15000);
+    return () => { stop = true; clearInterval(timer); };
+  }, []);
+  const sensorPins = useMemo(() => {
+    if (!liveFeed?.zones) return [];
+    return (zones || [])
+      .filter((z) => z.geometry?.centroid && liveFeed.zones[z.id])
+      .map((z) => ({ zone: z, feed: liveFeed.zones[z.id] }));
+  }, [zones, liveFeed]);
+
+  // Runout screening paths (committed evidence bundle, labeled approximation).
+  const [runout, setRunout] = useState(null);
+  useEffect(() => {
+    let stop = false;
+    apiRequest('/runout/exposure')
+      .then((b) => { if (!stop) setRunout(b.zones || null); })
+      .catch(() => { if (!stop) setRunout(null); });
+    return () => { stop = true; };
+  }, []);
+
+  // Wound candidates (review queue, NOT confirmed cuts).
+  const [wounds, setWounds] = useState(null);
+  useEffect(() => {
+    let stop = false;
+    apiRequest('/wounds')
+      .then((b) => { if (!stop) setWounds(b.corridors || null); })
+      .catch(() => { if (!stop) setWounds(null); });
+    return () => { stop = true; };
+  }, []);
+  const woundPins = useMemo(() => {
+    if (!wounds) return [];
+    return Object.values(wounds).flatMap((c) => c.candidates || []);
+  }, [wounds]);
 
   // Zone colors lookup
   const getZoneFillColor = (band) => {
@@ -132,13 +133,13 @@ export default function RiskMap() {
 
   return (
     <div className="relative w-full h-full min-h-[480px] bg-mine-darkest rounded-2xl overflow-hidden border border-mine-border shadow-md flex flex-col">
-      {/* Top Banner on Map — location-aware */}
+        {/* Top Banner on Map — villager: no SHAP jargon */}
       <div className="absolute top-3 left-3 z-[400] bg-mine-card border border-mine-border rounded-lg px-3 py-1.5 text-xs font-medium text-mine-text flex items-center gap-2 shadow-sm">
-        <span className={`w-2 h-2 rounded-full ${locationData.live ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`}></span>
-        <span className="font-semibold">{locationData.label} {t('map.title')} ({zones.map(z=>z.id).join('–') || locationData.id})</span>
-        <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold border ${locationData.live ? 'bg-emerald-500/15 text-emerald-700 border-emerald-500/30' : 'bg-amber-500/15 text-amber-700 border-amber-500/30'}`}>{locationData.badge}</span>
+        <span className={`w-2 h-2 rounded-full ${locationData?.live ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`}></span>
+        <span className="font-semibold">{t(`location.${locationData?.id}`) !== `location.${locationData?.id}` ? t(`location.${locationData.id}`) : (locationData?.label || 'Gangtok')} {t('map.title')} ({(zones||[]).map(z=>z.id).join('–') || locationData?.id || 'S1-S4'})</span>
+        <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold border ${locationData?.live ? 'bg-emerald-500/15 text-emerald-700 border-emerald-500/30' : 'bg-amber-500/15 text-amber-700 border-amber-500/30'}`}>{locationData?.live ? t('common.live_ngen') : t('common.no_data')}</span>
         <span className="text-mine-muted font-mono">|</span>
-        <span className="text-mine-muted text-[11px]">{t('map.clickSlope')}</span>
+        <span className="text-mine-muted text-[11px]">{role === 'villager' ? t('villager.tap_map') : t('map.clickSlope')}</span>
       </div>
 
       {/* Top-Right Map Controls: Reset View / Basemap Mode */}
@@ -190,26 +191,8 @@ export default function RiskMap() {
           />
         )}
 
-        {/* Gangtok Elevation Contours — only for Gangtok corridor */}
-        {activeLocation === 'gangtok' && GANGTOK_CONTOURS.map((contour, i) => (
-          <Polyline
-            key={i}
-            positions={contour.coords}
-            pathOptions={{
-              color: contour.color,
-              weight: 1.5,
-              dashArray: contour.dash,
-              opacity: 0.65,
-            }}
-          >
-            <Tooltip sticky direction="top">
-              <span className="text-[10px] font-mono text-mine-text">{contour.name}</span>
-            </Tooltip>
-          </Polyline>
-        ))}
-
-        {/* Road Network (R1-R4) with status coloring: R1 blocked, R2 at-risk, R3/R4 open — per corridor */}
-        {roadSegments.map((road) => {
+        {/* Road Network with live status coloring — per corridor */}
+        {(roadSegments||[]).map((road) => {
           const isBlocked = road.status === 'blocked';
           const isAtRisk = road.status === 'at-risk';
           const color = isBlocked ? '#c74732' : isAtRisk ? '#d97706' : '#5e7f3a';
@@ -250,7 +233,7 @@ export default function RiskMap() {
         })}
 
         {/* NER Slope Zone Polygons (S1-S4 Gangtok) */}
-        {zones.map((zone) => {
+        {(zones||[]).map((zone) => {
           if (!zone.geometry || !zone.geometry.coordinates) return null;
           const isSelected = zone.id === selectedZoneId;
           const fillColor = getZoneFillColor(zone.risk_band);
@@ -315,25 +298,26 @@ export default function RiskMap() {
           );
         })}
 
-        {/* Sensor Node Markers — per corridor */}
+         {/* Live sensor pins — from /api/live/feed */}
         {mapLayers.sensors &&
-          sensors.map((sensor) => (
-            <Marker key={sensor.id} position={sensor.coordinates} icon={sensorIcon}>
+          sensorPins.map(({ zone, feed }) => (
+            <Marker key={zone.id} position={zone.geometry.centroid} icon={sensorIcon}>
               <Popup>
                 <div className="p-1 space-y-1">
                   <div className="flex items-center gap-1 text-talus-600 font-semibold text-xs">
                     <Radio className="w-3.5 h-3.5" />
-                    <span>{sensor.name}</span>
+                    <span>{zone.id} sensor</span>
+                    {role !== 'villager' && (
+                      <span className="text-[9px] font-bold px-1.5 py-px rounded-full bg-amber-500/10 text-amber-600 border border-amber-500/20">SIM</span>
+                    )}
                   </div>
-                  <div className="text-[11px] text-mine-text font-mono">{sensor.reading}</div>
-                  <div className="text-[10px] text-mine-muted flex items-center justify-between">
-                    <span>{t('map.type')} {sensor.type}</span>
-                    <span
-                      className={`font-semibold ${
-                        sensor.status === 'online' ? 'text-risk-verylow' : 'text-risk-moderate'
-                      }`}
-                    >
-                      [{sensor.status.toUpperCase()}]
+                  <div className="text-[11px] text-mine-text font-mono">
+                    rain 1h {feed.rain_1h_mm.toFixed(1)}mm · Δsoil {feed.soil_delta >= 0 ? '+' : ''}{feed.soil_delta.toFixed(3)}
+                  </div>
+                  <div className="text-[10px] text-mine-muted flex items-center justify-between font-mono">
+                    <span>batt {feed.battery_pct.toFixed(0)}% · {feed.rssi_dbm.toFixed(0)} dBm</span>
+                    <span className={`font-semibold ${feed.status === 'ok' ? 'text-risk-verylow' : 'text-risk-moderate'}`}>
+                      [{feed.status.toUpperCase()}]
                     </span>
                   </div>
                 </div>
@@ -341,24 +325,37 @@ export default function RiskMap() {
             </Marker>
           ))}
 
-        {/* Infrastructure & Assembly Point Markers — per corridor */}
-        {mapLayers.infrastructure &&
-          infra.map((item) => (
-            <Marker key={item.id} position={item.coordinates} icon={assemblyIcon}>
-              <Popup>
-                <div className="p-1 space-y-1">
-                  <div className="flex items-center gap-1 text-risk-verylow font-semibold text-xs">
-                    <Shield className="w-3.5 h-3.5" />
-                    <span>{item.name}</span>
+        {/* Runout paths — downstream risk if slope fails */}
+        {mapLayers.runout && runout &&
+          Object.entries(runout)
+            .filter(([, z]) => Array.isArray(z.path) && z.path.length >= 2)
+            .map(([zid, z]) => (
+              <Polyline
+                key={`runout-${zid}`}
+                positions={z.path}
+                pathOptions={{ color: '#c74732', weight: 2, dashArray: '2, 5', opacity: 0.75 }}
+              >
+                <Tooltip sticky direction="top">
+                  <div className="text-[11px] p-0.5">
+                    <div className="font-bold text-mine-text">{zid} runout — {z.length_m}m</div>
+                    <div className="text-mine-muted">~{z.buildings_n} buildings downstream</div>
                   </div>
-                  {item.capacity && (
-                    <div className="text-[11px] text-mine-text">{t('map.capacity')} {item.capacity}</div>
-                  )}
-                  <div className="text-[10px] text-mine-muted">{t('zone.status')}: {item.status}</div>
-                </div>
-              </Popup>
-            </Marker>
-          ))}
+                </Tooltip>
+              </Polyline>
+            ))}
+
+        {/* Vegetation change — field check before action */}
+        {mapLayers.wounds && woundPins.map((w, i) => (
+          <Marker key={`wound-${i}`} position={[w.lat, w.lon]} icon={sensorIcon}>
+            <Popup>
+              <div className="text-[11px] p-0.5">
+                <div className="font-bold text-mine-text">Vegetation change near {w.seg}</div>
+                <div className="text-mine-muted font-mono">NDVI {w.ndvi_pre} → {w.ndvi_post} (Δ{w.drop})</div>
+                <div className="text-mine-muted">Possible fresh disturbance — field team to verify.</div>
+              </div>
+            </Popup>
+          </Marker>
+        ))}
 
         {/* Routing Overlays (Normal vs Risk-Aware Route) */}
         {mapLayers.routes && activeRoutePlan && (

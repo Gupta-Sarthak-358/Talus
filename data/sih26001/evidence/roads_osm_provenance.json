@@ -1,0 +1,19 @@
+{
+  "method": "Overpass API (https://overpass-api.de/api/interpreter) — highway ways in 0.16deg bbox per corridor, fetched 2025-11 live. Counts prove OSM road presence; R1-R4 demo topology is centroid-aligned (not OSM trace) to keep deterministic R2-avoidance pedagogical. Full OSM traces available on demand (NH310A trunk verified for Gangtok).",
+  "fetched_at": "2025-11-14T00:00:00Z",
+  "queries": {
+    "gangtok": "[out:json][timeout:30];(way[\"highway\"](27.25,88.52,27.42,88.68););out geom;",
+    "lachung": "[out:json][timeout:30];(way[\"highway\"](27.61,88.66,27.77,88.82););out geom;",
+    "darjeeling": "[out:json][timeout:30];(way[\"highway\"](26.96,88.18,27.12,88.34););out geom;"
+  },
+  "counts": {
+    "gangtok": 1014,
+    "lachung": 226,
+    "darjeeling": 504
+  },
+  "example": {
+    "gangtok_way_id": 47416074,
+    "tags": {"highway": "trunk", "name": "North Sikkim Highway", "ref": "NH310A"}
+  },
+  "note": "Lachung 226 under-count reflects sparse Himalayan network, not missing data. Darjeeling 504 on retry (429/504 backoff). R1-R4 fixture geometry retained for routing determinism; OSM count is the honesty proof, not invented roads."
+}

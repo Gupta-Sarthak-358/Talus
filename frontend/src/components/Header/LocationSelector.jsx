@@ -17,16 +17,20 @@ export default function LocationSelector() {
           onChange={(e) => switchLocation(e.target.value)}
           className="appearance-none bg-mine-card border border-mine-border hover:border-talus-500 rounded-lg pl-2.5 pr-7 py-1.5 text-xs font-semibold text-mine-text focus:outline-none focus:border-talus-600 transition-colors"
         >
-          {Object.values(locations).map((loc) => (
-            <option key={loc.id} value={loc.id}>
-              {loc.label} {loc.live ? `● ${t('location.live')}` : `○ ${t('location.preview')}`}
-            </option>
-          ))}
+          {Object.values(locations).map((loc) => {
+            const label = t(`location.${loc.id}`) !== `location.${loc.id}` ? t(`location.${loc.id}`) : loc.label;
+            const badge = loc.live ? t('common.live_ngen') : t('common.no_data');
+            return (
+              <option key={loc.id} value={loc.id}>
+                {label} ● {badge}
+              </option>
+            );
+          })}
         </select>
         <ChevronDown className="w-3 h-3 text-mine-muted absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
       </div>
-      <span className={`hidden sm:inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold border ${locationData.live ? 'bg-emerald-500/15 text-emerald-700 border-emerald-500/30' : 'bg-amber-500/15 text-amber-700 border-amber-500/30'}`}>
-        {locationData.badge}
+      <span className="hidden sm:inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold border bg-emerald-500/15 text-emerald-700 border-emerald-500/30">
+        {locationData?.live ? t('common.live_ngen') : t('common.no_data')}
       </span>
     </div>
   );

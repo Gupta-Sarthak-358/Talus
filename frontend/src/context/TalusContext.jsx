@@ -12,7 +12,7 @@ import { translations, SUPPORTED_LANGS } from '../i18n/translations';
 export const TalusContext = createContext(null);
 
 export function TalusProvider({ children }) {
-  // Location State — NER multi-corridor (gangtok live, lachung/darjeeling preview)
+  // Location State — NER multi-corridor (all live via backend stores)
   const [activeLocation, setActiveLocation] = useState('gangtok');
   const locationData = getLocationData(activeLocation);
 
@@ -44,7 +44,6 @@ export function TalusProvider({ children }) {
   // UI & Modals State
   const [isWhatIfOpen, setIsWhatIfOpen] = useState(false);
   const [isRouteModalOpen, setIsRouteModalOpen] = useState(false);
-  const [isCvModalOpen, setIsCvModalOpen] = useState(false);
   const [isAlertsDrawerOpen, setIsAlertsDrawerOpen] = useState(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [isRoadsModalOpen, setIsRoadsModalOpen] = useState(false);
@@ -59,11 +58,11 @@ export function TalusProvider({ children }) {
   // Map Layer Controls
   const [mapLayers, setMapLayers] = useState({
     sensors: true,
-    infrastructure: true,
     hazardGlow: true,
-    contourBenches: true,
     routes: true,
     roads: true,
+    runout: true,
+    wounds: true,
   });
 
   // Loading and Error States
@@ -72,7 +71,7 @@ export function TalusProvider({ children }) {
   const [simulationLoading, setSimulationLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Location switcher — Gangtok live, others preview (local fixtures until NGEN extraction)
+  // Location switcher — all corridors live via backend
   const switchLocation = useCallback((locId) => {
     const loc = getLocationData(locId);
     setActiveLocation(loc.id);
@@ -81,82 +80,14 @@ export function TalusProvider({ children }) {
     setActiveSimulation(null);
   }, []);
 
-  // Helper: build preview zones for non-live locations (fixture scores, no API)
-  const buildPreviewZones = useCallback((locId) => {
-    const loc = getLocationData(locId);
-    // Preview risk mapping — distinct per corridor to show location differentiation
-    const previewScores = locId === 'lachung'
-      ? { N1: 86, N2: 73, N3: 64, N4: 49 }
-      : locId === 'darjeeling'
-      ? { D1: 81, D2: 76, D3: 62, D4: 46 }
-      : { S1: 89, S2: 78, S3: 66, S4: 52 };
-    const bands = (s) => s >= 85 ? 'CRITICAL' : s >= 75 ? 'HIGH' : s >= 65 ? 'MODERATE' : s >= 50 ? 'LOW' : 'VERY_LOW';
-    return loc.zones.map(z => ({
-      id: z.id,
-      name: z.name,
-      sector: z.type || '',
-      risk_score: previewScores[z.id] ?? 60,
-      risk_band: bands(previewScores[z.id] ?? 60),
-      confidence: 62,
-      status: bands(previewScores[z.id] ?? 60) === 'CRITICAL' ? 'Critical - preview' : 'Preview',
-      geometry: { coordinates: z.coordinates, centroid: z.centroid, benches: z.benches },
-      trend: z.id.endsWith('1') || z.id.endsWith('2') ? 'escalating' : 'stable',
-    }));
-  }, []);
-
-  // Initial Data Load — live for Gangtok, preview for other corridors
+  // Initial Data Load — all corridors live via backend stores; backend-down
+  // shows the error state, never invented scores.
   const loadInitialData = useCallback(async (overrideLang = null) => {
     const effectiveLang = overrideLang || lang;
     setLoading(true);
     setError(null);
     try {
-      const loc = getLocationData(activeLocation);
-      if (!loc.live) {
-        // Preview location: no live API, use local fixtures
-        const previewZones = buildPreviewZones(activeLocation);
-        setZones(previewZones);
-        setAlerts([]);
-        setRoads(loc.roads);
-        const previewReports = await getReportsQueue().catch(() => []);
-        setReports(Array.isArray(previewReports) ? previewReports : previewReports.reports || []);
-        setRiskSummary({
-          criticalCount: previewZones.filter(z => z.risk_band === 'CRITICAL').length,
-          highCount: previewZones.filter(z => z.risk_band === 'HIGH').length,
-          moderateCount: previewZones.filter(z => z.risk_band === 'MODERATE').length,
-          lowCount: previewZones.filter(z => z.risk_band === 'LOW' || z.risk_band === 'VERY_LOW').length,
-          totalZones: previewZones.length,
-          dataQualityConfidence: 62,
-          activePersonnelInHazard: 0,
-          systemStatus: previewZones.some(z => z.risk_band === 'CRITICAL') ? 'CRITICAL_ALERT' : 'HIGH_ALERT',
-        });
-        // Build preview zone detail from first zone
-        const first = previewZones[0];
-        if (first) {
-          setSelectedZoneId(first.id);
-          setSelectedZoneData({
-            id: first.id,
-            name: first.name,
-            sector: first.sector,
-            risk_score: first.risk_score,
-            risk_band: first.risk_band,
-            confidence: first.confidence,
-            status: first.status,
-            geometry: first.geometry,
-            updated_at: new Date().toISOString(),
-            missingEvidence: ["preview: NGEN extraction pending for this corridor"],
-            missing_evidence: ["preview: NGEN extraction pending"],
-            role_actions: {},
-            telemetry: { slope_angle: 32, rainfall_24h: 88, rainfall_7d: 210, soil_moisture: 0.31 },
-            shap: [{ feature: "preview", value: 0, rawValue: "0", description: "Preview — live SHAP after NGEN" }],
-            trend: { direction: first.trend === 'escalating' ? 'rising' : 'stable', rapid: false, history: [], historySource: 'preview' },
-            isPreview: true,
-          });
-        }
-        const defaultRoute = await fetchRoute({ originKey: defaultOriginKey(activeLocation), location: activeLocation }).catch(() => null);
-        setActiveRoutePlan(defaultRoute);
-        return;
-      }
-      // Live path (Gangtok + now Lachung/Darjeeling via backend stores)
+      // Live path (Gangtok + Lachung/Darjeeling via backend stores)
       const [zonesRes, alertsRes, roadsRes, reportsRes] = await Promise.all([
         getZones(activeLocation),
         getAlerts(),
@@ -190,46 +121,19 @@ export function TalusProvider({ children }) {
     } finally {
       setLoading(false);
     }
-  }, [activeLocation, buildPreviewZones]);
+  }, [activeLocation]);
 
   useEffect(() => {
     loadInitialData();
   }, [loadInitialData]);
 
-  // Zone Selection Handler — live for Gangtok, preview fallback
+  // Zone Selection Handler — lang-aware: decisions translate per lang (backend DECISIONS_TRANSLATIONS)
   const selectZone = useCallback(async (zoneId) => {
     setSelectedZoneId(zoneId);
     setZoneLoading(true);
     try {
-      const loc = getLocationData(activeLocation);
-      if (!loc.live) {
-        const previewZones = buildPreviewZones(activeLocation);
-        const pz = previewZones.find(z => z.id === zoneId);
-        if (pz) {
-          setSelectedZoneData({
-            id: pz.id,
-            name: pz.name,
-            sector: pz.sector,
-            risk_score: pz.risk_score,
-            risk_band: pz.risk_band,
-            confidence: pz.confidence,
-            status: pz.status,
-            geometry: pz.geometry,
-            updated_at: new Date().toISOString(),
-            missingEvidence: ["preview: NGEN extraction pending for this corridor"],
-            missing_evidence: ["preview: NGEN extraction pending"],
-            role_actions: {},
-            telemetry: { slope_angle: 32, rainfall_24h: 88, rainfall_7d: 210, soil_moisture: 0.31 },
-            shap: [{ feature: "preview", value: 0, rawValue: "0", description: "Preview — live SHAP after NGEN" }],
-            trend: { direction: pz.trend === 'escalating' ? 'rising' : 'stable', rapid: false, history: [], historySource: 'preview' },
-            isPreview: true,
-          });
-        }
-        return;
-      }
-      // If the selected zone has an active simulation override, use simulated data
       if (activeSimulation && activeSimulation.zone_id === zoneId) {
-        const base = await getZoneById(zoneId);
+        const base = await getZoneById(zoneId, lang);
         const baseObj = base.zone || base;
         setSelectedZoneData({
           ...baseObj,
@@ -242,7 +146,7 @@ export function TalusProvider({ children }) {
           caveat: activeSimulation.caveat,
         });
       } else {
-        const zoneRes = await getZoneById(zoneId);
+        const zoneRes = await getZoneById(zoneId, lang);
         setSelectedZoneData(zoneRes.zone || zoneRes);
       }
     } catch (err) {
@@ -250,12 +154,31 @@ export function TalusProvider({ children }) {
     } finally {
       setZoneLoading(false);
     }
-  }, [activeSimulation, activeLocation, buildPreviewZones]);
+  }, [activeSimulation, activeLocation, lang]);
 
-  // Role Switcher Handler
+  // Refetch selected zone when language changes so role_actions translate (villager avoid_msg etc.)
+  useEffect(() => {
+    if (selectedZoneId) {
+      selectZone(selectedZoneId);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lang]);
+
+  // Role Switcher Handler — persists to localStorage so refresh keeps lane
   const setRole = (newRoleId) => {
     setRoleState(newRoleId);
+    try { localStorage.setItem('talus_auth', JSON.stringify({ role: newRoleId, at: new Date().toISOString() })); } catch {}
   };
+  // Restore saved role on mount (villager open, officers stay logged in until lock)
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('talus_auth');
+      if (raw) {
+        const a = JSON.parse(raw);
+        if (a.role && a.role !== role) setRoleState(a.role);
+      }
+    } catch {}
+  }, []);
 
   // Run What-If Simulation
   const runSimulation = async (params) => {
@@ -369,9 +292,9 @@ export function TalusProvider({ children }) {
     setRoads(updated);
   };
 
-  // Multilingual Alert Dispatch Fixture
-  const dispatchAlertFixture = async () => {
-    const res = await postDispatchAlerts();
+  // Multilingual Alert Dispatch Fixture (app fixture or env-gated SMS)
+  const dispatchAlertFixture = async (opts = {}) => {
+    const res = await postDispatchAlerts(opts);
     setAlertDispatchData(res);
     return res;
   };
@@ -456,8 +379,6 @@ export function TalusProvider({ children }) {
     setIsWhatIfOpen,
     isRouteModalOpen,
     setIsRouteModalOpen,
-    isCvModalOpen,
-    setIsCvModalOpen,
     isAlertsDrawerOpen,
     setIsAlertsDrawerOpen,
     isReportModalOpen,

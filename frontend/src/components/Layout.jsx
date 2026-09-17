@@ -2,18 +2,7 @@ import React from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import Header from './Header/Header';
 import { useTalusContext } from '../context/TalusContext';
-import { ShieldCheck, Info } from 'lucide-react';
-import { LayoutDashboard, Users, Shield, Briefcase, Flame } from 'lucide-react';
-
-// Role-first nav: each person sees only their page. Tool routes
-// (/map /reports /lab /routes) stay in the router for deep links
-// from role pages, but are hidden here to avoid 9-tab confusion.
-const ROLE_TABS = [
-  { to: '/role/villager', key: 'nav.villager', icon: Users },
-  { to: '/role/district_officer', key: 'nav.district', icon: Shield },
-  { to: '/role/state_manager', key: 'nav.state', icon: Briefcase },
-  { to: '/role/rescue_team', key: 'nav.rescue', icon: Flame },
-];
+import { ShieldCheck } from 'lucide-react';
 
 function Footer() {
   const { t, locationData } = useTalusContext();
@@ -28,72 +17,26 @@ function Footer() {
             <span className="text-talus-600 font-mono text-[11px] font-bold">SIH26001 / MDoNER Prototype</span>
           </div>
           <div className="flex items-center gap-3 text-[11px] text-mine-muted">
-            <span>{t('app.region')}: <strong className="text-mine-text">{locationData.label} ({locationData.zones.map(z=>z.id).join('–')})</strong></span>
+            <span>{t('app.region')}: <strong className="text-mine-text">{(t(`location.${locationData?.id}`) !== `location.${locationData?.id}` ? t(`location.${locationData.id}`) : locationData?.label) || 'Gangtok'} ({(locationData?.zones||[]).map(z=>z.id).join('–')})</strong></span>
             <span className="text-mine-muted font-mono">|</span>
             <span className="text-talus-600 font-mono font-medium">{t('app.footerModel')}</span>
           </div>
         </div>
-        <div className="text-[11px] text-mine-muted space-y-1 pt-0.5 leading-relaxed">
-          <div className="flex items-start gap-1.5">
-            <Info className="w-3.5 h-3.5 text-talus-600 shrink-0 mt-0.5" />
-            <span><strong className="text-mine-text">Data Provenance:</strong> {t('app.provenance')}</span>
-          </div>
-          <div className="pl-5 text-[10px] text-mine-muted/90 font-mono">{t('app.disclaimer')}</div>
-        </div>
+
       </div>
     </footer>
   );
 }
 
 export default function Layout() {
-  const location = useLocation();
   const { t } = useTalusContext();
   return (
     <div className="min-h-screen bg-mine-darkest flex flex-col font-sans selection:bg-talus-600 selection:text-white">
+      <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-white border-2 border-zinc-900 px-3 py-2 rounded-xl text-xs font-bold z-[9999]">{t('common.skip_content')}</a>
       <Header />
-      {/* Tab bar — second nav, URL-shareable */}
-      <nav className="bg-mine-darker border-b border-mine-border px-3 sm:px-4">
-        <div className="max-w-[1920px] mx-auto flex items-center gap-1 py-1.5 overflow-x-auto">
-          <NavLink
-            to="/"
-            end
-            className={({ isActive }) =>
-              `flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all whitespace-nowrap ${
-                isActive
-                  ? 'bg-talus-600 text-white border-talus-700 shadow-sm'
-                  : 'bg-mine-card text-mine-text border-mine-border hover:border-talus-500'
-              }`
-            }
-          >
-            <LayoutDashboard className="w-3.5 h-3.5" />
-            <span>{t('nav.home')}</span>
-          </NavLink>
-          <span className="hidden md:block w-px h-5 bg-mine-border mx-1" />
-          {ROLE_TABS.map(({ to, key, icon: Icon }) => (
-            <NavLink
-              key={to}
-              to={to}
-              className={({ isActive }) =>
-                `flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all whitespace-nowrap ${
-                  isActive
-                    ? 'bg-emerald-600 text-white border-emerald-700 shadow-sm'
-                    : 'bg-mine-card text-mine-muted border-mine-border hover:border-emerald-500'
-                }`
-              }
-            >
-              <Icon className="w-3.5 h-3.5" />
-              <span>{t(key)}</span>
-            </NavLink>
-          ))}
-          <span className="ml-auto hidden sm:flex items-center gap-1 text-[11px] text-mine-muted font-mono">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            {location.pathname}
-          </span>
-        </div>
-      </nav>
-      <div className="flex-1">
+      <main id="main" className="flex-1">
         <Outlet />
-      </div>
+      </main>
       <Footer />
     </div>
   );

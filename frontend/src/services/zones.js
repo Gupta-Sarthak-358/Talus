@@ -20,6 +20,7 @@ function confPct(confidence) {
 
 function mapLiveZone(z) {
   const geo = MINE_ZONES_GEOJSON.find((g) => g.id === z.zone_id);
+  const pct1 = z.confidence_real_1pct != null ? Math.round((z.confidence_real_1pct <=1 ? z.confidence_real_1pct*100 : z.confidence_real_1pct)*10)/10 : null;
   return {
     id: z.zone_id,
     name: z.name || `Zone ${z.zone_id}`,
@@ -27,6 +28,8 @@ function mapLiveZone(z) {
     risk_score: z.risk_score,
     risk_band: bandUpper(z.risk_band),
     confidence: confPct(z.confidence),
+    confidence_real_1pct: pct1,
+    raw_confidence: z.confidence,
     status: bandUpper(z.risk_band) === 'CRITICAL' ? 'Critical - active monitoring'
           : bandUpper(z.risk_band) === 'HIGH' ? 'Elevated risk' : 'Normal Operations',
     geometry: geo ? { coordinates: geo.coordinates, centroid: geo.centroid, benches: geo.benches } : null,
@@ -75,6 +78,7 @@ export async function getZoneById(zoneId, lang = null) {
     };
   }
   const missing_evidence = features?.missing_features || [];
+  const pct1 = detail.confidence_real_1pct != null ? Math.round((detail.confidence_real_1pct <=1 ? detail.confidence_real_1pct*100 : detail.confidence_real_1pct)*10)/10 : null;
   const rich = {
     id: detail.zone_id,
     name: detail.name,
@@ -82,6 +86,8 @@ export async function getZoneById(zoneId, lang = null) {
     risk_score: detail.risk_score,
     risk_band: bandUpper(detail.risk_band),
     confidence: confPct(detail.confidence),
+    confidence_real_1pct: pct1,
+    raw_confidence: detail.confidence,
     status: bandUpper(detail.risk_band) === 'CRITICAL' ? 'Critical - active monitoring' : 'Normal Operations',
     geometry: detail.geometry,
     updated_at: detail.updated_at,

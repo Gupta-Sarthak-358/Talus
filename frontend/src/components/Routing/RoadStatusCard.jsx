@@ -22,8 +22,8 @@ export default function RoadStatusCard() {
             <h3 className="text-xs font-bold text-mine-text uppercase tracking-wider">
               {t('dashboard.roadStatus')}
             </h3>
-            <p className="text-[10px] text-mine-muted font-mono">
-              GET /api/roads/status · {locationData?.label || 'Corridor'} Arterial Graph
+            <p className="text-[10px] text-mine-muted">
+              {locationData?.label || 'Corridor'} · {roads.length} segments
             </p>
           </div>
         </div>

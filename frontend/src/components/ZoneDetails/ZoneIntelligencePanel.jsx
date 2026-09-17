@@ -47,11 +47,11 @@ export default function ZoneIntelligencePanel() {
             <MapPin className="w-3.5 h-3.5 text-talus-600" />
             <span>{t('zone.selectSlope')}</span>
           </span>
-          <span className="text-[10px] text-mine-muted font-mono">{zones.length} {t('dashboard.slopesMonitored')} ({zones.map(z=>z.id).join('–')})</span>
+          <span className="text-[10px] text-mine-muted font-mono">{(zones||[]).length} {t('dashboard.slopesMonitored')} ({(zones||[]).map(z=>z.id).join('–')})</span>
         </div>
 
         <div className="grid grid-cols-4 gap-2">
-          {zones.map((z) => {
+          {(zones||[]).map((z) => {
             const isSelected = z.id === selectedZoneId;
             const isCriticalOrHigh = z.risk_band === 'CRITICAL' || z.risk_band === 'HIGH';
 

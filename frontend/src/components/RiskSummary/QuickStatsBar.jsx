@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTalusContext } from '../../context/TalusContext';
 import { CloudRain, Radio, Users, Compass } from 'lucide-react';
+import { getForecastLive } from '../../services/forecast';
 
 export default function QuickStatsBar() {
-  const { zones, activeSimulation, selectedZoneData, locationData, scoringMode, t } = useTalusContext();
+  const { zones, activeSimulation, selectedZoneData, locationData, scoringMode, t, activeLocation } = useTalusContext();
 
   // Live rainfall: from selected zone telemetry or active simulation override
   const liveRainfall = selectedZoneData?.telemetry?.rainfall_24h ?? selectedZoneData?.telemetry?.rainfall_24h_mm ?? null;
   const rainfallVal = activeSimulation?.inputs?.rainfall_24h ?? liveRainfall ?? 42;
+  const [liveFc, setLiveFc] = useState(null);
+  useEffect(() => {
+    let stop=false;
+    getForecastLive(activeLocation).then(d=>{ if(!stop) setLiveFc(d); }).catch(()=>{ if(!stop) setLiveFc(null); });
+    return ()=>{ stop=true; };
+  }, [activeLocation]);
 
   return (
     <div className="bg-mine-darker border border-mine-border rounded-xl px-4 py-2 flex flex-wrap items-center justify-between gap-3 text-xs text-mine-text">
@@ -19,7 +26,13 @@ export default function QuickStatsBar() {
           <span className="font-mono font-semibold text-mine-text">
             {rainfallVal} mm {rainfallVal > 60 && <span className="text-[10px] text-risk-high font-bold ml-1">{t('quick.monsoonSaturation')}</span>}
           </span>
+          {liveFc?.daily?.[0] && (
+            <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-sky-500/15 text-sky-300 border border-sky-500/30">
+              LIVE {liveFc.daily[0].precip_mm}mm · {liveFc.daily[0].prob_max_pct ?? '?'}%
+            </span>
+          )}
         </div>
+
 
         {/* Slopes Monitored — per corridor */}
         <div className="flex items-center gap-2 border-l border-mine-border pl-4">

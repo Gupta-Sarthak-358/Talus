@@ -39,7 +39,8 @@ REPO = Path(__file__).resolve().parents[1]
 NUMERIC = ["slope_angle", "elevation", "aspect", "curvature", "twi", "spi_log",
            "rainfall_24h_mm", "rainfall_7d_mm", "rainfall_30d_mm",
            "soil_moisture", "ndvi", "distance_to_road", "distance_to_river",
-           "drain_density"]
+           "drain_density", "seismic_dist_km", "seismic_n50_rate",
+           "seismic_years_since"]
 
 CASES = [
     {

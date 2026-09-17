@@ -1,0 +1,11 @@
+{
+  "method": "Per-zone effective_rainfall warning thresholds (RESEARCH:22). FROZEN_BANDS keep scoring; thresholds overlay warning_state only. Initial values from per-zone historical effective rain median + 20mm (calibrated post-event, Taiwan-style). Update after each slide: threshold = 0.9*old + 0.1*event_effective_rain.",
+  "effective_rain_formula": "effective = rainfall_7d + 0.3*rainfall_30d (simple proxy for antecedent, Monga 390 separator)",
+  "thresholds": {
+    "gangtok": { "S1": 385, "S2": 395, "S3": 410, "S4": 375 },
+    "lachung": { "N1": 380, "N2": 390, "N3": 405, "N4": 370 },
+    "darjeeling": { "D1": 400, "D2": 410, "D3": 420, "D4": 390 }
+  },
+  "provenance": "Initial thresholds from training matrix median effective rain per corridor + zone elevation offset (higher elevation lower threshold). Scores unchanged.",
+  "updated_at": "2025-11-14T00:00:00Z"
+}

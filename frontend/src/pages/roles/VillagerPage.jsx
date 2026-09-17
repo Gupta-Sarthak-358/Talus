@@ -1,45 +1,78 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTalusContext } from '../../context/TalusContext';
 import RiskMap from '../../components/RiskMap/RiskMap';
-import { ShieldAlert, Navigation, FileText, Globe } from 'lucide-react';
+import IsolationAlertCard from '../../components/Alerts/IsolationAlertCard';
+import VillagerHero from '../../components/Villager/VillagerHero';
+import VillagerRoadPlain from '../../components/Villager/VillagerRoadPlain';
+import { Navigation, FileText } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
+/**
+ * Villager light shell: senior-dev wants <50KB, no SHAP; villager wants binary; ops/mgmt not using this route.
+ * Keeps RiskMap lazy behind toggle — default: hero+roads+actions, map opt-in on mobile.
+ */
 export default function VillagerPage() {
-  const { zones, selectedZoneData, locationData, t, setRole, lang } = useTalusContext();
+  const { zones, selectedZoneData, locationData, roads, t, setRole, selectZone, selectedZoneId } = useTalusContext();
   useEffect(() => setRole('villager'), []);
   const zone = selectedZoneData;
-  const isCritical = zone?.risk_band === 'CRITICAL' || zone?.risk_band === 'HIGH';
+
   return (
     <main className="max-w-[1920px] mx-auto px-3 sm:px-4 py-4 space-y-4">
-      {/* Simple header — no % */}
-      <div className={`rounded-2xl p-4 border text-center space-y-2 ${isCritical ? 'bg-risk-critical/10 border-risk-critical/40' : 'bg-mine-card border-mine-border'}`}>
-        <div className="flex items-center justify-center gap-2">
-          <ShieldAlert className={`w-6 h-6 ${isCritical ? 'text-risk-critical' : 'text-risk-verylow'}`} />
-          <span className={`text-lg font-extrabold ${isCritical ? 'text-risk-critical' : 'text-mine-text'}`}>{zone?.name || locationData.label}</span>
-          <span className={`px-2 py-0.5 rounded text-xs font-bold ${isCritical ? 'bg-risk-critical text-white' : 'bg-risk-verylow text-white'}`}>{zone?.risk_band || '—'}</span>
+      <VillagerHero zone={zone} t={t} />
+
+      <IsolationAlertCard />
+
+      {/* Village zone picker — large taps, no jargon */}
+      <div className="bg-white border-2 border-zinc-200 rounded-2xl p-3">
+        <div className="text-[11px] font-bold text-zinc-600 uppercase tracking-wider mb-2">{t('zone.selectSlope')} — {t('villager.tap_map')}</div>
+        <div className="grid grid-cols-4 gap-2">
+          {(zones || []).map((z) => {
+            const bandKey = `risk.band.${(z.risk_band || '').toLowerCase()}`;
+            const bandLabel = t(bandKey) !== bandKey ? t(bandKey) : z.risk_band;
+            return (
+              <button
+                key={z.id}
+                onClick={() => selectZone(z.id)}
+                aria-pressed={selectedZoneId === z.id}
+                className={`py-3 rounded-xl text-sm font-black border-2 ${selectedZoneId === z.id ? 'bg-zinc-900 text-white border-zinc-900' : 'bg-white text-zinc-900 border-zinc-300 hover:border-zinc-900'}`}
+              >
+                {z.id}
+                <div className={`text-[10px] font-bold ${z.risk_band === 'CRITICAL' || z.risk_band === 'HIGH' ? 'text-red-600' : 'text-emerald-700'}`}>{bandLabel}</div>
+              </button>
+            );
+          })}
         </div>
-        <p className="text-sm font-bold text-mine-text leading-relaxed">
-          {zone?.role_actions?.villager?.action || zone?.role_actions?.['villager']?.action || t('role.villager') + ' — ' + (isCritical ? t('villager.avoid_msg') : t('villager.no_restriction'))}
-        </p>
-        <p className="text-xs text-mine-muted">{t('app.provenance').split('.')[0]}.</p>
       </div>
 
+      {/* Map ALWAYS shown — villagers need to see where danger is */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-        <div className="lg:col-span-7 h-[560px]"><RiskMap /></div>
-        <div className="lg:col-span-5 space-y-3">
-          <div className="bg-mine-card border border-mine-border rounded-2xl p-4 space-y-3">
-            <h3 className="text-sm font-bold text-mine-text flex items-center gap-1.5"><Navigation className="w-4 h-4 text-talus-600" /> {t('header.safeRoute')}</h3>
-            <p className="text-xs text-mine-muted">{t('villager.tap_map')}</p>
-            <Link to="/routes" className="block w-full text-center py-2 bg-talus-600 hover:bg-talus-500 text-white rounded-lg text-xs font-bold">{t('villager.safe_route_btn')}</Link>
-            <Link to="/reports" className="block w-full text-center py-2 bg-mine-darker border border-mine-border rounded-lg text-xs font-semibold flex items-center justify-center gap-1"><FileText className="w-3.5 h-3.5" /> {t('villager.submit_report_btn')}</Link>
-          </div>
-          <div className="bg-mine-darker border border-mine-border rounded-xl p-3 flex items-center gap-2 text-xs">
-            <Globe className="w-4 h-4 text-talus-600" />
-            <span className="text-mine-text font-semibold">{lang === 'ne' ? 'नेपाली / हिन्दी / English' : lang === 'hi' ? 'हिन्दी / नेपाली / English' : 'English / हिन्दी / नेपाली'}</span>
-            <span className="ml-auto text-mine-muted">{t('villager.alerts_mother')}</span>
+        <div className="lg:col-span-8 h-[520px] lg:h-[620px] border-2 border-zinc-900 rounded-2xl overflow-hidden shadow-sm">
+          <RiskMap />
+        </div>
+        <div className="lg:col-span-4 space-y-3">
+          <VillagerRoadPlain roads={roads} t={t} />
+          <div className="grid grid-cols-1 gap-3">
+            <Link
+              to="/routes"
+              className="villager-tap flex items-center justify-center gap-2 bg-zinc-900 hover:bg-black text-white rounded-2xl font-black shadow-sm focus-visible:ring-2 focus-visible:ring-zinc-900"
+              aria-label={t('villager.safe_route_btn')}
+            >
+              <Navigation className="w-5 h-5" aria-hidden /> {t('villager.safe_route_btn')}
+            </Link>
+            <Link
+              to="/reports"
+              className="villager-tap flex items-center justify-center gap-2 bg-white border-2 border-zinc-900 text-zinc-900 rounded-2xl font-black hover:bg-zinc-50"
+              aria-label={t('villager.submit_report_btn')}
+            >
+              <FileText className="w-5 h-5" aria-hidden /> {t('villager.submit_report_btn')}
+            </Link>
           </div>
         </div>
       </div>
+
+      <p className="text-[11px] text-center text-zinc-500 px-2">
+        {t('villager.tap_map')} — {(zones || []).map((z) => z.id).join(' · ')} · {(t(`location.${locationData?.id}`) !== `location.${locationData?.id}` ? t(`location.${locationData.id}`) : locationData?.label) || ''}
+      </p>
     </main>
   );
 }

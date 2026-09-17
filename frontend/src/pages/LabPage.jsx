@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { useTalusContext } from '../context/TalusContext';
+import LiveFeedCard from '../components/Live/LiveFeedCard';
+import ReplayCard from '../components/Replay/ReplayCard';
 
 export default function LabPage() {
   const { setIsWhatIfOpen, t } = useTalusContext();
@@ -9,6 +11,10 @@ export default function LabPage() {
       <div className="bg-mine-card border border-mine-border rounded-2xl p-6 text-center">
         <h2 className="text-sm font-bold text-mine-text">{t('page.lab_title')}</h2>
         <p className="text-xs text-mine-muted mt-1">{t('page.lab_body')}</p>
+      </div>
+      <div className="mt-4 space-y-4">
+        <ReplayCard />
+        <LiveFeedCard />
       </div>
     </main>
   );

@@ -83,6 +83,7 @@ export default function RiskTrendChart({ trend = {}, zoneName = 'Zone B' }) {
               label={{ value: t('trend.high'), position: 'insideTopRight', fontSize: 9, fill: '#d96b24' }} />
             <ReferenceLine y={85} stroke="#c74732" strokeDasharray="3 3" opacity={0.7}
               label={{ value: t('trend.critical'), position: 'insideTopRight', fontSize: 9, fill: '#c74732' }} />
+            {history.length > 1 && <ReferenceLine x={history[history.length-1].time} stroke="#38bdf8" strokeDasharray="2 2" opacity={0.8} label={{ value: 'NOW', position: 'insideTop', fontSize: 9, fill: '#38bdf8' }} />}
 
             <Line
               type="monotone"
@@ -104,6 +105,12 @@ export default function RiskTrendChart({ trend = {}, zoneName = 'Zone B' }) {
           <span className="w-2 h-0.5 bg-risk-critical inline-block"></span> {t('trend.crit_thr')}
         </span>
       </div>
+      <div className="flex items-center justify-between text-[9px] font-mono px-1 pt-1 border-t border-dashed border-mine-border/60 mt-1">
+        <span className="text-mine-muted">◀ OBSERVED — IMD 0.25° + CCI</span>
+        <span className="px-1.5 py-0.5 rounded bg-mine-card border border-mine-border text-mine-text font-bold">NOW</span>
+        <span className="text-sky-600">FORECAST — Open-Meteo (fallback) ▶</span>
+      </div>
+      <p className="text-[10px] text-mine-muted">Causality: replay_series uses only inputs available ON each date — no future leak.</p>
     </div>
   );
 }

@@ -1,0 +1,13 @@
+.git
+.venv
+mnemo
+__pycache__
+*.pyc
+node_modules
+frontend/node_modules
+data/raw
+data/sih26001/processed
+ml/models/*.joblib
+runs/*.json
+runs/*.jsonl
+.env

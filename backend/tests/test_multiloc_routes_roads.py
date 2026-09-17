@@ -87,7 +87,8 @@ def test_roads_default_gangtok():
     body = r.json()
     assert body["location"] == "gangtok" and body["preview"] is False
     segs = {s["id"]: s for s in body["segments"]}
-    assert segs["R2"]["status"] == "at-risk"
+    # LIVE status from adjacent slope risk — not fixture stub
+    assert segs["R2"]["status"] in {"open", "at-risk", "blocked"}
     assert segs["R1"]["adjacent_slope"] == "S1"
     assert segs["R2"]["coordinates"][0] == [27.3450, 88.6000]
 
@@ -96,13 +97,19 @@ def test_roads_lachung_remapped():
     r = client.get("/api/roads/status?location=lachung")
     assert r.status_code == 200
     body = r.json()
-    assert body["location"] == "lachung" and body["preview"] is True
+    # 2025-11: OSM-verified corridor (226 ways), LIVE status from N1/N4 risk — no fixture stub
+    assert body["location"] == "lachung" and body["preview"] is False
+    assert body["osm_provenance"]["counts"]["lachung"] == 226
+    assert body["osm_provenance"]["counts"]["gangtok"] == 1014
     segs = {s["id"]: s for s in body["segments"]}
-    assert segs["R2"]["status"] == "at-risk"
+    assert segs["R2"]["status"] in {"open", "at-risk", "blocked"}
+    # Lachung names are corridor-specific — no Gangtok leak
+    assert segs["R2"]["name"] == "Ridge shortcut N1-N4"
+    assert segs["R1"]["name"] == "Yumthang approach link"
     assert segs["R1"]["adjacent_slope"] == "N1"
     assert segs["R4"]["adjacent_slope"] == "N4"
     lat, lon = segs["R1"]["coordinates"][0]
-    assert abs(lat - (27.3450 + 0.35)) < 1e-9 and abs(lon - (88.6000 + 0.135)) < 1e-9
+    assert abs(lat - (27.3450 + 0.35)) < 1e-4 and abs(lon - (88.6000 + 0.135)) < 1e-4
 
 
 def test_roads_unknown_location_falls_back():

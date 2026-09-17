@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTalusContext } from '../../context/TalusContext';
 import RouteComparisonCard from './RouteComparisonCard';
 import { routePresetsFor, defaultOriginKey } from '../../services/routing';
@@ -25,6 +26,12 @@ export default function SafeRouteModal() {
 
   const [selectedRouteKey, setSelectedRouteKey] = useState(corridor.defaultKey);
   const [calculating, setCalculating] = useState(false);
+  const navigate = useNavigate();
+
+  const handleViewOnMap = () => {
+    setIsRouteModalOpen(false);
+    navigate('/map');
+  };
   // If the corridor switched while the modal was closed, fall back to its default preset
   const effectiveKey = ROUTE_PRESETS.some((p) => p.key === selectedRouteKey)
     ? selectedRouteKey
@@ -42,7 +49,7 @@ export default function SafeRouteModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="w-full max-w-2xl bg-mine-card border border-mine-border rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
         <div className="p-4 bg-mine-darker border-b border-mine-border flex items-center justify-between">
@@ -118,7 +125,7 @@ export default function SafeRouteModal() {
         <div className="p-4 bg-mine-darker border-t border-mine-border flex items-center justify-between text-xs text-mine-muted">
           <span>{t('routing.bothProjected')}</span>
           <button
-            onClick={() => setIsRouteModalOpen(false)}
+            onClick={handleViewOnMap}
             className="px-3 py-1.5 bg-mine-card hover:bg-mine-dark text-mine-text border border-mine-border rounded-lg text-xs font-semibold transition-colors"
           >
             {t('routing.viewOnMap')}

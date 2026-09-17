@@ -1,0 +1,160 @@
+{
+  "date": "2026-09-15",
+  "seed": 42,
+  "baseline": {
+    "rf_auc": 0.934,
+    "rf_brier": 0.1166,
+    "lr_auc": 0.8914,
+    "lr_brier": 0.1274,
+    "n_features": 22
+  },
+  "configs": {
+    "full": {
+      "rf_auc": 0.934,
+      "rf_brier": 0.1166,
+      "lr_auc": 0.8914,
+      "lr_brier": 0.1274,
+      "n_features": 22
+    },
+    "no_rain": {
+      "rf_auc": 0.9189,
+      "rf_brier": 0.1218,
+      "lr_auc": 0.8946,
+      "lr_brier": 0.1241,
+      "n_features": 19
+    },
+    "no_dem6": {
+      "rf_auc": 0.9307,
+      "rf_brier": 0.1215,
+      "lr_auc": 0.8519,
+      "lr_brier": 0.1482,
+      "n_features": 16
+    },
+    "no_soil": {
+      "rf_auc": 0.9319,
+      "rf_brier": 0.1144,
+      "lr_auc": 0.8937,
+      "lr_brier": 0.1241,
+      "n_features": 21
+    },
+    "no_ndvi": {
+      "rf_auc": 0.9314,
+      "rf_brier": 0.1214,
+      "lr_auc": 0.8826,
+      "lr_brier": 0.1304,
+      "n_features": 21
+    },
+    "no_osm": {
+      "rf_auc": 0.9244,
+      "rf_brier": 0.1284,
+      "lr_auc": 0.8742,
+      "lr_brier": 0.14,
+      "n_features": 20
+    },
+    "no_seismic": {
+      "rf_auc": 0.9225,
+      "rf_brier": 0.1192,
+      "lr_auc": 0.8897,
+      "lr_brier": 0.1245,
+      "n_features": 19
+    },
+    "no_drain": {
+      "rf_auc": 0.9338,
+      "rf_brier": 0.1172,
+      "lr_auc": 0.8919,
+      "lr_brier": 0.1269,
+      "n_features": 21
+    },
+    "no_lulc": {
+      "rf_auc": 0.9316,
+      "rf_brier": 0.1186,
+      "lr_auc": 0.8886,
+      "lr_brier": 0.1291,
+      "n_features": 17
+    },
+    "static_only": {
+      "rf_auc": 0.9038,
+      "rf_brier": 0.1276,
+      "lr_auc": 0.8877,
+      "lr_brier": 0.1254,
+      "n_features": 17
+    },
+    "trigger_only": {
+      "rf_auc": 0.9127,
+      "rf_brier": 0.144,
+      "lr_auc": 0.6214,
+      "lr_brier": 0.2262,
+      "n_features": 10
+    },
+    "loo_elevation": {
+      "rf_auc": 0.9291,
+      "rf_brier": 0.1214,
+      "lr_auc": 0.8557,
+      "lr_brier": 0.1477,
+      "n_features": 21
+    },
+    "loo_distance_to_road": {
+      "rf_auc": 0.9228,
+      "rf_brier": 0.129,
+      "lr_auc": 0.8752,
+      "lr_brier": 0.1395,
+      "n_features": 21
+    },
+    "loo_ndvi": {
+      "rf_auc": 0.9314,
+      "rf_brier": 0.1214,
+      "lr_auc": 0.8826,
+      "lr_brier": 0.1304,
+      "n_features": 21
+    },
+    "loo_rainfall_7d": {
+      "rf_auc": 0.9313,
+      "rf_brier": 0.1174,
+      "lr_auc": 0.8923,
+      "lr_brier": 0.1264,
+      "n_features": 21
+    },
+    "loo_twi": {
+      "rf_auc": 0.9333,
+      "rf_brier": 0.1181,
+      "lr_auc": 0.8913,
+      "lr_brier": 0.1276,
+      "n_features": 21
+    },
+    "LEAK_prev_slide": {
+      "rf_auc": 0.968,
+      "rf_brier": 0.0813,
+      "lr_auc": 0.9467,
+      "lr_brier": 0.0948,
+      "n_features": 23
+    },
+    "NULL_lith_lineament": {
+      "rf_auc": 0.9336,
+      "rf_brier": 0.1174,
+      "lr_auc": 0.8914,
+      "lr_brier": 0.1274,
+      "n_features": 22
+    },
+    "CAND_aspect_sincos": {
+      "rf_auc": 0.9322,
+      "rf_brier": 0.118,
+      "lr_auc": 0.8939,
+      "lr_brier": 0.1261,
+      "n_features": 23
+    },
+    "CAND_+twi_x_rain7": {
+      "rf_auc": 0.9328,
+      "rf_brier": 0.1179,
+      "lr_auc": 0.8914,
+      "lr_brier": 0.1274,
+      "n_features": 23
+    },
+    "CAND_+slope_x_rain7": {
+      "rf_auc": 0.935,
+      "rf_brier": 0.115,
+      "lr_auc": 0.8913,
+      "lr_brier": 0.1274,
+      "n_features": 23
+    }
+  }
+}

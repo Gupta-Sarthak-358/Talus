@@ -1,0 +1,215 @@
+{
+ "source": "USGS FDSN event API (M5+, 26.5-28.5N/87.5-89.5E, 1965-2024)",
+ "fetched": "2026-09-15",
+ "n": 26,
+ "events": [
+  {
+   "mag": 5.2,
+   "place": "35 km NNW of Samtse, Bhutan",
+   "date": "2021-04-05",
+   "year": 2021,
+   "lat": 27.186,
+   "lon": 88.941
+  },
+  {
+   "mag": 5.4,
+   "place": "89 km NE of Lobujya, Nepal",
+   "date": "2016-05-22",
+   "year": 2016,
+   "lat": 28.454,
+   "lon": 87.533
+  },
+  {
+   "mag": 5.1,
+   "place": "13 km ESE of Il?m, Nepal",
+   "date": "2015-04-27",
+   "year": 2015,
+   "lat": 26.864,
+   "lon": 88.055
+  },
+  {
+   "mag": 5.2,
+   "place": "11 km WNW of Singtam, India",
+   "date": "2013-10-03",
+   "year": 2013,
+   "lat": 27.29,
+   "lon": 88.402
+  },
+  {
+   "mag": 6.9,
+   "place": "43 km NW of Mangan, India",
+   "date": "2011-09-18",
+   "year": 2011,
+   "lat": 27.73,
+   "lon": 88.155
+  },
+  {
+   "mag": 5.0,
+   "place": "35 km NW of Gyalshing, India",
+   "date": "2011-06-03",
+   "year": 2011,
+   "lat": 27.529,
+   "lon": 88.019
+  },
+  {
+   "mag": 5.2,
+   "place": "22 km WNW of Gyalshing, India",
+   "date": "2008-12-02",
+   "year": 2008,
+   "lat": 27.373,
+   "lon": 88.051
+  },
+  {
+   "mag": 5.0,
+   "place": "51 km NNW of Il?m, Nepal",
+   "date": "2007-08-11",
+   "year": 2007,
+   "lat": 27.344,
+   "lon": 87.737
+  },
+  {
+   "mag": 5.3,
+   "place": "16 km NE of Gyalshing, India",
+   "date": "2006-02-14",
+   "year": 2006,
+   "lat": 27.382,
+   "lon": 88.388
+  },
+  {
+   "mag": 5.5,
+   "place": "14 km SSE of Ha, Bhutan",
+   "date": "2003-03-25",
+   "year": 2003,
+   "lat": 27.264,
+   "lon": 89.331
+  },
+  {
+   "mag": 5.1,
+   "place": "7 km WNW of Naya B?z?r, India",
+   "date": "2001-12-02",
+   "year": 2001,
+   "lat": 27.15,
+   "lon": 88.171
+  },
+  {
+   "mag": 5.1,
+   "place": "62 km NW of Gyalshing, India",
+   "date": "1998-11-26",
+   "year": 1998,
+   "lat": 27.753,
+   "lon": 87.894
+  },
+  {
+   "mag": 5.0,
+   "place": "8 km SSE of Mangan, India",
+   "date": "1996-09-25",
+   "year": 1996,
+   "lat": 27.433,
+   "lon": 88.552
+  },
+  {
+   "mag": 5.0,
+   "place": "73 km NW of Gyalshing, India",
+   "date": "1996-04-26",
+   "year": 1996,
+   "lat": 27.825,
+   "lon": 87.821
+  },
+  {
+   "mag": 5.5,
+   "place": "86 km NNW of Mangan, India",
+   "date": "1990-01-09",
+   "year": 1990,
+   "lat": 28.225,
+   "lon": 88.163
+  },
+  {
+   "mag": 5.0,
+   "place": "37 km W of Gyalshing, India",
+   "date": "1989-05-22",
+   "year": 1989,
+   "lat": 27.243,
+   "lon": 87.886
+  },
+  {
+   "mag": 5.0,
+   "place": "7 km W of Namchi, India",
+   "date": "1988-09-27",
+   "year": 1988,
+   "lat": 27.175,
+   "lon": 88.293
+  },
+  {
+   "mag": 5.0,
+   "place": "7 km NE of K?rsiy?ng, India",
+   "date": "1986-01-07",
+   "year": 1986,
+   "lat": 26.93,
+   "lon": 88.325
+  },
+  {
+   "mag": 5.1,
+   "place": "26 km ENE of Gangtok, India",
+   "date": "1982-04-05",
+   "year": 1982,
+   "lat": 27.419,
+   "lon": 88.864
+  },
+  {
+   "mag": 6.1,
+   "place": "15 km ENE of Gangtok, India",
+   "date": "1980-11-19",
+   "year": 1980,
+   "lat": 27.394,
+   "lon": 88.752
+  },
+  {
+   "mag": 5.1,
+   "place": "23 km ESE of Dhar?n, Nepal",
+   "date": "1979-06-19",
+   "year": 1979,
+   "lat": 26.741,
+   "lon": 87.506
+  },
+  {
+   "mag": 5.1,
+   "place": "91 km ENE of Lobujya, Nepal",
+   "date": "1975-11-26",
+   "year": 1975,
+   "lat": 28.343,
+   "lon": 87.636
+  },
+  {
+   "mag": 5.1,
+   "place": "20 km NNE of Odl\u0101b\u0101ri, India",
+   "date": "1972-11-06",
+   "year": 1972,
+   "lat": 26.997,
+   "lon": 88.728
+  },
+  {
+   "mag": 5.1,
+   "place": "27 km WNW of Gyalshing, India",
+   "date": "1972-08-21",
+   "year": 1972,
+   "lat": 27.375,
+   "lon": 87.999
+  },
+  {
+   "mag": 5.5,
+   "place": "52 km E of Kh??db?ri??, Nepal",
+   "date": "1965-01-12",
+   "year": 1965,
+   "lat": 27.407,
+   "lon": 87.735
+  },
+  {
+   "mag": 5.9,
+   "place": "42 km WNW of Gyalshing, India",
+   "date": "1965-01-12",
+   "year": 1965,
+   "lat": 27.38,
+   "lon": 87.837
+  }
+ ]
+}

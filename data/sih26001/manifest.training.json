@@ -27,13 +27,14 @@
     "drain_density": "channel-cell length within 300m / pi*0.09 km2 (same accumulation grids)",
     "distance_to_river": "Overpass bulk out-center nearest (fallback: DEM channel EDT); osm-qa-unverified",
     "distance_to_road": "Overpass bulk out-center nearest, pilot highway filter; CENTER-APPROX delta vs pilot geometry (logged)",
-    "rain": "IMD 0.25deg 1991-2020 climatology at nearest cell: June-total mean->30d, max-7d-in-JJAS mean->7d, max-daily-in-JJAS mean->24h (PROXY season-window, tagged)",
-    "soil": "CCI COMBINED TCDR v202505 June-10-16-2024 window-mean grid, kill-bits masked (QUASI-STATIC proxy, tagged)",
+    "rain": "IMD 0.25deg daily rfp25 (LOCAL ONLY): exact-date trailing 30/7/1d windows where event date known; that-year June-total->30d, max-trailing-7d-JJAS->7d, max-daily-JJAS->24h for year-known rows; negatives matched to seed-42 random positive-pool years; undated/out-of-range keep 1991-2020 climatology. Per-row source in sidecar.rain_source (tagged).",
+    "soil": "CCI COMBINED v09.2 daily (LOCAL ONLY, single-version): June 10-16 window-mean of each row's year (kill-bits masked); exact-date rows get trailing-7d means; negatives matched to seed-42 random positive-pool years (>=1978); undated/pre-1978/all-NaN fall back to v09.2 June 2024 window. Per-row source in sidecar.soil_source.",
     "ndvi": "Sentinel-2 pinned scene S2B_45RXL_20241129 (+SCL gate; median-imputed if outside/cloud, rate logged) (QUASI-STATIC, tagged)",
     "lulc": "ESA WorldCover 2021 v200 3x3-mode + repo mapping (REAL)",
     "lithology": "UNIFORM lingtse_granite_gneiss (PROXY-published-map, pilot value) \u2014 OMITTED from trainer X, delta logged",
     "lineament": "UNIFORM 0.8 km/km2 (PROXY-published-map, pilot value) \u2014 OMITTED from trainer X, delta logged",
-    "previous_landslide": "nearest-OTHER-slide<=300m (sample rows only) \u2014 OMITTED from trainer X (leakage), delta logged"
+    "previous_landslide": "nearest-OTHER-slide<=300m (sample rows only) \u2014 OMITTED from trainer X (leakage), delta logged",
+    "seismic": "USGS FDSN M5+ 1965-2024 bbox (committed evidence/usgs_quakes.json): dist-to-nearest, prior-count<=50km, years-since (cap 60); ref = slide year else rain_year else 2024; strictly-before (no leakage)."
   },
   "stats": {
     "started": "2026-09-04T19:52:08Z",
@@ -57,14 +58,42 @@
     "osm_rivers": 1757,
     "matrix_shape": [
       2936,
-      22
+      25
     ],
     "prev_rate_pos": 0.5116,
     "river_dem_fallback_pts": 0,
-    "matrix_sha256": "10f048e19b395fa6e26c83d66fac06f5ca551eaf15a804b18f4cf670de0c25b4",
-    "sidecar_sha256": "1deb4981df57c41aec5464b255a054ee3442e5c3a9a590202c380cbd93cee037",
-    "sample_sha256": "ff942d20f1222c3a66e84894f90522d64ed5618fd540e6f41fc3c40bfc8d3835",
-    "finished": "2026-09-04T20:08:02Z"
+    "matrix_sha256": "259ffe209034634ad0ab407c99f8e4bbc118b26ccebbc831e34d43d95c55e0e7",
+    "sidecar_sha256": "8f22051ed584384683be59a58a5e51ae0a9d86eacbbbdc8425fcb06e1c23b4ed",
+    "sample_sha256": "2796f639ecbb2f4746fe2e4f2d327708a528e5bd3aebf13c6ce0405f712354f8",
+    "finished": "2026-09-04T20:08:02Z",
+    "rain_upgrade": {
+      "date": "2026-09-15",
+      "event_imd_daily_rows": 4,
+      "event_year_peak_rows": 740,
+      "background_year_peak_rows": 1468,
+      "climatology_fallback_rows": 724,
+      "note": "positives: exact-date windows where known, else that-year JJAS peak; negatives: seed-42 random-year peaks (matched design); undated/out-of-range keep 1991-2020 climatology. Month-anchored tier still TODO (PDF re-parse)."
+    },
+    "soil_upgrade": {
+      "date": "2026-09-15",
+      "version": "v09.2 single-version (overlap vs v202505: mean|diff| 0.0219, max 0.0559)",
+      "event_soil_daily_rows": 4,
+      "event_year_window_rows": 729,
+      "background_year_window_rows": 1426,
+      "fallback_rows": 777,
+      "gap_chain": {
+        "cell": 272,
+        "spatial": 531,
+        "global": 44
+      },
+      "note": "June 10-16 window-mean per row-year (v09.2 CCI daily, kill-bits masked); exact dates get trailing-7d means; negatives seed-42 matched years (>=1978); gaps fall back cell-days -> bbox spatial -> reference mean (counts logged)."
+    },
+    "seismic_upgrade": {
+      "date": "2026-09-15",
+      "quakes": 26,
+      "rows_with_prior_M5_50km": 2683,
+      "note": "conditioning only (Taiwan precedent): dist-to-nearest-M5+ (static), count<=50km before ref-year, years-since capped 60. Model decides if useful."
+    }
   },
   "sources": {
     "shapefile": "data/raw/gsi/GSI_Landslide_Inventory.shp.zip (LOCAL ONLY)",
@@ -76,25 +105,25 @@
     "lulc": "ESA WorldCover 2021 v200 N27E087 via AWS Open Data (remote)",
     "osm": "Overpass bulk out-center, study bbox (remote, cached git-ignored)"
   },
-  "honesty": "INITIATION year-or-0 + PDF month/year histories cannot support per-event 24h windows \u2014 all rain/soil/ndvi time-varying inputs are climatology/quasi-static proxies, tagged; year used only for temporal-split bookkeeping + evidence tags; never invented dates.",
+  "honesty": "INITIATION year-or-0 + PDF month/year histories cannot support per-event 24h windows \u2014 all rain/soil/ndvi time-varying inputs are climatology/quasi-static proxies, tagged; year used only for temporal-split bookkeeping + evidence tags; never invented dates. Rain-fix Sep15: year-known rows use that-year IMD peaks (not 30-yr means); exact-date rows use date-anchored windows; negatives use matched random years; undated rows stay climatology (tagged per-row). Soil-fix Sep15: single-version v09.2 (overlap mean|diff| 0.0219 vs v202505); year-window per dated row, matched years for negatives, tagged fallbacks. Soil-fix Sep15: single-version v09.2 (overlap mean|diff| 0.0219 vs v202505); year-window per dated row, matched years for negatives, tagged fallbacks.",
   "training": {
     "seed": 42,
     "clusters": 8,
-    "started": "2026-09-04T20:18:23Z",
+    "started": "2026-09-17T08:50:32Z",
     "n": 2936,
     "n_pos": 1468,
     "metrics": {
       "lr_oof": {
-        "auc": 0.8947,
-        "brier": 0.1214,
-        "ece10": 0.029,
-        "acc50": 0.8283
+        "auc": 0.8913,
+        "brier": 0.1275,
+        "ece10": 0.0411,
+        "acc50": 0.8185
       },
       "rf_oof": {
-        "auc": 0.8983,
-        "brier": 0.1254,
-        "ece10": 0.0621,
-        "acc50": 0.8208
+        "auc": 0.9345,
+        "brier": 0.1165,
+        "ece10": 0.111,
+        "acc50": 0.83
       },
       "naive_prevalence": {
         "brier": 0.25,
@@ -108,62 +137,62 @@
           "lgb": "n/a"
         },
         "cluster_1": {
-          "lr": 0.6938,
-          "rf": 0.7248,
-          "xgb": 0.7435,
-          "lgb": 0.7453
+          "lr": 0.6629,
+          "rf": 0.8456,
+          "xgb": 0.8707,
+          "lgb": 0.8652
         },
         "cluster_2": {
-          "lr": 0.7714,
-          "rf": 0.7499,
-          "xgb": 0.744,
-          "lgb": 0.7639
+          "lr": 0.7589,
+          "rf": 0.8267,
+          "xgb": 0.8184,
+          "lgb": 0.8257
         },
         "cluster_3": {
-          "lr": 0.99,
+          "lr": 0.993,
           "rf": 1.0,
-          "xgb": 0.996,
-          "lgb": 0.995
+          "xgb": 0.998,
+          "lgb": 0.996
         },
         "cluster_4": {
-          "lr": 0.9408,
-          "rf": 0.9392,
-          "xgb": 0.9517,
-          "lgb": 0.947
+          "lr": 0.9436,
+          "rf": 0.9861,
+          "xgb": 0.9948,
+          "lgb": 0.9914
         },
         "cluster_5": {
-          "lr": 0.67,
-          "rf": 0.6972,
-          "xgb": 0.6852,
-          "lgb": 0.6509
+          "lr": 0.7045,
+          "rf": 0.8071,
+          "xgb": 0.7953,
+          "lgb": 0.7991
         },
         "cluster_6": {
-          "lr": 0.865,
-          "rf": 0.8807,
-          "xgb": 0.8993,
-          "lgb": 0.9025
+          "lr": 0.8587,
+          "rf": 0.8566,
+          "xgb": 0.9043,
+          "lgb": 0.8985
         },
         "cluster_7": {
-          "lr": 0.937,
-          "rf": 0.9193,
-          "xgb": 0.8854,
-          "lgb": 0.882
+          "lr": 0.9377,
+          "rf": 0.9476,
+          "xgb": 0.9691,
+          "lgb": 0.9632
         }
       },
       "xgb_oof": {
-        "auc": 0.9029,
-        "brier": 0.1328,
-        "ece10": 0.0809,
-        "acc50": 0.813
+        "auc": 0.9421,
+        "brier": 0.12,
+        "ece10": 0.0968,
+        "acc50": 0.8338
       },
       "lgb_oof": {
-        "auc": 0.9015,
-        "brier": 0.144,
-        "ece10": 0.1122,
-        "acc50": 0.8076
+        "auc": 0.9406,
+        "brier": 0.1392,
+        "ece10": 0.1275,
+        "acc50": 0.827
       },
       "rf_calibrated_oof": {
-        "brier": 0.118,
+        "brier": 0.0967,
         "ece10": 0.0
       },
       "calibration_caveat": "isotonic fit on the same OOF predictions it is evaluated on (optimistic); clean check is the temporal holdout below (when feasible)"
@@ -176,115 +205,135 @@
       "done": true,
       "test_n": 807,
       "rf_test": {
-        "auc": 0.8189,
-        "brier": 0.1216,
-        "ece10": 0.1061
+        "auc": 0.8573,
+        "brier": 0.0967,
+        "ece10": 0.0976
       }
     },
     "threshold_screen": {
       "june_total_separator_mm": 390.0,
-      "frac_points_above_separator": 1.0,
-      "median_split_mm": 557.4,
-      "mean_oof_p_above_median": 0.6322,
-      "mean_oof_p_below_median": 0.2805,
-      "frac_pos_dailymax_ge_144": 0.2616,
+      "frac_points_above_separator": 0.8736,
+      "median_split_mm": 546.8,
+      "mean_oof_p_above_median": 0.4979,
+      "mean_oof_p_below_median": 0.3279,
+      "frac_pos_dailymax_ge_144": 0.1907,
       "note": "Dahal 144mm is an event-intensity threshold; our 24h proxy is a JJAS-daily-max climatology, so this fraction is a consistency screen, not a threshold validation"
     },
     "importance": [
       {
         "feature": "elevation",
-        "perm_auc_drop": 0.0705,
-        "impurity": 0.207
+        "perm_auc_drop": 0.0227,
+        "impurity": 0.1906
+      },
+      {
+        "feature": "seismic_n50_rate",
+        "perm_auc_drop": 0.0097,
+        "impurity": 0.1113
       },
       {
         "feature": "distance_to_road",
-        "perm_auc_drop": 0.0332,
-        "impurity": 0.2005
-      },
-      {
-        "feature": "ndvi",
-        "perm_auc_drop": 0.0161,
-        "impurity": 0.0755
-      },
-      {
-        "feature": "slope_angle",
-        "perm_auc_drop": 0.0034,
-        "impurity": 0.0587
-      },
-      {
-        "feature": "soil_moisture",
-        "perm_auc_drop": 0.003,
-        "impurity": 0.0935
-      },
-      {
-        "feature": "aspect",
-        "perm_auc_drop": 0.0003,
-        "impurity": 0.0465
-      },
-      {
-        "feature": "rainfall_24h_mm",
-        "perm_auc_drop": 0.0001,
-        "impurity": 0.0529
+        "perm_auc_drop": 0.0068,
+        "impurity": 0.1624
       },
       {
         "feature": "rainfall_30d_mm",
+        "perm_auc_drop": 0.0011,
+        "impurity": 0.0707
+      },
+      {
+        "feature": "ndvi",
+        "perm_auc_drop": 0.0009,
+        "impurity": 0.043
+      },
+      {
+        "feature": "seismic_years_since",
         "perm_auc_drop": 0.0001,
-        "impurity": 0.0339
+        "impurity": 0.0467
       },
       {
-        "feature": "distance_to_river",
-        "perm_auc_drop": 0.0,
-        "impurity": 0.0506
+        "feature": "soil_moisture",
+        "perm_auc_drop": 0.0001,
+        "impurity": 0.0545
       },
       {
-        "feature": "curvature",
+        "feature": "rainfall_24h_mm",
         "perm_auc_drop": 0.0,
-        "impurity": 0.0372
+        "impurity": 0.0545
+      },
+      {
+        "feature": "slope_angle",
+        "perm_auc_drop": 0.0,
+        "impurity": 0.0296
+      },
+      {
+        "feature": "seismic_dist_km",
+        "perm_auc_drop": 0.0,
+        "impurity": 0.0511
       },
       {
         "feature": "rainfall_7d_mm",
         "perm_auc_drop": 0.0,
-        "impurity": 0.0304
+        "impurity": 0.0502
       },
       {
-        "feature": "spi_log",
+        "feature": "distance_to_river",
         "perm_auc_drop": 0.0,
-        "impurity": 0.039
+        "impurity": 0.0353
       },
       {
-        "feature": "lulc_BUILT",
+        "feature": "lulc_WETLAND",
         "perm_auc_drop": 0.0,
-        "impurity": 0.0082
+        "impurity": 0.0
+      },
+      {
+        "feature": "lulc_FOREST",
+        "perm_auc_drop": 0.0,
+        "impurity": 0.0053
       },
       {
         "feature": "drain_density",
         "perm_auc_drop": 0.0,
-        "impurity": 0.0182
+        "impurity": 0.0094
       },
       {
-        "feature": "lulc_WATER",
+        "feature": "aspect",
         "perm_auc_drop": 0.0,
-        "impurity": 0.0037
+        "impurity": 0.0211
+      },
+      {
+        "feature": "spi_log",
+        "perm_auc_drop": 0.0,
+        "impurity": 0.0191
+      },
+      {
+        "feature": "curvature",
+        "perm_auc_drop": 0.0,
+        "impurity": 0.0162
       },
       {
         "feature": "lulc_BARREN",
         "perm_auc_drop": 0.0,
-        "impurity": 0.001
+        "impurity": 0.0007
+      },
+      {
+        "feature": "recent_disturbance",
+        "perm_auc_drop": 0.0,
+        "impurity": 0.0
+      },
+      {
+        "feature": "lulc_BUILT",
+        "perm_auc_drop": 0.0,
+        "impurity": 0.0054
+      },
+      {
+        "feature": "lulc_WATER",
+        "perm_auc_drop": 0.0,
+        "impurity": 0.0058
       },
       {
         "feature": "twi",
-        "perm_auc_drop": -0.0,
-        "impurity": 0.036
-      },
-      {
-        "feature": "lulc_FOREST",
-        "perm_auc_drop": -0.0,
-        "impurity": 0.0073
-      },
-      {
-        "feature": "lulc_WETLAND",
-        "perm_auc_drop": -0.0,
-        "impurity": 0.0
+        "perm_auc_drop": 0.0,
+        "impurity": 0.0172
       }
     ],
     "shap_sample": [
@@ -297,14 +346,18 @@
           "curvature": -0.07550343480716835,
           "twi": -0.41849876780675965,
           "spi_log": -1.4524469542486458,
-          "rainfall_24h_mm": 0.29559369644796446,
-          "rainfall_7d_mm": 0.39911521850361303,
-          "rainfall_30d_mm": 0.45974441214959105,
-          "soil_moisture": 0.6064401958831269,
+          "rainfall_24h_mm": -0.1533156814408998,
+          "rainfall_7d_mm": -0.3174434796299122,
+          "rainfall_30d_mm": 1.3305657089308145,
+          "soil_moisture": -0.7313825927627213,
           "ndvi": 0.45302106470799774,
           "distance_to_road": -0.4956436193497619,
           "distance_to_river": -0.38703757175653514,
           "drain_density": -0.6467332166147467,
+          "seismic_dist_km": 0.3484029351479958,
+          "seismic_n50_rate": 0.25930819879782707,
+          "seismic_years_since": -0.5403254671337104,
+          "recent_disturbance": -0.03693584275765589,
           "lulc_BARREN": 0.0,
           "lulc_BUILT": 0.0,
           "lulc_FOREST": 1.0,
@@ -313,80 +366,96 @@
         },
         "shap": {
           "slope_angle": [
-            0.07922647593026601,
-            -0.07922647593026626
+            0.04121619777076573,
+            -0.04121619777076567
           ],
           "elevation": [
-            -0.10349019513085729,
-            0.10349019513085803
+            -0.11966225134438971,
+            0.1196622513443902
           ],
           "aspect": [
-            -0.00030672849396975576,
-            0.00030672849396976313
+            -0.0037302629503855505,
+            0.0037302629503856415
           ],
           "curvature": [
-            -0.00799675268312627,
-            0.007996752683126244
+            -0.001247686156898209,
+            0.0012476861568982316
           ],
           "twi": [
-            -0.004659225870331752,
-            0.004659225870331685
+            -0.0066948900310727115,
+            0.00669489003107294
           ],
           "spi_log": [
-            0.03183241046924793,
-            -0.031832410469247216
+            0.023084141531381885,
+            -0.023084141531382035
           ],
           "rainfall_24h_mm": [
-            -0.03700986014560894,
-            0.0370098601456092
+            -0.02496544151951756,
+            0.024965441519517684
           ],
           "rainfall_7d_mm": [
-            -0.031224582024374014,
-            0.031224582024374545
+            -0.013675568398922268,
+            0.013675568398922245
           ],
           "rainfall_30d_mm": [
-            -0.033618840541124344,
-            0.033618840541124455
+            -0.03781476388672793,
+            0.037814763886728386
           ],
           "soil_moisture": [
-            -0.15375009444176435,
-            0.15375009444176851
+            -0.020442419739090813,
+            0.02044241973909079
           ],
           "ndvi": [
-            -0.028238895722274233,
-            0.028238895722274514
+            -0.024015426452823292,
+            0.024015426452823584
           ],
           "distance_to_road": [
-            -0.11238509949023218,
-            0.11238509949023347
+            -0.11356157270948442,
+            0.11356157270948494
           ],
           "distance_to_river": [
-            -0.0015483283365160295,
-            0.0015483283365160467
+            -0.01477334188104299,
+            0.014773341881042882
           ],
           "drain_density": [
-            0.0034342553060986796,
-            -0.0034342553060986852
+            0.0010696779301401802,
+            -0.001069677930140186
+          ],
+          "seismic_dist_km": [
+            -0.050940401143151966,
+            0.0509404011431522
+          ],
+          "seismic_n50_rate": [
+            -0.08741618035187189,
+            0.08741618035187114
+          ],
+          "seismic_years_since": [
+            -0.014326818830361823,
+            0.014326818830361961
+          ],
+          "recent_disturbance": [
+            2.3691722288018744e-06,
+            -2.3691722288018206e-06
           ],
           "lulc_BARREN": [
-            -0.0001475404639094719,
-            0.00014754046390947197
+            -0.00023282482013378377,
+            0.00023282482013379008
           ],
           "lulc_BUILT": [
-            0.004421091746292875,
-            -0.00442109174629288
+            0.0018579256441831281,
+            -0.0018579256441831542
           ],
           "lulc_FOREST": [
-            -0.00021830283422316846,
-            0.00021830283422316082
+            -0.0016728836482418,
+            0.0016728836482417955
           ],
           "lulc_WATER": [
-            -0.002476777582895497,
-            0.002476777582895496
+            -0.00410823486876845,
+            0.004108234868768462
           ],
           "lulc_WETLAND": [
-            0.00010862518668984959,
-            -0.00010862518668984948
+            2.291561569789595e-06,
+            -2.291561569789626e-06
           ]
         }
       },
@@ -399,14 +468,18 @@
           "curvature": -0.23988878278388595,
           "twi": -0.4985527102010913,
           "spi_log": 0.11990343164273828,
-          "rainfall_24h_mm": 0.29559369644796446,
-          "rainfall_7d_mm": 0.39911521850361303,
-          "rainfall_30d_mm": 0.45974441214959105,
-          "soil_moisture": 0.19343953727596036,
+          "rainfall_24h_mm": 0.15007681325360825,
+          "rainfall_7d_mm": 0.1775035483908006,
+          "rainfall_30d_mm": 0.2577961392459199,
+          "soil_moisture": -0.5445426799756088,
           "ndvi": -1.4478561259899556,
           "distance_to_road": -0.5275659355539994,
           "distance_to_river": -0.6611800989814965,
           "drain_density": 1.3533684985381165,
+          "seismic_dist_km": -0.592601455597548,
+          "seismic_n50_rate": 0.8702915294590977,
+          "seismic_years_since": -0.4773657667128439,
+          "recent_disturbance": -0.03693584275765589,
           "lulc_BARREN": 0.0,
           "lulc_BUILT": 0.0,
           "lulc_FOREST": 1.0,
@@ -415,80 +488,96 @@
         },
         "shap": {
           "slope_angle": [
-            -0.06228115901888186,
-            0.06228115901888201
+            -0.027051981348798364,
+            0.027051981348797653
           ],
           "elevation": [
-            -0.1163366586919362,
-            0.11633665869193595
+            -0.13282072627920233,
+            0.13282072627920144
           ],
           "aspect": [
-            0.027857069938324264,
-            -0.02785706993832391
+            0.016386722954059622,
+            -0.016386722954059643
           ],
           "curvature": [
-            -0.00019046208256588424,
-            0.00019046208256585738
+            -0.00030241415784467915,
+            0.00030241415784445754
           ],
           "twi": [
-            -0.01142920714680134,
-            0.011429207146801342
+            -0.006464846722385879,
+            0.006464846722385815
           ],
           "spi_log": [
-            -0.006517442217661576,
-            0.006517442217661584
+            -0.005143460898315558,
+            0.005143460898315564
           ],
           "rainfall_24h_mm": [
-            -0.030958777615665962,
-            0.030958777615665716
+            -0.02089784815180895,
+            0.020897848151810654
           ],
           "rainfall_7d_mm": [
-            -0.02773548590764281,
-            0.027735485907643232
+            -0.02161641066466693,
+            0.021616410664667775
           ],
           "rainfall_30d_mm": [
-            -0.025839940140992727,
-            0.025839940140992546
+            -0.02322695177343748,
+            0.0232269517734371
           ],
           "soil_moisture": [
-            -0.00478465427665499,
-            0.004784654276655011
+            -0.027355488354298085,
+            0.027355488354297932
           ],
           "ndvi": [
-            -0.08203351106469059,
-            0.08203351106469119
+            -0.04170352426415721,
+            0.04170352426415712
           ],
           "distance_to_road": [
-            -0.1055566119066661,
-            0.10555661190666676
+            -0.0959246256700962,
+            0.09592462567009945
           ],
           "distance_to_river": [
-            -0.006532890710036032,
-            0.006532890710035981
+            -0.014259257300541032,
+            0.014259257300540834
           ],
           "drain_density": [
-            -0.011456603403070682,
-            0.011456603403070774
+            -0.004045400667391769,
+            0.0040454006673926336
+          ],
+          "seismic_dist_km": [
+            -0.014837785065979943,
+            0.014837785065979632
+          ],
+          "seismic_n50_rate": [
+            -0.04560698430061057,
+            0.04560698430061022
+          ],
+          "seismic_years_since": [
+            0.002654567036268611,
+            -0.0026545670362687268
+          ],
+          "recent_disturbance": [
+            1.9400217836615344e-06,
+            -1.9400217836615187e-06
           ],
           "lulc_BARREN": [
-            -0.00018832818397940048,
-            0.0001883281839794006
+            -0.0001333352503145132,
+            0.00013333525031451512
           ],
           "lulc_BUILT": [
-            0.00232628023387622,
-            -0.002326280233876212
+            0.0012752618153261568,
+            -0.0012752618153261809
           ],
           "lulc_FOREST": [
-            0.0003195553056364592,
-            -0.0003195553056364581
+            -0.0010850767523295397,
+            0.0010850767523295233
           ],
           "lulc_WATER": [
-            -0.002725620512626678,
-            0.0027256205126266896
+            -0.0038923549140497515,
+            0.003892354914049765
           ],
           "lulc_WETLAND": [
-            1.608227941989644e-05,
-            -1.608227941989644e-05
+            1.6155861730409555e-06,
+            -1.6155861730409565e-06
           ]
         }
       },
@@ -501,14 +590,18 @@
           "curvature": -0.16880322690206215,
           "twi": 3.499696968271371,
           "spi_log": -2.4310165841060325,
-          "rainfall_24h_mm": 0.29559369644796446,
-          "rainfall_7d_mm": 0.39911521850361303,
-          "rainfall_30d_mm": 0.45974441214959105,
-          "soil_moisture": 0.6064401958831269,
+          "rainfall_24h_mm": -0.1533156814408998,
+          "rainfall_7d_mm": -0.3174434796299122,
+          "rainfall_30d_mm": 1.3305657089308145,
+          "soil_moisture": -0.7313825927627213,
           "ndvi": -2.0978578691312038,
           "distance_to_road": -0.4951635845196231,
           "distance_to_river": -0.11591443096683396,
           "drain_density": 3.0373946219685153,
+          "seismic_dist_km": 0.13909704656696645,
+          "seismic_n50_rate": 0.25930819879782707,
+          "seismic_years_since": -0.5403254671337104,
+          "recent_disturbance": -0.03693584275765589,
           "lulc_BARREN": 0.0,
           "lulc_BUILT": 0.0,
           "lulc_FOREST": 1.0,
@@ -517,80 +610,96 @@
         },
         "shap": {
           "slope_angle": [
-            0.05936275392875574,
-            -0.059362753928755486
+            0.03498810032142847,
+            -0.03498810032142854
           ],
           "elevation": [
-            -0.10524034464125093,
-            0.10524034464125191
+            -0.1389694788255104,
+            0.13896947882551217
           ],
           "aspect": [
-            -0.0067734116992274945,
-            0.006773411699227469
+            -0.007091489584311805,
+            0.007091489584311783
           ],
           "curvature": [
-            -0.0019246354601655578,
-            0.001924635460165565
+            -0.0013874276222294128,
+            0.0013874276222294786
           ],
           "twi": [
-            0.012822565341561551,
-            -0.012822565341561652
+            0.021274637375885565,
+            -0.0212746373758857
           ],
           "spi_log": [
-            0.033782448825405736,
-            -0.033782448825405376
+            0.029172036041056,
+            -0.029172036041056306
           ],
           "rainfall_24h_mm": [
-            -0.04250970543089152,
-            0.04250970543089166
+            -0.01980525072737035,
+            0.019805250727370237
           ],
           "rainfall_7d_mm": [
-            -0.04154903424485898,
-            0.04154903424485948
+            -0.01617719311486817,
+            0.01617719311486832
           ],
           "rainfall_30d_mm": [
-            -0.04080618148015533,
-            0.04080618148015542
+            -0.035362016422031746,
+            0.03536201642203162
           ],
           "soil_moisture": [
-            -0.12861179384459756,
-            0.12861179384459687
+            -0.019884729789919595,
+            0.019884729789919512
           ],
           "ndvi": [
-            -0.06761845626119434,
-            0.06761845626119604
+            -0.031011765665921863,
+            0.031011765665922404
           ],
           "distance_to_road": [
-            -0.10116354901476697,
-            0.10116354901476804
+            -0.10936166238786538,
+            0.10936166238786572
           ],
           "distance_to_river": [
-            -0.0049499159579211305,
-            0.004949915957921074
+            -0.011474552815024616,
+            0.011474552815024406
           ],
           "drain_density": [
-            -0.010118446938984295,
-            0.010118446938984185
+            -0.004310431680842105,
+            0.00431043168084216
+          ],
+          "seismic_dist_km": [
+            -0.04076991248155719,
+            0.04076991248155762
+          ],
+          "seismic_n50_rate": [
+            -0.06912922580304207,
+            0.06912922580304152
+          ],
+          "seismic_years_since": [
+            -0.007173492336915903,
+            0.007173492336916015
+          ],
+          "recent_disturbance": [
+            2.4763197412526884e-06,
+            -2.4763197412526787e-06
           ],
           "lulc_BARREN": [
-            -0.00019943516407738054,
-            0.0001994351640773795
+            -0.0001984264187210258,
+            0.0001984264187210245
           ],
           "lulc_BUILT": [
-            0.0034687866086967442,
-            -0.0034687866086967408
+            0.001879194736881042,
+            -0.0018791947368810473
           ],
           "lulc_FOREST": [
-            0.0021547490224059747,
-            -0.0021547490224059747
+            -0.0009219941996516885,
+            0.0009219941996516704
           ],
           "lulc_WATER": [
-            -0.0024355360623974764,
-            0.0024355360623974777
+            -0.004350143703768069,
+            0.004350143703768061
           ],
           "lulc_WETLAND": [
-            0.0002607773510494857,
-            -0.0002607773510494856
+            1.4383661944782505e-05,
+            -1.4383661944782561e-05
           ]
         }
       },
@@ -603,14 +712,18 @@
           "curvature": -0.028853538759721475,
           "twi": 1.289318669938986,
           "spi_log": -1.8882648948690721,
-          "rainfall_24h_mm": -0.8498107191642329,
-          "rainfall_7d_mm": -0.9767588513931316,
-          "rainfall_30d_mm": -1.0402613754737935,
-          "soil_moisture": -3.198171931891986,
+          "rainfall_24h_mm": -0.4884058994616995,
+          "rainfall_7d_mm": -0.8669635337111017,
+          "rainfall_30d_mm": -0.05818990313005056,
+          "soil_moisture": 0.5883221076829614,
           "ndvi": 0.40578256593319745,
           "distance_to_road": 4.942170935012537,
           "distance_to_river": 1.8724847448771889,
           "drain_density": -0.6467332166147467,
+          "seismic_dist_km": -0.514111747379662,
+          "seismic_n50_rate": 1.5263243222889415,
+          "seismic_years_since": -0.4144060662919774,
+          "recent_disturbance": -0.03693584275765589,
           "lulc_BARREN": 0.0,
           "lulc_BUILT": 0.0,
           "lulc_FOREST": 0.0,
@@ -619,80 +732,96 @@
         },
         "shap": {
           "slope_angle": [
-            0.04724341775683103,
-            -0.047243417756830566
+            0.03866530510030618,
+            -0.03866530510030622
           ],
           "elevation": [
-            0.14772072303254746,
-            -0.1477207230325476
+            0.18547564981544662,
+            -0.18547564981544717
           ],
           "aspect": [
-            -0.004256216668686928,
-            0.0042562166686869775
+            -0.001367304246576762,
+            0.0013673042465767676
           ],
           "curvature": [
-            0.001895036591502938,
-            -0.0018950365915029604
+            0.002114292888886078,
+            -0.002114292888886083
           ],
           "twi": [
-            0.007847896862114456,
-            -0.007847896862114468
+            0.005146918543029098,
+            -0.005146918543029083
           ],
           "spi_log": [
-            0.018429084289332934,
-            -0.018429084289332733
+            0.0172236454805887,
+            -0.01722364548058877
           ],
           "rainfall_24h_mm": [
-            0.03676472461966481,
-            -0.03676472461966441
+            -0.0026561987286829645,
+            0.0026561987286829545
           ],
           "rainfall_7d_mm": [
-            0.02331690295782106,
-            -0.02331690295782088
+            0.003904496764824161,
+            -0.003904496764824214
           ],
           "rainfall_30d_mm": [
-            0.022980161190525844,
-            -0.022980161190525556
+            -5.493815136087592e-05,
+            5.493815136088087e-05
           ],
           "soil_moisture": [
-            0.05946027183101416,
-            -0.05946027183101328
+            0.019459315197754668,
+            -0.019459315197754644
           ],
           "ndvi": [
-            -0.007180946057906084,
-            0.007180946057906055
+            -0.0086007270493918,
+            0.008600727049391714
           ],
           "distance_to_road": [
-            0.11692797310388127,
-            -0.11692797310388137
+            0.15559984216830744,
+            -0.1555998421683049
           ],
           "distance_to_river": [
-            0.015342610829576395,
-            -0.015342610829576287
+            0.03456870098788228,
+            -0.03456870098788243
           ],
           "drain_density": [
-            0.002318817777309418,
-            -0.002318817777309455
+            0.0016588175157189258,
+            -0.0016588175157189243
+          ],
+          "seismic_dist_km": [
+            -0.0004229881872365271,
+            0.0004229881872365429
+          ],
+          "seismic_n50_rate": [
+            0.005059620586957655,
+            -0.005059620586957699
+          ],
+          "seismic_years_since": [
+            0.012819876294732793,
+            -0.012819876294732819
+          ],
+          "recent_disturbance": [
+            1.0164553824397705e-05,
+            -1.0164553824397666e-05
           ],
           "lulc_BARREN": [
-            7.87938422043745e-06,
-            -7.879384220437666e-06
+            -3.6130026578193776e-05,
+            3.613002657819324e-05
           ],
           "lulc_BUILT": [
-            0.004104617533867096,
-            -0.004104617533867097
+            0.004060484816706066,
+            -0.004060484816706066
           ],
           "lulc_FOREST": [
-            -0.0009327549138829605,
-            0.0009327549138829511
+            0.001197816657751695,
+            -0.0011978166577517005
           ],
           "lulc_WATER": [
-            0.007945484695427623,
-            -0.007945484695427602
+            0.02009718977347551,
+            -0.020097189773475566
           ],
           "lulc_WETLAND": [
-            1.595006222590908e-05,
-            -1.5950062225909092e-05
+            2.7784121019219863e-05,
+            -2.778412101921988e-05
           ]
         }
       },
@@ -705,14 +834,18 @@
           "curvature": -0.1399247198250712,
           "twi": -0.48521038646870257,
           "spi_log": -0.6650010160622238,
-          "rainfall_24h_mm": 1.8608911460896913,
-          "rainfall_7d_mm": 1.8053617844245677,
-          "rainfall_30d_mm": 1.702731664232829,
-          "soil_moisture": 0.4437429667348489,
+          "rainfall_24h_mm": -0.03558128051467277,
+          "rainfall_7d_mm": -0.35609937308941675,
+          "rainfall_30d_mm": 0.05444481332381179,
+          "soil_moisture": 0.46770393613685074,
           "ndvi": -0.008026683334050584,
           "distance_to_road": 0.40560177278478277,
           "distance_to_river": -0.47335650161162496,
           "drain_density": 1.247667894812747,
+          "seismic_dist_km": -0.3867839984928693,
+          "seismic_n50_rate": -1.9931649096308208,
+          "seismic_years_since": 3.1113371572765476,
+          "recent_disturbance": -0.03693584275765589,
           "lulc_BARREN": 0.0,
           "lulc_BUILT": 0.0,
           "lulc_FOREST": 1.0,
@@ -721,80 +854,96 @@
         },
         "shap": {
           "slope_angle": [
-            0.022578779570378776,
-            -0.022578779570378668
+            0.008509655514602765,
+            -0.008509655514602778
           ],
           "elevation": [
-            0.08651723578205292,
-            -0.08651723578205255
+            0.03198926032091186,
+            -0.031989260320912004
           ],
           "aspect": [
-            0.017958740912579763,
-            -0.017958740912579794
+            0.002510956298283932,
+            -0.002510956298283964
           ],
           "curvature": [
-            0.009215272050707744,
-            -0.009215272050707699
+            0.004298342922247661,
+            -0.0042983429222476
           ],
           "twi": [
-            -0.0006822978728978827,
-            0.0006822978728979034
+            0.001035999771863803,
+            -0.001035999771863784
           ],
           "spi_log": [
-            0.01360157471241878,
-            -0.013601574712418999
+            0.0025441077858237384,
+            -0.002544107785823841
           ],
           "rainfall_24h_mm": [
-            -0.016517227903139777,
-            0.01651722790313975
+            0.009635440326252536,
+            -0.00963544032625244
           ],
           "rainfall_7d_mm": [
-            -0.012462840642027509,
-            0.012462840642027599
+            0.013155047888012973,
+            -0.013155047888013095
           ],
           "rainfall_30d_mm": [
-            -0.012537161593025757,
-            0.012537161593025746
+            0.0017957077589443732,
+            -0.001795707758944374
           ],
           "soil_moisture": [
-            0.009953500483793416,
-            -0.009953500483793518
+            0.020977344350465187,
+            -0.0209773443504651
           ],
           "ndvi": [
-            -0.04298417578373523,
-            0.04298417578373501
+            -0.024733527313246042,
+            0.024733527313246302
           ],
           "distance_to_road": [
-            0.33255038336687787,
-            -0.33255038336687875
+            0.17230859682466027,
+            -0.17230859682465946
           ],
           "distance_to_river": [
-            -0.0011166178032113202,
-            0.0011166178032113283
+            -0.003896134476606222,
+            0.003896134476606162
           ],
           "drain_density": [
-            -0.0026348666640346047,
-            0.0026348666640345977
+            -0.0031096116285809078,
+            0.0031096116285809104
+          ],
+          "seismic_dist_km": [
+            0.0022310546335066557,
+            -0.0022310546335066487
+          ],
+          "seismic_n50_rate": [
+            0.15787196326346137,
+            -0.15787196326346128
+          ],
+          "seismic_years_since": [
+            0.061640103470245296,
+            -0.06164010347024471
+          ],
+          "recent_disturbance": [
+            2.679454468412224e-06,
+            -2.679454468412212e-06
           ],
           "lulc_BARREN": [
-            0.0002415031637945712,
-            -0.0002415031637945709
+            -6.29658902567695e-05,
+            6.296589025676863e-05
           ],
           "lulc_BUILT": [
-            0.005186605169280288,
-            -0.005186605169280281
+            0.002329743197140743,
+            -0.002329743197140767
           ],
           "lulc_FOREST": [
-            0.008497427362061135,
-            -0.008497427362061176
+            0.0023035311401787043,
+            -0.0023035311401787095
           ],
           "lulc_WATER": [
-            -0.0014188688132783385,
-            0.0014188688132783392
+            -0.001385689447190236,
+            0.001385689447190227
           ],
           "lulc_WETLAND": [
-            4.669378787646446e-06,
-            -4.6693787876464386e-06
+            2.87121950539548e-08,
+            -2.8712195053956626e-08
           ]
         }
       }
@@ -829,7 +978,7 @@
     "has_xgb": true,
     "has_lgb": true,
     "has_shap": true,
-    "finished": "2026-09-04T20:19:24Z",
+    "finished": "2026-09-17T08:51:04Z",
     "clean": true
   },
   "demo_touch": "none \u2014 zero fixture/score/contract changes by this lane (frozen scores are validator-guarded; training is upside, not a demo blocker)"
