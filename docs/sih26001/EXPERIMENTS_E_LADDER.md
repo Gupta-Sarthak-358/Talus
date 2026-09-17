@@ -691,6 +691,11 @@ AUCs 0.79); iso on episode-grouped OOF; dev-fixed Youden op rawP>=0.0001. Held-o
 ALERT 0.2, CRIT 0.1, AUC 0.468, Brier 0.595, novel 0.0, burden hot-frac 0.0. 20%+ dev positives
 score raw 0.0 (op rule degenerated twice before Youden). VERDICT NEGATIVE: tabular temporal
 retraining does not fix M0 — answers spec question against VI-0-as-sufficient. VI-1 unstarted.
+VI-2P-B (`physics_iverson.py`, `runs/phase_v/vi2pb/`, NO FITTING): Iverson R(t*) + infinite-slope
+FoS over frozen 324-combo ensemble for 23×6 states. Wet-event FoS_med<1 (DARJ-2015 0.56,
+20MILE 0.50, NH10-Oct21 0.51, Mantam 0.79), dry-event >1.5 (Sokpay 2.49, Pathing 1.82, Lingchom
+2.03); T-7→T median changes tiny (±0.03) — FoS carries STATE not TIMING. 2 ABSTAIN-flat
+(NH10-Oct22 0.8°, Tsong 0.0°: infinite-slope invalid, recorded not fudged). Fusion gated separately.
 VI-1 (`train_vi1.py`, `runs/phase_v/vi1/`, GRU-16 1-layer, 300ep, pos_weight 72, CUDA):
 dev-OOF AUC 0.79, op thr 0.0062 (non-degenerate). Held-out: WATCH/ALERT/CRIT 0.5/0.5/0.5
 BUT AUC 0.388, Brier 0.615 — indiscriminate-loud replaces blind-quiet; novel 0.4 is the
