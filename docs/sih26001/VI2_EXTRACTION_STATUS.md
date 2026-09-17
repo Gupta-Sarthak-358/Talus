@@ -65,6 +65,15 @@ tonight. STOP probing; resume = single PNG GET on dap enclosure URL, then runboo
   ≈ weeks. Parked unless LiCSAR stays down long-term AND scope is explicitly approved.
 - Primary remains LiCSAR resume probe (4 MB products vs 8 GB raws).
 
+## First payload landed via browser (2026-09-18)
+
+`20160730_20160811.geo.cc.tif` (4,092,260 B, sha f5cb39296adbb667, local-only per
+raw-archive convention): 2711×2900 EPSG:4326 uint8 0–255 coherence scale.
+Mantam 11×11 window median 9/255 (≈0.035) vs frame mean ≈0.29 — severe local
+decorrelation in the 12 d before collapse (monsoon/vegetation/surface-change
+nulls apply; unw phase needed for the deformation half).
+Needed next: same pair `.geo.unw.tif` + mid pair `20160718_20160730` unw+cc.
+
 ## Scope guard
 
 Extraction extracts. No scores, no fusion, no threshold talk until the audit
