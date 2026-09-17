@@ -589,6 +589,16 @@ ManganChungthang-20200627, Apdara-20200627). Tigdo/ModiRijo gain IE+Scroll+AP.
 Oct-2025 Mirik cloudburst (20+ dead, 5+ outlets) ingested as 2 FORK rows (Soureni/Dilaram):
 in-Darjeeling-hills but south of NGEN box AND post-archive (no ind2025) -> methodology
 fork open: box-boundary vs feature-support-envelope regime definition. Gap 12.
+Mining pass 8 (`trackA_mining9.py`): MECHANISM VERDICTS — ManganChungthang-20200627
+PROMOTED (Telegraph+ANI+Federal: active slides + washout, include-rule) and
+Apdara-20200627 PROMOTED (NHPC own PR: 0020 hillside slide 40m above dam + 4 outlets;
+dam-damage dispute irrelevant to event identity) -> pool 18 -> 20, gap 10.
+RULE FROZEN (`CHAMPIONSHIP_RULE_v1.md` 2026-09-18): NGEN box + support + contamination
+locked; Soureni/Dilaram -> POST_CHAMPIONSHIP_STUDY.
+Integrity audit (`championship_audit.py`, `runs/championship_audit.json`): 20 events,
+15 episodes, 0 errors; all rows dual+ convergence; seasons 16/3/1 monsoon/post/pre;
+recurrent-site rows 6, edge rows 1 (Pubung); all T-30 IMD files present.
+Watch items: 2022-heavy (7/20, reporting bias), Gangtok 5-site concentration.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;
