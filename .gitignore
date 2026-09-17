@@ -130,3 +130,6 @@ docs/PILOT_REVIEW.md
 # pid files from start_all
 .backend.pid
 .frontend.pid
+
+# VI-2 landing zone: browser/Selenium drops, filed post-validation
+/*.tif
