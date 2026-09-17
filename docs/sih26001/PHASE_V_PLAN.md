@@ -60,3 +60,11 @@ calibration (Brier/ECE), OOD behavior, regional/novel-vs-recurrent splits.
 ## Standing prohibitions
 
 No E17 before final Phase-IV scorecards. No multimodal production before M0 baseline. No threshold/model/feature change during held-out. No geography-specific model zoo. No silent PROXY→REAL upgrades.
+
+## Architecture freeze (8193101, 2026-09-18)
+
+Roles locked: susceptibility=where, environment=forcing, physics=state (FoS never a
+threshold), SAR=response-pending, exposure downstream, OOD/provenance as trust layer.
+No new branches (no PINN, no second physics, no new modalities). Open gates only:
+VI-2 SAR extraction (infra-blocked) then one tiny fusion experiment (env vs
+env+physics vs env+physics+SAR). After that: build product, not machinery.
