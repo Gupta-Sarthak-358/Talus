@@ -659,6 +659,14 @@ retrieval gaps, gap chain documented) + 0 MISSING, seismic REAL all 23 (USGS thr
 satellite era-validated scene-PENDING, terrain anomalies 0. Fixed en route: NaN-cell
 provenance lie (now gap chain), 2 corrupt CCI downloads (re-fetched), off-season archive
 gaps filled (Oct-Nov 2022, Feb-Mar 2023, Apr 2020 via CEDA). Registry updated. M0 UNSTARTED.
+V-B FULL (`vb_report.py` + `reconstruction_manifest.json` + `event_table.csv`): upgrades applied
+uniformly via pipeline then full 23 re-run — +3d rain, seismic nearest-event detail, STAC scene
+discovery (S2/L8/S1 per snapshot, post-snapshot acquisitions asserted out), D8 terrain suite
+(elev/slope/aspect/curvature/TWI/SPI/drain, training formulas, training-range plausibility).
+Verdict V-B PASS: 138/138, 0 leakage, 0 sat errors, 0 terrain warnings, split cross-check intact.
+Satellite finding: optical-usable (<30% cloud) only 84/138, but SAR-backed usable 138/138 —
+M1 must lean on SAR/change, not optical, in monsoon. Flat-cell notes (Tsong, NH10-Oct22)
+in event table. No M0 scores anywhere in this report.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;
