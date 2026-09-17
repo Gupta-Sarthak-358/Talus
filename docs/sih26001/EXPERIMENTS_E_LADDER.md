@@ -576,6 +576,13 @@ Transfer 6 -> 9 (+Tripura May-18 pair, +Nongstoin-20230617 quad-source).
 Provisional-transfer +5 (Tripura May-20 pair, Lumshong, Pynthor, Rngain-road-cut).
 Skipped with reason: Mawsynram truck gorge (accident), Guwahati guard-wall (structural).
 Mizoram + Jul-2020-Sikkim deferred on 429s. Gap 14.
+Mining pass 6 (`trackA_mining7.py`): pool 16 -> 17 (+29Mile-20200923 now 5 outlets;
+29-Mile series complete at 4 dated hits). SeesaGolai HELD (follow-ups same-outlet,
+mechanism caveat stands); Sichey HELD (Telegraph dead page; InSAR chronic-slope
+context added, event still single-source). Transfer 9 -> 10 (+Hlimen-20240528 Remal
+houses point); Hunthar-NH6 provisional-transfer; Melthum quarry REJECTED (excavation
+site, BhaluKhola precedent); other Remal village tolls stay aggregate context.
+Mirik/Kurseong deferred on 429. Gap 13.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;
