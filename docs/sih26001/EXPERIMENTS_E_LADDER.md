@@ -629,6 +629,11 @@ Mining pass 14 (`trackA_mining15.py`, admin sweep): +2 provisional (Tsong-201909
 IPR, needs Tsong-specific corroboration; UpperRimbi-20250912 6 outlets but post-archive).
 Martam GPS 27.2596,88.5506 logged as context (academic, no exact event date).
 4 queries 429-deferred (Sichey-final, West-2-3, Melli-2021, Kalimpong-2020). Pool holds 22.
+Mining pass 15 (`trackA_mining16.py`): Mamkhola-20210730 REJECTED (5 outlets but rivulet
+washaway of labour camp — flood-dominant + occupational). 29-Mile rows adopt field GPS
+27.0144,88.4359 (in-box confirmed; Rambi town itself out — good thing the marker won).
+Sichey press budget exhausted (admin-archive avenue remains). SetiJhora = toe erosion,
+not a slide. Pool holds 22, audit 22/17/0.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;
