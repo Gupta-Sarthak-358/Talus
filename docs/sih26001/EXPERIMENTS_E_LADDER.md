@@ -667,6 +667,14 @@ Verdict V-B PASS: 138/138, 0 leakage, 0 sat errors, 0 terrain warnings, split cr
 Satellite finding: optical-usable (<30% cloud) only 84/138, but SAR-backed usable 138/138 —
 M1 must lean on SAR/change, not optical, in monsoon. Flat-cell notes (Tsong, NH10-Oct22)
 in event table. No M0 scores anywhere in this report.
+V-C M0 (`m0_replay.py`, `runs/phase_v/m0/`): frozen serving recipe verified byte-for-byte
+(FROZEN_BANDS edges, raw-score banding, OOD invariant asserted). Held-out: WATCH 0.50,
+ALERT 0.30, CRITICAL 0.00, AUC 0.53, Brier 0.317 (worse than constant); dev nearly identical
+(system property, not generalization gap). All 6 ALERT recalls = 3×29-Mile + Dipudara-nowcast
+(lead 0) + ManganChung (lead 2); novel advance-ALERT ≈ 0. Raw-vs-calibrated divergence measured
+(20MILE T: raw 68 WATCH vs P_cal 0.855). OOD 30 snaps / 5 events, invariant holds. Burden reused
+from frozen-scorer runs (monsoon 28/60-5.8d, off-season 0/60). 7 held-out misses typed in ledger.
+Nothing tuned. M1 gate open against the ledger only.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;
