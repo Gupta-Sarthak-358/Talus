@@ -681,6 +681,11 @@ blocked by Requester-Pays + monsoon-blind). Held-out ALERT 0.30→0.60, 4/7 resc
 Brier 0.317→0.384, AUC flat, sat-only AUC exactly 0.500, rescues mostly sat-evidence-none
 with window-edge leads. VERDICT REJECT: gain is dev-overfit recalibration, not satellite
 complementarity. No M2. Residual hypothesis: coherence-phase SAR / optical-when-clear.
+VI-0 spec frozen (`VI0_SPEC.md`: 7d horizon for M0-comparability, dev-only positives+N2,
+seed-42 monsoon N3 in dev-years, seed-43 off-season N0, N1 deferred, leakage rules).
+Population built (`build_vi0.py`): 3798 rows, 52 pos; soil 2502 REAL + 719 PROXY-spatial +
+577 winter-retrieval-gap fallbacks (flag-recorded, off-season CCI gaps filled via CEDA where
+fetchable); held-out asserted absent; I/O fixed (dataset-handle cache, 4× speedup). No fit yet.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;
