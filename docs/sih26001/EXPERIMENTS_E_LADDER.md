@@ -610,6 +610,11 @@ Tier-1 menu match. `ceiling` column live on all non-eligible rows: YES-corrobora
 NO-box 10, NO-mechanism 4, rest terminal (duplicate/aggregate/post-rule) or conditional
 (archive/coordinate). Dateless leads logged not rowed (SSDMA menu: Sokpay/Namchi-40/Bey?/Tsong;
 Wadia table; GSI-2019 Darjeeling field inventory). Audit still 20/15/0.
+Mining pass 11 (`trackA_mining12.py`): SoBhir PROMOTED as Mantam-20160813 with DATE
+RESOLUTION (NESAC Aug-3 early onset vs Aug-13 ~1230 catastrophic damming collapse;
+T = Aug-13, onset logged) and 8+ corroboration incl GSI-at-site + CWC/NRSC + HC PIL
+-> pool 20 -> 21 (16 episodes, audit clean, oldest event 2016, Mangan ties Gangtok 5-5).
+Bey lead CLOSED (2011-earthquake-triggered, mechanism + pre-S2). Gap 9.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;
