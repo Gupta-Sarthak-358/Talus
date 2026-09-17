@@ -73,6 +73,13 @@ Mantam 11×11 window median 9/255 (≈0.035) vs frame mean ≈0.29 — severe lo
 decorrelation in the 12 d before collapse (monsoon/vegetation/surface-change
 nulls apply; unw phase needed for the deformation half).
 Needed next: same pair `.geo.unw.tif` + mid pair `20160718_20160730` unw+cc.
+PILOT VALIDATED (browser-supplied pair 20160730_20160811): unw float32 radians
+(Mantam n=3/121 valid, med 0.608 rad ≈ +5.4 mm LOS, range −1.25..+1.0; sign =
+toward-sensor per LiCSAR convention, recorded assumption); cc uint8 0–255.
+Key finding: unw coverage 2.5% where coherence lost — deformation observable
+degrades to coherence-loss itself on monsoon slopes (anticipated null stands).
+File hashes: cc f5cb39296adbb667 (4092260 B), unw 70176ed5d8147169 (14670110 B).
+Lesson: re-verify size+hash AFTER move (caught a partial-file read). Batch GO.
 
 ## Scope guard
 
