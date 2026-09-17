@@ -643,6 +643,10 @@ Kalimpong/Dentam retries 429). **Championship frozen at evidence ceiling 23** (3
 rule, not effort). Added 29MILE-20200827 provisional (5th series hit, same-side law noted).
 Experiment registry live (`runs/experiment_registry.md`). Audit 23/18/0; readiness 21+2+0.
 Next: split manifest -> daily reconstruction -> M0.
+Split v1 (`splits/championship_split_v1.json`, `make_split.py` asserts): dev 13 / held-out 10.
+Assertion caught EP-SEP2022 split (Yumthang-dev vs 20Mile-heldout) -> Yumthang moved held-out
+(integrity over count). ho_years 2016-2024, dev 2015-2024; 29-Mile both sides; Dipudara pair
+held-out together. Registry updated with split hash.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;

@@ -1,0 +1,198 @@
+{
+  "version": "championship_split_v1",
+  "frozen": "2026-09-18",
+  "rule": "no model performance used; constraints asserted in scripts/make_split.py",
+  "dev_n": 13,
+  "heldout_n": 10,
+  "dev_years": [
+    2015,
+    2015,
+    2019,
+    2020,
+    2020,
+    2020,
+    2020,
+    2021,
+    2021,
+    2022,
+    2022,
+    2022,
+    2024
+  ],
+  "heldout_years": [
+    2016,
+    2019,
+    2021,
+    2022,
+    2022,
+    2022,
+    2022,
+    2023,
+    2024,
+    2024
+  ],
+  "law": "held-out untouchable: no calibration/threshold/OOD/feature decision may use it",
+  "events": [
+    {
+      "slide_no": "NEWS-DARJ-20150701",
+      "exact_date": "2015-07-01",
+      "district": "Darjeeling",
+      "related_episode_id": "EP-JUL2015-DARJ",
+      "side": "development"
+    },
+    {
+      "slide_no": "NEWS-NH10-20150709",
+      "exact_date": "2015-07-09",
+      "district": "Darjeeling",
+      "related_episode_id": "EP-JUL2015-DARJ",
+      "side": "development"
+    },
+    {
+      "slide_no": "NEWS-NH10-20211020",
+      "exact_date": "2021-10-20",
+      "district": "East Sikkim/WB",
+      "related_episode_id": "EP-OCT2021-NE",
+      "side": "development"
+    },
+    {
+      "slide_no": "NEWS-MANGAN-20240613",
+      "exact_date": "2024-06-13",
+      "district": "Mangan",
+      "related_episode_id": "EP-JUN2024-SIKKIM",
+      "side": "development"
+    },
+    {
+      "slide_no": "NEWS-DIPUDARA-20240820",
+      "exact_date": "2024-08-20",
+      "district": "Gangtok",
+      "related_episode_id": "EP-AUG2024-EASTSIKKIM",
+      "side": "held-out"
+    },
+    {
+      "slide_no": "NEWS-DIPUDARA-20240821",
+      "exact_date": "2024-08-21",
+      "district": "Gangtok",
+      "related_episode_id": "EP-AUG2024-EASTSIKKIM",
+      "side": "held-out"
+    },
+    {
+      "slide_no": "NEWS-NH10-20221009",
+      "exact_date": "2022-10-09",
+      "district": "Kalimpong/East Sikkim",
+      "related_episode_id": "EP-OCT2022-NE",
+      "side": "development"
+    },
+    {
+      "slide_no": "NEWS-PUBUNG-20190708",
+      "exact_date": "2019-07-08",
+      "district": "Darjeeling",
+      "related_episode_id": "EP-JUL2019-DARJ",
+      "side": "held-out"
+    },
+    {
+      "slide_no": "NEWS-RONGEY-20220628",
+      "exact_date": "2022-06-28",
+      "district": "Gangtok",
+      "related_episode_id": "EP-JUN2022-SIKKIM",
+      "side": "development"
+    },
+    {
+      "slide_no": "NEWS-YUMTHANG-20220831",
+      "exact_date": "2022-08-31",
+      "district": "Mangan",
+      "related_episode_id": "EP-SEP2022-SIKKIM",
+      "side": "held-out"
+    },
+    {
+      "slide_no": "NEWS-20MILE-20220901",
+      "exact_date": "2022-09-01",
+      "district": "Gangtok/Pakyong",
+      "related_episode_id": "EP-SEP2022-SIKKIM",
+      "side": "held-out"
+    },
+    {
+      "slide_no": "NEWS-17MILE-20220615",
+      "exact_date": "2022-06-15",
+      "district": "Gangtok",
+      "related_episode_id": "EP-JUN2022-SIKKIM",
+      "side": "development"
+    },
+    {
+      "slide_no": "NEWS-BIRIKDARA-20220802",
+      "exact_date": "2022-08-02",
+      "district": "Pakyong/Kalimpong border",
+      "related_episode_id": "EP-AUG2022-SIKKIM",
+      "side": "held-out"
+    },
+    {
+      "slide_no": "NEWS-29MILE-20210906",
+      "exact_date": "2021-09-06",
+      "district": "Kalimpong",
+      "related_episode_id": "EP-SEP2021-NE",
+      "side": "development"
+    },
+    {
+      "slide_no": "NEWS-PATHING-20221124",
+      "exact_date": "2022-11-24",
+      "district": "Namchi",
+      "related_episode_id": "EP-NOV2022-PATHING",
+      "side": "held-out"
+    },
+    {
+      "slide_no": "NEWS-29MILE-20210711",
+      "exact_date": "2021-07-11",
+      "district": "Kalimpong",
+      "related_episode_id": "EP-JUL2021-NE",
+      "side": "held-out"
+    },
+    {
+      "slide_no": "NEWS-29MILE-20200923",
+      "exact_date": "2020-09-23",
+      "district": "Kalimpong",
+      "related_episode_id": "EP-SEP2020-NE",
+      "side": "development"
+    },
+    {
+      "slide_no": "NEWS-LINGCHOM-20200524",
+      "exact_date": "2020-05-24",
+      "district": "Mangan",
+      "related_episode_id": "EP-MAY2020-NSIKKIM",
+      "side": "development"
+    },
+    {
+      "slide_no": "NEWS-MANGANCHUNG-20200627",
+      "exact_date": "2020-06-27",
+      "district": "Mangan",
+      "related_episode_id": "EP-JUN2020-NSIKKIM",
+      "side": "development"
+    },
+    {
+      "slide_no": "NEWS-APDARA-20200627",
+      "exact_date": "2020-06-27",
+      "district": "Gangtok",
+      "related_episode_id": "EP-JUN2020-NSIKKIM",
+      "side": "development"
+    },
+    {
+      "slide_no": "NEWS-MANTAM-20160813",
+      "exact_date": "2016-08-13",
+      "district": "Mangan",
+      "related_episode_id": "EP-AUG2016-MANTAM",
+      "side": "held-out"
+    },
+    {
+      "slide_no": "NEWS-SOKPAY-20230326",
+      "exact_date": "2023-03-26",
+      "district": "Gangtok",
+      "related_episode_id": "EP-MAR2023-SOKPAY",
+      "side": "held-out"
+    },
+    {
+      "slide_no": "NEWS-TSONG-20190916",
+      "exact_date": "2019-09-16",
+      "district": "Gyalshing",
+      "related_episode_id": "EP-SEP2019-YUKSAM",
+      "side": "development"
+    }
+  ]
+}
