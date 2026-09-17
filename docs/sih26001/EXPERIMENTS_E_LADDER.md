@@ -647,6 +647,12 @@ Split v1 (`splits/championship_split_v1.json`, `make_split.py` asserts): dev 13 
 Assertion caught EP-SEP2022 split (Yumthang-dev vs 20Mile-heldout) -> Yumthang moved held-out
 (integrity over count). ho_years 2016-2024, dev 2015-2024; 29-Mile both sides; Dipudara pair
 held-out together. Registry updated with split hash.
+V-B pilot (`reconstruct_event.py`, system python): Mantam end-to-end — 6 snapshots,
+rain IMD REAL (T: 27.6/104.6/526.1mm, consistent w/ Koley EMAP), soil v09.2 REAL all 6,
+seismic USGS REAL (0 events ≤T), terrain SRTM REAL (1223m/48.8°; fixed a window-math bug
+that gave -4427m — index-based windows now), satellite era-validated PENDING-scene,
+disturbance MISSING (no 2016 wound map). Invariant asserted in code + independently
+verified. T-day grid excluded (post-onset). Contract: `runs/phase_v/daily_replay/`.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;
