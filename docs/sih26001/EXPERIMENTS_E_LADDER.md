@@ -625,6 +625,10 @@ CE cites valley-side construction/traffic, formation cave-in not cut-slope failu
 reversible only on geotech evidence — provisionals convert, not accumulate).
 Sichey slope doubly peer-attested (ASCE-2024 debris-flow model) but event still single.
 MyongKyong unchanged. Pool holds 22, audit 22/17/0.
+Mining pass 14 (`trackA_mining15.py`, admin sweep): +2 provisional (Tsong-20190916 Tier-1
+IPR, needs Tsong-specific corroboration; UpperRimbi-20250912 6 outlets but post-archive).
+Martam GPS 27.2596,88.5506 logged as context (academic, no exact event date).
+4 queries 429-deferred (Sichey-final, West-2-3, Melli-2021, Kalimpong-2020). Pool holds 22.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;
