@@ -686,6 +686,11 @@ seed-42 monsoon N3 in dev-years, seed-43 off-season N0, N1 deferred, leakage rul
 Population built (`build_vi0.py`): 3798 rows, 52 pos; soil 2502 REAL + 719 PROXY-spatial +
 577 winter-retrieval-gap fallbacks (flag-recorded, off-season CCI gaps filled via CEDA where
 fetchable); held-out asserted absent; I/O fixed (dataset-handle cache, 4× speedup). No fit yet.
+VI-0 FIT (`train_vi0.py`, `runs/phase_v/vi0/`): XGB wins dev-OOF Brier 0.0125 (RF 0.0127,
+AUCs 0.79); iso on episode-grouped OOF; dev-fixed Youden op rawP>=0.0001. Held-out: WATCH 0.2,
+ALERT 0.2, CRIT 0.1, AUC 0.468, Brier 0.595, novel 0.0, burden hot-frac 0.0. 20%+ dev positives
+score raw 0.0 (op rule degenerated twice before Youden). VERDICT NEGATIVE: tabular temporal
+retraining does not fix M0 — answers spec question against VI-0-as-sufficient. VI-1 unstarted.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;
