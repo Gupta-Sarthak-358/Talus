@@ -533,6 +533,16 @@ as ONE sample for its multi-slide cluster; Majwa-20240610 duplicate-guarded;
 Meghalaya/Assam trio (2022-06-09/14/17, dual-source exact) auto-failed contam_geo and sit
 in a transfer cohort, not the championship; Pubung-20190708 provisional at the domain
 edge (0.01deg S of box). Eligibility computed False/True by rule: pool stays 7, honestly.
+Mining pass 2 (`trackA_mining2.py`): pool 7 -> 10 eligible (+Rongey-20220628 dual,
++Yumthang-20220831 triple Army-rescue, +20Mile-20220901 triple; gap 20).
+Pubung source-leg passed (6 outlets + IMD 172mm/24h) but still edge-provisional.
+Jun-17-2022 HT Friday-5-dead identified as aggregate re-report of Jun-15 Lingzya/17th-Mile
+deaths (Telegraph Jun 16) and duplicate-guarded; Lingzya ravine itself a road accident,
+not a slide; Chungthang-20231004 rejected (GLOF cascade, trigger 5200m outside regime).
+29-Mile-20210906 dual-source but point unresolved (mile-marker vs 60km-from-Rangpo conflict).
+Chronic-site repeats now visible (29-Mile Sep-2021 + Oct-2021; 20-Mile Sep-2022 + Oct-2022):
+distinct dates, non-overlapping T-30 windows, legitimate separate samples.
+Also fixed a bool-vs-string filter bug that undercounted eligible 10 as 4.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;
