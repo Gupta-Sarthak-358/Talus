@@ -35,6 +35,17 @@ on 200, run the paced runbook. If durable, check COMET portal news.
    `runs/phase_v/vi2/sar_features.json` + audit; model fitting stays closed
    until the extraction audit passes.
 
+## Third-party confirmation + correction (2026-09-18)
+
+Independent web fetch of the exact dap enclosure URL: **404**. Three clients
+across two local networks plus one external: same result. Verdict: current DAP payload
+unavailability / migration-service inconsistency (no claim about which internal
+component; the 404 proves non-service, not mechanism).
+Correction: the 4,092,260-byte 200 was MEASURED ONLY (Content-Length match to
+metadata, ~00:25 IST) — bytes were not persisted, so no file/hash exists. The
+observation stands as a logged measurement, not an artifact. Lesson recorded:
+persist first successful payload reads immediately.
+
 ## Breakthrough + new finding (`.public` XML → dap enclosure)
 
 The `.public` pair dirs carry `.tif.xml` EPOS records whose enclosure URL is
