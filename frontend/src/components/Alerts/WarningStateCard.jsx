@@ -56,9 +56,19 @@ export default function WarningStateCard() {
       <div className="divide-y divide-mine-border/50">
         {data.states.map((s) => (
           <div key={s.zone_id} className="px-4 py-2.5 flex items-start gap-3">
-            <span className={`mt-0.5 text-[10px] font-bold px-2 py-0.5 rounded-full border whitespace-nowrap ${STATE_STYLE[s.state]}`}>
-              {s.zone_id} · {s.state}
-            </span>
+            <div className="flex flex-col gap-1 shrink-0">
+              <span className={`mt-0.5 text-[10px] font-bold px-2 py-0.5 rounded-full border whitespace-nowrap ${STATE_STYLE[s.state]}`}>
+                {s.zone_id} · {s.state}
+              </span>
+              {s.ood && (
+                <span
+                  className="text-[9px] font-bold px-2 py-0.5 rounded-full border whitespace-nowrap bg-violet-500/15 text-violet-300 border-violet-500/40"
+                  title={(s.ood_reasons || []).join('; ') || 'Outside validated terrain support'}
+                >
+                  OOD — caution, not confirmed low risk
+                </span>
+              )}
+            </div>
             <div className="min-w-0 flex-1">
               <div className="text-[11px] text-mine-muted">
                 {s.reasons.join(' · ')}

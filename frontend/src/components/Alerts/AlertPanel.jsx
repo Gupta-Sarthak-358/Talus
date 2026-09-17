@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTalusContext } from '../../context/TalusContext';
-import { Bell, ShieldAlert, AlertTriangle, CheckCircle2, X, ExternalLink, Filter, Globe, Send, Radio } from 'lucide-react';
+import { translations } from '../../i18n/translations';
+import { Bell, ShieldAlert, AlertTriangle, CheckCircle2, X, ExternalLink, Filter, Globe, Send, Radio, Edit3 } from 'lucide-react';
 
 export default function AlertPanel() {
   const {
@@ -23,6 +24,7 @@ export default function AlertPanel() {
   const [dispatchSent, setDispatchSent] = useState(null);
   const [dispatchChannel, setDispatchChannel] = useState('app');
   const [smsLog, setSmsLog] = useState(null);
+  const [customMessage, setCustomMessage] = useState('');
 
   if (!isAlertsDrawerOpen) return null;
 
@@ -34,16 +36,18 @@ export default function AlertPanel() {
   const handleDispatch = async () => {
     setDispatching(true);
     try {
+      const textToSend = customMessage.trim() || selectedMessage.text;
       if (dispatchChannel==='cbe') {
         const { apiRequest } = await import('../../services/api');
-        const res = await apiRequest('/alerts/cbe', { method:'POST', body: JSON.stringify({area:'S1', message:{[activeLang]: selectedMessage.text}, severity:'Severe'}) });
+        const res = await apiRequest('/alerts/cbe', { method:'POST', body: JSON.stringify({area:'S1', message:{[activeLang]: textToSend}, severity:'Severe'}) });
         setDispatchSent({...res, channel:'CB', simulated: res.simulated});
         setTimeout(() => setDispatchSent(null), 6000);
         return;
       }
-      const res = await dispatchAlertFixture({ channel: dispatchChannel, lang: activeLang });
+      const res = await dispatchAlertFixture({ channel: dispatchChannel, lang: activeLang, message: customMessage.trim() || undefined });
       setDispatchSent(res);
       setTimeout(() => setDispatchSent(null), 6000);
+      if (customMessage.trim()) setCustomMessage('');
       if (dispatchChannel==='sms') {
         try { const { getDispatchLog } = await import('../../services/alerts'); const l=await getDispatchLog(5); setSmsLog(l.entries||[]); } catch {}
       }
@@ -52,8 +56,10 @@ export default function AlertPanel() {
     }
   };
 
-  const selectedMessage = alertDispatchData?.messages?.find((m) => m.lang === activeLang) ||
-    alertDispatchData?.messages?.[0] || { lang: 'en', text: t('alerts.fallback') };
+  const previewT = (k) => (translations[activeLang]||translations.en)[k] || t(k);
+  const fallbackByLang = (translations[activeLang]||translations.en)['alerts.fallback'] || t('alerts.fallback');
+  const fixtureText = alertDispatchData?.messages?.find((m) => m.lang === activeLang)?.text || alertDispatchData?.messages?.[0]?.text || fallbackByLang;
+  const selectedMessage = { lang: activeLang, text: customMessage.trim() ? customMessage : fixtureText };
 
   return (
     <div className="fixed inset-0 z-[2000] flex justify-end bg-black/40 backdrop-blur-sm transition-opacity">
@@ -129,17 +135,25 @@ export default function AlertPanel() {
             </div>
           )}
 
-          {/* Active Language Preview Message */}
-          <div className="p-3 bg-mine-card rounded-xl border border-risk-critical/30 space-y-1.5">
+          {/* Active Language Preview Message — writable broadcast */}
+          <div className="p-3 bg-mine-card rounded-xl border border-risk-critical/30 space-y-2">
             <div className="flex items-center justify-between text-[10px] text-mine-muted font-mono">
               <span className="text-risk-critical font-bold uppercase">
-                {activeLang === 'en' ? t('alerts.englishBroadcast') : activeLang === 'hi' ? t('alerts.hindiBroadcast') : activeLang === 'ne' ? t('alerts.nepaliBroadcast') : activeLang === 'as' ? 'অসমীয়া সম্প্ৰচাৰ' : 'বাংলা সম্প্রচার'}
+                {activeLang === 'en' ? previewT('alerts.englishBroadcast') : activeLang === 'hi' ? previewT('alerts.hindiBroadcast') : activeLang === 'ne' ? previewT('alerts.nepaliBroadcast') : activeLang === 'as' ? previewT('alerts.assameseBroadcast') : previewT('alerts.bengaliBroadcast')}
               </span>
-              <span>{t('alerts.trigger')}</span>
+              <span>{previewT('alerts.trigger')}</span>
             </div>
+            <textarea
+              value={customMessage}
+              onChange={(e)=>setCustomMessage(e.target.value)}
+              placeholder={fixtureText}
+              rows={2}
+              className="w-full px-2.5 py-2 bg-mine-darker border border-mine-border rounded-lg text-xs text-mine-text placeholder:text-mine-muted focus:outline-none focus:border-talus-500 resize-none"
+            />
             <p className="text-xs text-mine-text font-medium leading-relaxed">
               "{selectedMessage.text}"
             </p>
+            <p className="text-[11px] text-mine-muted flex items-center gap-1"><Edit3 className="w-3 h-3" /> Write your broadcast above — authorities only. Leave empty to use fixture.</p>
           </div>
 
           {/* CB badge + QR — judge scans phone, sees EN/HI/NE/AS/BN in 2 sec */}
@@ -169,17 +183,21 @@ export default function AlertPanel() {
             <span className="text-mine-muted text-[11px]">{t('alerts.filterActive')}</span>
           </div>
           <div className="flex gap-1">
-            {['ALL', 'CRITICAL', 'HIGH'].map((sev) => (
+            {[
+              ['ALL', t('alerts.all')],
+              ['CRITICAL', t('alerts.critical')],
+              ['HIGH', t('alerts.high')],
+            ].map(([key, label]) => (
               <button
-                key={sev}
-                onClick={() => setFilterSeverity(sev)}
+                key={key}
+                onClick={() => setFilterSeverity(key)}
                 className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-all ${
-                  filterSeverity === sev
+                  filterSeverity === key
                     ? 'bg-talus-600 text-white shadow-sm'
                     : 'text-mine-muted hover:text-mine-text'
                 }`}
               >
-                {sev}
+                {label}
               </button>
             ))}
           </div>
@@ -217,7 +235,7 @@ export default function AlertPanel() {
                             : 'bg-risk-moderate/15 text-risk-moderate border border-risk-moderate/30'
                         }`}
                       >
-                        {alert.severity}
+                        {alert.severity === 'CRITICAL' ? t('alerts.critical') : alert.severity === 'HIGH' ? t('alerts.high') : alert.severity}
                       </span>
                       <span className="text-[11px] text-mine-muted font-mono">{alert.timestamp}</span>
                     </div>

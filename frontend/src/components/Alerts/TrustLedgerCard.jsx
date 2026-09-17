@@ -15,9 +15,15 @@ export default function TrustLedgerCard() {
 
   useEffect(() => {
     let stop = false;
-    apiRequest('/replay/series')
-      .then((b) => { if (!stop) { setLedger(b.ledger); setOffline(false); } })
-      .catch(() => { if (!stop) setOffline(true); });
+    // Trust ledger v2 (Warning | Lead | Exposure | Support | Result, incl. OOD row);
+    // falls back to the legacy replay-series ledger when the bundle is absent.
+    apiRequest('/trust/ledger')
+      .then((b) => { if (!stop) { setLedger(b.ledger || []); setOffline(false); } })
+      .catch(() => {
+        apiRequest('/replay/series')
+          .then((b) => { if (!stop) { setLedger(b.ledger); setOffline(false); } })
+          .catch(() => { if (!stop) setOffline(true); });
+      });
     return () => { stop = true; };
   }, []);
 
@@ -29,8 +35,11 @@ export default function TrustLedgerCard() {
     ) : null;
   }
 
-  const detected = ledger.filter((L) => L.lead_high_days != null && L.lead_high_days >= 0);
-  const leads = detected.map((L) => L.lead_high_days).sort((a, b) => a - b);
+  const v2 = ledger.length > 0 && ledger[0].warning !== undefined;
+  const detected = ledger.filter((L) =>
+    v2 ? L.result.startsWith('Event') : (L.lead_high_days != null && L.lead_high_days >= 0));
+  const leads = (v2 ? detected.map((L) => L.lead_days).filter((x) => x != null)
+                    : detected.map((L) => L.lead_high_days)).sort((a, b) => a - b);
   const median = leads.length % 2
     ? leads[Math.floor(leads.length / 2)]
     : Math.round((leads[leads.length / 2 - 1] + leads[leads.length / 2]) / 2);
@@ -52,8 +61,8 @@ export default function TrustLedgerCard() {
           <div className="text-[10px] text-mine-muted">median High-warning lead time</div>
         </div>
         <div>
-          <div className="text-xl font-bold font-mono text-mine-text">{Math.min(...leads)}d</div>
-          <div className="text-[10px] text-mine-muted">shortest lead (Sichey 2021)</div>
+          <div className="text-xl font-bold font-mono text-mine-text">{leads.length ? `${Math.min(...leads)}d` : '—'}</div>
+          <div className="text-[10px] text-mine-muted">shortest detected lead</div>
         </div>
         <div>
           <div className="text-xl font-bold font-mono text-mine-text">{early}</div>
@@ -65,18 +74,42 @@ export default function TrustLedgerCard() {
           <thead>
             <tr className="text-left text-mine-muted border-b border-mine-border">
               <th className="py-1 pr-2">event</th>
-              <th className="py-1 pr-2">first High</th>
-              <th className="py-1 pr-2">lead</th>
-              <th className="py-1">first Critical</th>
+              {v2 ? (
+                <>
+                  <th className="py-1 pr-2">warning</th>
+                  <th className="py-1 pr-2">lead</th>
+                  <th className="py-1 pr-2">exposure</th>
+                  <th className="py-1 pr-2">support</th>
+                  <th className="py-1">result</th>
+                </>
+              ) : (
+                <>
+                  <th className="py-1 pr-2">first High</th>
+                  <th className="py-1 pr-2">lead</th>
+                  <th className="py-1">first Critical</th>
+                </>
+              )}
             </tr>
           </thead>
           <tbody>
             {ledger.map((L) => (
-              <tr key={L.id} className="border-b border-mine-border/50 text-mine-muted">
+              <tr key={L.id} className={`border-b border-mine-border/50 ${L.support && L.support.startsWith('OUT') ? 'bg-violet-500/10 text-violet-200' : 'text-mine-muted'}`}>
                 <td className="py-1 pr-2 font-mono">{L.id}</td>
-                <td className="py-1 pr-2 font-mono">{L.first_high || '—'}</td>
-                <td className="py-1 pr-2 font-mono">{L.lead_high_days != null ? `${L.lead_high_days}d` : 'missed'}</td>
-                <td className="py-1 font-mono">{L.first_critical || '—'}</td>
+                {v2 ? (
+                  <>
+                    <td className="py-1 pr-2 font-mono">{L.warning}</td>
+                    <td className="py-1 pr-2 font-mono">{L.lead_days != null ? `${L.lead_days}d` : '—'}</td>
+                    <td className="py-1 pr-2">{L.exposure}</td>
+                    <td className="py-1 pr-2">{L.support}</td>
+                    <td className="py-1 font-semibold">{L.result}</td>
+                  </>
+                ) : (
+                  <>
+                    <td className="py-1 pr-2 font-mono">{L.first_high || '—'}</td>
+                    <td className="py-1 pr-2 font-mono">{L.lead_high_days != null ? `${L.lead_high_days}d` : 'missed'}</td>
+                    <td className="py-1 font-mono">{L.first_critical || '—'}</td>
+                  </>
+                )}
               </tr>
             ))}
           </tbody>

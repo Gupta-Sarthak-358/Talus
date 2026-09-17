@@ -147,10 +147,15 @@ class Sih26001Live:
             p_real = min(max(float(p_real), 0.0), 1.0)
             score = int(round(p * 100))
             from . import model_service
+            from . import support as _support
+            ood = _support.check(row)
             return {"score": score, "confidence": round(cal, 3),
                     "confidence_real_1pct": round(p_real, 4),
                     "band": model_service.band_for_score(score),
-                    "raw_proba": round(p, 4)}
+                    "raw_proba": round(p, 4),
+                    "ood": ood["ood"], "ood_reasons": ood["ood_reasons"],
+                    "probability_status": ("uncalibrated-ood" if ood["ood"]
+                                           else "calibrated")}
         except Exception:
             return None
 

@@ -242,16 +242,314 @@ now reaches full 764-pair coverage with matched SMDs elev −0.125 / road −0.0
 stable, as intended — the cleanup made the evaluation harder to fool, not prettier.
 No specialists retrained here by design.
 
-## FROZEN predictive architecture (E12 decision)
+## FROZEN predictive architecture (E12 decision, E14 collapse applied)
 
-Shared global backbone (north/general) + South specialist branch (Darjeeling/south).
-No north specialist, no ensembles, no model zoo. The retired hypothesis
-("one global scorer + only local thresholds") is superseded by evidence:
-regional specialization earned its branch across 5 seeds × 2 families.
-Production family (RF vs XGB) is a separate later decision. Next: E13
-calibration of the surviving architecture (regional, held-out) → E14 candidate
-warning bands vs recall/false-alarms/lead-time → E15 temporal replay on the
-frozen inference pipeline.
+E12 adopted a South specialist branch; E14 tested it operationally and the
+pre-registered rule fired COLLAPSE (1/5 RF, 2/5 XGB, trigger-happy FAR).
+Final: **one global scorer + regional calibration + regional warning policy**.
+No specialists, no ensembles, no model zoo. The E12 predictive edge is preserved
+in the record as protocol-sensitive evidence, not as architecture. Production
+family (RF vs XGB) remains a separate later decision. Next: E15 temporal replay
+on the frozen inference pipeline, then championship evaluation.
+
+## E13 strict regional calibration (run 2026-09-17)
+
+`scripts/e13_calibration.py`, `runs/e13.json`. Per branch, 5 seeds, 60/20/20
+spatial cluster splits (train/calib/test); isotonic on out-of-sample calib
+predictions; untouched test; reliability bins saved. Pool n=4590 (E1.5b+E1.5c).
+
+Mean over seeds, south test (RF): raw Brier 0.234/0.224 (G/S) → cal 0.163/0.169;
+ECE 0.249/0.227 → 0.071/0.075. North: Brier 0.184 → 0.170/0.153, ECE 0.181 → 0.147.
+XGB same pattern. **Probability validity: YES** — calibration transforms
+uninterpretable scores into usable probabilities on both branches.
+PR-AUC dips slightly post-isotonic (step artifacts, expected); sens50 jumps
+(0.40–0.53 → 0.84–0.93) because 0.5 means something different after calibration —
+raw sens50 is not an operational metric, E14 sets thresholds on calibrated outputs.
+
+**Tension recorded honestly:** under E13's 60/20/20 protocol the specialist edge
+does NOT replicate — RF south raw PR global 0.8616 vs specialist 0.8586 (tie),
+XGB favors global (0.8863 vs 0.8664); post-calibration all four south configs
+converge (Brier 0.16–0.18, ECE 0.05–0.10). E13 trains global on less data and
+tests smaller cluster sets than E12's complementary-half protocol, so this
+tempers rather than overturns the freeze — but the branch advantage is
+protocol-sensitive, and the freeze now rests on E12 explicitly, not on consensus
+across protocols. Regional separation stands regardless: north and south need
+different calibrators (never one global curve).
+
+## E14 warning policy (run 2026-09-17 — COLLAPSE verdict)
+
+`scripts/e14_warning_policy.py`, `runs/e14.json`. Operating thresholds transferred
+from calib at recall≥0.80, applied fixed to test (5 seeds, RF500+XGB400).
+
+Applied rule: RF wins 1/5 (need ≥4), XGB agree 2/5 (need ≥3 in direction),
+road never worse. **Verdict: COLLAPSE to global + regional calibration.**
+The specialist is more trigger-happy — higher recall but substantially higher FAR
+at transferred operating points (e.g. seed 42 RF: S recall 0.964/FAR 0.566 vs G
+0.878/0.368). Matched-recall diagnostic (min FAR at recall≥0.90): RF specialist
+wins 2/5 seeds, XGB 0/5. No consistent operational edge in either family.
+
+What survives: regional calibration (E13, independent evidence), regional warning
+policy (north operates thr 0.15–0.25 vs south 0.45–0.60 — different mappings,
+not different models), road-event recall parity. The E12 predictive edge did not
+survive contact with calibrated operating points — recorded, not hidden.
+
+## E14 warning policy (PRE-REGISTERED — protocol; results above)
+
+Question: does the South specialist buy anything *operationally* after calibration?
+Compare on South test: Global+South-cal vs Specialist+South-cal across candidate
+policies `NORMAL→WATCH→ALERT→CRITICAL` on calibrated probability.
+
+Protocol (`scripts/e14_warning_policy.py`, 5 seeds, frozen E1.5b+E1.5c pool):
+60/20/20 spatial cluster splits per region (same construction as E13); operating
+threshold = smallest threshold with calib-positive recall ≥0.80, transferred
+fixed to test; plus full 0.05–0.95 sweep curves on test (diagnostic only).
+Lead-time/seasonal-burden/transitions are NOT measurable cross-sectionally —
+they belong to E15 (`replay_series.json`: causality/cases/ledger present).
+
+Metrics per policy: event recall, missed count, false-alarm rate (+ per-1000-slope
+burden), precision, road-event recall (dist<200m), alert-days proxy (fraction
+flagged). North reported for completeness (global only, no north specialist exists).
+
+DECISION RULE (locked before running): keep the South specialist branch iff, at
+calib-transferred R80 operating points on South test, its false-alarm rate is
+lower than Global+South-cal by ≥0.02 absolute in ≥4/5 seeds (RF500 primary; XGB400
+must agree in direction), with no worse road-event recall. Otherwise collapse to
+global + regional calibration. No post-hoc metric shopping.
+
+## E15 frozen-system replay + incident interrogation (run 2026-09-17)
+
+`scripts/e15_replay_audit.py` (`runs/e15.json`) + `scripts/e15_incident_replay.py`
+(`runs/e15_incidents.json`). Required rebuild first: the committed replay was
+scored with Sept-15 weights, current prod weights are the Sept-17 retrain —
+replaying stale scores would test a dead system. Rebuilt with current weights
+(plus wound-schema fix: `recent_disturbance=0` const, E8).
+
+Ledger, independently recomputed (5/5 match committed):
+
+| Case | first High (lead) | first Critical | burden (hot/31d) |
+|---|---|---|---|
+| mangan-jun2024 | Jun-10 (3d) | Jun-11 | 4/31 |
+| dipudara-aug2024 | Jul-21 (30d) | — | 19/31, 1 early episode (precursor slides = life-saving evacuation, not false) |
+| lumsay-jun2022 | Jun-03 (27d) | Jun-08 | 28/31, month-fuzzy date |
+| sichey-jun2021 | Jun-01 (7d) | — | 6/31, date-fuzzy ±days |
+| nh10-oct2022 | Sep-13 (26d) | Sep-14 | 27/31 |
+
+Leakage audit: rain 3/3 exact vs IMD archive, trailing-only ✓; NDVI all 5 scenes
+pre-event ✓; soil daily ✓ for 2024 cases but **anachronistic quasi-static
+(2024 window) for 2021/22 cases** — impact bounded (soil perm ~0.0001), fix is
+backfilling v09.2 dailies; **analogues 5/5 were training positives (two at 0m)**
+→ lead times are optimistic upper bounds, not generalisation evidence;
+**seismic ref-after-event 1/5** (sichey T0110 ref 2025 > 2021 event).
+Exposure join: 2/5 covered (sichey→S2 runout, 85 homes at 185m — the E9 story
+live; lumsay→S3, 1 home) — runout spans Gangtok demo slopes only; 3/5 replay
+sites have no exposure coverage yet.
+Burden warning: lumsay 28/31 and nh10 27/31 hot days is the enthusiastic-widget
+failure mode in miniature — monsoon-season susceptibility stays hot, so only the
+exposure/decision layer (E9/E14) can prevent warning fatigue. Off-season burden
+unmeasured (all windows are pre-event).
+
+Verdict: the frozen system moves before events (5/5 flagged, multi-day leads,
+ledger verified, rain exact) but E15 does NOT validate deployment. Championship
+needs: held-out analogues, backfilled soil, off-season burden windows, dated
+Darjeeling events. Replay machinery itself is now verified and current-weight.
+
+### E15 incident tiers (frozen pipeline: prod RF + regional iso + regime-matched policy)
+
+- Tier-1 (5 dated cases, daily T−30..T, inputs ≤T): first ALERT mangan 3d /
+  dipudara 30d / lumsay 27d / sichey 7d / nh10 26d before events; trajectories +
+  cards in `runs/e15_incidents.json`. Matches audit ledger exactly.
+- Tier-2 (746 dated positives, event-year points, IN-SAMPLE): recall WATCH 0.916 /
+  ALERT 0.787 / CRITICAL 0.685; south ALERT 0.836 vs north 0.566; road-event
+  recall recorded per region. Ceiling metric, not generalisation.
+- Tier-B (60 background × 31 monsoon days): 28/60 windows any-alert, mean 5.8
+  hot-days — the measured false-warning burden both E14 and the dashboard must
+  carry openly.
+
+KEY FINDING — regime mismatch: policy cutoffs derived on peak-anchored pool rows
+collapse on daily-trailing rows (ALERT 0.9/0.95, Tier-1 nearly silent), because
+the training target (season-peak proxy) and the operating regime (daily trailing)
+live on different score scales. Thresholds do not transfer across regimes:
+E14 policy governs matrix-regime decisions; daily replay keeps the band system
+until a daily-resolved calibration exists. Recorded as a constraint, not a bugfix.
+
+## E15 historical incident replay (PRE-REGISTERED — not yet run)
+
+Frozen pipeline under interrogation (no training, no threshold tuning here):
+prod RF weights (`sih26001_rf_v1.joblib`) + E13-protocol regional isotonic refit
+(deterministic seed 42, corrected-pool calib partitions) + policy cutoffs derived
+once on calib: WATCH = calib recall≥0.95, ALERT = R80 operating point,
+CRITICAL = calib precision≥0.80 (fallback 0.80 if unachievable — recorded).
+
+- Tier-1 (daily T−30..T): 5 dated cases (2 fuzzy-flagged). Full trajectories +
+  incident cards. Inputs strictly ≤T (trailing IMD, same/prior-day soil, pre-event
+  S2, static analogue; 2021/22 soil anachronism carried from audit).
+- Tier-2 (all 746 dated positives, 638 Darjeeling): event-year point replay,
+  IN-SAMPLE labeled (training rows). Recall-at-state only, never generalisation.
+- Tier-B (background burden): 60 BG windows (30 S incl. new negatives, 30 N) ×
+  31 monsoon days, same pipeline. False-warning burden + hot-day fractions.
+
+Stratify: N/S, road<200m, monsoon/non-monsoon. Outputs: per-incident trajectories,
+first WATCH/ALERT/CRITICAL + leads, misses, burden, exposure-at-warning,
+`runs/e15_incidents.json` (+ calibrator arrays for dashboard).
+E15 carries no architecture gate — verdict is the ledger. Verdict criteria:
+system survives iff Tier-1 exact-date cases all reach ≥ALERT before T with
+documented leads AND Tier-B burden stays discussable (hot-day frac reported,
+not hidden); else the failure mode (misses vs burden) names the next work.
+
+## E16 daily-regime calibration + held-out census (PRE-REGISTERED — not yet run)
+
+Census (`runs/e16_census.json`): 818 held-out positives, ALL West Bengal plains
+(Darjeeling 509 + Jalpaiguri 309, lat 26.69–27.0), 734 dated 1965–2016, zero in
+DEM tile, all IMD years present. Different geomorphic regime (Terai/plains) —
+usable only as flagged out-of-regime test, never as hills validation.
+
+Protocol (`scripts/e16_daily_calibration.py`): daily population = exact-date event
+days (label 1, n reported, fuzzy excluded from fit) + Tier-B background days
+(label 0); fit isotonic AND Platt (logistic — pre-registered as the stable
+candidate at tiny-n); leave-one-event-out comparison; Tier-1 redo with cleaned
+inputs (soil backfill via v09.2 dailies where files exist, seismic ref=event year);
+Tier-B redo; E16c pilot = 10 northernmost held-out events, per-feature pedigree
+flags (REAL/PROXY/imputed), event-year-point replay, regime flag.
+E16 carries no architecture gate. Success = daily-calibrated Tier-1 reaches
+≥ALERT with sane (non-degenerate) thresholds + burden re-measured + held-out
+pilot runs with pedigree recorded.
+
+## E16 daily-regime calibration + held-out census (run 2026-09-17)
+
+Census (`runs/e16_census.json`): 818 held-out positives, ALL West Bengal plains
+(Darjeeling 509 + Jalpaiguri 309), 734 dated 1965–2016, zero in DEM tile —
+different regime, flagged out-of-regime test only.
+
+Daily population: 4 exact-date event days + 1860 background days.
+LOO-event: iso Brier 0.0002 vs raw 0.0765 — vacuous at n=4 (predict-zero nearly
+wins at 0.2% prevalence); Platt collapses flat (max 0.008). **Daily-regime
+calibration is DATA-blocked, not method-blocked**: iso overfits to steps
+(Tier-1 event days 1.0/1.0/0.03/0.0/0.03 — misses 3/5 incl. exact nh10),
+Platt to base rate. Tier-B redo under daily-iso (0/60) is over-conservatism,
+not good news. Required: exact-date mining to ~30–50 positives; until then NO
+daily-calibrated policy — daily replay keeps bands, E14 matrix policy stands.
+Methodology itself works (soil backfill via v09.2 dailies, seismic ref=event-year
+fix, LOO machinery ready). Raw Tier-1 peaks 0.69–0.91 confirm ranking survives;
+only the probability mapping is missing.
+
+E16c pilot (`runs/e16c.json`): 10 northernmost held-out events, dynamic-only
+(IMD/soil/seismic local; terrain/optical/OSM queued with tile spec): eff median
+725.7 vs DARJ 527, 10/10 above — plausibility signal with coarse-cell caveat
+(neighbors share 0.25° cells: ~5 independent cell-years).
+
+### E16c full held-out MODEL replay — terrain the model never trained on (run 2026-09-17)
+
+`scripts/e16c_extract.py` + `scripts/e16c_score.py`, `runs/e16c_features.csv` +
+`runs/e16c_full.json`. All 10 got REAL full rows: Copernicus GLO-30 (N26E088+N26E089)
+elev/slope + grafted repo-hydro TWI/SPI/drain, IMD event-year peaks, v09.2 soil
+windows, WC LULC, per-point Overpass geometry distances (10/10, cached+recorded),
+seismic ref=event year, NDVI median-impute + flag. Result: **0/10 band≥High, 1/10
+E14-op** vs Tier-2 south 0.836 — mechanism diagnosed: raw probs 0.49–0.83 (median
+~0.64) vs train-pos 0.97, i.e. the model discounts plains terrain below its
+experience (several points 226–382m vs train-pos p10=447; 4/10 road distances below
+train-pos p1); the south isotonic then crushes mid-raw to ~0 because raw 0.5–0.8
+is negative territory in its calibration population — calibrated outputs are
+overconfident-LOW out-of-regime. Boundary drawn: hills model does not cover
+Terai/plains physics; OOD inputs need an OOD flag or calibration floor, not silent
+zeros. The 818-event census stands as the population for that future work.
+
+## E16 wrap: Track A audit + regime-tagged warnings (run 2026-09-17)
+
+Track A (`runs/trackA_date_audit.json`): 2181 year-or-undated + 57 month-year PDF
++ 36 year-only + 12 undated + 4 exact news-anchored. Gap to 30 exact: 26 events
+needing news/Govt/DHM cross-ref. Inclusion filter locked: exact date + supported
+geography + feature coverage + pre-event daily inputs; fuzzy stays replay-only.
+818-event census reframed: out-of-regime geographic transfer population (WB plains),
+never hills validation.
+
+E16c full replay stands as the first out-of-regime transfer test (0/10 with
+diagnosed mechanism, not a silent miss).
+
+Trust feature shipped: `GET /api/warning/state` states now carry `confidence`,
+`probability_status: calibrated`, `probability_regime: matrix`, `scoring`
+(live-rf/fixture) and a `regime_note` stating daily-trailing scores are
+ranking-only pending exact-date events (`backend/app/main.py:warning_state`,
+19 tests green). The system now declares which numbers are probabilities.
+
+Hierarchy going forward: E1–E10 data/leakage → E1.5 sampling correction → E12
+branch test → E13 regional calibration → E14 policy collapse → E15 replay
+machinery → E16 daily-calibration feasibility + transfer test → championship
+(exact-date mining → held-out analogues → off-season burden → dated Darjeeling).
+No new model architectures: RF/XGB/ensembles/neural would be procrastination.
+
+## E16d OOD boundary + shipped guardrail (run 2026-09-17)
+
+`scripts/e16d_ood_boundary.py`, `runs/e16d.json`,
+`data/sih26001/evidence/feature_support.json`, `backend/app/support.py`,
+`backend/tests/test_ood.py` (8 tests). Distances vs p_raw: kNN5 Spearman −0.61,
+Mahalanobis −0.64 — farther from support scores lower, measured.
+Rule process: pre-registered ≥2-any-feature FAILED validation (Tier-1 analogues
+flagged 0.40 — monsoon rain extremes must never trigger abstention) and was
+rejected in favor of terrain-only OOB≥1: heldout 0.60 / tier1 0.00 / trainpos
+0.07. All 6 OOD-driven silent-low held-out rows fire; remaining 4 are in-support
+model misses (honest false negatives, same class as any other).
+Shipped invariant: any terrain-OOB row gets `ood:true` + `probability_status:
+uncalibrated-ood` + reasons (`score_row`, warning states); warnings never
+suppressed, values never invented, S1-style extremes get a truthful caveat.
+
+System invariant: **calibration must never silently convert OOD outputs into
+confident low-risk probabilities.** Dashboard contract: `RISK: low calibrated
+probability` only in-support; else `MODEL SUPPORT: outside validated regime /
+CONFIDENCE: limited / REASON: <features>` — "I don't know" is a valid output.
+818 WB-plains census formalized as the **out-of-regime transfer benchmark**
+(population, not validation). Championship claims split: (1) in-domain detection,
+(2) daily calibration NOT supported (n=4), (3) geographic transfer FAILS on
+tested plains (mechanism: terrain discount + calibrator burial, both recorded).
+
+## Phase IV: championship tracks (opened 2026-09-17)
+
+Shipped this run: Trust Ledger v2 (`GET /api/trust/ledger`, 6 rows incl. OOD
+contrast row; `TrustLedgerCard` renders Warning|Lead|Exposure|Support|Result with
+legacy fallback; backend test `test_trust_ledger.py`), Sichey incident bundle
+(`incident_sichey.json`: trajectory + 85-home exposure + decision), OOD badge in
+`WarningStateCard` (frontend build green), Track-A tracker (81 rows: 78 month-hint
++ 3 mined-exact — 2015-07-01 Darjeeling disaster, 2015-07-09 NH10, 2021-10-20 NH10;
+exact-date pool now 7). Mining pilot proved feasible (convergent multi-source dates).
+Track-A target: 30 exact (gap 23). Note: mined events may sit near training points
+geographically — their contribution is new exact DATES, which is what daily
+calibration lacks.
+
+Four scorecards for the final page (not one leaderboard): (1) predictive validity
+(spatial/hard/temporal AUC, Brier, ECE); (2) historical warning performance
+(recall, leads, misses); (3) warning burden (false alerts, hot days, seasonal split);
+(4) trust/domain validity (OOD detection, calibration coverage, support flags,
+freshness). Frozen: no new architectures, no plains model to rescue 10 cases, no
+threshold tuning on replay cases, Tier-2/in-sample never presented as validation,
+0/10 never hidden.
+
+## Phase IV opened (2026-09-17): evidence before intelligence
+
+Track A (`trackA_candidates.csv`, 90 rows; `championship_events_v1.csv` DRAFT, 7 rows,
+UNFROZEN until 30): 7 exact (4 seed + 3 mined: 2015-07-01
+Darjeeling 36–38 dead multi-source, 2015-07-09 NH10, 2021-10-20 NH10 multi-source),
+Mining pass 1 ingested (`trackA_mining1.py`): DipuDara-20240820 was ALREADY pooled
+(peer-reviewed paper = corroboration, not a new sample); Mangan-20240613 episode-tagged
+as ONE sample for its multi-slide cluster; Majwa-20240610 duplicate-guarded;
+Meghalaya/Assam trio (2022-06-09/14/17, dual-source exact) auto-failed contam_geo and sit
+in a transfer cohort, not the championship; Pubung-20190708 provisional at the domain
+edge (0.01deg S of box). Eligibility computed False/True by rule: pool stays 7, honestly.
+78 month-hint with priority (A/B/C), source tiers, precision statuses
+(EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
+automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;
+mined rows pass). Gap to 30 exact: 23. Mining pilot proved feasible — convergent
+multi-source dates, no lonely-webpage assertions.
+Trust Ledger v2 live (`GET /api/trust/ledger`, 6 rows incl. OOD contrast;
+`TrustLedgerCard` renders Warning|Lead|Exposure|Support|Result). Sichey bundle
+(`incident_sichey.json`) + OOD badge in `WarningStateCard` (build green).
+Off-season burden (`runs/burden_offseason.json`): 0/60 windows any-hot, mean 0.0
+hot-days vs monsoon 28/60 and 5.8 — seasonal separation measured, not assumed.
+0/10 framing (locked): out-of-regime transfer test with diagnosed mechanism
+(terrain-support mismatch + calibrator extrapolation) and shipped OOD guard —
+failure analysis, never a headline metric.
+Four scorecards for the final page: predictive validity / warning performance /
+warning burden / trust-domain. E17 frozen until championship evidence demands a
+specific regime-aware-routing question. No new architectures, no plains model to
+rescue 10 cases, no replay-tuned thresholds, Tier-2 never as validation.
 
 ## Implementation order (frozen)
 

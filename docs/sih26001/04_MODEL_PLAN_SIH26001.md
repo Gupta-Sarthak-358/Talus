@@ -28,18 +28,18 @@ Published NER evidence (research §7.5, §10.1):
 
 **Plan executed:** RF + XGBoost stared (mirrors v1's multi-family habit), LGBM as third family, no ensemble (best single XGB 0.9418 wins). LR mandatory dumb baseline beaten (0.9338 vs 0.8914). Wound appended as rare feature 4/2936, then **REMOVED from X per E8** (no measurable signal; rebuild as disturbance score later, test on road-event recall).
 
-## 8. Frozen predictive architecture (E12, 2026-09-17 — supersedes any single-model text above)
+## 8. Frozen predictive architecture (E12 decision + E14 collapse, 2026-09-17)
 
-Shared global backbone (north/general) + South specialist branch (Darjeeling/south).
-Evidence: 5 repeated spatial seeds × RF500/XGB400, held-out hard negatives, PR-AUC
-primary — south specialist ΔPR +0.041 (RF) / +0.044 (XGB), all seeds positive;
-north specialist loses (0.913 vs 0.960 global); ensembles lose pooled. Full record:
-`docs/sih26001/EXPERIMENTS_E_LADDER.md` (E12) + `scripts/e12_south_confirmation.py` +
-`runs/e12.json`. Leaderboard: easy-background OOF 0.9339 · hard-negative stress
-0.7804 · corrected pooled 0.8950 · matched pooled 0.8478 · temporal 0.8578.
-Production family (RF vs XGB) is a separate later decision. Next: E13 regional
-calibration → E14 candidate bands → E15 replay. No new features until E1.5c clears
-(done: north top-up 540, matched road SMD −0.039).
+E12 found a South specialist edge (5 seeds × RF500/XGB400, ΔPR +0.041/+0.044);
+E14 tested it operationally (calib-transferred R80 operating points) and the
+pre-registered rule fired COLLAPSE (RF 1/5, XGB agree 2/5 — specialist higher
+recall but substantially higher FAR; matched-recall diagnostic RF 2/5, XGB 0/5).
+Final: **one global scorer + regional calibration + regional warning policy**
+— no specialists, no ensembles. Full record: `EXPERIMENTS_E_LADDER.md`
+(E12/E14) + `scripts/e12_south_confirmation.py` + `scripts/e14_warning_policy.py`.
+Leaderboard: easy-background OOF 0.9339 · hard-negative stress 0.7804 · corrected
+pooled 0.8950 · matched pooled 0.8478 · temporal 0.8578. Production family (RF vs
+XGB) is a separate later decision. Next: E15 replay, then championship.
 
 ## 3. Validation protocol (built — verified 2025-11-14)
 

@@ -1449,6 +1449,22 @@ def runout_exposure():
     return json.loads(fp.read_text(encoding="utf-8"))
 
 
+@app.get("/api/trust/ledger")
+def trust_ledger():
+    """Trust ledger: Warning | Lead | Exposure | Data support | Result.
+
+    Separates detected / missed / unknown-out-of-regime (never one green number).
+    Committed bundle from scripts/build_trust_ledger.py.
+    """
+    fp = _FIX_DIR.parent / "evidence" / "trust_ledger.json"
+    if not fp.exists():
+        raise HTTPException(
+            status_code=404,
+            detail="No trust ledger: run scripts/build_trust_ledger.py",
+        )
+    return json.loads(fp.read_text(encoding="utf-8"))
+
+
 @app.get("/api/wounds")
 def wound_map():
     """Fresh-disturbance candidates (committed evidence bundle).
@@ -1746,11 +1762,36 @@ def warning_state(location: str = "gangtok", lang: str = "en"):
             "phones": PHONES.get(location, ""),
             "villager_explain": (next((d for d in _decisions(zid, score, lang) if d["role"]=="villager"), {}) or {}).get("message","") + f" — {band}. Follow officer, not the number." if score<85 else "EVACUATE now via valley route, avoid ridge road.",
         }
+        try:
+            from . import support as _support
+            _feats = store.features[zid]
+            _frow = _feats.model_dump() if hasattr(_feats, "model_dump") else dict(_feats)
+            _ood = _support.check(_frow)
+        except Exception:
+            _ood = {"ood": False, "ood_reasons": []}
+        if _ood["ood"]:
+            reasons.append("Outside validated terrain support ("
+                           + "; ".join(_ood["ood_reasons"])
+                           + ") — CAUTION, not confirmed low risk")
         states.append({
             "zone_id": zid,
             "state": _WARN_STATES[level],
             "score": score,
             "band": band,
+            # Trust feature (E16): the system knows which numbers are calibrated
+            # probabilities and which are ranking-only. Matrix-regime scores carry
+            # calibrated confidence; daily-trailing replay scores are bands-only
+            # until exact-date calibration data exists (no daily-calibrated policy).
+            # OOD invariant (E16d): never a silent confident low-risk outside support.
+            "ood": _ood["ood"],
+            "ood_reasons": _ood["ood_reasons"],
+            "confidence": store.confidence.get(zid),
+            "probability_status": ("uncalibrated-ood" if _ood["ood"] else "calibrated"),
+            "probability_regime": "matrix",
+            "scoring": "live-rf" if getattr(store, "live_scores", False) else "fixture",
+            "regime_note": ("Calibrated probability available (matrix regime). "
+                            "Daily-trailing scores are ranking-only: warning bands "
+                            "apply, daily probability calibration pending exact-date events."),
             "reasons": reasons,
             "action": {"message": (officer or {}).get("message", "Monitor."),
                        "priority": (officer or {}).get("priority", "normal")},

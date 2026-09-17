@@ -23,9 +23,10 @@ NGEN PIPELINE (replaces synthetic generator)
   ↓
 Feature Processing (12 demo rows ×22 cols + 2936 training)
   ↓
-TALUS RISK ENGINE (live or fixture fallback) — FROZEN per E12 (`EXPERIMENTS_E_LADDER.md`)
- GLOBAL backbone (north/general) + SOUTH specialist branch (Darjeeling/south);
- no north specialist, no ensembles. RF500/XGB prod parity. Family (RF vs XGB) TBD.
+TALUS RISK ENGINE (live or fixture fallback) — FROZEN per E12+E14 (`EXPERIMENTS_E_LADDER.md`)
+ ONE global scorer + regional calibration + regional warning policy (E14 collapsed
+ the South branch: no operational edge at calibrated operating points).
+ No specialists, no ensembles. RF500/XGB prod parity. Family (RF vs XGB) TBD.
   score 0–100 (frozen scaffold 89/78/66/52) + confidence + confidence_real_1pct
   → regional calibration → regional warning → hazard → exposure/risk → decision
   ↓
@@ -47,7 +48,7 @@ NER GIS Dashboard (React + Leaflet) + Admin Panel (/admin PINs) + PWA field app 
 | v1 module | v2 module | Change |
 |---|---|---|
 | Generator (physics sim) | **NGEN** (NER data pipeline) | Complete rewrite — real data (IMD 0.25°, CCI v09.2, SRTM n27_e088, WorldCover, OSM 1014/226/504) |
-| ML predictor | ML predictor | Global backbone + South specialist branch (E12 frozen, 5 seeds × RF/XGB, PR-AUC Δ+0.04 south); 2936 rows 1468+1468 + E1.5b southern top-up (experiment lane); OOF RF 0.9338 XGB 0.9418, temporal Brier 0.0978 |
+| ML predictor | ML predictor | One global scorer + regional calibration (E14 collapsed E12 south branch: no operational FAR edge); 2936 rows 1468+1468 + E1.5b/E1.5c top-ups (experiment lane); OOF RF 0.9338 XGB 0.9418, temporal Brier 0.0978 |
 | SHAP | SHAP | Same module, live TreeSHAP top-4 `sih26001_model.py:explain_row` |
 | Calibration (isotonic) | Calibration | Same approach + Bayes prevalence correction 0.5→0.01 `GET /api/model/calib:1221` |
 | Trend / escalation | Trend + SWI + Warning | New: SWI `swi.py:14` + 6-state warning + local thresholds 385/395/410/375 |

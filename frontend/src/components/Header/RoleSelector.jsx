@@ -120,7 +120,7 @@ export default function RoleSelector() {
           </button>
         </div>
       )}
-      {loginFor && <LoginModal wantedRole={loginFor} onClose={()=>setLoginFor(null)} onSuccess={()=> setLoginFor(null)} />}
+      {loginFor && <LoginModal wantedRole={loginFor} onClose={()=>setLoginFor(null)} onSuccess={(r)=>{ const target = r==='admin' ? '/admin' : `/role/${r}`; setLoginFor(null); setIsOpen(false); setRole(r); try{ localStorage.setItem('talus_auth', JSON.stringify({role:r, at:new Date().toISOString()})); }catch{} navigate(target); }} />}
     </div>
   );
 }

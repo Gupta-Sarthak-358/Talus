@@ -1,0 +1,72 @@
+{
+ "generated": "2026-09-17T14:10:19Z",
+ "columns": [
+  "Warning",
+  "Lead",
+  "Exposure",
+  "Data support",
+  "Result"
+ ],
+ "ledger": [
+  {
+   "id": "mangan-jun2024",
+   "warning": "2024-06-10 High / 2024-06-11 Critical",
+   "lead_days": 3,
+   "exposure": "runout uncovered (demo slopes only)",
+   "support": "in-domain (analogue in training \u2014 optimistic, flagged)",
+   "result": "Event \u2014 detected",
+   "fuzzy_date": false,
+   "burden": "4/31 hot days"
+  },
+  {
+   "id": "dipudara-aug2024",
+   "warning": "2024-07-21 High",
+   "lead_days": 30,
+   "exposure": "runout uncovered (demo slopes only)",
+   "support": "in-domain (analogue in training \u2014 optimistic, flagged)",
+   "result": "Event \u2014 detected",
+   "fuzzy_date": false,
+   "burden": "19/31 hot days"
+  },
+  {
+   "id": "lumsay-jun2022",
+   "warning": "2022-06-03 High / 2022-06-08 Critical",
+   "lead_days": 27,
+   "exposure": "1 homes @ 671m (S3)",
+   "support": "in-domain (analogue in training \u2014 optimistic, flagged)",
+   "result": "Event \u2014 detected",
+   "fuzzy_date": true,
+   "burden": "28/31 hot days"
+  },
+  {
+   "id": "sichey-jun2021",
+   "warning": "2021-06-01 High",
+   "lead_days": 7,
+   "exposure": "85 homes @ 185m (S2)",
+   "support": "in-domain (analogue in training \u2014 optimistic, flagged)",
+   "result": "Event \u2014 detected",
+   "fuzzy_date": true,
+   "burden": "6/31 hot days"
+  },
+  {
+   "id": "nh10-oct2022",
+   "warning": "2022-09-13 High / 2022-09-14 Critical",
+   "lead_days": 26,
+   "exposure": "runout uncovered (demo slopes only)",
+   "support": "in-domain (analogue in training \u2014 optimistic, flagged)",
+   "result": "Event \u2014 detected",
+   "fuzzy_date": false,
+   "burden": "27/31 hot days"
+  },
+  {
+   "id": "wb-plains-pilot",
+   "warning": "none (band Very Low)",
+   "lead_days": null,
+   "exposure": "runout uncovered (out-of-regime)",
+   "support": "OUT-OF-REGIME (terrain outside learned support)",
+   "result": "Unknown \u2014 outside validated domain (OOD guard fires, no silent zero)",
+   "fuzzy_date": false,
+   "burden": "n/a (point replay, not windowed)"
+  }
+ ]
+}

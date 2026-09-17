@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-15T19:39:03Z",
+  "generated": "2026-09-17T12:28:19Z",
   "model": "ml/models/sih26001_rf_v1.joblib + isotonic (frozen bundle)",
   "bands": "<50 Very Low, <65 Low, <75 Moderate, <85 High, else Critical (backend FROZEN_BANDS)",
   "cases": [
@@ -30,19 +30,19 @@
       ],
       "first_moderate": {
         "date": "2024-06-10",
-        "score": 79.7
+        "score": 78.4
       },
       "first_high": {
         "date": "2024-06-10",
-        "score": 79.7
+        "score": 78.4
       },
       "first_critical": {
-        "date": "2024-06-13",
-        "score": 93.2
+        "date": "2024-06-11",
+        "score": 85.5
       },
       "peak": {
         "date": "2024-06-13",
-        "score": 93.2,
+        "score": 93.9,
         "band": "Critical"
       },
       "event_day": {
@@ -52,9 +52,9 @@
         "rain_30d": 553.9,
         "soil_moisture": 0.2679,
         "ndvi": 0.753,
-        "p_raw": 0.81,
-        "p_cal": 0.9315,
-        "score": 93.2,
+        "p_raw": 0.82,
+        "p_cal": 0.9388,
+        "score": 93.9,
         "band": "Critical"
       }
     },
@@ -85,11 +85,11 @@
       ],
       "first_moderate": {
         "date": "2024-07-21",
-        "score": 79.7
+        "score": 75.2
       },
       "first_high": {
         "date": "2024-07-21",
-        "score": 79.7
+        "score": 75.2
       },
       "first_critical": {
         "date": null,
@@ -97,7 +97,7 @@
       },
       "peak": {
         "date": "2024-08-19",
-        "score": 79.8,
+        "score": 78.4,
         "band": "High"
       },
       "event_day": {
@@ -107,9 +107,9 @@
         "rain_30d": 556.1,
         "soil_moisture": 0.2835,
         "ndvi": 0.852,
-        "p_raw": 0.574,
-        "p_cal": 0.7978,
-        "score": 79.8,
+        "p_raw": 0.58,
+        "p_cal": 0.7843,
+        "score": 78.4,
         "band": "High"
       }
     },
@@ -137,12 +137,12 @@
         88.5
       ],
       "first_moderate": {
-        "date": "2022-06-04",
-        "score": 79.7
+        "date": "2022-06-03",
+        "score": 75.2
       },
       "first_high": {
-        "date": "2022-06-04",
-        "score": 79.7
+        "date": "2022-06-03",
+        "score": 75.2
       },
       "first_critical": {
         "date": "2022-06-08",
@@ -160,9 +160,9 @@
         "rain_30d": 993.0,
         "soil_moisture": 0.2551,
         "ndvi": 0.271,
-        "p_raw": 0.712,
-        "p_cal": 0.8991,
-        "score": 89.9,
+        "p_raw": 0.754,
+        "p_cal": 0.9388,
+        "score": 93.9,
         "band": "Critical"
       }
     },
@@ -189,12 +189,12 @@
         88.5
       ],
       "first_moderate": {
-        "date": "2021-06-01",
-        "score": 77.1
+        "date": "2021-05-27",
+        "score": 65.3
       },
       "first_high": {
         "date": "2021-06-01",
-        "score": 77.1
+        "score": 78.4
       },
       "first_critical": {
         "date": null,
@@ -202,7 +202,7 @@
       },
       "peak": {
         "date": "2021-06-06",
-        "score": 79.8,
+        "score": 80.7,
         "band": "High"
       },
       "event_day": {
@@ -212,9 +212,9 @@
         "rain_30d": 470.2,
         "soil_moisture": 0.2365,
         "ndvi": 0.322,
-        "p_raw": 0.582,
-        "p_cal": 0.7978,
-        "score": 79.8,
+        "p_raw": 0.576,
+        "p_cal": 0.7843,
+        "score": 78.4,
         "band": "High"
       }
     },
@@ -244,20 +244,20 @@
         88.5
       ],
       "first_moderate": {
-        "date": "2022-09-11",
-        "score": 71.4
+        "date": "2022-09-13",
+        "score": 75.2
       },
       "first_high": {
-        "date": "2022-09-12",
-        "score": 77.1
+        "date": "2022-09-13",
+        "score": 75.2
       },
       "first_critical": {
         "date": "2022-09-14",
-        "score": 89.9
+        "score": 85.5
       },
       "peak": {
-        "date": "2022-09-16",
-        "score": 92.5,
+        "date": "2022-09-21",
+        "score": 93.9,
         "band": "Critical"
       },
       "event_day": {
@@ -267,9 +267,9 @@
         "rain_30d": 455.0,
         "soil_moisture": 0.2886,
         "ndvi": 0.891,
-        "p_raw": 0.62,
-        "p_cal": 0.7978,
-        "score": 79.8,
+        "p_raw": 0.602,
+        "p_cal": 0.8073,
+        "score": 80.7,
         "band": "High"
       }
     }

@@ -1,5 +1,6 @@
 import { apiRequest } from './api';
 import { getZones } from './zones';
+import { translations } from '../i18n/translations';
 
 /**
  * Risk summary + alerts — LIVE SIH26001 (real /api/zones + /api/zones/{id}/decision).
@@ -43,23 +44,26 @@ function summarize(zones) {
   };
 }
 
-export async function getAlerts() {
+export async function getAlerts(lang = 'en') {
   const { zones } = await getZones();
+  const t = (k) => (translations[lang] || translations.en)[k] || translations.en[k] || k;
   const alerts = [];
   for (const z of zones) {
     const band = bandUpper(z.risk_band);
     if (band === 'CRITICAL' || band === 'HIGH') {
       let decision = null;
       try {
-        const d = await apiRequest(`/zones/${z.id}/decision`);
+        const d = await apiRequest(`/zones/${z.id}/decision?lang=${encodeURIComponent(lang)}`);
+        // decisions are role-ordered: villager is first
         decision = d.decisions?.[0];
       } catch { /* keep alert without decision text */ }
+      const bandLabel = band === 'CRITICAL' ? t('alerts.critical') : band === 'HIGH' ? t('alerts.high') : cap(band);
       alerts.push({
-        id: `zone-${z.id}-${band.toLowerCase()}`,
+        id: `zone-${z.id}-${band.toLowerCase()}-${lang}`,
         zoneId: z.id,
         zoneName: `${z.id} — ${zoneDisplayName(z)}`,
-        title: `${cap(band)} risk detected on ${z.id} (${zoneDisplayName(z)})`,
-        summary: decision?.message || `${z.id} is ${band.toLowerCase()} risk`,
+        title: `${bandLabel} — ${z.id} (${zoneDisplayName(z)})`,
+        summary: decision?.message || t('alerts.fallback'),
         severity: band,
         action: decision?.action || 'monitor',
         drivers: [],

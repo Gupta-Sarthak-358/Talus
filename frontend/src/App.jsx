@@ -23,8 +23,8 @@ import AlertPanel from './components/Alerts/AlertPanel';
 
 export default function App() {
   return (
-    <ErrorBoundary>
-      <TalusProvider>
+    <TalusProvider>
+      <ErrorBoundary>
         <BrowserRouter>
           <Suspense fallback={<div className="max-w-[1920px] mx-auto p-6"><LoadingSkeleton lines={6} /></div>}>
             <Routes>
@@ -50,7 +50,7 @@ export default function App() {
           <ReportModal />
           <AlertPanel />
         </BrowserRouter>
-      </TalusProvider>
-    </ErrorBoundary>
+      </ErrorBoundary>
+    </TalusProvider>
   );
 }

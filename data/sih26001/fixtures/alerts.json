@@ -2,11 +2,13 @@
   "fixture": true,
   "trigger": "S1 escalated to Critical (fixture)",
   "queued": 3,
-  "languages": ["en", "hi", "ne"],
+  "languages": ["en", "hi", "ne", "as", "bn"],
   "messages": [
     { "lang": "en", "text": "LANDSLIDE ALERT (S1 Tathangchen): Critical risk for 2 days. Avoid hillside road. Follow officer instructions." },
     { "lang": "hi", "text": "भूस्खलन चेतावनी (S1): 2 दिन तक गंभीर खतरा। पहाड़ी सड़क से बचें। अधिकारी के निर्देश मानें। (फिक्सचर)" },
-    { "lang": "ne", "text": "पहिरो चेतावनी (S1): २ दिन गम्भीर जोखिम। डाँडा बाटो नजानुहोस्। अधिकारीको निर्देशन पालना गर्नुहोस्। (फिक्सचर)" }
+    { "lang": "ne", "text": "पहिरो चेतावनी (S1): २ दिन गम्भीर जोखिम। डाँडा बाटो नजानुहोस्। अधिकारीको निर्देशन पालना गर्नुहोस्। (फिक्सचर)" },
+    { "lang": "as", "text": "ভূমিস্খলন সতৰ্কবাণী (S1 তাথাংচেন): ২ দিনলৈ সংকটজনক আশংকা। পাহাৰীয়া পথ পৰিহাৰ কৰক। বিষয়াৰ নিৰ্দেশ মানক। (ফিক্সচাৰ)" },
+    { "lang": "bn", "text": "ভূমিধস সতর্কতা (S1 তাথাংচেন): ২ দিন গুরুতর ঝুঁকি। পাহাড়ি রাস্তা এড়িয়ে চলুন। কর্মকর্তার নির্দেশ মানুন। (ফিক্সচার)" }
   ],
   "offline_note": "Cached on device. Queued sync when network returns (fixture)."
 }

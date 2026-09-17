@@ -1,0 +1,121 @@
+{
+ "method": "p1-p99 terrain bands over 1468 training positives (E16d); shipped guard: >=1 TERRAIN OOB fires caution (validated 0.60 held-out / 0.00 tier1 / 0.07 trainpos; the >=2-any-feature candidate failed Tier-1 check at 0.40 and was rejected). TERRAIN excludes dynamic features: monsoon extremes must never trigger abstention.",
+ "n_pos": 1468,
+ "bands": {
+  "slope_angle": [
+   8.934,
+   51.933
+  ],
+  "elevation": [
+   249.781,
+   3701.596
+  ],
+  "aspect": [
+   4.0,
+   354.33
+  ],
+  "curvature": [
+   -0.038,
+   0.0383
+  ],
+  "twi": [
+   3.3835,
+   11.6698
+  ],
+  "spi_log": [
+   1.769,
+   9.5773
+  ],
+  "rainfall_24h_mm": [
+   57.8,
+   225.9
+  ],
+  "rainfall_7d_mm": [
+   195.7,
+   762.9
+  ],
+  "rainfall_30d_mm": [
+   356.241,
+   839.8
+  ],
+  "soil_moisture": [
+   0.1685,
+   0.3329
+  ],
+  "ndvi": [
+   0.0834,
+   0.9
+  ],
+  "distance_to_road": [
+   29.337,
+   2128.748
+  ],
+  "distance_to_river": [
+   110.937,
+   3542.33
+  ],
+  "drain_density": [
+   0.0,
+   3.59
+  ],
+  "seismic_dist_km": [
+   2.0369,
+   29.9591
+  ],
+  "seismic_n50_rate": [
+   0.0702,
+   0.2542
+  ],
+  "seismic_years_since": [
+   1.0,
+   24.0
+  ]
+ },
+ "standardizer": {
+  "mean": [
+   29.5635,
+   1284.2248,
+   177.3447,
+   0.0007,
+   5.7474,
+   4.5102,
+   108.7309,
+   339.1889,
+   582.8394,
+   0.252,
+   0.677,
+   443.4527,
+   1242.9737,
+   0.6917,
+   13.1119,
+   0.1703,
+   5.9612
+  ],
+  "std": [
+   9.0817,
+   663.0544,
+   94.1345,
+   0.0152,
+   1.745,
+   1.5947,
+   45.1738,
+   141.5091,
+   134.2225,
+   0.0404,
+   0.2013,
+   407.778,
+   784.8081,
+   1.0017,
+   6.1582,
+   0.0384,
+   6.0677
+  ]
+ },
+ "generated": "2026-09-17T13:57:36Z",
+ "shipped_rule": "terrain_oob_ge1",
+ "validated_rates": {
+  "heldout": 0.6,
+  "tier1_analogues": 0.0,
+  "trainpos_sample": 0.07
+ }
+}

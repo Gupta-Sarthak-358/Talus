@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { getZones, getZoneById } from '../services/zones';
 import { getRiskSummary, getAlerts, acknowledgeAlert } from '../services/risk';
 import { calculateRoute as fetchRoute, getRoadsStatus, defaultOriginKey } from '../services/routing';
@@ -71,13 +71,17 @@ export function TalusProvider({ children }) {
   const [simulationLoading, setSimulationLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // Corridor invalidation: switching corridors invalidates corridor-specific data (zones, roads, isolation, warning, reports filter, selectedZone)
+  const selectZoneSeq = useRef(0);
   // Location switcher — all corridors live via backend
   const switchLocation = useCallback((locId) => {
     const loc = getLocationData(locId);
     setActiveLocation(loc.id);
     const firstZone = loc.zones[0]?.id || 'S1';
     setSelectedZoneId(firstZone);
+    setSelectedZoneData(null); // invalidate old corridor detail cache immediately
     setActiveSimulation(null);
+    selectZoneSeq.current += 1; // cancel any in-flight selectZone
   }, []);
 
   // Initial Data Load — all corridors live via backend stores; backend-down
@@ -87,10 +91,10 @@ export function TalusProvider({ children }) {
     setLoading(true);
     setError(null);
     try {
-      // Live path (Gangtok + Lachung/Darjeeling via backend stores)
+      // Live path (Gangtok + Lachung/Darjeeling via backend stores) — alerts are lang-aware
       const [zonesRes, alertsRes, roadsRes, reportsRes] = await Promise.all([
         getZones(activeLocation),
-        getAlerts(),
+        getAlerts(effectiveLang),
         getRoadsStatus(activeLocation),
         getReportsQueue(),
       ]);
@@ -121,21 +125,25 @@ export function TalusProvider({ children }) {
     } finally {
       setLoading(false);
     }
-  }, [activeLocation]);
+  }, [activeLocation, lang]);
 
   useEffect(() => {
     loadInitialData();
   }, [loadInitialData]);
 
-  // Zone Selection Handler — lang-aware: decisions translate per lang (backend DECISIONS_TRANSLATIONS)
+  // Zone Selection Handler — race-guarded: stale response must not overwrite fresh selection (see PLAN §14)
   const selectZone = useCallback(async (zoneId) => {
+    const seq = ++selectZoneSeq.current;
+    const locAtStart = activeLocation;
     setSelectedZoneId(zoneId);
     setZoneLoading(true);
     try {
+      let data;
       if (activeSimulation && activeSimulation.zone_id === zoneId) {
         const base = await getZoneById(zoneId, lang);
+        if (seq !== selectZoneSeq.current || locAtStart !== activeLocation) return; // stale
         const baseObj = base.zone || base;
-        setSelectedZoneData({
+        data = {
           ...baseObj,
           risk_score: activeSimulation.risk_score,
           risk_band: activeSimulation.risk_band,
@@ -144,15 +152,18 @@ export function TalusProvider({ children }) {
           trend: activeSimulation.trend,
           isSimulated: true,
           caveat: activeSimulation.caveat,
-        });
+        };
       } else {
         const zoneRes = await getZoneById(zoneId, lang);
-        setSelectedZoneData(zoneRes.zone || zoneRes);
+        if (seq !== selectZoneSeq.current || locAtStart !== activeLocation) return; // stale B overwrote S2
+        data = zoneRes.zone || zoneRes;
       }
+      setSelectedZoneData(data);
     } catch (err) {
+      if (seq !== selectZoneSeq.current) return;
       console.error(`Error loading zone ${zoneId}:`, err);
     } finally {
-      setZoneLoading(false);
+      if (seq === selectZoneSeq.current) setZoneLoading(false);
     }
   }, [activeSimulation, activeLocation, lang]);
 
@@ -403,7 +414,17 @@ export function TalusProvider({ children }) {
 export function useTalusContext() {
   const context = useContext(TalusContext);
   if (!context) {
-    throw new Error('useTalusContext must be used within a TalusProvider');
+    // Fallback for HMR / outside-provider render — prevents hard crash, shows loading state
+    console.warn('useTalusContext outside TalusProvider — returning fallback');
+    return {
+      zones: [], reports: [], roads: [], alerts: [],
+      selectedZoneData: null, selectedZoneId: 'S1',
+      locationData: { label: 'Gangtok Corridor, Sikkim', zones: [] },
+      t: (k) => k, lang: 'en', role: 'villager',
+      setIsReportModalOpen: () => {}, setIsAlertsDrawerOpen: () => {},
+      setRole: () => {}, selectZone: () => {},
+      loading: true, zoneLoading: false, error: null,
+    };
   }
   return context;
 }

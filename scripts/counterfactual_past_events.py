@@ -186,6 +186,10 @@ def main():
             r30 = float(w.iloc[-30:].sum()) if len(w) >= 30 else float(w.sum())
             feat = {k: base[k] for k in NUMERIC if k != "spi_log"}
             feat["spi_log"] = float(np.log1p(max(base["spi"], 0)))
+            # E8: recent_disturbance REMOVED from X — constant 0 satisfies the
+            # current encoder's schema while contributing no signal (verified
+            # zero-importance; rebuild as disturbance score separately).
+            feat["recent_disturbance"] = 0.0
             feat.update({"rainfall_24h_mm": round(r24, 1), "rainfall_7d_mm": round(r7, 1),
                          "rainfall_30d_mm": round(r30, 1),
                          "soil_moisture": dsoil.get(ds_, base["soil_moisture"]) if dsoil.get(ds_) is not None else base["soil_moisture"],
