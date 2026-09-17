@@ -583,6 +583,12 @@ context added, event still single-source). Transfer 9 -> 10 (+Hlimen-20240528 Re
 houses point); Hunthar-NH6 provisional-transfer; Melthum quarry REJECTED (excavation
 site, BhaluKhola precedent); other Remal village tolls stay aggregate context.
 Mirik/Kurseong deferred on 429. Gap 13.
+Mining pass 7 (`trackA_mining8.py`): pool 17 -> 18 (+Lingchom-20200524: Tier-1 govt IPR +
+PTI + press; post-Amphan pre-monsoon). Provisionals +3 in-domain (MyongKyong-20200524,
+ManganChungthang-20200627, Apdara-20200627). Tigdo/ModiRijo gain IE+Scroll+AP.
+Oct-2025 Mirik cloudburst (20+ dead, 5+ outlets) ingested as 2 FORK rows (Soureni/Dilaram):
+in-Darjeeling-hills but south of NGEN box AND post-archive (no ind2025) -> methodology
+fork open: box-boundary vs feature-support-envelope regime definition. Gap 12.
 78 month-hint with priority (A/B/C), source tiers, precision statuses
 (EXACT_VERIFIED/MULTI_SOURCE, MONTH_CONFIRMED, YEAR_ONLY, UNDATED, REJECTED) and
 automated contamination checks (`trackA_v2.py`: geo/DEM/rain + train proximity;
