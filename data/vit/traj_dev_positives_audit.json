@@ -1,0 +1,13 @@
+{
+  "n": 793,
+  "events": 13,
+  "rows_per_event": 61,
+  "soil_missing": 86,
+  "soil_provenance": {
+    "PROXY-spatial": 445,
+    "REAL": 262,
+    "MISSING (window-absent)": 86
+  },
+  "fos_abstain": 122,
+  "gates": "all inputs timestamp<=d asserted; held-out firewall asserted; v09.2 single-version; no FILL"
+}
