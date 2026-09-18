@@ -100,6 +100,16 @@ degrades to coherence-loss itself on monsoon slopes (anticipated null stands).
 File hashes: cc f5cb39296adbb667 (4092260 B), unw 70176ed5d8147169 (14670110 B).
 Lesson: re-verify size+hash AFTER move (caught a partial-file read). Batch GO.
 
+## Extraction audit PASS (2026-09-18, still no scores)
+
+23 events × 137 pairs (048D+012A, recent/mid/baseline, secondary ≤ T−1 asserted per pair
+in code). unw coverage 132/137 (5 void: Rongey/17MILE 048D triples, 012A covers those
+events). cc mostly 10–35/255 (monsoon decorrelation); unw medians swing ±30 rad with no
+eyeball baseline→recent pattern — unwrapping/atmosphere noise dominates raw medians, which
+is why modeling must use coherence-gated trends, not medians. Mantam cross-geometry split
+(048D +0.6 rad n=3 vs 012A −4.6 rad n=121) recorded for the modeling stage. 206 files,
+54 shared across events (no duplication). Root landing zone now empty (all filed).
+
 ## Scope guard
 
 Extraction extracts. No scores, no fusion, no threshold talk until the audit
