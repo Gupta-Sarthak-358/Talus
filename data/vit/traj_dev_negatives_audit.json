@@ -1,0 +1,13 @@
+{
+  "n": 1196,
+  "n0": 793,
+  "n1": 403,
+  "soil_missing": 219,
+  "soil_provenance": {
+    "PROXY-spatial": 649,
+    "REAL": 328,
+    "MISSING (window-absent)": 219
+  },
+  "rule": "window-level clean + per-row assert below",
+  "per_row_violations": 0
+}

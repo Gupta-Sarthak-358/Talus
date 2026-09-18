@@ -1,0 +1,470 @@
+{
+  "rule": "candidate row (S,t) valid iff no calendar event within 50km of S dated in (t,t+14d]; over-exclusion is safe",
+  "n": 58,
+  "events": [
+    {
+      "slide_no": "NEWS-DARJ-20150701",
+      "date": "2015-07-01",
+      "lat": 27.05,
+      "lon": 88.43,
+      "in_championship": true,
+      "mechanism": "fatal multi-slide episode"
+    },
+    {
+      "slide_no": "NEWS-NH10-20150709",
+      "date": "2015-07-09",
+      "lat": 27.02,
+      "lon": 88.42,
+      "in_championship": true,
+      "mechanism": "fatal road-block"
+    },
+    {
+      "slide_no": "NEWS-NH10-20211020",
+      "date": "2021-10-20",
+      "lat": 27.17,
+      "lon": 88.51,
+      "in_championship": true,
+      "mechanism": "road-block high-exposure"
+    },
+    {
+      "slide_no": "NEWS-MANGAN-20240613",
+      "date": "2024-06-13",
+      "lat": 27.51,
+      "lon": 88.53,
+      "in_championship": true,
+      "mechanism": "fatal multi-slide episode"
+    },
+    {
+      "slide_no": "NEWS-DIPUDARA-20240820",
+      "date": "2024-08-20",
+      "lat": 27.2525,
+      "lon": 88.4606,
+      "in_championship": true,
+      "mechanism": "non-fatal high-exposure"
+    },
+    {
+      "slide_no": "NEWS-DIPUDARA-20240821",
+      "date": "2024-08-21",
+      "lat": 27.2525,
+      "lon": 88.4606,
+      "in_championship": true,
+      "mechanism": "non-fatal"
+    },
+    {
+      "slide_no": "NEWS-NH10-20221009",
+      "date": "2022-10-09",
+      "lat": 27.13,
+      "lon": 88.51,
+      "in_championship": true,
+      "mechanism": "road-block high-exposure"
+    },
+    {
+      "slide_no": "NEWS-GARO-20220609",
+      "date": "2022-06-09",
+      "lat": 25.47,
+      "lon": 90.12,
+      "in_championship": false,
+      "mechanism": "nan"
+    },
+    {
+      "slide_no": "NEWS-GUWAHATI-20220614",
+      "date": "2022-06-14",
+      "lat": 26.1,
+      "lon": 91.71,
+      "in_championship": false,
+      "mechanism": "nan"
+    },
+    {
+      "slide_no": "NEWS-LAITLAREM-20220617",
+      "date": "2022-06-17",
+      "lat": 25.34,
+      "lon": 91.86,
+      "in_championship": false,
+      "mechanism": "nan"
+    },
+    {
+      "slide_no": "NEWS-PUBUNG-20190708",
+      "date": "2019-07-08",
+      "lat": 27.0044,
+      "lon": 88.2165,
+      "in_championship": true,
+      "mechanism": "fatal"
+    },
+    {
+      "slide_no": "NEWS-MAJWA-20240610",
+      "date": "2024-06-10",
+      "lat": 27.23,
+      "lon": 88.42,
+      "in_championship": false,
+      "mechanism": "nan"
+    },
+    {
+      "slide_no": "NEWS-RONGEY-20220628",
+      "date": "2022-06-28",
+      "lat": 27.3,
+      "lon": 88.65,
+      "in_championship": true,
+      "mechanism": "fatal"
+    },
+    {
+      "slide_no": "NEWS-YUMTHANG-20220831",
+      "date": "2022-08-31",
+      "lat": 27.7,
+      "lon": 88.68,
+      "in_championship": true,
+      "mechanism": "non-fatal high-exposure"
+    },
+    {
+      "slide_no": "NEWS-20MILE-20220901",
+      "date": "2022-09-01",
+      "lat": 27.17,
+      "lon": 88.51,
+      "in_championship": true,
+      "mechanism": "road-block high-exposure"
+    },
+    {
+      "slide_no": "NEWS-17MILE-20220615",
+      "date": "2022-06-15",
+      "lat": 27.28,
+      "lon": 88.62,
+      "in_championship": true,
+      "mechanism": "non-fatal (1 death post-rescue) road-block"
+    },
+    {
+      "slide_no": "NEWS-BIRIKDARA-20220802",
+      "date": "2022-08-02",
+      "lat": 27.1,
+      "lon": 88.48,
+      "in_championship": true,
+      "mechanism": "non-fatal road-block"
+    },
+    {
+      "slide_no": "NEWS-29MILE-20210906",
+      "date": "2021-09-06",
+      "lat": 27.0144,
+      "lon": 88.4359,
+      "in_championship": true,
+      "mechanism": "non-fatal road-block chronic-site"
+    },
+    {
+      "slide_no": "NEWS-SIKKIM-20220617",
+      "date": "2022-06-17",
+      "lat": 27.5,
+      "lon": 88.55,
+      "in_championship": false,
+      "mechanism": "nan"
+    },
+    {
+      "slide_no": "NEWS-CHUNGTHANG-20231004",
+      "date": "2023-10-04",
+      "lat": 27.61,
+      "lon": 88.66,
+      "in_championship": false,
+      "mechanism": "nan"
+    },
+    {
+      "slide_no": "NEWS-PATHING-20221124",
+      "date": "2022-11-24",
+      "lat": 27.2955,
+      "lon": 88.3924,
+      "in_championship": true,
+      "mechanism": "non-fatal mass-evacuation chronic-slide"
+    },
+    {
+      "slide_no": "NEWS-SEESAGOLAI-20210601",
+      "date": "2021-06-01",
+      "lat": 27.324,
+      "lon": 88.613,
+      "in_championship": false,
+      "mechanism": "rejected (mechanism)"
+    },
+    {
+      "slide_no": "NEWS-SICHEY-20210609",
+      "date": "2021-06-09",
+      "lat": 27.31,
+      "lon": 88.6,
+      "in_championship": false,
+      "mechanism": "fatal"
+    },
+    {
+      "slide_no": "NEWS-BHALUKHOLA-20210617",
+      "date": "2021-06-17",
+      "lat": 27.09,
+      "lon": 88.45,
+      "in_championship": false,
+      "mechanism": "rejected (mechanism)"
+    },
+    {
+      "slide_no": "NEWS-TIGDO-20200710",
+      "date": "2020-07-10",
+      "lat": 27.14,
+      "lon": 93.7,
+      "in_championship": false,
+      "mechanism": "fatal"
+    },
+    {
+      "slide_no": "NEWS-MODIRIJO-20200710",
+      "date": "2020-07-10",
+      "lat": 27.1,
+      "lon": 93.62,
+      "in_championship": false,
+      "mechanism": "fatal"
+    },
+    {
+      "slide_no": "NEWS-TUPUL-20220630",
+      "date": "2022-06-30",
+      "lat": 24.94,
+      "lon": 93.66,
+      "in_championship": false,
+      "mechanism": "fatal mass-casualty"
+    },
+    {
+      "slide_no": "NEWS-SOOD-20220619",
+      "date": "2022-06-19",
+      "lat": 27.13,
+      "lon": 93.72,
+      "in_championship": false,
+      "mechanism": "fatal"
+    },
+    {
+      "slide_no": "NEWS-HOLLONGI-20200923",
+      "date": "2020-09-23",
+      "lat": 27.08,
+      "lon": 93.7,
+      "in_championship": false,
+      "mechanism": "road-block"
+    },
+    {
+      "slide_no": "NEWS-ITANAGAR-20190717",
+      "date": "2019-07-17",
+      "lat": 27.101,
+      "lon": 93.623,
+      "in_championship": false,
+      "mechanism": "road-block"
+    },
+    {
+      "slide_no": "NEWS-NH29-20190704",
+      "date": "2019-07-04",
+      "lat": 25.66,
+      "lon": 94.09,
+      "in_championship": false,
+      "mechanism": "road-block chronic-site"
+    },
+    {
+      "slide_no": "NEWS-29MILE-20210711",
+      "date": "2021-07-11",
+      "lat": 27.0144,
+      "lon": 88.4359,
+      "in_championship": true,
+      "mechanism": "non-fatal road-block chronic-site"
+    },
+    {
+      "slide_no": "NEWS-29MILE-20200923",
+      "date": "2020-09-23",
+      "lat": 27.0144,
+      "lon": 88.4359,
+      "in_championship": true,
+      "mechanism": "non-fatal road-block chronic-site"
+    },
+    {
+      "slide_no": "NEWS-SUBALSINGH-20180518",
+      "date": "2018-05-18",
+      "lat": 23.99,
+      "lon": 91.55,
+      "in_championship": false,
+      "mechanism": "fatal"
+    },
+    {
+      "slide_no": "NEWS-KAMBUK-20180518",
+      "date": "2018-05-18",
+      "lat": 24.0,
+      "lon": 91.56,
+      "in_championship": false,
+      "mechanism": "fatal"
+    },
+    {
+      "slide_no": "NEWS-PALKU-20180520",
+      "date": "2018-05-20",
+      "lat": 23.9,
+      "lon": 91.5,
+      "in_championship": false,
+      "mechanism": "fatal?"
+    },
+    {
+      "slide_no": "NEWS-BELBARI-20180520",
+      "date": "2018-05-20",
+      "lat": 23.95,
+      "lon": 91.35,
+      "in_championship": false,
+      "mechanism": "fatal?"
+    },
+    {
+      "slide_no": "NEWS-NONGSTOIN-20230617",
+      "date": "2023-06-17",
+      "lat": 25.51,
+      "lon": 91.27,
+      "in_championship": false,
+      "mechanism": "fatal"
+    },
+    {
+      "slide_no": "NEWS-LUMSHONG-20220616",
+      "date": "2022-06-16",
+      "lat": 25.35,
+      "lon": 92.5,
+      "in_championship": false,
+      "mechanism": "road-block high-exposure?"
+    },
+    {
+      "slide_no": "NEWS-PYNTHOR-20231008",
+      "date": "2023-10-08",
+      "lat": 25.55,
+      "lon": 92.15,
+      "in_championship": false,
+      "mechanism": "fatal?"
+    },
+    {
+      "slide_no": "NEWS-RNGAIN-20230414",
+      "date": "2023-04-14",
+      "lat": 25.25,
+      "lon": 91.95,
+      "in_championship": false,
+      "mechanism": "fatal road-cut?"
+    },
+    {
+      "slide_no": "NEWS-HLIMEN-20240528",
+      "date": "2024-05-28",
+      "lat": 23.68,
+      "lon": 92.72,
+      "in_championship": false,
+      "mechanism": "fatal"
+    },
+    {
+      "slide_no": "NEWS-HUNTHAR-20240528",
+      "date": "2024-05-28",
+      "lat": 23.75,
+      "lon": 92.7,
+      "in_championship": false,
+      "mechanism": "road-block?"
+    },
+    {
+      "slide_no": "NEWS-MELTHUM-20240528",
+      "date": "2024-05-28",
+      "lat": 23.69,
+      "lon": 92.72,
+      "in_championship": false,
+      "mechanism": "rejected (mechanism)"
+    },
+    {
+      "slide_no": "NEWS-LINGCHOM-20200524",
+      "date": "2020-05-24",
+      "lat": 27.38,
+      "lon": 88.55,
+      "in_championship": true,
+      "mechanism": "fatal"
+    },
+    {
+      "slide_no": "NEWS-MYONGKYONG-20200524",
+      "date": "2020-05-24",
+      "lat": 27.48,
+      "lon": 88.52,
+      "in_championship": false,
+      "mechanism": "fatal?"
+    },
+    {
+      "slide_no": "NEWS-MANGANCHUNG-20200627",
+      "date": "2020-06-27",
+      "lat": 27.51,
+      "lon": 88.53,
+      "in_championship": true,
+      "mechanism": "road-block strategic-corridor"
+    },
+    {
+      "slide_no": "NEWS-APDARA-20200627",
+      "date": "2020-06-27",
+      "lat": 27.35,
+      "lon": 88.53,
+      "in_championship": true,
+      "mechanism": "infrastructure-adjacent slope failure"
+    },
+    {
+      "slide_no": "NEWS-SOURENI-20251005",
+      "date": "2025-10-05",
+      "lat": 26.91,
+      "lon": 88.18,
+      "in_championship": false,
+      "mechanism": "fatal multi-slide episode?"
+    },
+    {
+      "slide_no": "NEWS-DILARAM-20251005",
+      "date": "2025-10-05",
+      "lat": 26.95,
+      "lon": 88.25,
+      "in_championship": false,
+      "mechanism": "fatal road-block?"
+    },
+    {
+      "slide_no": "NEWS-SADAPHAMTAM-20260725",
+      "date": "2026-07-25",
+      "lat": 27.16,
+      "lon": 88.36,
+      "in_championship": false,
+      "mechanism": "fatal?"
+    },
+    {
+      "slide_no": "NEWS-SAMARDUNG-20260720",
+      "date": "2026-07-20",
+      "lat": 27.2,
+      "lon": 88.4,
+      "in_championship": false,
+      "mechanism": "rejected (mechanism)"
+    },
+    {
+      "slide_no": "NEWS-MANTAM-20160813",
+      "date": "2016-08-13",
+      "lat": 27.5397,
+      "lon": 88.5007,
+      "in_championship": true,
+      "mechanism": "non-fatal high-exposure valley-blocking"
+    },
+    {
+      "slide_no": "NEWS-SOKPAY-20230326",
+      "date": "2023-03-26",
+      "lat": 27.4,
+      "lon": 88.53,
+      "in_championship": true,
+      "mechanism": "non-fatal mass-evacuation"
+    },
+    {
+      "slide_no": "NEWS-TSONG-20190916",
+      "date": "2019-09-16",
+      "lat": 27.35,
+      "lon": 88.2,
+      "in_championship": true,
+      "mechanism": "fatal cloudburst mass-evacuation"
+    },
+    {
+      "slide_no": "NEWS-UPPERRIMBI-20250912",
+      "date": "2025-09-12",
+      "lat": 27.29,
+      "lon": 88.23,
+      "in_championship": false,
+      "mechanism": "fatal?"
+    },
+    {
+      "slide_no": "NEWS-MAMKHOLA-20210730",
+      "date": "2021-07-30",
+      "lat": 27.15,
+      "lon": 88.5,
+      "in_championship": false,
+      "mechanism": "rejected (mechanism)"
+    },
+    {
+      "slide_no": "NEWS-29MILE-20200827",
+      "date": "2020-08-27",
+      "lat": 27.0144,
+      "lon": 88.4359,
+      "in_championship": false,
+      "mechanism": "road-block chronic-site?"
+    }
+  ]
+}
