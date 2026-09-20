@@ -15,7 +15,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Python deps — layer-cached before code copy
 COPY backend/requirements.txt ./backend/requirements.txt
 COPY requirements.txt ./requirements.txt
-RUN pip install --upgrade pip \
+COPY pyproject.toml ./pyproject.toml
+COPY routing ./routing
+RUN sed -i '/^-e \.\.$/d' backend/requirements.txt \
+ && pip install --upgrade pip \
+ && pip install -e . \
  && pip install -r backend/requirements.txt \
  && pip install -r requirements.txt || true
 
