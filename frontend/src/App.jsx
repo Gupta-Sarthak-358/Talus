@@ -22,9 +22,20 @@ import ReportModal from './components/Reports/ReportModal';
 import AlertPanel from './components/Alerts/AlertPanel';
 import RequireRole from './components/Auth/RequireRole';
 
+function Warmup() {
+  React.useEffect(() => {
+    // Client-side wake: fire on Vercel load (villager default) so Render's 15-min sleep
+    // is hidden behind the hero, not on the first SHAP click. No await, no block.
+    const base = (import.meta.env.VITE_API_URL || 'http://localhost:8000/api').replace(/\/api\/?$/, '');
+    fetch(`${base}/health`, { cache: 'no-store' }).catch(() => {});
+  }, []);
+  return null;
+}
+
 export default function App() {
   return (
     <TalusProvider>
+      <Warmup />
       <ErrorBoundary>
         <BrowserRouter>
           <Suspense fallback={<div className="max-w-[1920px] mx-auto p-6"><LoadingSkeleton lines={6} /></div>}>
