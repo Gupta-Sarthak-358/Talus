@@ -17,21 +17,29 @@ function Section({ title, icon:Icon, children }) {
 }
 
 export default function AdminPage() {
-  const { activeLocation } = useTalusContext();
+  const { activeLocation, zones, role: ctxRole } = useTalusContext();
+  const liveZones = zones || [];
   const [health, setHealth] = useState(null);
+  const [healthFailed, setHealthFailed] = useState(false);
+  const [db, setDb] = useState(null);
   const [iso, setIso] = useState(null);
   const [log, setLog] = useState([]);
   const [reports, setReports] = useState([]);
-  const auth = getAuth();
+  const [calib, setCalib] = useState(null);
+  // Reactive gate: context role updates on PIN login even when already on /admin
+  // (same-path navigate is a no-op, so a localStorage snapshot alone would stay stale).
+  const auth = { ...getAuth(), role: ctxRole || getAuth().role };
 
   useEffect(() => {
-    apiRequest('/health'.replace('/api','')).catch(()=>fetch('/health').then(r=>r.json()).catch(()=>null)).then(setHealth);
-    // Try backend health via absolute
-    fetch((import.meta.env.VITE_API_URL || 'http://localhost:8000/api').replace(/\/api\/?$/,'') + '/health')
-      .then(r=>r.json()).then(setHealth).catch(()=>{});
-    apiRequest(`/isolation?location=${activeLocation}`).then(setIso).catch(()=>{});
-    apiRequest('/alerts/dispatch/log?limit=10').then(d=>setLog(d.entries||[])).catch(()=>{});
-    apiRequest('/reports/queue').then(d=>setReports(d.reports||[])).catch(()=>{});
+    let stop = false;
+    const base = (import.meta.env.VITE_API_URL || 'http://localhost:8000/api').replace(/\/api\/?$/, '');
+    fetch(`${base}/health`).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }).then((d) => { if (!stop) { setHealth(d); setHealthFailed(false); } }).catch(() => { if (!stop) setHealthFailed(true); });
+    apiRequest(`/isolation?location=${activeLocation}`).then((d) => { if (!stop) setIso(d); }).catch(() => {});
+    apiRequest('/alerts/dispatch/log?limit=10').then((d) => { if (!stop) setLog(d.entries || []); }).catch(() => {});
+    apiRequest('/reports/queue').then((d) => { if (!stop) setReports(d.reports || []); }).catch(() => {});
+    apiRequest('/db/status').then((d) => { if (!stop) setDb(d); }).catch(() => {});
+    apiRequest('/model/calib?pi_real=0.01').then((d) => { if (!stop) setCalib(d); }).catch(() => {});
+    return () => { stop = true; };
   }, [activeLocation]);
 
   if (auth.role !== 'admin' && auth.role !== 'state_manager' && auth.role !== 'district_officer') {
@@ -53,13 +61,17 @@ export default function AdminPage() {
         </h1>
         <button onClick={()=>{clearAuth(); location.reload();}} className="text-xs px-3 py-1.5 bg-mine-darker border border-mine-border rounded-lg text-mine-muted hover:text-mine-text">Lock / Switch role</button>
       </div>
-      <p className="text-xs text-mine-muted">Villagers see only danger/safe + map. Officers see actions. This panel holds the technical provenance (model, OSM counts, Brier, calibration) that the final product hides from the field.</p>
+      <p className="text-xs text-mine-muted">Villagers see only danger/safe + map. Officers see actions. This panel holds the technical provenance (model, OSM counts, Brier, calibration) that the final product hides from the field. {liveZones.length} slopes live via GET /api/zones.</p>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Section title="System health" icon={Activity}>
+          {healthFailed && !health ? (
+            <div className="text-xs text-mine-muted">Health unreachable — backend offline.</div>
+          ) : (
           <pre className="text-[11px] font-mono bg-mine-darker border border-mine-border rounded-lg p-3 overflow-auto max-h-56 text-mine-text">
-            {health ? JSON.stringify(health, null, 2) : 'loading...'}
+            {health ? JSON.stringify({ ...health, db, calib: calib ? { brier: calib.brier, pi_real: calib.pi_real } : undefined }, null, 2) : 'loading...'}
           </pre>
+          )}
         </Section>
 
         <Section title={`Isolation — ${activeLocation}`} icon={AlertTriangle}>
@@ -110,10 +122,10 @@ export default function AdminPage() {
 
         <Section title="Provenance (hidden from field)" icon={MapPin}>
           <div className="text-xs space-y-1 text-mine-muted">
-            <div>Model: RF 500 trees + isotonic · 2936 rows (1468+1468) · 17 numeric + lulc</div>
-            <div>Rain: IMD 0.25deg 1901-2024 · Soil: ESA CCI v09.2 1978-2024 · Quakes: USGS 26 M5+ · DEM: SRTM 30m · OSM: Gangtok 1066/Lachung 226/Darjeeling 504</div>
-            <div>Wound: Sentinel-2 matched Nov23 vs Nov24 (2 scars) · Runout: SRTM steepest-descent</div>
-            <div>Recalibration: pi_train 0.5 → pi_real 0.01 (Bayes) — score frozen, confidence_real_1pct added</div>
+            <div>Model: RF 500 trees + isotonic · 2936 rows (1468+1468) · 17 numeric + lulc · GroupKFold8 RF 0.9345 XGB 0.9421 Brier 0.0967 · Temporal 673/73 RF 0.8573</div>
+            <div>Rain: IMD 0.25deg 1901-2024 · Soil: ESA CCI v09.2 1978-2024 · Quakes: USGS 26 M5+ · DEM: SRTM 30m · OSM: Gangtok 1014/Lachung 226/Darjeeling 504</div>
+            <div>Wound: Sentinel-2 matched Nov23 vs Nov24 (2 scars, 4/2936) · Runout: SRTM steepest-descent 85 buildings · Panchayat 100 tiles · COP30 S1 28.3→28.7</div>
+            <div>Recalibration: pi_train 0.5 → pi_real 0.01 (Bayes) — score frozen, confidence_real_1pct added · SWI JMA 3-tank L1=15</div>
             <div>PINs: {Object.entries(DEMO_PINS).map(([k,v])=>`${k}:${v||'open'}`).join(' · ')}</div>
           </div>
         </Section>

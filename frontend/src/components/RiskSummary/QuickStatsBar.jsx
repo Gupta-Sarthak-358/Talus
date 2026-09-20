@@ -6,9 +6,9 @@ import { getForecastLive } from '../../services/forecast';
 export default function QuickStatsBar() {
   const { zones, activeSimulation, selectedZoneData, locationData, scoringMode, t, activeLocation } = useTalusContext();
 
-  // Live rainfall: from selected zone telemetry or active simulation override
+  // Live rainfall: from selected zone telemetry or active simulation override — never invented.
   const liveRainfall = selectedZoneData?.telemetry?.rainfall_24h ?? selectedZoneData?.telemetry?.rainfall_24h_mm ?? null;
-  const rainfallVal = activeSimulation?.inputs?.rainfall_24h ?? liveRainfall ?? 42;
+  const rainfallVal = activeSimulation?.inputs?.rainfall_24h ?? liveRainfall ?? null;
   const [liveFc, setLiveFc] = useState(null);
   useEffect(() => {
     let stop=false;
@@ -21,10 +21,10 @@ export default function QuickStatsBar() {
       <div className="flex items-center gap-5 flex-wrap">
         {/* Weather Indicator */}
         <div className="flex items-center gap-2">
-          <CloudRain className={`w-4 h-4 ${rainfallVal > 60 ? 'text-risk-moderate animate-bounce' : 'text-mine-muted'}`} />
+          <CloudRain className={`w-4 h-4 ${rainfallVal != null && rainfallVal > 60 ? 'text-risk-moderate animate-bounce' : 'text-mine-muted'}`} />
           <span className="text-mine-muted">{t('quick.rainfall')}</span>
           <span className="font-mono font-semibold text-mine-text">
-            {rainfallVal} mm {rainfallVal > 60 && <span className="text-[10px] text-risk-high font-bold ml-1">{t('quick.monsoonSaturation')}</span>}
+            {rainfallVal != null ? <>{rainfallVal} mm {rainfallVal > 60 && <span className="text-[10px] text-risk-high font-bold ml-1">{t('quick.monsoonSaturation')}</span>}</> : '—'}
           </span>
           {liveFc?.daily?.[0] && (
             <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-sky-500/15 text-sky-300 border border-sky-500/30">

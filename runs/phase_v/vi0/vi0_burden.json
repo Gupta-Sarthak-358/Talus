@@ -1,0 +1,7 @@
+{
+  "monsoon_windows_any_hot_frac": "see-note",
+  "note": "population rows lack window ids; burden approximated per-row-day hot fraction",
+  "hot_day_frac_all": 0.0,
+  "hot_day_frac_monsoon": 0.0,
+  "hot_day_frac_offseason": 0.0
+}

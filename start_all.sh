@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # TALUS — One-command launcher (Linux/macOS/WSL/Git Bash)
-# SIH26001 @ 68c0c28 — Gangtok pilot S1-S4 89/78/66/52, 16/17 REAL/PROXY, 1528×22 training RF 0.921 XGB 0.9256
+# SIH26001 — 32 zones x 8 corridors NGEN 32x22 (17 numeric + lulc), 2936 rows GroupKFold8 RF 0.9345 XGB 0.9421, scaffold S1-S4 89/78/66/52
 # Usage:  ./start_all.sh            # validators + backend :8000 + frontend :5173
 #         ./start_all.sh --build    # + vite build check
 #         ./start_all.sh --no-frontend  # backend only
@@ -87,7 +87,7 @@ echo "  Dashboard : http://localhost:5173  (VITE_USE_LIVE_API=true → :8000)"
 echo "  API docs  : http://localhost:8000/docs"
 echo "  API zones : http://127.0.0.1:8000/api/zones"
 echo ""
-echo "Demo flow: map → click S1 (89 Critical) → SHAP → What-If S3 66→74 → Causal monga-mdl S3→High → Roads R2 avoided → Report S2 crack → queue → verify"
+echo "Demo flow: PIN district 1111 → District ops (warning+isolation sticky, intel/queue/road) → live map 32 zones → SHAP → What-If → Roads R2 avoided → Report → queue verify → State triage → Rescue ingress"
 echo ""
 echo "Logs: tail -f backend.log frontend.log"
 echo "Stop: kill \$(cat .backend.pid .frontend.pid)  or  ./stop_all.sh"

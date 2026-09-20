@@ -8,6 +8,10 @@ frontend/node_modules
 data/raw
 data/sih26001/processed
 ml/models/*.joblib
+!ml/models/sih26001_rf_v1.joblib
+!ml/models/sih26001_iso_v1.joblib
+!ml/models/talus_rf_v1.joblib
+!ml/models/talus_calibration_v1.joblib
 runs/*.json
 runs/*.jsonl
 .env

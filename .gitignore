@@ -113,6 +113,10 @@ backend/app/_model.joblib
 
 # canonical trained Model v1 artifact (compressed; regenerated if deleted)
 !ml/models/talus_rf_v1.joblib
+# SIH26001 live scoring pair (RF+isotonic, ~4.3MB) — SHIPS to deploy, no fixture fallback
+!ml/models/sih26001_rf_v1.joblib
+!ml/models/sih26001_iso_v1.joblib
+!ml/models/talus_calibration_v1.joblib
 
 # ── SIH26001 training lane (hackathon Sept 5) ──────────────────────────
 # Inventory-scale training matrix + caches stay out of git; only the

@@ -150,13 +150,13 @@ export default function RiskSummaryCards() {
               </span>
             </div>
             <div className="text-[11px] text-mine-muted font-mono mt-0.5">
-              <span className="text-mine-text font-semibold">RF 0.8983</span> <span className="text-mine-muted">·</span> <span className="text-mine-text font-semibold">XGB 0.9029</span> <span className="text-mine-muted">·</span> <span className="text-mine-text font-semibold">LGBM 0.9015</span> <span className="text-mine-muted">·</span> <span>Brier 0.118</span> <span className="text-mine-muted">vs naive 0.25</span> <span className="text-mine-muted">·</span> <span>SHAP 5-pt</span>
+              <span className="text-mine-text font-semibold">RF 0.9345</span> <span className="text-mine-muted">·</span> <span className="text-mine-text font-semibold">XGB 0.9421</span> <span className="text-mine-muted">·</span> <span className="text-mine-text font-semibold">LGBM 0.9406</span> <span className="text-mine-muted">·</span> <span>Brier 0.0967</span> <span className="text-mine-muted">vs naive 0.25</span> <span className="text-mine-muted">·</span> <span>SHAP top-4</span>
             </div>
           </div>
         </div>
         <div className="flex items-center gap-2 text-[11px]">
           <span className="px-2 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 font-mono font-bold">
-            Temporal 673/73 → RF test 0.8189
+            Temporal 673/73 → RF test 0.8573
           </span>
           <span className="hidden sm:inline text-mine-muted">GroupKFold(8) spatial · 16/17 REAL/PROXY</span>
         </div>
@@ -166,7 +166,7 @@ export default function RiskSummaryCards() {
         <span className="px-1.5 py-0.5 rounded bg-mine-darker border border-mine-border">IMD 1991-2020 climatology</span>
         <span className="px-1.5 py-0.5 rounded bg-mine-darker border border-mine-border">CCI 0.271</span>
         <span className="px-1.5 py-0.5 rounded bg-mine-darker border border-mine-border">WorldCover N27E087</span>
-        <span className="px-1.5 py-0.5 rounded bg-mine-darker border border-mine-border">Overpass 6698/1320</span>
+        <span className="px-1.5 py-0.5 rounded bg-mine-darker border border-mine-border">Overpass 1014/226/504</span>
         <span className="ml-auto text-talus-600 font-medium">ml/sih26001/reports/metrics.md</span>
       </div>
     </div>

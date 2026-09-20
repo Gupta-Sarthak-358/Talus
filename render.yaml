@@ -1,0 +1,28 @@
+# TALUS SIH26001 — Render deploy (backend API, Docker).
+# Frontend deploys separately on Vercel (Root Directory: frontend).
+# Pair: set Vercel env VITE_API_URL=https://<this-service>.onrender.com/api
+services:
+  - type: web
+    name: talus-sih26001
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    plan: free
+    envVars:
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: AUTO_ALERT_ENABLED
+        value: true
+      - key: AUTO_ALERT_SMS
+        value: false
+      # Optional — set in Render dashboard when keys exist (app degrades honestly without them):
+      # - key: DATABASE_URL
+      #   sync: false
+      # - key: SMS_PROVIDER
+      #   sync: false
+      # - key: SMS_API_KEY
+      #   sync: false
+      # - key: SMS_TO
+      #   sync: false
+      # - key: IMD_API_KEY
+      #   sync: false

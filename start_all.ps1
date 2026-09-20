@@ -1,5 +1,5 @@
 # TALUS one-command launcher - PowerShell (Windows, primary for SIH demo)
-# SIH26001 @ 68c0c28 - Gangtok S1-S4 89/78/66/52, 16/17 REAL/PROXY, 1528x22 RF 0.921 XGB 0.9256
+# SIH26001 - 32 zones x 8 corridors NGEN 32x22 (17 numeric + lulc), 2936 rows GroupKFold8 RF 0.9345 XGB 0.9421, scaffold S1-S4 89/78/66/52
 # Usage:
 #   powershell -ExecutionPolicy Bypass -File .\start_all.ps1
 #   powershell -ExecutionPolicy Bypass -File .\start_all.ps1 -Build
@@ -18,7 +18,7 @@ $py311 = "C:\Users\satvi\AppData\Local\Programs\Python\Python311\python.exe"
 if (-not (Test-Path $py311)) { $py311 = $venvPython }
 
 Write-Host "=== TALUS one-command launcher (PS) ===" -ForegroundColor Cyan
-Write-Host "Root: $root  Branch: SIH26001 @ 68c0c28" -ForegroundColor DarkGray
+Write-Host "Root: $root  Track: SIH26001 (32 zones x 8 corridors)" -ForegroundColor DarkGray
 
 # 0) validators - must stay green
 Write-Host "[0/3] validators..." -ForegroundColor Yellow
@@ -78,10 +78,10 @@ if ($NoFrontend) {
 
 Write-Host ""
 Write-Host "=== TALUS is running ===" -ForegroundColor Cyan
-Write-Host "  Dashboard : http://localhost:5173  (live S1-S4 89/78/66/52)" -ForegroundColor White
+Write-Host "  Dashboard : http://localhost:5173  (live 32 zones x 8 corridors, PIN: district 1111 / state 2222 / rescue 3333 / admin 9999)" -ForegroundColor White
 Write-Host "  API docs  : http://localhost:8000/docs" -ForegroundColor White
 Write-Host "  API zones : http://127.0.0.1:8000/api/zones" -ForegroundColor White
 Write-Host ""
-Write-Host "Demo flow: map to S1 89 Critical to SHAP to What-If S3 66 to 74 to Causal monga-mdl S3 to High to Roads R2 avoided to Report S2 crack to queue to verify" -ForegroundColor Gray
+Write-Host "Demo flow: PIN district 1111 -> District ops (warning+isolation sticky, intel/queue/road) -> live map 32 zones -> SHAP -> What-If -> Roads R2 avoided -> Report -> queue verify -> State triage -> Rescue ingress" -ForegroundColor Gray
 Write-Host "Logs: Get-Content backend.log -Tail 20; Get-Content frontend.log -Tail 20" -ForegroundColor DarkGray
 Write-Host "Stop: powershell -File ./stop_all.ps1  or  ./stop_all.sh  or  ./stop_all.bat" -ForegroundColor DarkGray

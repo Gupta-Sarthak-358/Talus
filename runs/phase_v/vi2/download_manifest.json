@@ -1,0 +1,1494 @@
+{
+  "frames": [
+    "048D_06252_131313",
+    "012A_06241_131313"
+  ],
+  "rule": "secondary <= T-1d; span<=48d preferred; slots recent/mid/baseline",
+  "events": {
+    "NEWS-DARJ-20150701": {
+      "T": "2015-07-01",
+      "pairs": [
+        {
+          "frame": "048D_06252_131313",
+          "slot": "recent",
+          "pair": "20150206_20150630",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20150206_20150630",
+          "files": [
+            "20150206_20150630.geo.unw.tif",
+            "20150206_20150630.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "mid",
+          "pair": "20150525_20150606",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20150525_20150606",
+          "files": [
+            "20150525_20150606.geo.unw.tif",
+            "20150525_20150606.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "baseline",
+          "pair": "20150513_20150525",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20150513_20150525",
+          "files": [
+            "20150513_20150525.geo.unw.tif",
+            "20150513_20150525.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "recent",
+          "pair": "20150615_20150627",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20150615_20150627",
+          "files": [
+            "20150615_20150627.geo.unw.tif",
+            "20150615_20150627.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "mid",
+          "pair": "20150603_20150615",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20150603_20150615",
+          "files": [
+            "20150603_20150615.geo.unw.tif",
+            "20150603_20150615.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "baseline",
+          "pair": "20150428_20150522",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20150428_20150522",
+          "files": [
+            "20150428_20150522.geo.unw.tif",
+            "20150428_20150522.geo.cc.tif"
+          ]
+        }
+      ]
+    },
+    "NEWS-NH10-20150709": {
+      "T": "2015-07-09",
+      "pairs": [
+        {
+          "frame": "048D_06252_131313",
+          "slot": "recent",
+          "pair": "20150206_20150630",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20150206_20150630",
+          "files": [
+            "20150206_20150630.geo.unw.tif",
+            "20150206_20150630.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "mid",
+          "pair": "20150525_20150606",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20150525_20150606",
+          "files": [
+            "20150525_20150606.geo.unw.tif",
+            "20150525_20150606.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "baseline",
+          "pair": "20150525_20150606",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20150525_20150606",
+          "files": [
+            "20150525_20150606.geo.unw.tif",
+            "20150525_20150606.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "recent",
+          "pair": "20150615_20150627",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20150615_20150627",
+          "files": [
+            "20150615_20150627.geo.unw.tif",
+            "20150615_20150627.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "mid",
+          "pair": "20150603_20150615",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20150603_20150615",
+          "files": [
+            "20150603_20150615.geo.unw.tif",
+            "20150603_20150615.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "baseline",
+          "pair": "20150522_20150603",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20150522_20150603",
+          "files": [
+            "20150522_20150603.geo.unw.tif",
+            "20150522_20150603.geo.cc.tif"
+          ]
+        }
+      ]
+    },
+    "NEWS-NH10-20211020": {
+      "T": "2021-10-20",
+      "pairs": [
+        {
+          "frame": "048D_06252_131313",
+          "slot": "recent",
+          "pair": "20210926_20211008",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20210926_20211008",
+          "files": [
+            "20210926_20211008.geo.unw.tif",
+            "20210926_20211008.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "mid",
+          "pair": "20210914_20210926",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20210914_20210926",
+          "files": [
+            "20210914_20210926.geo.unw.tif",
+            "20210914_20210926.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "baseline",
+          "pair": "20210902_20210914",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20210902_20210914",
+          "files": [
+            "20210902_20210914.geo.unw.tif",
+            "20210902_20210914.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "recent",
+          "pair": "20211005_20211017",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20211005_20211017",
+          "files": [
+            "20211005_20211017.geo.unw.tif",
+            "20211005_20211017.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "mid",
+          "pair": "20210923_20211005",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20210923_20211005",
+          "files": [
+            "20210923_20211005.geo.unw.tif",
+            "20210923_20211005.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "baseline",
+          "pair": "20210830_20210911",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20210830_20210911",
+          "files": [
+            "20210830_20210911.geo.unw.tif",
+            "20210830_20210911.geo.cc.tif"
+          ]
+        }
+      ]
+    },
+    "NEWS-MANGAN-20240613": {
+      "T": "2024-06-13",
+      "pairs": [
+        {
+          "frame": "048D_06252_131313",
+          "slot": "recent",
+          "pair": "20240525_20240606",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20240525_20240606",
+          "files": [
+            "20240525_20240606.geo.unw.tif",
+            "20240525_20240606.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "mid",
+          "pair": "20240501_20240525",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20240501_20240525",
+          "files": [
+            "20240501_20240525.geo.unw.tif",
+            "20240501_20240525.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "baseline",
+          "pair": "20240419_20240501",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20240419_20240501",
+          "files": [
+            "20240419_20240501.geo.unw.tif",
+            "20240419_20240501.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "recent",
+          "pair": "20240522_20240603",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20240522_20240603",
+          "files": [
+            "20240522_20240603.geo.unw.tif",
+            "20240522_20240603.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "mid",
+          "pair": "20240510_20240522",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20240510_20240522",
+          "files": [
+            "20240510_20240522.geo.unw.tif",
+            "20240510_20240522.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "baseline",
+          "pair": "20240428_20240510",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20240428_20240510",
+          "files": [
+            "20240428_20240510.geo.unw.tif",
+            "20240428_20240510.geo.cc.tif"
+          ]
+        }
+      ]
+    },
+    "NEWS-DIPUDARA-20240820": {
+      "T": "2024-08-20",
+      "pairs": [
+        {
+          "frame": "048D_06252_131313",
+          "slot": "recent",
+          "pair": "20240805_20240817",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20240805_20240817",
+          "files": [
+            "20240805_20240817.geo.unw.tif",
+            "20240805_20240817.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "mid",
+          "pair": "20240724_20240805",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20240724_20240805",
+          "files": [
+            "20240724_20240805.geo.unw.tif",
+            "20240724_20240805.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "baseline",
+          "pair": "20240618_20240712",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20240618_20240712",
+          "files": [
+            "20240618_20240712.geo.unw.tif",
+            "20240618_20240712.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "recent",
+          "pair": "20240802_20240814",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20240802_20240814",
+          "files": [
+            "20240802_20240814.geo.unw.tif",
+            "20240802_20240814.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "mid",
+          "pair": "20240721_20240802",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20240721_20240802",
+          "files": [
+            "20240721_20240802.geo.unw.tif",
+            "20240721_20240802.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "baseline",
+          "pair": "20240709_20240721",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20240709_20240721",
+          "files": [
+            "20240709_20240721.geo.unw.tif",
+            "20240709_20240721.geo.cc.tif"
+          ]
+        }
+      ]
+    },
+    "NEWS-DIPUDARA-20240821": {
+      "T": "2024-08-21",
+      "pairs": [
+        {
+          "frame": "048D_06252_131313",
+          "slot": "recent",
+          "pair": "20240805_20240817",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20240805_20240817",
+          "files": [
+            "20240805_20240817.geo.unw.tif",
+            "20240805_20240817.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "mid",
+          "pair": "20240724_20240805",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20240724_20240805",
+          "files": [
+            "20240724_20240805.geo.unw.tif",
+            "20240724_20240805.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "baseline",
+          "pair": "20240618_20240712",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20240618_20240712",
+          "files": [
+            "20240618_20240712.geo.unw.tif",
+            "20240618_20240712.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "recent",
+          "pair": "20240802_20240814",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20240802_20240814",
+          "files": [
+            "20240802_20240814.geo.unw.tif",
+            "20240802_20240814.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "mid",
+          "pair": "20240721_20240802",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20240721_20240802",
+          "files": [
+            "20240721_20240802.geo.unw.tif",
+            "20240721_20240802.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "baseline",
+          "pair": "20240709_20240721",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20240709_20240721",
+          "files": [
+            "20240709_20240721.geo.unw.tif",
+            "20240709_20240721.geo.cc.tif"
+          ]
+        }
+      ]
+    },
+    "NEWS-NH10-20221009": {
+      "T": "2022-10-09",
+      "pairs": [
+        {
+          "frame": "048D_06252_131313",
+          "slot": "recent",
+          "pair": "20220921_20221003",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20220921_20221003",
+          "files": [
+            "20220921_20221003.geo.unw.tif",
+            "20220921_20221003.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "mid",
+          "pair": "20220828_20220921",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20220828_20220921",
+          "files": [
+            "20220828_20220921.geo.unw.tif",
+            "20220828_20220921.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "baseline",
+          "pair": "20220816_20220828",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20220816_20220828",
+          "files": [
+            "20220816_20220828.geo.unw.tif",
+            "20220816_20220828.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "recent",
+          "pair": "20220918_20220930",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20220918_20220930",
+          "files": [
+            "20220918_20220930.geo.unw.tif",
+            "20220918_20220930.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "mid",
+          "pair": "20220906_20220918",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20220906_20220918",
+          "files": [
+            "20220906_20220918.geo.unw.tif",
+            "20220906_20220918.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "baseline",
+          "pair": "20220825_20220906",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20220825_20220906",
+          "files": [
+            "20220825_20220906.geo.unw.tif",
+            "20220825_20220906.geo.cc.tif"
+          ]
+        }
+      ]
+    },
+    "NEWS-PUBUNG-20190708": {
+      "T": "2019-07-08",
+      "pairs": [
+        {
+          "frame": "048D_06252_131313",
+          "slot": "recent",
+          "pair": "20190621_20190703",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20190621_20190703",
+          "files": [
+            "20190621_20190703.geo.unw.tif",
+            "20190621_20190703.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "mid",
+          "pair": "20190609_20190621",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20190609_20190621",
+          "files": [
+            "20190609_20190621.geo.unw.tif",
+            "20190609_20190621.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "baseline",
+          "pair": "20190504_20190516",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20190504_20190516",
+          "files": [
+            "20190504_20190516.geo.unw.tif",
+            "20190504_20190516.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "recent",
+          "pair": "20190618_20190630",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20190618_20190630",
+          "files": [
+            "20190618_20190630.geo.unw.tif",
+            "20190618_20190630.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "mid",
+          "pair": "20190606_20190618",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20190606_20190618",
+          "files": [
+            "20190606_20190618.geo.unw.tif",
+            "20190606_20190618.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "baseline",
+          "pair": "20190513_20190606",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20190513_20190606",
+          "files": [
+            "20190513_20190606.geo.unw.tif",
+            "20190513_20190606.geo.cc.tif"
+          ]
+        }
+      ]
+    },
+    "NEWS-RONGEY-20220628": {
+      "T": "2022-06-28",
+      "pairs": [
+        {
+          "frame": "048D_06252_131313",
+          "slot": "recent",
+          "pair": "20220605_20220617",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20220605_20220617",
+          "files": [
+            "20220605_20220617.geo.unw.tif",
+            "20220605_20220617.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "mid",
+          "pair": "20220512_20220605",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20220512_20220605",
+          "files": [
+            "20220512_20220605.geo.unw.tif",
+            "20220512_20220605.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "baseline",
+          "pair": "20220430_20220512",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20220430_20220512",
+          "files": [
+            "20220430_20220512.geo.unw.tif",
+            "20220430_20220512.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "recent",
+          "pair": "20220614_20220626",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20220614_20220626",
+          "files": [
+            "20220614_20220626.geo.unw.tif",
+            "20220614_20220626.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "mid",
+          "pair": "20220521_20220602",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20220521_20220602",
+          "files": [
+            "20220521_20220602.geo.unw.tif",
+            "20220521_20220602.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "baseline",
+          "pair": "20220509_20220521",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20220509_20220521",
+          "files": [
+            "20220509_20220521.geo.unw.tif",
+            "20220509_20220521.geo.cc.tif"
+          ]
+        }
+      ]
+    },
+    "NEWS-YUMTHANG-20220831": {
+      "T": "2022-08-31",
+      "pairs": [
+        {
+          "frame": "048D_06252_131313",
+          "slot": "recent",
+          "pair": "20220816_20220828",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20220816_20220828",
+          "files": [
+            "20220816_20220828.geo.unw.tif",
+            "20220816_20220828.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "mid",
+          "pair": "20220804_20220816",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20220804_20220816",
+          "files": [
+            "20220804_20220816.geo.unw.tif",
+            "20220804_20220816.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "baseline",
+          "pair": "20220711_20220723",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20220711_20220723",
+          "files": [
+            "20220711_20220723.geo.unw.tif",
+            "20220711_20220723.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "recent",
+          "pair": "20220813_20220825",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20220813_20220825",
+          "files": [
+            "20220813_20220825.geo.unw.tif",
+            "20220813_20220825.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "mid",
+          "pair": "20220801_20220813",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20220801_20220813",
+          "files": [
+            "20220801_20220813.geo.unw.tif",
+            "20220801_20220813.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "baseline",
+          "pair": "20220720_20220801",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20220720_20220801",
+          "files": [
+            "20220720_20220801.geo.unw.tif",
+            "20220720_20220801.geo.cc.tif"
+          ]
+        }
+      ]
+    },
+    "NEWS-20MILE-20220901": {
+      "T": "2022-09-01",
+      "pairs": [
+        {
+          "frame": "048D_06252_131313",
+          "slot": "recent",
+          "pair": "20220816_20220828",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20220816_20220828",
+          "files": [
+            "20220816_20220828.geo.unw.tif",
+            "20220816_20220828.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "mid",
+          "pair": "20220804_20220816",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20220804_20220816",
+          "files": [
+            "20220804_20220816.geo.unw.tif",
+            "20220804_20220816.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "baseline",
+          "pair": "20220711_20220723",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20220711_20220723",
+          "files": [
+            "20220711_20220723.geo.unw.tif",
+            "20220711_20220723.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "recent",
+          "pair": "20220813_20220825",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20220813_20220825",
+          "files": [
+            "20220813_20220825.geo.unw.tif",
+            "20220813_20220825.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "mid",
+          "pair": "20220801_20220813",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20220801_20220813",
+          "files": [
+            "20220801_20220813.geo.unw.tif",
+            "20220801_20220813.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "baseline",
+          "pair": "20220720_20220801",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20220720_20220801",
+          "files": [
+            "20220720_20220801.geo.unw.tif",
+            "20220720_20220801.geo.cc.tif"
+          ]
+        }
+      ]
+    },
+    "NEWS-17MILE-20220615": {
+      "T": "2022-06-15",
+      "pairs": [
+        {
+          "frame": "048D_06252_131313",
+          "slot": "recent",
+          "pair": "20220512_20220605",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20220512_20220605",
+          "files": [
+            "20220512_20220605.geo.unw.tif",
+            "20220512_20220605.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "mid",
+          "pair": "20220430_20220512",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20220430_20220512",
+          "files": [
+            "20220430_20220512.geo.unw.tif",
+            "20220430_20220512.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "baseline",
+          "pair": "20220430_20220512",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20220430_20220512",
+          "files": [
+            "20220430_20220512.geo.unw.tif",
+            "20220430_20220512.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "recent",
+          "pair": "20220602_20220614",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20220602_20220614",
+          "files": [
+            "20220602_20220614.geo.unw.tif",
+            "20220602_20220614.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "mid",
+          "pair": "20220509_20220521",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20220509_20220521",
+          "files": [
+            "20220509_20220521.geo.unw.tif",
+            "20220509_20220521.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "baseline",
+          "pair": "20220427_20220509",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20220427_20220509",
+          "files": [
+            "20220427_20220509.geo.unw.tif",
+            "20220427_20220509.geo.cc.tif"
+          ]
+        }
+      ]
+    },
+    "NEWS-BIRIKDARA-20220802": {
+      "T": "2022-08-02",
+      "pairs": [
+        {
+          "frame": "048D_06252_131313",
+          "slot": "recent",
+          "pair": "20220711_20220723",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20220711_20220723",
+          "files": [
+            "20220711_20220723.geo.unw.tif",
+            "20220711_20220723.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "mid",
+          "pair": "20220629_20220711",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20220629_20220711",
+          "files": [
+            "20220629_20220711.geo.unw.tif",
+            "20220629_20220711.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "baseline",
+          "pair": "20220617_20220629",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20220617_20220629",
+          "files": [
+            "20220617_20220629.geo.unw.tif",
+            "20220617_20220629.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "recent",
+          "pair": "20220720_20220801",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20220720_20220801",
+          "files": [
+            "20220720_20220801.geo.unw.tif",
+            "20220720_20220801.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "mid",
+          "pair": "20220626_20220708",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20220626_20220708",
+          "files": [
+            "20220626_20220708.geo.unw.tif",
+            "20220626_20220708.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "baseline",
+          "pair": "20220614_20220626",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20220614_20220626",
+          "files": [
+            "20220614_20220626.geo.unw.tif",
+            "20220614_20220626.geo.cc.tif"
+          ]
+        }
+      ]
+    },
+    "NEWS-29MILE-20210906": {
+      "T": "2021-09-06",
+      "pairs": [
+        {
+          "frame": "048D_06252_131313",
+          "slot": "recent",
+          "pair": "20210821_20210902",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20210821_20210902",
+          "files": [
+            "20210821_20210902.geo.unw.tif",
+            "20210821_20210902.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "mid",
+          "pair": "20210809_20210821",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20210809_20210821",
+          "files": [
+            "20210809_20210821.geo.unw.tif",
+            "20210809_20210821.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "baseline",
+          "pair": "20210716_20210728",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20210716_20210728",
+          "files": [
+            "20210716_20210728.geo.unw.tif",
+            "20210716_20210728.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "recent",
+          "pair": "20210818_20210830",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20210818_20210830",
+          "files": [
+            "20210818_20210830.geo.unw.tif",
+            "20210818_20210830.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "mid",
+          "pair": "20210806_20210818",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20210806_20210818",
+          "files": [
+            "20210806_20210818.geo.unw.tif",
+            "20210806_20210818.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "baseline",
+          "pair": "20210725_20210806",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20210725_20210806",
+          "files": [
+            "20210725_20210806.geo.unw.tif",
+            "20210725_20210806.geo.cc.tif"
+          ]
+        }
+      ]
+    },
+    "NEWS-PATHING-20221124": {
+      "T": "2022-11-24",
+      "pairs": [
+        {
+          "frame": "048D_06252_131313",
+          "slot": "recent",
+          "pair": "20221108_20221120",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20221108_20221120",
+          "files": [
+            "20221108_20221120.geo.unw.tif",
+            "20221108_20221120.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "mid",
+          "pair": "20221027_20221108",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20221027_20221108",
+          "files": [
+            "20221027_20221108.geo.unw.tif",
+            "20221027_20221108.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "baseline",
+          "pair": "20220921_20221003",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20220921_20221003",
+          "files": [
+            "20220921_20221003.geo.unw.tif",
+            "20220921_20221003.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "recent",
+          "pair": "20221105_20221117",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20221105_20221117",
+          "files": [
+            "20221105_20221117.geo.unw.tif",
+            "20221105_20221117.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "mid",
+          "pair": "20221024_20221105",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20221024_20221105",
+          "files": [
+            "20221024_20221105.geo.unw.tif",
+            "20221024_20221105.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "baseline",
+          "pair": "20221012_20221024",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20221012_20221024",
+          "files": [
+            "20221012_20221024.geo.unw.tif",
+            "20221012_20221024.geo.cc.tif"
+          ]
+        }
+      ]
+    },
+    "NEWS-29MILE-20210711": {
+      "T": "2021-07-11",
+      "pairs": [
+        {
+          "frame": "048D_06252_131313",
+          "slot": "recent",
+          "pair": "20210622_20210704",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20210622_20210704",
+          "files": [
+            "20210622_20210704.geo.unw.tif",
+            "20210622_20210704.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "mid",
+          "pair": "20210610_20210622",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20210610_20210622",
+          "files": [
+            "20210610_20210622.geo.unw.tif",
+            "20210610_20210622.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "baseline",
+          "pair": "20210529_20210610",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20210529_20210610",
+          "files": [
+            "20210529_20210610.geo.unw.tif",
+            "20210529_20210610.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "recent",
+          "pair": "20210619_20210701",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20210619_20210701",
+          "files": [
+            "20210619_20210701.geo.unw.tif",
+            "20210619_20210701.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "mid",
+          "pair": "20210607_20210619",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20210607_20210619",
+          "files": [
+            "20210607_20210619.geo.unw.tif",
+            "20210607_20210619.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "baseline",
+          "pair": "20210526_20210607",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20210526_20210607",
+          "files": [
+            "20210526_20210607.geo.unw.tif",
+            "20210526_20210607.geo.cc.tif"
+          ]
+        }
+      ]
+    },
+    "NEWS-29MILE-20200923": {
+      "T": "2020-09-23",
+      "pairs": [
+        {
+          "frame": "048D_06252_131313",
+          "slot": "recent",
+          "pair": "20200907_20200919",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20200907_20200919",
+          "files": [
+            "20200907_20200919.geo.unw.tif",
+            "20200907_20200919.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "mid",
+          "pair": "20200826_20200907",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20200826_20200907",
+          "files": [
+            "20200826_20200907.geo.unw.tif",
+            "20200826_20200907.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "baseline",
+          "pair": "20200802_20200814",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20200802_20200814",
+          "files": [
+            "20200802_20200814.geo.unw.tif",
+            "20200802_20200814.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "recent",
+          "pair": "20200904_20200916",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20200904_20200916",
+          "files": [
+            "20200904_20200916.geo.unw.tif",
+            "20200904_20200916.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "mid",
+          "pair": "20200823_20200904",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20200823_20200904",
+          "files": [
+            "20200823_20200904.geo.unw.tif",
+            "20200823_20200904.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "baseline",
+          "pair": "20200811_20200823",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20200811_20200823",
+          "files": [
+            "20200811_20200823.geo.unw.tif",
+            "20200811_20200823.geo.cc.tif"
+          ]
+        }
+      ]
+    },
+    "NEWS-LINGCHOM-20200524": {
+      "T": "2020-05-24",
+      "pairs": [
+        {
+          "frame": "048D_06252_131313",
+          "slot": "recent",
+          "pair": "20200510_20200522",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20200510_20200522",
+          "files": [
+            "20200510_20200522.geo.unw.tif",
+            "20200510_20200522.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "mid",
+          "pair": "20200416_20200428",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20200416_20200428",
+          "files": [
+            "20200416_20200428.geo.unw.tif",
+            "20200416_20200428.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "baseline",
+          "pair": "20200404_20200416",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20200404_20200416",
+          "files": [
+            "20200404_20200416.geo.unw.tif",
+            "20200404_20200416.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "recent",
+          "pair": "20200507_20200519",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20200507_20200519",
+          "files": [
+            "20200507_20200519.geo.unw.tif",
+            "20200507_20200519.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "mid",
+          "pair": "20200425_20200507",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20200425_20200507",
+          "files": [
+            "20200425_20200507.geo.unw.tif",
+            "20200425_20200507.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "baseline",
+          "pair": "20200401_20200413",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20200401_20200413",
+          "files": [
+            "20200401_20200413.geo.unw.tif",
+            "20200401_20200413.geo.cc.tif"
+          ]
+        }
+      ]
+    },
+    "NEWS-MANGANCHUNG-20200627": {
+      "T": "2020-06-27",
+      "pairs": [
+        {
+          "frame": "048D_06252_131313",
+          "slot": "recent",
+          "pair": "20200603_20200615",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20200603_20200615",
+          "files": [
+            "20200603_20200615.geo.unw.tif",
+            "20200603_20200615.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "mid",
+          "pair": "20200522_20200603",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20200522_20200603",
+          "files": [
+            "20200522_20200603.geo.unw.tif",
+            "20200522_20200603.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "baseline",
+          "pair": "20200510_20200522",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20200510_20200522",
+          "files": [
+            "20200510_20200522.geo.unw.tif",
+            "20200510_20200522.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "recent",
+          "pair": "20200612_20200624",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20200612_20200624",
+          "files": [
+            "20200612_20200624.geo.unw.tif",
+            "20200612_20200624.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "mid",
+          "pair": "20200531_20200612",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20200531_20200612",
+          "files": [
+            "20200531_20200612.geo.unw.tif",
+            "20200531_20200612.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "baseline",
+          "pair": "20200507_20200519",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20200507_20200519",
+          "files": [
+            "20200507_20200519.geo.unw.tif",
+            "20200507_20200519.geo.cc.tif"
+          ]
+        }
+      ]
+    },
+    "NEWS-APDARA-20200627": {
+      "T": "2020-06-27",
+      "pairs": [
+        {
+          "frame": "048D_06252_131313",
+          "slot": "recent",
+          "pair": "20200603_20200615",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20200603_20200615",
+          "files": [
+            "20200603_20200615.geo.unw.tif",
+            "20200603_20200615.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "mid",
+          "pair": "20200522_20200603",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20200522_20200603",
+          "files": [
+            "20200522_20200603.geo.unw.tif",
+            "20200522_20200603.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "baseline",
+          "pair": "20200510_20200522",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20200510_20200522",
+          "files": [
+            "20200510_20200522.geo.unw.tif",
+            "20200510_20200522.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "recent",
+          "pair": "20200612_20200624",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20200612_20200624",
+          "files": [
+            "20200612_20200624.geo.unw.tif",
+            "20200612_20200624.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "mid",
+          "pair": "20200531_20200612",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20200531_20200612",
+          "files": [
+            "20200531_20200612.geo.unw.tif",
+            "20200531_20200612.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "baseline",
+          "pair": "20200507_20200519",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20200507_20200519",
+          "files": [
+            "20200507_20200519.geo.unw.tif",
+            "20200507_20200519.geo.cc.tif"
+          ]
+        }
+      ]
+    },
+    "NEWS-MANTAM-20160813": {
+      "T": "2016-08-13",
+      "pairs": [
+        {
+          "frame": "048D_06252_131313",
+          "slot": "recent",
+          "pair": "20160730_20160811",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20160730_20160811",
+          "files": [
+            "20160730_20160811.geo.unw.tif",
+            "20160730_20160811.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "mid",
+          "pair": "20160612_20160718",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20160612_20160718",
+          "files": [
+            "20160612_20160718.geo.unw.tif",
+            "20160612_20160718.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "baseline",
+          "pair": "20160531_20160612",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20160531_20160612",
+          "files": [
+            "20160531_20160612.geo.unw.tif",
+            "20160531_20160612.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "recent",
+          "pair": "20160715_20160808",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20160715_20160808",
+          "files": [
+            "20160715_20160808.geo.unw.tif",
+            "20160715_20160808.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "mid",
+          "pair": "20160528_20160715",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20160528_20160715",
+          "files": [
+            "20160528_20160715.geo.unw.tif",
+            "20160528_20160715.geo.cc.tif"
+          ]
+        }
+      ]
+    },
+    "NEWS-SOKPAY-20230326": {
+      "T": "2023-03-26",
+      "pairs": [
+        {
+          "frame": "048D_06252_131313",
+          "slot": "recent",
+          "pair": "20230308_20230320",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20230308_20230320",
+          "files": [
+            "20230308_20230320.geo.unw.tif",
+            "20230308_20230320.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "mid",
+          "pair": "20230224_20230308",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20230224_20230308",
+          "files": [
+            "20230224_20230308.geo.unw.tif",
+            "20230224_20230308.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "baseline",
+          "pair": "20230212_20230224",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20230212_20230224",
+          "files": [
+            "20230212_20230224.geo.unw.tif",
+            "20230212_20230224.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "recent",
+          "pair": "20230305_20230317",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20230305_20230317",
+          "files": [
+            "20230305_20230317.geo.unw.tif",
+            "20230305_20230317.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "mid",
+          "pair": "20230221_20230305",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20230221_20230305",
+          "files": [
+            "20230221_20230305.geo.unw.tif",
+            "20230221_20230305.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "baseline",
+          "pair": "20230209_20230221",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20230209_20230221",
+          "files": [
+            "20230209_20230221.geo.unw.tif",
+            "20230209_20230221.geo.cc.tif"
+          ]
+        }
+      ]
+    },
+    "NEWS-TSONG-20190916": {
+      "T": "2019-09-16",
+      "pairs": [
+        {
+          "frame": "048D_06252_131313",
+          "slot": "recent",
+          "pair": "20190901_20190913",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20190901_20190913",
+          "files": [
+            "20190901_20190913.geo.unw.tif",
+            "20190901_20190913.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "mid",
+          "pair": "20190820_20190901",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20190820_20190901",
+          "files": [
+            "20190820_20190901.geo.unw.tif",
+            "20190820_20190901.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "048D_06252_131313",
+          "slot": "baseline",
+          "pair": "20190727_20190808",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/48/048D_06252_131313/interferograms/20190727_20190808",
+          "files": [
+            "20190727_20190808.geo.unw.tif",
+            "20190727_20190808.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "recent",
+          "pair": "20190829_20190910",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20190829_20190910",
+          "files": [
+            "20190829_20190910.geo.unw.tif",
+            "20190829_20190910.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "mid",
+          "pair": "20190817_20190829",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20190817_20190829",
+          "files": [
+            "20190817_20190829.geo.unw.tif",
+            "20190817_20190829.geo.cc.tif"
+          ]
+        },
+        {
+          "frame": "012A_06241_131313",
+          "slot": "baseline",
+          "pair": "20190805_20190817",
+          "page": "https://gws-access.jasmin.ac.uk/public/nceo_geohazards/LiCSAR_products/12/012A_06241_131313/interferograms/20190805_20190817",
+          "files": [
+            "20190805_20190817.geo.unw.tif",
+            "20190805_20190817.geo.cc.tif"
+          ]
+        }
+      ]
+    }
+  }
+}

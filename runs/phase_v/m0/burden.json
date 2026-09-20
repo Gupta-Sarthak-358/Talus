@@ -1,0 +1,38 @@
+{
+  "note": "background burden from frozen-scorer band runs (same RF+iso+bands family)",
+  "monsoon_TierB": "see e15_replay_audit",
+  "offseason": {
+    "frac_any_hot": 0.0,
+    "mean_hot_days": 0.0,
+    "monsoon_reference": {
+      "frac_any_hot": 0.4666666666666667,
+      "mean_hot_days": 5.8,
+      "note": "E15 Tier-B, same band pipeline, monsoon windows"
+    }
+  },
+  "m0_event_hot_occupancy": {
+    "NEWS-17MILE-20220615": 0,
+    "NEWS-20MILE-20220901": 0,
+    "NEWS-29MILE-20200923": 4,
+    "NEWS-29MILE-20210711": 2,
+    "NEWS-29MILE-20210906": 1,
+    "NEWS-APDARA-20200627": 0,
+    "NEWS-BIRIKDARA-20220802": 0,
+    "NEWS-DARJ-20150701": 0,
+    "NEWS-DIPUDARA-20240820": 2,
+    "NEWS-DIPUDARA-20240821": 2,
+    "NEWS-LINGCHOM-20200524": 0,
+    "NEWS-MANGAN-20240613": 0,
+    "NEWS-MANGANCHUNG-20200627": 1,
+    "NEWS-MANTAM-20160813": 0,
+    "NEWS-NH10-20150709": 0,
+    "NEWS-NH10-20211020": 0,
+    "NEWS-NH10-20221009": 0,
+    "NEWS-PATHING-20221124": 0,
+    "NEWS-PUBUNG-20190708": 0,
+    "NEWS-RONGEY-20220628": 0,
+    "NEWS-SOKPAY-20230326": 0,
+    "NEWS-TSONG-20190916": 0,
+    "NEWS-YUMTHANG-20220831": 0
+  }
+}

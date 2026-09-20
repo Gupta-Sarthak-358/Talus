@@ -1,0 +1,13 @@
+{
+  "events": 23,
+  "pairs": 137,
+  "files_read": 274,
+  "bytes": 3077714569,
+  "pairs_with_unw": 132,
+  "date_gate": "secondary <= T-1 asserted per pair in code",
+  "units": {
+    "unw": "radians (\u00d78.84 = mm LOS)",
+    "cc": "uint8 0-255"
+  },
+  "issues": []
+}

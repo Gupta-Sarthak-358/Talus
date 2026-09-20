@@ -1,18 +1,26 @@
 import React from 'react';
 import { useTalusContext } from '../../context/TalusContext';
-import { ShieldCheck, AlertOctagon, Clock, Navigation, ArrowRight } from 'lucide-react';
+import { RISK_BANDS } from '../../data/constants';
+import { ShieldCheck, AlertOctagon, Navigation } from 'lucide-react';
 
 function exposureBand(score) {
-  if (score >= 85) return 'CRITICAL';
-  if (score >= 75) return 'HIGH';
-  if (score >= 65) return 'MODERATE';
-  if (score >= 50) return 'LOW';
-  return 'VERY LOW';
+  for (const [band, meta] of Object.entries(RISK_BANDS)) {
+    const [lo, hi] = meta.range;
+    if (score >= lo && score <= hi) return band;
+  }
+  return 'VERY_LOW';
 }
 
 export default function RouteComparisonCard({ routePlan }) {
-  const { t } = useTalusContext();
-  if (!routePlan) return null;
+  const { t, executeRouting } = useTalusContext();
+  if (!routePlan) {
+    return (
+      <div className="bg-white border-2 border-zinc-200 rounded-2xl p-4 text-xs text-zinc-600">
+        No recommended route yet — backend route unavailable.
+        <button onClick={() => executeRouting?.({}).catch(() => {})} className="ml-2 px-2 py-1 bg-zinc-900 text-white rounded-lg text-[11px] font-bold focus-visible:ring-2">Retry</button>
+      </div>
+    );
+  }
 
   const { normalRoute, riskAwareRoute, comparison } = routePlan;
 

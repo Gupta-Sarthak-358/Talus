@@ -1,0 +1,32 @@
+{
+  "heldout_vi2": {
+    "subset": "heldout-vi2",
+    "n": 60,
+    "recall_watch": 0.8,
+    "recall_alert": 0.7,
+    "recall_critical": 0.5,
+    "imminence_auc": 0.4813,
+    "imminence_pr": 0.6801,
+    "brier7": 0.368
+  },
+  "dev_vi2": {
+    "subset": "dev-vi2",
+    "n": 78,
+    "recall_watch": 1.0,
+    "recall_alert": 0.7692,
+    "recall_critical": 0.6154,
+    "imminence_auc": 0.8632,
+    "imminence_pr": 0.908,
+    "brier7": 0.1241
+  },
+  "heldout_m0": {
+    "subset": "heldout",
+    "n": 60,
+    "recall_watch": 0.5,
+    "recall_alert": 0.3,
+    "recall_critical": 0.0,
+    "imminence_auc": 0.5312,
+    "imminence_pr": 0.6979,
+    "brier7": 0.3171
+  }
+}

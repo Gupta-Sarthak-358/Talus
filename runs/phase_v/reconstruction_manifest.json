@@ -1,0 +1,7 @@
+{
+  "contract": "Mantam pilot + upgrades (3d rain, seismic detail, STAC scenes, D8 terrain)",
+  "code_sha": "ea38f25c1653",
+  "events": 23,
+  "snapshots": 138,
+  "T_convention": "T-day grid excluded; T shares grid state with T-1"
+}

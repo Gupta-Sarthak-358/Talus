@@ -20,6 +20,7 @@ import WhatIfDrawer from './components/Simulation/WhatIfDrawer';
 import SafeRouteModal from './components/Routing/SafeRouteModal';
 import ReportModal from './components/Reports/ReportModal';
 import AlertPanel from './components/Alerts/AlertPanel';
+import RequireRole from './components/Auth/RequireRole';
 
 export default function App() {
   return (
@@ -34,12 +35,12 @@ export default function App() {
                 <Route path="reports" element={<ReportsPage />} />
                 <Route path="lab" element={<LabPage />} />
                 <Route path="routes" element={<RoutesPage />} />
-                {/* Role shells — selection via Admin Panel only */}
+                {/* Role shells — villager open, officers + admin PIN-gated (direct URLs included) */}
                 <Route path="role/villager" element={<VillagerPage />} />
-                <Route path="role/district_officer" element={<DistrictPage />} />
-                <Route path="role/state_manager" element={<StatePage />} />
-                <Route path="role/rescue_team" element={<RescuePage />} />
-                <Route path="admin" element={<AdminPage />} />
+                <Route path="role/district_officer" element={<RequireRole allow="district_officer"><DistrictPage /></RequireRole>} />
+                <Route path="role/state_manager" element={<RequireRole allow="state_manager"><StatePage /></RequireRole>} />
+                <Route path="role/rescue_team" element={<RequireRole allow="rescue_team"><RescuePage /></RequireRole>} />
+                <Route path="admin" element={<RequireRole allow={['admin', 'district_officer', 'state_manager']}><AdminPage /></RequireRole>} />
                 <Route path="dashboard" element={<Dashboard />} />
               </Route>
             </Routes>

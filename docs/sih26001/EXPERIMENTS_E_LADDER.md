@@ -8,6 +8,56 @@ FULL reproduces prod (RF200 0.9339 vs prod RF500 0.9345 `ml/sih26001/reports/met
 Prior run: region specialists lose to global (`scripts/exp_region_specialist.py`,
 `runs/region_specialist.json`) — this ladder investigates *why* before adding intelligence.
 
+## Temporal forecasting close-out — 2026-09-18 (CAMPAIGN CLOSED)
+
+**Scientific conclusion: at the available spatial/temporal resolution, the measured
+environmental variables plus tested SAR summaries do not provide a validated
+pre-failure timing signal.** This is not project failure — susceptibility signal,
+regional calibration, exposure-aware decisions, OOD handling, and the reproducible
+warning/replay system all stand. The temporal campaign reached its evidence ceiling.
+
+| Rung | Representation | Held-out AUC | Held-out Brier | Held-out recall | Verdict |
+|---|---|---|---|---|---|
+| M0 | 7-day tabular baseline | 0.531 | 0.317 | ALERT 0.30 | dead |
+| VI-0 | tabular + time-matched negatives (3,798 rows / 52 pos) | 0.468 | 0.595 | WATCH/ALERT 0.2/0.2, novel 0 | NEGATIVE |
+| VI-1 | GRU-16 sequence | 0.388 | 0.615 | 0.5/0.5/0.5 on a hair-trigger | REJECT |
+| VI-2 | LiCSAR coherence/phase summaries (137 pairs, date-gated, 0/138 leaks) | 0.481 | 0.368 | ALERT 0.70, sat-only AUC 0.500 exactly | REJECT |
+
+**We did not fail to find a better model; we failed to find a validated observable
+precursor.** Full per-rung protocols below; VI-2 close-out section at the bottom of
+this file.
+
+## H3 (PRE-REGISTERED 2026-09-20 — NOT STARTED, runs only on explicit approval)
+
+**H3:** dense InSAR velocity/change (LiCSBAS/SBAS time series) provides pre-event
+information unavailable to daily rain/soil/static predictors. This is a different
+observable from VI-2's snapshot coherence/phase summaries — not a retry, not a new net.
+
+Frozen gates (no deviation without a new ADR):
+1. Observable: LiCSBAS/SBAS-type temporal velocity/deformation ONLY — not another
+   VV/VH summary, not a new neural architecture, no feature-shopping after results.
+2. Window: fixed pre-event horizon, every timestamp strictly ≤ T-1
+   (re-verify 0 leaks before any score).
+3. Population: same frozen 23-event championship, same 13-dev/10-held-out split from
+   `runs/final_scorecards_v1.json`; held-out 10 untouched until the single evaluation.
+4. Primary test is held-out DISCRIMINATION of the dense-InSAR signal — a prettier
+   recall number never substitutes for it. No held-out threshold tuning,
+   no Tier-2-as-validation, NO_FILL intact.
+5. Resource ceiling fixed before execution (weeks, pipeline, event/track eligibility);
+   when reached, no H4/H5/H6 — the floor is declared.
+6. Binary outcome only: evidence for H3 / no evidence for H3. Single evaluation:
+   held-out AUC/Brier vs M0 (0.531/0.317). Pass bar: AUC > 0.60 with Brier < 0.30.
+
+Endpoint: H3 positive → dense deformation carries information absent from the
+environmental observables. H3 negative → detectability floor declared and temporal
+forecasting frozen. Either way the project stops being "we couldn't get the model to
+work" and becomes a documented result about what the sensing system can and cannot
+observe before failure.
+
+If H3 never runs, the standing result is the detectability floor: failure occurs after
+the observable precursor falls below the system's detectability at 0.25°/daily
+environmental resolution and tested SAR footprint summaries.
+
 ## Verdict
 
 1. **Leaderboard, not one headline number.** The hard-negative figure below is a
@@ -705,6 +755,9 @@ dev-OOF AUC 0.79, op thr 0.0062 (non-degenerate). Held-out: WATCH/ALERT/CRIT 0.5
 BUT AUC 0.388, Brier 0.615 — indiscriminate-loud replaces blind-quiet; novel 0.4 is the
 only bright spot and rides the hair-trigger. VERDICT REJECT: sequence representation
 without new evidence fails. Ladder points to VI-2 (SAR coherence/deformation), not nets.
+[HISTORICAL 2026-09-18 morning — SUPERSEDED. Extraction audit PASS (23 events × 137
+pairs), modeling closed with VERDICT REJECT; see close-out on top and VI-2 verdict
+section at the bottom. Preserved verbatim below.]
 VI-2 EXTRACTION IN FLIGHT: browser-chain route cracked it (GWS page → CEDA link → 302 →
 dap via curl -L; lesson: follow links, never hardcode hosts). Manifest-driven batch
 (`download_licsar_manifest.py`, invariant-checked, paced, Mantam-first): ~9 files/~93 MB
@@ -731,7 +784,33 @@ warning burden / trust-domain. E17 frozen until championship evidence demands a
 specific regime-aware-routing question. No new architectures, no plains model to
 rescue 10 cases, no replay-tuned thresholds, Tier-2 never as validation.
 
-## Implementation order (frozen)
+## VI-2 verdict: REJECT (2026-09-18, extraction audit PASS, modeling closed)
+
+VI-2 FIT (`runs/phase_v/vi2/`): per-event LiCSAR unw/coherence summaries (recent mm,
+trend, recent cc, cc trend, valid frac, cross-geometry agreement), 137 pairs date-gated
+(secondary ≤ T-1 asserted per pair; re-verified 0/138 leak rows), XGB tiny on dev + iso
+on dev — identical protocol to M1-A. Held-out (frozen 10-event championship):
+
+| Metric | M0 | VI-2 | base-only | sat-only |
+|---|---|---|---|---|
+| ALERT recall | 0.30 | 0.70 | 0.40 | 0.00 |
+| AUC | 0.531 | 0.481 | 0.520 | **0.500** |
+| Brier | 0.317 | 0.368 | 0.263 | 0.222 |
+
+Reconciliation re-verified: dev AUC 0.8632 / Brier 0.1241, held-out AUC 0.4813 /
+Brier 0.368 recomputed from `vi2_predictions.csv` (138 = 78 dev + 60 held-out) match
+`vi2_scorecard.json` exactly. VERDICT REJECT: H2 NOT SUPPORTED in this representation —
+sat-only AUC = 0.500 exactly (coherence/phase summaries carry no pre-event signal at
+these footprints), and the recall gain is recalibration-overfit (base-only already
+0.40/0.263; +SAR lifts recall to 0.70 while AUC falls below chance and Brier degrades).
+Monsoon decorrelation (cc 10–35, unw 2.5% coverage at Mantam) makes the "deformation"
+observable mostly unwrapping-atmosphere noise — consistent with, not contradictory to,
+the null. No broader SAR fusion; burden comparison skipped (gate failed first).
+Residual space narrows to: dense InSAR time-series (LiCSBAS/SBAS velocity — different
+observable, untested) or accepting pre-event surface response below the detectability
+floor for these event scales in this environment.
+
+## Implementation order (ARCHIVAL — superseded by the 2026-09-18 close-out above; preserved, not active)
 
 1. E1.5 matched negatives + gates A/B/C → 2. re-run ladder+specialists on corrected
    splits → 3. global calibration → 4. regional calibration test → 5. candidate bands →

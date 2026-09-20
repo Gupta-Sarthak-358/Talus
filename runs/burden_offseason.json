@@ -1,0 +1,433 @@
+{
+  "windows": [
+    {
+      "zone": "T2235",
+      "region": "SOUTH",
+      "window": "2024-01",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T1892",
+      "region": "SOUTH",
+      "window": "2024-02",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2577",
+      "region": "SOUTH",
+      "window": "2023-11",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T1761",
+      "region": "SOUTH",
+      "window": "2024-02",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T1527",
+      "region": "SOUTH",
+      "window": "2023-12",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T1495",
+      "region": "SOUTH",
+      "window": "2023-12",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T1977",
+      "region": "SOUTH",
+      "window": "2023-11",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2171",
+      "region": "SOUTH",
+      "window": "2023-11",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2037",
+      "region": "SOUTH",
+      "window": "2023-11",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T1701",
+      "region": "SOUTH",
+      "window": "2023-11",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2760",
+      "region": "SOUTH",
+      "window": "2023-12",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T1666",
+      "region": "SOUTH",
+      "window": "2023-12",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2591",
+      "region": "SOUTH",
+      "window": "2024-02",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2305",
+      "region": "SOUTH",
+      "window": "2024-01",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2805",
+      "region": "SOUTH",
+      "window": "2024-02",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2813",
+      "region": "SOUTH",
+      "window": "2024-01",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T1794",
+      "region": "SOUTH",
+      "window": "2024-02",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T1809",
+      "region": "SOUTH",
+      "window": "2024-02",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T1962",
+      "region": "SOUTH",
+      "window": "2024-02",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2201",
+      "region": "SOUTH",
+      "window": "2024-02",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2908",
+      "region": "SOUTH",
+      "window": "2024-01",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2583",
+      "region": "SOUTH",
+      "window": "2023-12",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2042",
+      "region": "SOUTH",
+      "window": "2023-11",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2775",
+      "region": "SOUTH",
+      "window": "2023-11",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2734",
+      "region": "SOUTH",
+      "window": "2024-02",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T1905",
+      "region": "SOUTH",
+      "window": "2024-01",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2016",
+      "region": "SOUTH",
+      "window": "2024-02",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T1726",
+      "region": "SOUTH",
+      "window": "2024-02",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2066",
+      "region": "SOUTH",
+      "window": "2023-11",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2469",
+      "region": "SOUTH",
+      "window": "2024-02",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2202",
+      "region": "NORTH",
+      "window": "2023-12",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T1643",
+      "region": "NORTH",
+      "window": "2024-01",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2214",
+      "region": "NORTH",
+      "window": "2023-12",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2456",
+      "region": "NORTH",
+      "window": "2024-01",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2272",
+      "region": "NORTH",
+      "window": "2023-12",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2281",
+      "region": "NORTH",
+      "window": "2024-02",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2258",
+      "region": "NORTH",
+      "window": "2024-02",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2560",
+      "region": "NORTH",
+      "window": "2024-01",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2492",
+      "region": "NORTH",
+      "window": "2023-12",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T1970",
+      "region": "NORTH",
+      "window": "2024-01",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2450",
+      "region": "NORTH",
+      "window": "2023-11",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2297",
+      "region": "NORTH",
+      "window": "2023-12",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2359",
+      "region": "NORTH",
+      "window": "2024-01",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T1576",
+      "region": "NORTH",
+      "window": "2023-12",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T1674",
+      "region": "NORTH",
+      "window": "2024-02",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T1868",
+      "region": "NORTH",
+      "window": "2023-12",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T1924",
+      "region": "NORTH",
+      "window": "2024-02",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2084",
+      "region": "NORTH",
+      "window": "2024-02",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T1606",
+      "region": "NORTH",
+      "window": "2023-11",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2685",
+      "region": "NORTH",
+      "window": "2024-01",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2337",
+      "region": "NORTH",
+      "window": "2024-02",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T1540",
+      "region": "NORTH",
+      "window": "2024-02",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2344",
+      "region": "NORTH",
+      "window": "2023-12",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2087",
+      "region": "NORTH",
+      "window": "2024-01",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2486",
+      "region": "NORTH",
+      "window": "2024-02",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T1975",
+      "region": "NORTH",
+      "window": "2024-01",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T2131",
+      "region": "NORTH",
+      "window": "2024-01",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T1912",
+      "region": "NORTH",
+      "window": "2024-01",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T1957",
+      "region": "NORTH",
+      "window": "2024-02",
+      "hot_days": 0,
+      "top": "NORMAL"
+    },
+    {
+      "zone": "T1514",
+      "region": "NORTH",
+      "window": "2024-01",
+      "hot_days": 0,
+      "top": "NORMAL"
+    }
+  ],
+  "summary": {
+    "frac_any_hot": 0.0,
+    "mean_hot_days": 0.0,
+    "monsoon_reference": {
+      "frac_any_hot": 0.4666666666666667,
+      "mean_hot_days": 5.8,
+      "note": "E15 Tier-B, same band pipeline, monsoon windows"
+    }
+  }
+}

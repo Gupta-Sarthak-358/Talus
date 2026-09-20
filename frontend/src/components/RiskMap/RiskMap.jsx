@@ -325,8 +325,8 @@ export default function RiskMap() {
             </Marker>
           ))}
 
-        {/* Runout paths — downstream risk if slope fails */}
-        {mapLayers.runout && runout &&
+        {/* Runout paths — officer/rescue only; villager sees binary danger, not building counts */}
+        {mapLayers.runout && role !== 'villager' && runout &&
           Object.entries(runout)
             .filter(([, z]) => Array.isArray(z.path) && z.path.length >= 2)
             .map(([zid, z]) => (
@@ -344,8 +344,8 @@ export default function RiskMap() {
               </Polyline>
             ))}
 
-        {/* Vegetation change — field check before action */}
-        {mapLayers.wounds && woundPins.map((w, i) => (
+        {/* Vegetation change — officer/rescue field-check; hidden for villager */}
+        {mapLayers.wounds && role !== 'villager' && woundPins.map((w, i) => (
           <Marker key={`wound-${i}`} position={[w.lat, w.lon]} icon={sensorIcon}>
             <Popup>
               <div className="text-[11px] p-0.5">

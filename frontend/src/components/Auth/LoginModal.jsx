@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 import { Shield, X, Lock } from 'lucide-react';
 import { checkPin, setAuth, roleLabel } from '../../services/auth';
-import { useTalusContext } from '../../context/TalusContext';
 
-export default function LoginModal({ wantedRole, onClose, onSuccess }) {
+export default function LoginModal({ wantedRole, allowAdminPin = false, onClose, onSuccess }) {
   const [pin, setPin] = useState('');
   const [err, setErr] = useState('');
-  const { setRole } = useTalusContext();
 
   const handle = (e) => {
     e.preventDefault();
     if (checkPin(wantedRole, pin)) {
       setAuth(wantedRole);
-      setRole(wantedRole);
+      // Single exit: onSuccess owns close + setRole + navigate (no double-fire).
       onSuccess?.(wantedRole);
-      onClose?.();
+    } else if (allowAdminPin && checkPin('admin', pin)) {
+      // Admin PIN 9999 opens all (auth.js contract) — identity stays admin.
+      setAuth('admin');
+      onSuccess?.('admin');
     } else {
       setErr('Wrong PIN. Demo: district 1111 · state 2222 · rescue 3333 · admin 9999');
     }

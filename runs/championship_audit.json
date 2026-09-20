@@ -1,0 +1,257 @@
+{
+  "n": 23,
+  "gap_to_30": 7,
+  "errors": [],
+  "years": {
+    "2022": 7,
+    "2020": 4,
+    "2021": 3,
+    "2024": 3,
+    "2015": 2,
+    "2019": 2,
+    "2016": 1,
+    "2023": 1
+  },
+  "seasons": {
+    "monsoon": 18,
+    "post-monsoon": 3,
+    "pre-monsoon": 2
+  },
+  "districts": {
+    "Gangtok": 6,
+    "Mangan": 5,
+    "Darjeeling": 3,
+    "Kalimpong": 3,
+    "East Sikkim/WB": 1,
+    "Kalimpong/East Sikkim": 1,
+    "Gangtok/Pakyong": 1,
+    "Pakyong/Kalimpong border": 1,
+    "Namchi": 1,
+    "Gyalshing": 1
+  },
+  "event_types": {
+    "road-block high-exposure": 3,
+    "fatal": 3,
+    "non-fatal road-block chronic-site": 3,
+    "fatal multi-slide episode": 2,
+    "non-fatal high-exposure": 2,
+    "fatal road-block": 1,
+    "non-fatal": 1,
+    "non-fatal (1 death post-rescue) road-block": 1,
+    "non-fatal road-block": 1,
+    "non-fatal mass-evacuation chronic-slide": 1,
+    "road-block strategic-corridor": 1,
+    "infrastructure-adjacent slope failure": 1,
+    "non-fatal high-exposure valley-blocking": 1,
+    "non-fatal mass-evacuation": 1,
+    "fatal cloudburst mass-evacuation": 1
+  },
+  "episodes": 18,
+  "recurrent_site_rows": 8,
+  "edge_proxy_rows": 1,
+  "convergence": {
+    "dual": 3,
+    "triple": 2,
+    "multi (5 outlets)": 2,
+    "multi (5 outlets + peer-reviewed geotech study)": 1,
+    "multi": 1,
+    "dual (press + peer-reviewed)": 1,
+    "multi (6 outlets, ground detail + IMD 172mm/24h)": 1,
+    "multi (4 outlets)": 1,
+    "multi (wire + press + field GPS + peer-reviewed)": 1,
+    "quad": 1,
+    "multi (Tier-1 govt + wire + press)": 1,
+    "multi (3 outlets)": 1,
+    "multi (5 outlets incl operator admission)": 1,
+    "multi (8+ outlets/institutions)": 1,
+    "multi (5 outlets incl Tier-1 govt)": 1
+  },
+  "transfer_eligible": 10,
+  "post_championship_study": 2,
+  "events": [
+    {
+      "slide_no": "NEWS-DARJ-20150701",
+      "exact_date": "2015-07-01",
+      "district": "Darjeeling",
+      "event_type": "fatal multi-slide episode",
+      "related_episode_id": "EP-JUL2015-DARJ",
+      "source_convergence": NaN
+    },
+    {
+      "slide_no": "NEWS-NH10-20150709",
+      "exact_date": "2015-07-09",
+      "district": "Darjeeling",
+      "event_type": "fatal road-block",
+      "related_episode_id": "EP-JUL2015-DARJ",
+      "source_convergence": NaN
+    },
+    {
+      "slide_no": "NEWS-NH10-20211020",
+      "exact_date": "2021-10-20",
+      "district": "East Sikkim/WB",
+      "event_type": "road-block high-exposure",
+      "related_episode_id": "EP-OCT2021-NE",
+      "source_convergence": "multi (5 outlets + peer-reviewed geotech study)"
+    },
+    {
+      "slide_no": "NEWS-MANGAN-20240613",
+      "exact_date": "2024-06-13",
+      "district": "Mangan",
+      "event_type": "fatal multi-slide episode",
+      "related_episode_id": "EP-JUN2024-SIKKIM",
+      "source_convergence": "multi"
+    },
+    {
+      "slide_no": "NEWS-DIPUDARA-20240820",
+      "exact_date": "2024-08-20",
+      "district": "Gangtok",
+      "event_type": "non-fatal high-exposure",
+      "related_episode_id": "EP-AUG2024-EASTSIKKIM",
+      "source_convergence": "dual (press + peer-reviewed)"
+    },
+    {
+      "slide_no": "NEWS-DIPUDARA-20240821",
+      "exact_date": "2024-08-21",
+      "district": "Gangtok",
+      "event_type": "non-fatal",
+      "related_episode_id": "EP-AUG2024-EASTSIKKIM",
+      "source_convergence": NaN
+    },
+    {
+      "slide_no": "NEWS-NH10-20221009",
+      "exact_date": "2022-10-09",
+      "district": "Kalimpong/East Sikkim",
+      "event_type": "road-block high-exposure",
+      "related_episode_id": "EP-OCT2022-NE",
+      "source_convergence": NaN
+    },
+    {
+      "slide_no": "NEWS-PUBUNG-20190708",
+      "exact_date": "2019-07-08",
+      "district": "Darjeeling",
+      "event_type": "fatal",
+      "related_episode_id": "EP-JUL2019-DARJ",
+      "source_convergence": "multi (6 outlets, ground detail + IMD 172mm/24h)"
+    },
+    {
+      "slide_no": "NEWS-RONGEY-20220628",
+      "exact_date": "2022-06-28",
+      "district": "Gangtok",
+      "event_type": "fatal",
+      "related_episode_id": "EP-JUN2022-SIKKIM",
+      "source_convergence": "dual"
+    },
+    {
+      "slide_no": "NEWS-YUMTHANG-20220831",
+      "exact_date": "2022-08-31",
+      "district": "Mangan",
+      "event_type": "non-fatal high-exposure",
+      "related_episode_id": "EP-SEP2022-SIKKIM",
+      "source_convergence": "triple"
+    },
+    {
+      "slide_no": "NEWS-20MILE-20220901",
+      "exact_date": "2022-09-01",
+      "district": "Gangtok/Pakyong",
+      "event_type": "road-block high-exposure",
+      "related_episode_id": "EP-SEP2022-SIKKIM",
+      "source_convergence": "triple"
+    },
+    {
+      "slide_no": "NEWS-17MILE-20220615",
+      "exact_date": "2022-06-15",
+      "district": "Gangtok",
+      "event_type": "non-fatal (1 death post-rescue) road-block",
+      "related_episode_id": "EP-JUN2022-SIKKIM",
+      "source_convergence": "multi (4 outlets)"
+    },
+    {
+      "slide_no": "NEWS-BIRIKDARA-20220802",
+      "exact_date": "2022-08-02",
+      "district": "Pakyong/Kalimpong border",
+      "event_type": "non-fatal road-block",
+      "related_episode_id": "EP-AUG2022-SIKKIM",
+      "source_convergence": "dual"
+    },
+    {
+      "slide_no": "NEWS-29MILE-20210906",
+      "exact_date": "2021-09-06",
+      "district": "Kalimpong",
+      "event_type": "non-fatal road-block chronic-site",
+      "related_episode_id": "EP-SEP2021-NE",
+      "source_convergence": "dual"
+    },
+    {
+      "slide_no": "NEWS-PATHING-20221124",
+      "exact_date": "2022-11-24",
+      "district": "Namchi",
+      "event_type": "non-fatal mass-evacuation chronic-slide",
+      "related_episode_id": "EP-NOV2022-PATHING",
+      "source_convergence": "multi (wire + press + field GPS + peer-reviewed)"
+    },
+    {
+      "slide_no": "NEWS-29MILE-20210711",
+      "exact_date": "2021-07-11",
+      "district": "Kalimpong",
+      "event_type": "non-fatal road-block chronic-site",
+      "related_episode_id": "EP-JUL2021-NE",
+      "source_convergence": "quad"
+    },
+    {
+      "slide_no": "NEWS-29MILE-20200923",
+      "exact_date": "2020-09-23",
+      "district": "Kalimpong",
+      "event_type": "non-fatal road-block chronic-site",
+      "related_episode_id": "EP-SEP2020-NE",
+      "source_convergence": "multi (5 outlets)"
+    },
+    {
+      "slide_no": "NEWS-LINGCHOM-20200524",
+      "exact_date": "2020-05-24",
+      "district": "Mangan",
+      "event_type": "fatal",
+      "related_episode_id": "EP-MAY2020-NSIKKIM",
+      "source_convergence": "multi (Tier-1 govt + wire + press)"
+    },
+    {
+      "slide_no": "NEWS-MANGANCHUNG-20200627",
+      "exact_date": "2020-06-27",
+      "district": "Mangan",
+      "event_type": "road-block strategic-corridor",
+      "related_episode_id": "EP-JUN2020-NSIKKIM",
+      "source_convergence": "multi (3 outlets)"
+    },
+    {
+      "slide_no": "NEWS-APDARA-20200627",
+      "exact_date": "2020-06-27",
+      "district": "Gangtok",
+      "event_type": "infrastructure-adjacent slope failure",
+      "related_episode_id": "EP-JUN2020-NSIKKIM",
+      "source_convergence": "multi (5 outlets incl operator admission)"
+    },
+    {
+      "slide_no": "NEWS-MANTAM-20160813",
+      "exact_date": "2016-08-13",
+      "district": "Mangan",
+      "event_type": "non-fatal high-exposure valley-blocking",
+      "related_episode_id": "EP-AUG2016-MANTAM",
+      "source_convergence": "multi (8+ outlets/institutions)"
+    },
+    {
+      "slide_no": "NEWS-SOKPAY-20230326",
+      "exact_date": "2023-03-26",
+      "district": "Gangtok",
+      "event_type": "non-fatal mass-evacuation",
+      "related_episode_id": "EP-MAR2023-SOKPAY",
+      "source_convergence": "multi (5 outlets)"
+    },
+    {
+      "slide_no": "NEWS-TSONG-20190916",
+      "exact_date": "2019-09-16",
+      "district": "Gyalshing",
+      "event_type": "fatal cloudburst mass-evacuation",
+      "related_episode_id": "EP-SEP2019-YUKSAM",
+      "source_convergence": "multi (5 outlets incl Tier-1 govt)"
+    }
+  ]
+}

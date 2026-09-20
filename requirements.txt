@@ -1,0 +1,3 @@
+# Root package deps for the Docker layer cache.
+# Intentionally minimal — runtime deps install from backend/requirements.txt.
+# This file exists because Dockerfile COPYs it before pip install.

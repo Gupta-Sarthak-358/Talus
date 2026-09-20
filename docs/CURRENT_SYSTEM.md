@@ -118,3 +118,4 @@ GIS
 3. IMD live requires IMD_API_KEY (data.gov.in); absent → IMD-live falls back to Open-Meteo blend with labeled provenance.
 4. Soil SWI overlays warning state only — scoring stays frozen on soil_moisture (CCI v09.2 quasi-static proxy).
 5. Inventory 1991-2020 climatology / quasi-static proxies for time-varying inputs (tagged approximate); wound review queue (not confirmed cuts); in-situ rain/soil sensors are fixture/provenance-gated.
+6. Temporal forecasting campaign CLOSED 2026-09-18 (M0 → VI-0 → VI-1 → VI-2 all falsified on the frozen 10-event held-out; sat-only AUC 0.500). The system is a spatial susceptibility + warning-decision system with explicit domain limits — it does not manufacture temporal certainty. See `docs/sih26001/EXPERIMENTS_E_LADDER.md` close-out + `docs/sih26001/FINAL_SCORECARDS_V1.md`.

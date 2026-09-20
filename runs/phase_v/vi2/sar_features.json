@@ -1,0 +1,2898 @@
+{
+  "NEWS-DARJ-20150701": {
+    "T": "2015-07-01",
+    "lat": 27.05,
+    "lon": 88.43,
+    "pairs": [
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20150206_20150630",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 8,
+          "n_total": 121,
+          "median": 30.712,
+          "spread_p90_p10": null,
+          "provenance": "REAL",
+          "median_mm": 135.6
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 13.0,
+          "spread_p90_p10": 52.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20150525_20150606",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 105,
+          "n_total": 121,
+          "median": 3.149,
+          "spread_p90_p10": 3.585,
+          "provenance": "REAL",
+          "median_mm": 13.9
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 18.0,
+          "spread_p90_p10": 52.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20150513_20150525",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": -3.412,
+          "spread_p90_p10": 1.814,
+          "provenance": "REAL",
+          "median_mm": -15.1
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 26.0,
+          "spread_p90_p10": 60.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20150615_20150627",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 8.675,
+          "spread_p90_p10": 12.132,
+          "provenance": "REAL",
+          "median_mm": 38.3
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 14.0,
+          "spread_p90_p10": 27.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20150603_20150615",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": -4.751,
+          "spread_p90_p10": 2.969,
+          "provenance": "REAL",
+          "median_mm": -21.0
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 31.0,
+          "spread_p90_p10": 45.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20150428_20150522",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 109,
+          "n_total": 121,
+          "median": 19.592,
+          "spread_p90_p10": 5.739,
+          "provenance": "REAL",
+          "median_mm": 86.5
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 29.0,
+          "spread_p90_p10": 44.0,
+          "provenance": "REAL"
+        }
+      }
+    ]
+  },
+  "NEWS-NH10-20150709": {
+    "T": "2015-07-09",
+    "lat": 27.02,
+    "lon": 88.42,
+    "pairs": [
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20150206_20150630",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 15,
+          "n_total": 121,
+          "median": 24.151,
+          "spread_p90_p10": 2.892,
+          "provenance": "REAL",
+          "median_mm": 106.6
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 10.0,
+          "spread_p90_p10": 13.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20150525_20150606",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 0.366,
+          "spread_p90_p10": 2.436,
+          "provenance": "REAL",
+          "median_mm": 1.6
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 26.0,
+          "spread_p90_p10": 37.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20150525_20150606",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 0.366,
+          "spread_p90_p10": 2.436,
+          "provenance": "REAL",
+          "median_mm": 1.6
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 26.0,
+          "spread_p90_p10": 37.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20150615_20150627",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 6.394,
+          "spread_p90_p10": 12.09,
+          "provenance": "REAL",
+          "median_mm": 28.2
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 14.0,
+          "spread_p90_p10": 27.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20150603_20150615",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": -3.277,
+          "spread_p90_p10": 2.713,
+          "provenance": "REAL",
+          "median_mm": -14.5
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 22.0,
+          "spread_p90_p10": 29.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20150522_20150603",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 7.368,
+          "spread_p90_p10": 9.866,
+          "provenance": "REAL",
+          "median_mm": 32.5
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 24.0,
+          "spread_p90_p10": 34.0,
+          "provenance": "REAL"
+        }
+      }
+    ]
+  },
+  "NEWS-NH10-20211020": {
+    "T": "2021-10-20",
+    "lat": 27.17,
+    "lon": 88.51,
+    "pairs": [
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20210926_20211008",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 106,
+          "n_total": 121,
+          "median": 10.28,
+          "spread_p90_p10": 0.523,
+          "provenance": "REAL",
+          "median_mm": 45.4
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 26.0,
+          "spread_p90_p10": 57.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20210914_20210926",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 76,
+          "n_total": 121,
+          "median": -13.358,
+          "spread_p90_p10": 2.216,
+          "provenance": "REAL",
+          "median_mm": -59.0
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 13.0,
+          "spread_p90_p10": 46.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20210902_20210914",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 75,
+          "n_total": 121,
+          "median": -1.138,
+          "spread_p90_p10": 4.583,
+          "provenance": "REAL",
+          "median_mm": -5.0
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 11.0,
+          "spread_p90_p10": 38.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20211005_20211017",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 84,
+          "n_total": 121,
+          "median": 5.067,
+          "spread_p90_p10": 2.868,
+          "provenance": "REAL",
+          "median_mm": 22.4
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 14.0,
+          "spread_p90_p10": 29.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20210923_20211005",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 98,
+          "n_total": 121,
+          "median": -0.455,
+          "spread_p90_p10": 3.937,
+          "provenance": "REAL",
+          "median_mm": -2.0
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 19.0,
+          "spread_p90_p10": 48.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20210830_20210911",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 91,
+          "n_total": 121,
+          "median": -4.665,
+          "spread_p90_p10": 4.658,
+          "provenance": "REAL",
+          "median_mm": -20.6
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 17.0,
+          "spread_p90_p10": 33.0,
+          "provenance": "REAL"
+        }
+      }
+    ]
+  },
+  "NEWS-MANGAN-20240613": {
+    "T": "2024-06-13",
+    "lat": 27.51,
+    "lon": 88.53,
+    "pairs": [
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20240525_20240606",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 0.0,
+          "spread_p90_p10": 2.521,
+          "provenance": "REAL",
+          "median_mm": 0.0
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 19.0,
+          "spread_p90_p10": 34.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20240501_20240525",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 3.157,
+          "spread_p90_p10": 8.824,
+          "provenance": "REAL",
+          "median_mm": 13.9
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 13.0,
+          "spread_p90_p10": 30.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20240419_20240501",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": -6.553,
+          "spread_p90_p10": 7.559,
+          "provenance": "REAL",
+          "median_mm": -28.9
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 18.0,
+          "spread_p90_p10": 42.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20240522_20240603",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 97,
+          "n_total": 121,
+          "median": -14.825,
+          "spread_p90_p10": 5.808,
+          "provenance": "REAL",
+          "median_mm": -65.4
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 18.0,
+          "spread_p90_p10": 22.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20240510_20240522",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 92,
+          "n_total": 121,
+          "median": 6.187,
+          "spread_p90_p10": 6.186,
+          "provenance": "REAL",
+          "median_mm": 27.3
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 17.0,
+          "spread_p90_p10": 24.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20240428_20240510",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 113,
+          "n_total": 121,
+          "median": -8.275,
+          "spread_p90_p10": 1.771,
+          "provenance": "REAL",
+          "median_mm": -36.5
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 30.0,
+          "spread_p90_p10": 31.0,
+          "provenance": "REAL"
+        }
+      }
+    ]
+  },
+  "NEWS-DIPUDARA-20240820": {
+    "T": "2024-08-20",
+    "lat": 27.2525,
+    "lon": 88.4606,
+    "pairs": [
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20240805_20240817",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": -5.261,
+          "spread_p90_p10": 5.745,
+          "provenance": "REAL",
+          "median_mm": -23.2
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 31.0,
+          "spread_p90_p10": 57.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20240724_20240805",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 3.463,
+          "spread_p90_p10": 0.907,
+          "provenance": "REAL",
+          "median_mm": 15.3
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 35.0,
+          "spread_p90_p10": 74.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20240618_20240712",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 1.354,
+          "spread_p90_p10": 2.967,
+          "provenance": "REAL",
+          "median_mm": 6.0
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 27.0,
+          "spread_p90_p10": 60.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20240802_20240814",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 99,
+          "n_total": 121,
+          "median": 13.801,
+          "spread_p90_p10": 1.213,
+          "provenance": "REAL",
+          "median_mm": 60.9
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 19.0,
+          "spread_p90_p10": 60.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20240721_20240802",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 86,
+          "n_total": 121,
+          "median": 2.972,
+          "spread_p90_p10": 2.857,
+          "provenance": "REAL",
+          "median_mm": 13.1
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 16.0,
+          "spread_p90_p10": 71.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20240709_20240721",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 115,
+          "n_total": 121,
+          "median": -11.846,
+          "spread_p90_p10": 1.914,
+          "provenance": "REAL",
+          "median_mm": -52.3
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 34.0,
+          "spread_p90_p10": 57.0,
+          "provenance": "REAL"
+        }
+      }
+    ]
+  },
+  "NEWS-DIPUDARA-20240821": {
+    "T": "2024-08-21",
+    "lat": 27.2525,
+    "lon": 88.4606,
+    "pairs": [
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20240805_20240817",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": -5.261,
+          "spread_p90_p10": 5.745,
+          "provenance": "REAL",
+          "median_mm": -23.2
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 31.0,
+          "spread_p90_p10": 57.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20240724_20240805",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 3.463,
+          "spread_p90_p10": 0.907,
+          "provenance": "REAL",
+          "median_mm": 15.3
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 35.0,
+          "spread_p90_p10": 74.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20240618_20240712",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 1.354,
+          "spread_p90_p10": 2.967,
+          "provenance": "REAL",
+          "median_mm": 6.0
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 27.0,
+          "spread_p90_p10": 60.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20240802_20240814",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 99,
+          "n_total": 121,
+          "median": 13.801,
+          "spread_p90_p10": 1.213,
+          "provenance": "REAL",
+          "median_mm": 60.9
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 19.0,
+          "spread_p90_p10": 60.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20240721_20240802",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 86,
+          "n_total": 121,
+          "median": 2.972,
+          "spread_p90_p10": 2.857,
+          "provenance": "REAL",
+          "median_mm": 13.1
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 16.0,
+          "spread_p90_p10": 71.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20240709_20240721",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 115,
+          "n_total": 121,
+          "median": -11.846,
+          "spread_p90_p10": 1.914,
+          "provenance": "REAL",
+          "median_mm": -52.3
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 34.0,
+          "spread_p90_p10": 57.0,
+          "provenance": "REAL"
+        }
+      }
+    ]
+  },
+  "NEWS-NH10-20221009": {
+    "T": "2022-10-09",
+    "lat": 27.13,
+    "lon": 88.51,
+    "pairs": [
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20220921_20221003",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 64,
+          "n_total": 121,
+          "median": -2.078,
+          "spread_p90_p10": 5.877,
+          "provenance": "REAL",
+          "median_mm": -9.2
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 11.0,
+          "spread_p90_p10": 17.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20220828_20220921",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 56,
+          "n_total": 121,
+          "median": -2.21,
+          "spread_p90_p10": 4.375,
+          "provenance": "REAL",
+          "median_mm": -9.8
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 10.0,
+          "spread_p90_p10": 15.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20220816_20220828",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 60,
+          "n_total": 121,
+          "median": 3.595,
+          "spread_p90_p10": 4.842,
+          "provenance": "REAL",
+          "median_mm": 15.9
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 10.0,
+          "spread_p90_p10": 15.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20220918_20220930",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 97,
+          "n_total": 121,
+          "median": -16.386,
+          "spread_p90_p10": 3.075,
+          "provenance": "REAL",
+          "median_mm": -72.3
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 18.0,
+          "spread_p90_p10": 18.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20220906_20220918",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 73,
+          "n_total": 121,
+          "median": -7.039,
+          "spread_p90_p10": 7.867,
+          "provenance": "REAL",
+          "median_mm": -31.1
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 12.0,
+          "spread_p90_p10": 21.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20220825_20220906",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 74,
+          "n_total": 121,
+          "median": 7.64,
+          "spread_p90_p10": 3.346,
+          "provenance": "REAL",
+          "median_mm": 33.7
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 13.0,
+          "spread_p90_p10": 18.0,
+          "provenance": "REAL"
+        }
+      }
+    ]
+  },
+  "NEWS-PUBUNG-20190708": {
+    "T": "2019-07-08",
+    "lat": 27.0044,
+    "lon": 88.2165,
+    "pairs": [
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20190621_20190703",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 65,
+          "n_total": 121,
+          "median": -5.653,
+          "spread_p90_p10": 3.732,
+          "provenance": "REAL",
+          "median_mm": -25.0
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 19.0,
+          "spread_p90_p10": 30.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20190609_20190621",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 71,
+          "n_total": 121,
+          "median": 11.498,
+          "spread_p90_p10": 3.77,
+          "provenance": "REAL",
+          "median_mm": 50.8
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 19.0,
+          "spread_p90_p10": 35.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20190504_20190516",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 109,
+          "n_total": 121,
+          "median": -12.123,
+          "spread_p90_p10": 1.822,
+          "provenance": "REAL",
+          "median_mm": -53.5
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 19.0,
+          "spread_p90_p10": 39.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20190618_20190630",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 98,
+          "n_total": 121,
+          "median": 10.421,
+          "spread_p90_p10": 4.737,
+          "provenance": "REAL",
+          "median_mm": 46.0
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 20.0,
+          "spread_p90_p10": 32.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20190606_20190618",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 106,
+          "n_total": 121,
+          "median": -1.219,
+          "spread_p90_p10": 2.355,
+          "provenance": "REAL",
+          "median_mm": -5.4
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 26.0,
+          "spread_p90_p10": 40.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20190513_20190606",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 42,
+          "n_total": 121,
+          "median": -21.668,
+          "spread_p90_p10": 4.001,
+          "provenance": "REAL",
+          "median_mm": -95.6
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 15.0,
+          "spread_p90_p10": 17.0,
+          "provenance": "REAL"
+        }
+      }
+    ]
+  },
+  "NEWS-RONGEY-20220628": {
+    "T": "2022-06-28",
+    "lat": 27.3,
+    "lon": 88.65,
+    "pairs": [
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20220605_20220617",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 80,
+          "n_total": 121,
+          "median": -3.89,
+          "spread_p90_p10": 5.725,
+          "provenance": "REAL",
+          "median_mm": -17.2
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 13.0,
+          "spread_p90_p10": 19.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20220512_20220605",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 0,
+          "n_total": 121,
+          "median": null,
+          "spread_p90_p10": null,
+          "provenance": "REAL"
+        },
+        "cc": {
+          "n_valid": 0,
+          "n_total": 121,
+          "median": null,
+          "spread_p90_p10": null,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20220430_20220512",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 0,
+          "n_total": 121,
+          "median": null,
+          "spread_p90_p10": null,
+          "provenance": "REAL"
+        },
+        "cc": {
+          "n_valid": 0,
+          "n_total": 121,
+          "median": null,
+          "spread_p90_p10": null,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20220614_20220626",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 78,
+          "n_total": 121,
+          "median": -1.522,
+          "spread_p90_p10": 3.196,
+          "provenance": "REAL",
+          "median_mm": -6.7
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 14.0,
+          "spread_p90_p10": 21.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20220521_20220602",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 99,
+          "n_total": 121,
+          "median": -4.446,
+          "spread_p90_p10": 3.567,
+          "provenance": "REAL",
+          "median_mm": -19.6
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 19.0,
+          "spread_p90_p10": 28.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20220509_20220521",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 94,
+          "n_total": 121,
+          "median": 12.716,
+          "spread_p90_p10": 5.757,
+          "provenance": "REAL",
+          "median_mm": 56.1
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 17.0,
+          "spread_p90_p10": 22.0,
+          "provenance": "REAL"
+        }
+      }
+    ]
+  },
+  "NEWS-YUMTHANG-20220831": {
+    "T": "2022-08-31",
+    "lat": 27.7,
+    "lon": 88.68,
+    "pairs": [
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20220816_20220828",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 114,
+          "n_total": 121,
+          "median": 2.176,
+          "spread_p90_p10": 5.364,
+          "provenance": "REAL",
+          "median_mm": 9.6
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 27.0,
+          "spread_p90_p10": 62.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20220804_20220816",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 113,
+          "n_total": 121,
+          "median": 0.07,
+          "spread_p90_p10": 2.034,
+          "provenance": "REAL",
+          "median_mm": 0.3
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 29.0,
+          "spread_p90_p10": 76.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20220711_20220723",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 71,
+          "n_total": 121,
+          "median": 1.904,
+          "spread_p90_p10": 0.988,
+          "provenance": "REAL",
+          "median_mm": 8.4
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 12.0,
+          "spread_p90_p10": 22.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20220813_20220825",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 120,
+          "n_total": 121,
+          "median": -1.268,
+          "spread_p90_p10": 0.708,
+          "provenance": "REAL",
+          "median_mm": -5.6
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 47.0,
+          "spread_p90_p10": 73.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20220801_20220813",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 92,
+          "n_total": 121,
+          "median": 0.937,
+          "spread_p90_p10": 1.724,
+          "provenance": "REAL",
+          "median_mm": 4.1
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 17.0,
+          "spread_p90_p10": 58.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20220720_20220801",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 116,
+          "n_total": 121,
+          "median": -2.923,
+          "spread_p90_p10": 0.994,
+          "provenance": "REAL",
+          "median_mm": -12.9
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 42.0,
+          "spread_p90_p10": 83.0,
+          "provenance": "REAL"
+        }
+      }
+    ]
+  },
+  "NEWS-20MILE-20220901": {
+    "T": "2022-09-01",
+    "lat": 27.17,
+    "lon": 88.51,
+    "pairs": [
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20220816_20220828",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 82,
+          "n_total": 121,
+          "median": 3.498,
+          "spread_p90_p10": 2.742,
+          "provenance": "REAL",
+          "median_mm": 15.4
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 13.0,
+          "spread_p90_p10": 36.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20220804_20220816",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 81,
+          "n_total": 121,
+          "median": -5.635,
+          "spread_p90_p10": 0.968,
+          "provenance": "REAL",
+          "median_mm": -24.9
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 15.0,
+          "spread_p90_p10": 52.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20220711_20220723",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 94,
+          "n_total": 121,
+          "median": -5.079,
+          "spread_p90_p10": 2.366,
+          "provenance": "REAL",
+          "median_mm": -22.4
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 17.0,
+          "spread_p90_p10": 31.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20220813_20220825",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 91,
+          "n_total": 121,
+          "median": -23.531,
+          "spread_p90_p10": 7.333,
+          "provenance": "REAL",
+          "median_mm": -103.9
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 14.0,
+          "spread_p90_p10": 27.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20220801_20220813",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 80,
+          "n_total": 121,
+          "median": 4.551,
+          "spread_p90_p10": 5.302,
+          "provenance": "REAL",
+          "median_mm": 20.1
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 14.0,
+          "spread_p90_p10": 34.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20220720_20220801",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 82,
+          "n_total": 121,
+          "median": -3.235,
+          "spread_p90_p10": 4.039,
+          "provenance": "REAL",
+          "median_mm": -14.3
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 14.0,
+          "spread_p90_p10": 35.0,
+          "provenance": "REAL"
+        }
+      }
+    ]
+  },
+  "NEWS-17MILE-20220615": {
+    "T": "2022-06-15",
+    "lat": 27.28,
+    "lon": 88.62,
+    "pairs": [
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20220512_20220605",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 0,
+          "n_total": 121,
+          "median": null,
+          "spread_p90_p10": null,
+          "provenance": "REAL"
+        },
+        "cc": {
+          "n_valid": 0,
+          "n_total": 121,
+          "median": null,
+          "spread_p90_p10": null,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20220430_20220512",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 0,
+          "n_total": 121,
+          "median": null,
+          "spread_p90_p10": null,
+          "provenance": "REAL"
+        },
+        "cc": {
+          "n_valid": 0,
+          "n_total": 121,
+          "median": null,
+          "spread_p90_p10": null,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20220430_20220512",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 0,
+          "n_total": 121,
+          "median": null,
+          "spread_p90_p10": null,
+          "provenance": "REAL"
+        },
+        "cc": {
+          "n_valid": 0,
+          "n_total": 121,
+          "median": null,
+          "spread_p90_p10": null,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20220602_20220614",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 103,
+          "n_total": 121,
+          "median": 8.051,
+          "spread_p90_p10": 1.091,
+          "provenance": "REAL",
+          "median_mm": 35.5
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 19.0,
+          "spread_p90_p10": 43.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20220509_20220521",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 116,
+          "n_total": 121,
+          "median": 10.736,
+          "spread_p90_p10": 2.173,
+          "provenance": "REAL",
+          "median_mm": 47.4
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 31.0,
+          "spread_p90_p10": 45.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20220427_20220509",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 120,
+          "n_total": 121,
+          "median": 18.936,
+          "spread_p90_p10": 1.45,
+          "provenance": "REAL",
+          "median_mm": 83.6
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 34.0,
+          "spread_p90_p10": 48.0,
+          "provenance": "REAL"
+        }
+      }
+    ]
+  },
+  "NEWS-BIRIKDARA-20220802": {
+    "T": "2022-08-02",
+    "lat": 27.1,
+    "lon": 88.48,
+    "pairs": [
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20220711_20220723",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 66,
+          "n_total": 121,
+          "median": -3.748,
+          "spread_p90_p10": 4.53,
+          "provenance": "REAL",
+          "median_mm": -16.5
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 11.0,
+          "spread_p90_p10": 16.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20220629_20220711",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 77,
+          "n_total": 121,
+          "median": -2.262,
+          "spread_p90_p10": 3.232,
+          "provenance": "REAL",
+          "median_mm": -10.0
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 14.0,
+          "spread_p90_p10": 24.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20220617_20220629",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 88,
+          "n_total": 121,
+          "median": 9.982,
+          "spread_p90_p10": 3.024,
+          "provenance": "REAL",
+          "median_mm": 44.1
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 15.0,
+          "spread_p90_p10": 25.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20220720_20220801",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 86,
+          "n_total": 121,
+          "median": -4.057,
+          "spread_p90_p10": 5.875,
+          "provenance": "REAL",
+          "median_mm": -17.9
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 14.0,
+          "spread_p90_p10": 19.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20220626_20220708",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 111,
+          "n_total": 121,
+          "median": -0.374,
+          "spread_p90_p10": 3.433,
+          "provenance": "REAL",
+          "median_mm": -1.7
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 21.0,
+          "spread_p90_p10": 25.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20220614_20220626",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 113,
+          "n_total": 121,
+          "median": -1.46,
+          "spread_p90_p10": 1.368,
+          "provenance": "REAL",
+          "median_mm": -6.4
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 27.0,
+          "spread_p90_p10": 26.0,
+          "provenance": "REAL"
+        }
+      }
+    ]
+  },
+  "NEWS-29MILE-20210906": {
+    "T": "2021-09-06",
+    "lat": 27.0144,
+    "lon": 88.4359,
+    "pairs": [
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20210821_20210902",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 61,
+          "n_total": 121,
+          "median": 2.878,
+          "spread_p90_p10": 5.3,
+          "provenance": "REAL",
+          "median_mm": 12.7
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 11.0,
+          "spread_p90_p10": 13.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20210809_20210821",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 82,
+          "n_total": 121,
+          "median": -0.561,
+          "spread_p90_p10": 6.288,
+          "provenance": "REAL",
+          "median_mm": -2.5
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 14.0,
+          "spread_p90_p10": 17.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20210716_20210728",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 62,
+          "n_total": 121,
+          "median": -5.107,
+          "spread_p90_p10": 4.544,
+          "provenance": "REAL",
+          "median_mm": -22.5
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 11.0,
+          "spread_p90_p10": 18.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20210818_20210830",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 6.56,
+          "spread_p90_p10": 11.989,
+          "provenance": "REAL",
+          "median_mm": 29.0
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 13.0,
+          "spread_p90_p10": 19.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20210806_20210818",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": -2.547,
+          "spread_p90_p10": 6.819,
+          "provenance": "REAL",
+          "median_mm": -11.2
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 12.0,
+          "spread_p90_p10": 25.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20210725_20210806",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 75,
+          "n_total": 121,
+          "median": -2.675,
+          "spread_p90_p10": 4.565,
+          "provenance": "REAL",
+          "median_mm": -11.8
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 12.0,
+          "spread_p90_p10": 24.0,
+          "provenance": "REAL"
+        }
+      }
+    ]
+  },
+  "NEWS-PATHING-20221124": {
+    "T": "2022-11-24",
+    "lat": 27.2955,
+    "lon": 88.3924,
+    "pairs": [
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20221108_20221120",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 114,
+          "n_total": 121,
+          "median": -4.711,
+          "spread_p90_p10": 1.128,
+          "provenance": "REAL",
+          "median_mm": -20.8
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 40.0,
+          "spread_p90_p10": 45.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20221027_20221108",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 107,
+          "n_total": 121,
+          "median": -8.234,
+          "spread_p90_p10": 1.267,
+          "provenance": "REAL",
+          "median_mm": -36.3
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 30.0,
+          "spread_p90_p10": 41.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20220921_20221003",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 100,
+          "n_total": 121,
+          "median": -2.707,
+          "spread_p90_p10": 3.592,
+          "provenance": "REAL",
+          "median_mm": -11.9
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 19.0,
+          "spread_p90_p10": 22.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20221105_20221117",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 101,
+          "n_total": 121,
+          "median": 1.093,
+          "spread_p90_p10": 0.754,
+          "provenance": "REAL",
+          "median_mm": 4.8
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 31.0,
+          "spread_p90_p10": 51.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20221024_20221105",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 14.755,
+          "spread_p90_p10": 0.518,
+          "provenance": "REAL",
+          "median_mm": 65.1
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 41.0,
+          "spread_p90_p10": 31.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20221012_20221024",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 81,
+          "n_total": 121,
+          "median": -11.052,
+          "spread_p90_p10": 3.585,
+          "provenance": "REAL",
+          "median_mm": -48.8
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 17.0,
+          "spread_p90_p10": 20.0,
+          "provenance": "REAL"
+        }
+      }
+    ]
+  },
+  "NEWS-29MILE-20210711": {
+    "T": "2021-07-11",
+    "lat": 27.0144,
+    "lon": 88.4359,
+    "pairs": [
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20210622_20210704",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": -1.551,
+          "spread_p90_p10": 3.082,
+          "provenance": "REAL",
+          "median_mm": -6.8
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 16.0,
+          "spread_p90_p10": 20.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20210610_20210622",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 9.56,
+          "spread_p90_p10": 11.004,
+          "provenance": "REAL",
+          "median_mm": 42.2
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 16.0,
+          "spread_p90_p10": 25.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20210529_20210610",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": -0.017,
+          "spread_p90_p10": 1.544,
+          "provenance": "REAL",
+          "median_mm": -0.1
+        },
+        "cc": {
+          "n_valid": 120,
+          "n_total": 121,
+          "median": 18.0,
+          "spread_p90_p10": 31.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20210619_20210701",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 64,
+          "n_total": 121,
+          "median": 1.283,
+          "spread_p90_p10": 7.497,
+          "provenance": "REAL",
+          "median_mm": 5.7
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 11.0,
+          "spread_p90_p10": 14.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20210607_20210619",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 78,
+          "n_total": 121,
+          "median": -3.802,
+          "spread_p90_p10": 5.393,
+          "provenance": "REAL",
+          "median_mm": -16.8
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 13.0,
+          "spread_p90_p10": 19.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20210526_20210607",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 74,
+          "n_total": 121,
+          "median": 8.474,
+          "spread_p90_p10": 7.643,
+          "provenance": "REAL",
+          "median_mm": 37.4
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 13.0,
+          "spread_p90_p10": 23.0,
+          "provenance": "REAL"
+        }
+      }
+    ]
+  },
+  "NEWS-29MILE-20200923": {
+    "T": "2020-09-23",
+    "lat": 27.0144,
+    "lon": 88.4359,
+    "pairs": [
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20200907_20200919",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 57,
+          "n_total": 121,
+          "median": -11.845,
+          "spread_p90_p10": 6.307,
+          "provenance": "REAL",
+          "median_mm": -52.3
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 12.0,
+          "spread_p90_p10": 16.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20200826_20200907",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 60,
+          "n_total": 121,
+          "median": -2.718,
+          "spread_p90_p10": 4.304,
+          "provenance": "REAL",
+          "median_mm": -12.0
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 13.0,
+          "spread_p90_p10": 27.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20200802_20200814",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 67,
+          "n_total": 121,
+          "median": 1.957,
+          "spread_p90_p10": 4.975,
+          "provenance": "REAL",
+          "median_mm": 8.6
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 13.0,
+          "spread_p90_p10": 17.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20200904_20200916",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 81,
+          "n_total": 121,
+          "median": 9.268,
+          "spread_p90_p10": 6.515,
+          "provenance": "REAL",
+          "median_mm": 40.9
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 13.0,
+          "spread_p90_p10": 18.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20200823_20200904",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 81,
+          "n_total": 121,
+          "median": 0.204,
+          "spread_p90_p10": 7.967,
+          "provenance": "REAL",
+          "median_mm": 0.9
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 13.0,
+          "spread_p90_p10": 21.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20200811_20200823",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 63,
+          "n_total": 121,
+          "median": -7.879,
+          "spread_p90_p10": 5.678,
+          "provenance": "REAL",
+          "median_mm": -34.8
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 11.0,
+          "spread_p90_p10": 21.0,
+          "provenance": "REAL"
+        }
+      }
+    ]
+  },
+  "NEWS-LINGCHOM-20200524": {
+    "T": "2020-05-24",
+    "lat": 27.38,
+    "lon": 88.55,
+    "pairs": [
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20200510_20200522",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 15,
+          "n_total": 121,
+          "median": 4.521,
+          "spread_p90_p10": 1.847,
+          "provenance": "REAL",
+          "median_mm": 20.0
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 12.0,
+          "spread_p90_p10": 22.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20200416_20200428",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 105,
+          "n_total": 121,
+          "median": 2.203,
+          "spread_p90_p10": 2.76,
+          "provenance": "REAL",
+          "median_mm": 9.7
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 22.0,
+          "spread_p90_p10": 24.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20200404_20200416",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 29,
+          "n_total": 121,
+          "median": 10.969,
+          "spread_p90_p10": 2.711,
+          "provenance": "REAL",
+          "median_mm": 48.4
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 12.0,
+          "spread_p90_p10": 20.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20200507_20200519",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 74,
+          "n_total": 121,
+          "median": 4.946,
+          "spread_p90_p10": 4.476,
+          "provenance": "REAL",
+          "median_mm": 21.8
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 13.0,
+          "spread_p90_p10": 20.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20200425_20200507",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 16,
+          "n_total": 121,
+          "median": 24.728,
+          "spread_p90_p10": 3.982,
+          "provenance": "REAL",
+          "median_mm": 109.1
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 11.0,
+          "spread_p90_p10": 22.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20200401_20200413",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 73,
+          "n_total": 121,
+          "median": -15.981,
+          "spread_p90_p10": 5.305,
+          "provenance": "REAL",
+          "median_mm": -70.5
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 13.0,
+          "spread_p90_p10": 18.0,
+          "provenance": "REAL"
+        }
+      }
+    ]
+  },
+  "NEWS-MANGANCHUNG-20200627": {
+    "T": "2020-06-27",
+    "lat": 27.51,
+    "lon": 88.53,
+    "pairs": [
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20200603_20200615",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 47,
+          "n_total": 121,
+          "median": 25.6,
+          "spread_p90_p10": 3.642,
+          "provenance": "REAL",
+          "median_mm": 113.0
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 13.0,
+          "spread_p90_p10": 19.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20200522_20200603",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 60,
+          "n_total": 121,
+          "median": 0.735,
+          "spread_p90_p10": 2.839,
+          "provenance": "REAL",
+          "median_mm": 3.2
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 14.0,
+          "spread_p90_p10": 23.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20200510_20200522",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 77,
+          "n_total": 121,
+          "median": 8.074,
+          "spread_p90_p10": 2.99,
+          "provenance": "REAL",
+          "median_mm": 35.6
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 17.0,
+          "spread_p90_p10": 23.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20200612_20200624",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 95,
+          "n_total": 121,
+          "median": -2.423,
+          "spread_p90_p10": 4.942,
+          "provenance": "REAL",
+          "median_mm": -10.7
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 16.0,
+          "spread_p90_p10": 24.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20200531_20200612",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 85,
+          "n_total": 121,
+          "median": -1.886,
+          "spread_p90_p10": 4.118,
+          "provenance": "REAL",
+          "median_mm": -8.3
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 17.0,
+          "spread_p90_p10": 29.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20200507_20200519",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 104,
+          "n_total": 121,
+          "median": 6.726,
+          "spread_p90_p10": 2.401,
+          "provenance": "REAL",
+          "median_mm": 29.7
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 24.0,
+          "spread_p90_p10": 35.0,
+          "provenance": "REAL"
+        }
+      }
+    ]
+  },
+  "NEWS-APDARA-20200627": {
+    "T": "2020-06-27",
+    "lat": 27.35,
+    "lon": 88.53,
+    "pairs": [
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20200603_20200615",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 15,
+          "n_total": 121,
+          "median": 20.447,
+          "spread_p90_p10": 3.035,
+          "provenance": "REAL",
+          "median_mm": 90.2
+        },
+        "cc": {
+          "n_valid": 120,
+          "n_total": 121,
+          "median": 12.0,
+          "spread_p90_p10": 16.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20200522_20200603",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 35,
+          "n_total": 121,
+          "median": -1.008,
+          "spread_p90_p10": 1.68,
+          "provenance": "REAL",
+          "median_mm": -4.4
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 13.0,
+          "spread_p90_p10": 21.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20200510_20200522",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 9,
+          "n_total": 121,
+          "median": 3.837,
+          "spread_p90_p10": null,
+          "provenance": "REAL",
+          "median_mm": 16.9
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 10.0,
+          "spread_p90_p10": 14.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20200612_20200624",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 79,
+          "n_total": 121,
+          "median": 0.046,
+          "spread_p90_p10": 7.398,
+          "provenance": "REAL",
+          "median_mm": 0.2
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 13.0,
+          "spread_p90_p10": 15.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20200531_20200612",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 64,
+          "n_total": 121,
+          "median": 3.31,
+          "spread_p90_p10": 5.217,
+          "provenance": "REAL",
+          "median_mm": 14.6
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 11.0,
+          "spread_p90_p10": 14.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20200507_20200519",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 110,
+          "n_total": 121,
+          "median": 8.046,
+          "spread_p90_p10": 6.19,
+          "provenance": "REAL",
+          "median_mm": 35.5
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 20.0,
+          "spread_p90_p10": 21.0,
+          "provenance": "REAL"
+        }
+      }
+    ]
+  },
+  "NEWS-MANTAM-20160813": {
+    "T": "2016-08-13",
+    "lat": 27.5397,
+    "lon": 88.5007,
+    "pairs": [
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20160730_20160811",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 3,
+          "n_total": 121,
+          "median": 0.608,
+          "spread_p90_p10": null,
+          "provenance": "REAL",
+          "median_mm": 2.7
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 9.0,
+          "spread_p90_p10": 12.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20160612_20160718",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 5,
+          "n_total": 121,
+          "median": 2.371,
+          "spread_p90_p10": null,
+          "provenance": "REAL",
+          "median_mm": 10.5
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 11.0,
+          "spread_p90_p10": 16.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20160531_20160612",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 17,
+          "n_total": 121,
+          "median": 0.423,
+          "spread_p90_p10": 1.347,
+          "provenance": "REAL",
+          "median_mm": 1.9
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 13.0,
+          "spread_p90_p10": 16.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20160715_20160808",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": -4.555,
+          "spread_p90_p10": 12.712,
+          "provenance": "REAL",
+          "median_mm": -20.1
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 11.0,
+          "spread_p90_p10": 16.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20160528_20160715",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 6,
+          "n_total": 121,
+          "median": 8.694,
+          "spread_p90_p10": null,
+          "provenance": "REAL",
+          "median_mm": 38.4
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 12.0,
+          "spread_p90_p10": 17.0,
+          "provenance": "REAL"
+        }
+      }
+    ]
+  },
+  "NEWS-SOKPAY-20230326": {
+    "T": "2023-03-26",
+    "lat": 27.4,
+    "lon": 88.53,
+    "pairs": [
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20230308_20230320",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 106,
+          "n_total": 121,
+          "median": -5.546,
+          "spread_p90_p10": 1.379,
+          "provenance": "REAL",
+          "median_mm": -24.5
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 28.0,
+          "spread_p90_p10": 50.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20230224_20230308",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 108,
+          "n_total": 121,
+          "median": 9.307,
+          "spread_p90_p10": 2.127,
+          "provenance": "REAL",
+          "median_mm": 41.1
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 26.0,
+          "spread_p90_p10": 46.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20230212_20230224",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 111,
+          "n_total": 121,
+          "median": 2.504,
+          "spread_p90_p10": 1.069,
+          "provenance": "REAL",
+          "median_mm": 11.1
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 32.0,
+          "spread_p90_p10": 40.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20230305_20230317",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 97,
+          "n_total": 121,
+          "median": -17.203,
+          "spread_p90_p10": 2.783,
+          "provenance": "REAL",
+          "median_mm": -75.9
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 20.0,
+          "spread_p90_p10": 36.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20230221_20230305",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 97,
+          "n_total": 121,
+          "median": 18.191,
+          "spread_p90_p10": 1.915,
+          "provenance": "REAL",
+          "median_mm": 80.3
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 21.0,
+          "spread_p90_p10": 42.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20230209_20230221",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 114,
+          "n_total": 121,
+          "median": -10.97,
+          "spread_p90_p10": 0.874,
+          "provenance": "REAL",
+          "median_mm": -48.4
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 31.0,
+          "spread_p90_p10": 47.0,
+          "provenance": "REAL"
+        }
+      }
+    ]
+  },
+  "NEWS-TSONG-20190916": {
+    "T": "2019-09-16",
+    "lat": 27.35,
+    "lon": 88.2,
+    "pairs": [
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20190901_20190913",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 29,
+          "n_total": 121,
+          "median": 11.405,
+          "spread_p90_p10": 2.516,
+          "provenance": "REAL",
+          "median_mm": 50.3
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 13.0,
+          "spread_p90_p10": 20.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20190820_20190901",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 51,
+          "n_total": 121,
+          "median": -3.408,
+          "spread_p90_p10": 2.878,
+          "provenance": "REAL",
+          "median_mm": -15.0
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 9.0,
+          "spread_p90_p10": 14.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "048D_06252_131313",
+        "pair": "20190727_20190808",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 21,
+          "n_total": 121,
+          "median": 9.899,
+          "spread_p90_p10": 2.362,
+          "provenance": "REAL",
+          "median_mm": 43.7
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 11.0,
+          "spread_p90_p10": 13.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20190829_20190910",
+        "slot": "recent",
+        "unw": {
+          "n_valid": 38,
+          "n_total": 121,
+          "median": 10.198,
+          "spread_p90_p10": 3.002,
+          "provenance": "REAL",
+          "median_mm": 45.0
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 14.0,
+          "spread_p90_p10": 27.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20190817_20190829",
+        "slot": "mid",
+        "unw": {
+          "n_valid": 50,
+          "n_total": 121,
+          "median": 23.978,
+          "spread_p90_p10": 2.609,
+          "provenance": "REAL",
+          "median_mm": 105.8
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 14.0,
+          "spread_p90_p10": 22.0,
+          "provenance": "REAL"
+        }
+      },
+      {
+        "frame": "012A_06241_131313",
+        "pair": "20190805_20190817",
+        "slot": "baseline",
+        "unw": {
+          "n_valid": 92,
+          "n_total": 121,
+          "median": 5.965,
+          "spread_p90_p10": 6.924,
+          "provenance": "REAL",
+          "median_mm": 26.3
+        },
+        "cc": {
+          "n_valid": 121,
+          "n_total": 121,
+          "median": 17.0,
+          "spread_p90_p10": 26.0,
+          "provenance": "REAL"
+        }
+      }
+    ]
+  }
+}

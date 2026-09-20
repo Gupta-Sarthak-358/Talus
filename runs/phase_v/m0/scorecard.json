@@ -1,0 +1,73 @@
+{
+  "label_def": "y=1 iff snapshot in {T-7,T-3,T-1,T} (7-day imminence construct)",
+  "overall": {
+    "subset": "all",
+    "n": 138,
+    "recall_watch": 0.4783,
+    "recall_alert": 0.2609,
+    "recall_critical": 0.0,
+    "imminence_auc": 0.5171,
+    "imminence_pr": 0.6881,
+    "brier7": 0.3166
+  },
+  "dev": {
+    "subset": "dev",
+    "n": 78,
+    "recall_watch": 0.4615,
+    "recall_alert": 0.2308,
+    "recall_critical": 0.0,
+    "imminence_auc": 0.5178,
+    "imminence_pr": 0.6912,
+    "brier7": 0.3162
+  },
+  "heldout": {
+    "subset": "heldout",
+    "n": 60,
+    "recall_watch": 0.5,
+    "recall_alert": 0.3,
+    "recall_critical": 0.0,
+    "imminence_auc": 0.5312,
+    "imminence_pr": 0.6979,
+    "brier7": 0.3171
+  },
+  "recurrent": {
+    "subset": "recurrent",
+    "n": 42,
+    "recall_watch": 0.5714,
+    "recall_alert": 0.4286,
+    "recall_critical": 0.0,
+    "imminence_auc": 0.4974,
+    "imminence_pr": 0.6696,
+    "brier7": 0.2844
+  },
+  "novel": {
+    "subset": "novel",
+    "n": 96,
+    "recall_watch": 0.4375,
+    "recall_alert": 0.1875,
+    "recall_critical": 0.0,
+    "imminence_auc": 0.5269,
+    "imminence_pr": 0.7012,
+    "brier7": 0.3307
+  },
+  "north": {
+    "subset": "north",
+    "n": 90,
+    "recall_watch": 0.4667,
+    "recall_alert": 0.2,
+    "recall_critical": 0.0,
+    "imminence_auc": 0.5125,
+    "imminence_pr": 0.6998,
+    "brier7": 0.3548
+  },
+  "south": {
+    "subset": "south",
+    "n": 48,
+    "recall_watch": 0.5,
+    "recall_alert": 0.375,
+    "recall_critical": 0.0,
+    "imminence_auc": 0.502,
+    "imminence_pr": 0.6744,
+    "brier7": 0.245
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "coverage": {
+    "events": "23/23",
+    "snapshots": "138/138"
+  },
+  "temporal_assertions": "PASS",
+  "post_event_leakage": 0,
+  "satellite_query_errors": [],
+  "terrain_warnings": [],
+  "provenance_totals": {
+    "rainfall_24h_mm": {
+      "REAL": 138
+    },
+    "rainfall_3d_mm": {
+      "REAL": 138
+    },
+    "rainfall_7d_mm": {
+      "REAL": 138
+    },
+    "rainfall_30d_mm": {
+      "REAL": 138
+    },
+    "soil_moisture": {
+      "PROXY-spatial": 45,
+      "REAL": 93
+    },
+    "satellite": {
+      "REAL": 138
+    },
+    "seismic": {
+      "REAL": 138
+    },
+    "terrain": {
+      "REAL-static": 138
+    },
+    "disturbance": {
+      "MISSING": 138
+    }
+  },
+  "split_crosscheck": {
+    "episodes_intact": true,
+    "manifest": "championship_split_v1"
+  },
+  "verdict": "V-B PASS"
+}
