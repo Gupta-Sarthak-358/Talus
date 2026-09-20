@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY backend/requirements.txt ./backend/requirements.txt
 COPY requirements.txt ./requirements.txt
 COPY pyproject.toml ./pyproject.toml
+COPY routing ./routing
 RUN sed -i '/^-e \.\.$/d' backend/requirements.txt \
  && pip install --upgrade pip \
  && pip install -e . \
