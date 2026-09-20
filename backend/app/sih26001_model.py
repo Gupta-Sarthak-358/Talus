@@ -107,6 +107,9 @@ class Sih26001Live:
         self.encoder = rf_blob["encoder"]
         self.iso = iso_blob["isotonic"]
         self.trained_features = list(rf_blob.get("features", []))
+        # TreeExplainer build on the 500-tree RF costs ~100MB+ transient per
+        # construction — build once, reuse per request (single-worker server).
+        self._explainer = None
 
     def _frame(self, row: dict):
         import pandas as pd
@@ -169,7 +172,9 @@ class Sih26001Live:
             return None
         try:
             Xn = self.encoder.transform(self._frame(row))
-            explainer = shap.TreeExplainer(self.model)
+            if self._explainer is None:
+                self._explainer = shap.TreeExplainer(self.model)
+            explainer = self._explainer
             sv = explainer.shap_values(Xn)
             if isinstance(sv, list):
                 sv = sv[1] if len(sv) > 1 else sv[0]

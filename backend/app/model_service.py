@@ -95,10 +95,14 @@ class ModelService:
                 "confidence": self.calibrated_confidence(score),
                 "band": band_for_score(score)}
 
+    _explainer = None  # class-level cache, same reason as sih26001_model
+
     def explain(self, zone_letter: str, feats: dict) -> dict:
         import shap
         X = self.pre.transform(self._frame(zone_letter, feats))
-        explainer = shap.TreeExplainer(self.model)
+        if ModelService._explainer is None:
+            ModelService._explainer = shap.TreeExplainer(self.model)
+        explainer = ModelService._explainer
         sv = explainer.shap_values(X)[0]
         names = [n.split("__")[-1] for n in self.pre.get_feature_names_out()]
         pairs = sorted(zip(names, np.atleast_1d(sv)), key=lambda kv: -abs(kv[1]))[:4]
