@@ -2,7 +2,7 @@ import React from 'react';
 import { useTalusContext } from '../../context/TalusContext';
 import { HelpCircle, Info, Sparkles } from 'lucide-react';
 
-export default function ShapChart({ shap = [], baseRisk = 15, currentRisk = 82, zoneName = 'Zone B' }) {
+export default function ShapChart({ shap = [], baseRisk = null, currentRisk = 82, zoneName = 'Zone B', provenance = 'unknown' }) {
   const { t } = useTalusContext();
   if (!shap || shap.length === 0) {
     return (
@@ -26,7 +26,10 @@ export default function ShapChart({ shap = [], baseRisk = 15, currentRisk = 82, 
           </h4>
         </div>
         <div className="text-[10px] text-mine-muted font-mono">
-          {t('shap.base')} <span className="text-mine-text font-bold">{baseRisk}</span> {t('shap.current')} <span className="text-risk-high font-bold">{currentRisk}</span>
+          {t('shap.base')} <span className="text-mine-text font-bold">{baseRisk ?? '—'}</span> {t('shap.current')} <span className="text-risk-high font-bold">{currentRisk}</span>
+          <span className={`ml-1.5 px-1 py-px rounded border text-[9px] font-bold ${provenance === 'live' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-amber-500/10 text-amber-400 border-amber-500/30'}`}>
+            {provenance === 'live' ? 'LIVE TreeSHAP' : provenance === 'fixture' ? 'FIXTURE attribution' : 'SHAP'}
+          </span>
         </div>
       </div>
 

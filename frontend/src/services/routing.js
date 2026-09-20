@@ -104,8 +104,9 @@ export async function calculateRoute({ originKey = null, location = 'gangtok', a
   // Honest distances from returned geometry (backend cost is not km).
   const normalKm = pathKm(normalWaypoints);
   const awareKm = pathKm(awareWaypoints);
-  const awareRisk = aware.max_risk_exposed ?? 66;
-  const normalRisk = normal.max_risk_exposed ?? 89;
+  // Never invent exposure: missing backend value stays null, card renders '—'.
+  const awareRisk = aware.max_risk_exposed ?? null;
+  const normalRisk = normal.max_risk_exposed ?? null;
   const normalZones = normal.zone_path || [];
   const awareZones = aware.zone_path || [];
   return {
@@ -139,8 +140,8 @@ export async function calculateRoute({ originKey = null, location = 'gangtok', a
       distanceDeltaKm: +(awareKm - normalKm).toFixed(2),
       // Mountain-road estimate at ~20 km/h (was an arbitrary x1.5 factor).
       timeDeltaMin: +((awareKm - normalKm) * 3).toFixed(1),
-      riskReductionPct: normalRisk > 0 ? Math.round(((normalRisk - awareRisk) / normalRisk) * 100) : 0,
-      summary: `Shortest crosses at-risk segment R2 below ${preset.start}; the safe route diverts via the valley chain (${awareZones.join(' → ') || 'R3/R4'}) and avoids R2 entirely. Both start at ${preset.start} (${normalRisk}) — the difference is the ground crossed, shown as two separate lines on the map.`,
+      riskReductionPct: (normalRisk != null && awareRisk != null && normalRisk > 0) ? Math.round(((normalRisk - awareRisk) / normalRisk) * 100) : null,
+      summary: `Shortest crosses at-risk segment R2 below ${preset.start}; the safe route diverts via the valley chain (${awareZones.join(' → ') || 'R3/R4'}) and avoids R2 entirely. Both start at ${preset.start} (${normalRisk ?? '—'}) — the difference is the ground crossed, shown as two separate lines on the map.`,
     },
     avoidedZones: res.avoided_zones || [preset.start],
     avoidedSegments: ['R2'],

@@ -81,7 +81,7 @@ export default function CorridorComparison() {
               <div className={`inline-flex px-2 py-1 rounded-lg text-xs font-black border focus-visible:ring-2 ${r.state === 'CRITICAL' || r.state === 'EVACUATE' || r.state === 'RESTRICT' ? 'bg-red-600 text-white border-red-700' : r.state === 'ALERT' ? 'bg-amber-400 text-zinc-900 border-amber-500' : r.state === 'UNAVAILABLE' ? 'bg-zinc-200 text-zinc-600 border-zinc-300' : 'bg-emerald-600 text-white border-emerald-700'}`}>
                 {r.state} {r.zone && r.zone !== '—' && `· ${r.zone}`} {r.isolated && '· ISOLATED'} {r.mayIsolate && !r.isolated && '· MAY ISOLATE'}
               </div>
-              <div className="text-[11px] text-zinc-600 font-mono">Operational risk {r.opScore != null ? `${r.opScore} (Δ+${r.opDelta})` : `Δ+${r.opDelta}`} · exposure-sorted</div>
+              <div className="text-[11px] text-zinc-600 font-mono">Operational risk {r.opScore != null ? `${r.opScore} (Δ+${r.opDelta})` : '—'} · exposure-sorted</div>
             </div>
           );
         })}

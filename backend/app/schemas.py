@@ -79,6 +79,9 @@ class ExplanationResponse(BaseModel):
     risk_score: int
     base_value: float
     contributions: list[Contribution]
+    # live = TreeSHAP over the zone's NGEN row now; fixture = committed slopes.json
+    # attribution served when the live explainer is unavailable (never invented).
+    shap_provenance: str = "live"
 
 
 class DecisionItem(BaseModel):

@@ -108,6 +108,7 @@ export async function getZoneById(zoneId, lang = null) {
       description: (c.shap_value ?? c.shap) > 0 ? 'increases predicted risk' : 'decreases predicted risk',
     })),
     shapBaseValue: explanation?.base_value ?? null,
+    shapProvenance: explanation?.shap_provenance || 'unknown',
     trend: {
       direction: trend?.rapid_increase ? 'rapidly_increasing' : 'stable',
       rapid: !!trend?.rapid_increase,

@@ -147,14 +147,15 @@ export default function ZoneIntelligencePanel() {
       {role !== 'villager' && (
         <ShapChart
           shap={zone.shap}
-          baseRisk={zone.base_risk || 15}
+          baseRisk={zone.shapBaseValue ?? null}
           currentRisk={zone.risk_score}
           zoneName={zone.name}
+          provenance={zone.shapProvenance || 'unknown'}
         />
       )}
 
       {/* 4. Risk Escalation Timeline — hidden for villager */}
-      {role !== 'villager' && <RiskTrendChart trend={zone.trend} zoneName={zone.name} />}
+      {role !== 'villager' && <RiskTrendChart zoneId={zone.id} zoneName={zone.name} />}
 
       {/* 5. Missing Evidence — villager sees simple caution, officer sees full */}
       {role !== 'villager' ? (

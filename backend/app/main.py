@@ -383,7 +383,9 @@ def get_explanation(zone_id: str):
             risk_score=store.risk[zone_id],
             base_value=real["base_value"],
             contributions=real["contributions"],
+            shap_provenance="live",
         )
+    prov = "live"
     try:
         letter = zone_id.split("_")[-1]
         _, contribs = data.compute_risk(letter, store.features[zone_id])
@@ -401,11 +403,13 @@ def get_explanation(zone_id: str):
             {"feature": c["feature"], "shap_value": c["shap"]}
             for c in fx["contributions"]
         ]
+        prov = "fixture"
     return ExplanationResponse(
         zone_id=zone_id,
         risk_score=store.risk[zone_id],
         base_value=base_value,
         contributions=contribs,
+        shap_provenance=prov,
     )
 
 

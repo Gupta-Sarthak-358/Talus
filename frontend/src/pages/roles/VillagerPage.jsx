@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
  * Keeps RiskMap lazy behind toggle — default: hero+roads+actions, map opt-in on mobile.
  */
 export default function VillagerPage() {
-  const { zones, selectedZoneData, locationData, roads, t, setRole, selectZone, selectedZoneId } = useTalusContext();
+  const { zones, selectedZoneData, locationData, roads, t, setRole, selectZone, selectedZoneId, setIsReportModalOpen } = useTalusContext();
   useEffect(() => setRole('villager'), []);
   const zone = selectedZoneData;
 
@@ -59,13 +59,13 @@ export default function VillagerPage() {
             >
               <Navigation className="w-5 h-5" aria-hidden /> {t('villager.safe_route_btn')}
             </Link>
-            <Link
-              to="/reports"
-              className="villager-tap flex items-center justify-center gap-2 bg-white border-2 border-zinc-900 text-zinc-900 rounded-2xl font-black hover:bg-zinc-50"
+            <button
+              onClick={() => setIsReportModalOpen(true)}
+              className="villager-tap flex items-center justify-center gap-2 bg-white border-2 border-zinc-900 text-zinc-900 rounded-2xl font-black hover:bg-zinc-50 focus-visible:ring-2 focus-visible:ring-zinc-900"
               aria-label={t('villager.submit_report_btn')}
             >
               <FileText className="w-5 h-5" aria-hidden /> {t('villager.submit_report_btn')}
-            </Link>
+            </button>
           </div>
         </div>
       </div>

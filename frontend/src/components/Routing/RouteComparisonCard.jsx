@@ -4,11 +4,17 @@ import { RISK_BANDS } from '../../data/constants';
 import { ShieldCheck, AlertOctagon, Navigation } from 'lucide-react';
 
 function exposureBand(score) {
+  if (score == null) return null;
   for (const [band, meta] of Object.entries(RISK_BANDS)) {
     const [lo, hi] = meta.range;
     if (score >= lo && score <= hi) return band;
   }
   return 'VERY_LOW';
+}
+
+function fmtExposure(score) {
+  const band = exposureBand(score);
+  return band == null ? '—' : `${score} (${band})`;
 }
 
 export default function RouteComparisonCard({ routePlan }) {
@@ -69,7 +75,7 @@ export default function RouteComparisonCard({ routePlan }) {
             </div>
             <div>
               <div className="text-[10px] text-mine-muted font-sans">{t('route.exposure')}</div>
-              <div className="font-bold text-risk-critical">{normalRoute.riskExposureScore} ({exposureBand(normalRoute.riskExposureScore)})</div>
+              <div className="font-bold text-risk-critical">{fmtExposure(normalRoute.riskExposureScore)}</div>
             </div>
           </div>
 
@@ -106,7 +112,7 @@ export default function RouteComparisonCard({ routePlan }) {
             </div>
             <div>
               <div className="text-[10px] text-mine-muted font-sans">{t('route.exposure')}</div>
-              <div className="font-bold text-risk-verylow">{riskAwareRoute.riskExposureScore} ({exposureBand(riskAwareRoute.riskExposureScore)})</div>
+              <div className="font-bold text-risk-verylow">{fmtExposure(riskAwareRoute.riskExposureScore)}</div>
             </div>
           </div>
 

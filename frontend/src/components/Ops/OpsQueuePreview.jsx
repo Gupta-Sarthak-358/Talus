@@ -6,13 +6,13 @@ import { FileText, AlertTriangle, Clock, MapPin } from 'lucide-react';
  * Ops wants queue triaged in <10s: flagged first, then queued, newest first.
  * Senior: pure render, no fetch — reports already in context. Max 5 preview.
  */
-export default function OpsQueuePreview({ reports, t }) {
+export default function OpsQueuePreview({ reports, t, limit = 5 }) {
   const safe = reports || [];
   const preview = useMemo(() => {
     const flagged = safe.filter((r) => r.status === 'flagged');
     const queued = safe.filter((r) => r.status === 'queued');
-    return [...flagged, ...queued].slice(0, 5);
-  }, [safe]);
+    return [...flagged, ...queued].slice(0, limit);
+  }, [safe, limit]);
 
   if (!safe.length) return <div className="text-xs text-mine-muted p-3">No field reports — queue empty. Backend may be offline.</div>;
 
