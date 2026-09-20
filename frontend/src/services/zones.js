@@ -54,11 +54,20 @@ export async function getZones(location = null) {
   return { status: 'success', timestamp: new Date().toISOString(), zones: merged, location: locKey, scoring: res.scoring || 'fixture' };
 }
 
+async function retryApi(path, tries = 3, delayMs = 2200) {
+  for (let i = 0; i < tries; i++) {
+    try { return await apiRequest(path); } catch (e) {
+      if (i === tries - 1) throw e;
+      await new Promise((r) => setTimeout(r, delayMs));
+    }
+  }
+}
+
 export async function getZoneById(zoneId, lang = null) {
   const langQs = lang ? `?lang=${encodeURIComponent(lang)}` : '';
   const [detail, explanation, features, trend, decision, history] = await Promise.all([
     apiRequest(`/zones/${zoneId}`),
-    apiRequest(`/zones/${zoneId}/explanation`).catch(() => null),
+    retryApi(`/zones/${zoneId}/explanation`, 3, 4000).catch(() => null),
     apiRequest(`/zones/${zoneId}/features`).catch(() => null),
     apiRequest(`/zones/${zoneId}/trend`).catch(() => null),
     apiRequest(`/zones/${zoneId}/decision${langQs}`).catch(() => null),

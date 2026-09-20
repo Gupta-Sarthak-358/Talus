@@ -5,9 +5,10 @@ import { HelpCircle, Info, Sparkles } from 'lucide-react';
 export default function ShapChart({ shap = [], baseRisk = null, currentRisk = 82, zoneName = 'Zone B', provenance = 'unknown' }) {
   const { t } = useTalusContext();
   if (!shap || shap.length === 0) {
+    // While SHAP service wakes (cold start ~15s), show retrying — not empty error.
     return (
       <div className="p-4 bg-mine-darker rounded-xl border border-mine-border text-center text-xs text-mine-muted">
-        {t('shap.empty')}
+        <span className="inline-flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" /> Waking explanation service — retrying…</span>
       </div>
     );
   }

@@ -374,21 +374,25 @@ def get_explanation(zone_id: str):
     # Falls back to local live → legacy model → fixture, so single-service deploy still works.
     shap_url = os.getenv("SHAP_SERVICE_URL", "").strip().rstrip("/")
     if shap_url:
-        try:
-            import json as _js
-            data_bytes = _js.dumps({"zone_id": zone_id, "features": store.features[zone_id]}).encode()
-            req = _ureq.Request(f"{shap_url}/explain", data=data_bytes, headers={"Content-Type": "application/json"}, method="POST")
-            with _ureq.urlopen(req, timeout=8) as resp:
-                body = _js.loads(resp.read().decode())
-            return ExplanationResponse(
-                zone_id=zone_id,
-                risk_score=store.risk[zone_id],
-                base_value=float(body["base_value"]),
-                contributions=body["contributions"],
-                shap_provenance="live",
-            )
-        except Exception:
-            pass  # fall through to local
+        for attempt in range(3):
+            try:
+                import json as _js
+                data_bytes = _js.dumps({"zone_id": zone_id, "features": store.features[zone_id]}).encode()
+                req = _ureq.Request(f"{shap_url}/explain", data=data_bytes, headers={"Content-Type": "application/json"}, method="POST")
+                with _ureq.urlopen(req, timeout=12) as resp:
+                    body = _js.loads(resp.read().decode())
+                return ExplanationResponse(
+                    zone_id=zone_id,
+                    risk_score=store.risk[zone_id],
+                    base_value=float(body["base_value"]),
+                    contributions=body["contributions"],
+                    shap_provenance="live",
+                )
+            except Exception:
+                if attempt < 2:
+                    _time.sleep(4)
+                else:
+                    pass  # fall through to local after 3 tries
     # Live SIH26001 TreeSHAP over the zone's NGEN row (weights present only).
     try:
         from . import sih26001_model
