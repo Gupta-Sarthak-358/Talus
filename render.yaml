@@ -1,6 +1,7 @@
-# TALUS SIH26001 — Render deploy (backend API, Docker).
+# TALUS SIH26001 — Render deploy (split: API 203MB + SHAP 454MB, each 512MB free).
 # Frontend deploys separately on Vercel (Root Directory: frontend).
-# Pair: set Vercel env VITE_API_URL=https://<this-service>.onrender.com/api
+# Pair: set Vercel env VITE_API_URL=https://talus-sih26001.onrender.com/api
+# Cron (cron-job.org) pings /health on *both* services every 10 min to reduce cold starts.
 services:
   - type: web
     name: talus-sih26001
@@ -15,6 +16,8 @@ services:
         value: true
       - key: AUTO_ALERT_SMS
         value: false
+      - key: SHAP_SERVICE_URL
+        value: https://talus-shap.onrender.com
       # Optional — set in Render dashboard when keys exist (app degrades honestly without them):
       # - key: DATABASE_URL
       #   sync: false
@@ -26,3 +29,9 @@ services:
       #   sync: false
       # - key: IMD_API_KEY
       #   sync: false
+  - type: web
+    name: talus-shap
+    runtime: docker
+    dockerfilePath: ./shap-service/Dockerfile
+    healthCheckPath: /health
+    plan: free
