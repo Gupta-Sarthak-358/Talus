@@ -120,13 +120,20 @@ def explain(payload: dict):
             sv = sv[1] if len(sv) > 1 else sv[0]
         import numpy as np
         sv = np.asarray(sv)
-        if sv.ndim == 3:
-            sv = sv[:, :, 1] if sv.shape[2] > 1 else sv[:, :, 0]
-        sv = np.atleast_2d(sv)[0]
         try:
             names = [n.split("__")[-1] for n in live["encoder"].get_feature_names_out()]
         except Exception:
             names = live.get("features", []) or [f"f{i}" for i in range(len(sv))]
+        feature_count = len(names)
+        while sv.ndim > 2:
+            sv = sv[..., 1] if sv.shape[-1] > 1 else sv[..., 0]
+        sv = np.squeeze(sv)
+        if sv.ndim == 2:
+            if sv.shape[-1] == feature_count:
+                sv = sv[0]
+            elif sv.shape[0] == feature_count:
+                sv = sv[:, 0]
+        sv = np.asarray(sv).reshape(-1)
         pairs = sorted(zip(names, [float(v) for v in sv]), key=lambda kv: -abs(kv[1]))[:4]
         base = explainer.expected_value
         if not isinstance(base, float):
