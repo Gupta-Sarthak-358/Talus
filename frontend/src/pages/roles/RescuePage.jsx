@@ -25,7 +25,7 @@ export default function RescuePage() {
         <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-white animate-pulse" /> {t('rescue.banner')}</span>
         <span className="font-mono font-bold text-red-100">{liveZones.length} slopes · {liveRoads.length} segments LIVE</span>
       </div>
-      <div className="ops-sticky-top space-y-3">
+      <div className="space-y-3">
         <IsolationAlertCard />
         <WarningStateCard />
       </div>
