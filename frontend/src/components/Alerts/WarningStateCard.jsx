@@ -44,7 +44,7 @@ export default function WarningStateCard() {
       <div className="px-4 py-2.5 bg-mine-darker border-b border-mine-border flex items-center justify-between flex-wrap gap-2">
         <div className="flex items-center gap-2">
           <Siren className="w-4 h-4 text-red-300" />
-          <span className="text-xs font-bold text-mine-text">Corridor warning state</span>
+          <span className="text-xs font-bold text-mine-text">{t('warning.corridorTitle')}</span>
         </div>
         <div className="flex items-center gap-2 text-[11px] text-mine-muted">
           <span>highest:</span>

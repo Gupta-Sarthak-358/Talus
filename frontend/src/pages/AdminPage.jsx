@@ -61,12 +61,12 @@ export default function AdminPage() {
         </h1>
         <button onClick={()=>{clearAuth(); location.reload();}} className="text-xs px-3 py-1.5 bg-mine-darker border border-mine-border rounded-lg text-mine-muted hover:text-mine-text">Lock / Switch role</button>
       </div>
-      <p className="text-xs text-mine-muted">Villagers see only danger/safe + map. Officers see actions. This panel holds the technical provenance (model, OSM counts, Brier, calibration) that the final product hides from the field. {liveZones.length} slopes live via GET /api/zones.</p>
+      <p className="text-xs text-mine-muted">{t('admin.provenanceDesc')} {liveZones.length} slopes live via GET /api/zones.</p>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Section title="System health" icon={Activity}>
           {healthFailed && !health ? (
-            <div className="text-xs text-mine-muted">Health unreachable — backend offline.</div>
+            <div className="text-xs text-mine-muted">{t('admin.healthOffline')}</div>
           ) : (
           <pre className="text-[11px] font-mono bg-mine-darker border border-mine-border rounded-lg p-3 overflow-auto max-h-56 text-mine-text">
             {health ? JSON.stringify({ ...health, db, calib: calib ? { brier: calib.brier, pi_real: calib.pi_real } : undefined }, null, 2) : 'loading...'}
@@ -93,7 +93,7 @@ export default function AdminPage() {
         </Section>
 
         <Section title="Dispatch log (SMS/app)" icon={Bell}>
-          <div className="text-xs text-mine-muted mb-2">Every alert is logged to runs/alert_dispatch.jsonl with provider status. No fake success.</div>
+          <div className="text-xs text-mine-muted mb-2">{t('admin.alertLogNote')}</div>
           <div className="space-y-1 max-h-56 overflow-auto font-mono text-[11px]">
             {log.length ? log.map((e,i)=>(
               <div key={i} className="border border-mine-border rounded p-1.5 bg-mine-darker text-mine-text">
@@ -117,7 +117,7 @@ export default function AdminPage() {
         </Section>
 
         <Section title="Routing" icon={Route}>
-          <p className="text-xs text-mine-muted">Shortest via R2 (blocked/at-risk) vs safe via R3+R4. Isolation engine uses same bottleneck table. Deterministic avoidance, not score-threshold.</p>
+          <p className="text-xs text-mine-muted">{t('admin.routingNote')}</p>
         </Section>
 
         <Section title="Provenance (hidden from field)" icon={MapPin}>

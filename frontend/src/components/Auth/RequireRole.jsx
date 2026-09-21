@@ -30,7 +30,7 @@ export default function RequireRole({ allow, children }) {
   return (
     <main className="max-w-md mx-auto px-4 py-16 text-center space-y-4">
       <Shield className="w-10 h-10 text-zinc-400 mx-auto" />
-      <h2 className="text-lg font-extrabold text-mine-text">Credentials required</h2>
+      <h2 className="text-lg font-extrabold text-mine-text">{t('auth.credentials')}</h2>
       <p className="text-sm text-mine-muted">
         This {primary === 'admin' ? 'panel' : 'page'} needs an officer PIN. Villagers use the open page.
       </p>

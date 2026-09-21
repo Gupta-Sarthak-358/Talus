@@ -51,7 +51,7 @@ export default function LiveFeedCard() {
       <div className="p-4 bg-mine-darker border-b border-mine-border flex items-center justify-between flex-wrap gap-2">
         <div className="flex items-center gap-2">
           <Radio className="w-4 h-4 text-sky-400" />
-          <h3 className="text-sm font-bold text-mine-text">Live sensor lane</h3>
+          <h3 className="text-sm font-bold text-mine-text">{t('live.sensorTitle')}</h3>
           <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">
             SIMULATED
           </span>
@@ -143,7 +143,7 @@ export default function LiveFeedCard() {
                 <img src={qrImg} alt={`QR for live report ${qrZone}`} width={140} height={140}
                   className="rounded-lg border border-mine-border bg-white" loading="lazy" />
                 <div className="text-[11px] text-mine-muted break-all">
-                  <p>Scan to open the field-report form for <span className="font-bold text-mine-text">{qrZone}</span> at tick <span className="font-mono">{feed.tick}</span>.</p>
+                  <p>{t('live.qrHint')} <span className="font-bold text-mine-text">{qrZone}</span> at tick <span className="font-mono">{feed.tick}</span>.</p>
                   <p className="mt-1 font-mono text-[10px]">{reportUrl}</p>
                   <p className="mt-1">QR needs internet (qrserver); the URL works offline on the demo LAN.</p>
                 </div>
@@ -151,9 +151,9 @@ export default function LiveFeedCard() {
             </div>
 
             <div className="border border-mine-border rounded-xl p-3">
-              <h4 className="text-xs font-bold text-mine-text mb-2">Audit trail (latest)</h4>
+              <h4 className="text-xs font-bold text-mine-text mb-2">{t('live.auditTitle')}</h4>
               {audit.length === 0 ? (
-                <p className="text-[11px] text-mine-muted">No simulator audit yet — run <span className="font-mono">python scripts/local_sensor_sim.py --ticks 120 --interval 5</span>.</p>
+                <p className="text-[11px] text-mine-muted">{t('live.noAudit')}</p>
               ) : (
                 <ul className="text-[11px] font-mono space-y-1">
                   {audit.map((ev, i) => (

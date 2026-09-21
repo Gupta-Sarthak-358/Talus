@@ -14,7 +14,7 @@ export default function OpsQueuePreview({ reports, t, limit = 5 }) {
     return [...flagged, ...queued].slice(0, limit);
   }, [safe, limit]);
 
-  if (!safe.length) return <div className="text-xs text-mine-muted p-3">No field reports — queue empty. Backend may be offline.</div>;
+  if (!safe.length) return <div className="text-xs text-mine-muted p-3">{t('ops.noReports')}</div>;
 
   return (
     <div className="space-y-2">
@@ -22,7 +22,7 @@ export default function OpsQueuePreview({ reports, t, limit = 5 }) {
         <h3 className="text-xs font-bold text-mine-text flex items-center gap-1.5">
           <FileText className="w-3.5 h-3.5 text-talus-600" /> Field Queue — {preview.length}/{reports.length}
         </h3>
-        <Link to="/reports" className="text-[11px] font-bold text-talus-600 hover:text-talus-700">Open full queue →</Link>
+        <Link to="/reports" className="text-[11px] font-bold text-talus-600 hover:text-talus-700">{t('ops.openQueue')}</Link>
       </div>
       <div className="space-y-1.5 max-h-[320px] overflow-auto pr-1">
         {preview.map((r) => (

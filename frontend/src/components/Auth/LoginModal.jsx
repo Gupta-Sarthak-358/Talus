@@ -32,7 +32,7 @@ export default function LoginModal({ wantedRole, allowAdminPin = false, onClose,
           <button type="button" onClick={onClose} className="p-1 rounded hover:bg-mine-dark text-mine-muted"><X className="w-4 h-4" /></button>
         </div>
         <div className="p-4 space-y-3">
-          <p className="text-xs text-mine-muted">This section needs credentials. Villagers use the open page; officers use PIN.</p>
+          <p className="text-xs text-mine-muted">{t('auth.officerOnly')}</p>
           <div className="flex items-center gap-2">
             <Lock className="w-4 h-4 text-mine-muted" />
             <input

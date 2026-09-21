@@ -35,8 +35,8 @@ export default function RescuePage() {
         </div>
         <div className="lg:col-span-5 space-y-3 order-1 lg:order-2">
           <div className="bg-white border-2 border-zinc-200 rounded-2xl p-4">
-            <h3 className="text-xs font-black text-zinc-900">Recommended ingress — avoid R2 ridge{r2 ? ` (${r2.status})` : ''}</h3>
-            <p className="text-xs text-zinc-600 mt-1">Recommended route avoids at-risk ridge shortcut. Follow green solid (recommended), not red dashed (shortest). Final ingress with qualified personnel.</p>
+            <h3 className="text-xs font-black text-zinc-900">{t('rescue.ingressTitle')}{r2 ? ` (${r2.status})` : ''}</h3>
+            <p className="text-xs text-zinc-600 mt-1">{t('rescue.ingressDesc')}</p>
           </div>
           <ExposureCard />
           <RouteComparisonCard routePlan={activeRoutePlan} />

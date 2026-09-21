@@ -38,7 +38,7 @@ export default function ExposureCard() {
   }, []);
 
   if (!zones) {
-    if (failed) return <div className="bg-white border-2 border-zinc-200 rounded-2xl p-4 text-xs text-zinc-600">Exposure unavailable — backend offline.</div>;
+    if (failed) return <div className="bg-white border-2 border-zinc-200 rounded-2xl p-4 text-xs text-zinc-600">{t('exposure.unavailable')}</div>;
     return null;
   }
   const ranked = Object.entries(zones)
@@ -52,7 +52,7 @@ export default function ExposureCard() {
     <div className="bg-white border-2 border-zinc-200 rounded-2xl overflow-hidden">
       <div className="px-4 py-2.5 bg-zinc-900 text-white flex items-center gap-2">
         <TriangleAlert className="w-4 h-4" />
-        <span className="text-xs font-black">If it fails — who gets hit? (Recommended staging)</span>
+        <span className="text-xs font-black">{t('exposure.title')}</span>
       </div>
       <div className="px-4 py-3">
         <p className="text-[11px] text-zinc-700">

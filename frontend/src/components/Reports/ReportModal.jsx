@@ -337,7 +337,7 @@ export default function ReportModal() {
                     className="mt-1 flex items-center justify-center gap-2 w-full py-2.5 rounded-lg border border-dashed border-mine-border bg-mine-card text-mine-muted hover:text-mine-text hover:border-talus-500 cursor-pointer text-[11px] transition-colors"
                   >
                     <ImagePlus className="w-4 h-4" />
-                    <span>Attach photo / video (JPEG/PNG/WebP/MP4, ≤10 MB)</span>
+                    <span>{t('reports.attachHint')}</span>
                   </label>
                 ) : (
                   <div className="mt-1 p-2 rounded-lg border border-mine-border bg-mine-card flex items-center gap-2.5">
@@ -383,7 +383,7 @@ export default function ReportModal() {
                   <div className="mt-1.5 p-2 rounded-lg border border-mine-border bg-mine-darker text-[10px] font-mono text-mine-muted space-y-0.5">
                     <div>edge density {screening.edgeDensityPct}% · dark {screening.darkFractionPct}% · sharpness {screening.sharpness}</div>
                     <div>{screening.width}×{screening.height} → sampled {screening.sampled}</div>
-                    <div className="font-sans">Measurements for officer review — not a crack diagnosis.</div>
+                    <div className="font-sans">{t('reports.screenHint')}</div>
                   </div>
                 )}
                 {screening && !screening.supported && (

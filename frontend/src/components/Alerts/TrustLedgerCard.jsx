@@ -49,7 +49,7 @@ export default function TrustLedgerCard() {
     <div className="bg-mine-card border border-mine-border rounded-2xl overflow-hidden">
       <div className="px-4 py-2.5 bg-mine-darker border-b border-mine-border flex items-center gap-2">
         <BadgeCheck className="w-4 h-4 text-emerald-300" />
-        <span className="text-xs font-bold text-mine-text">Trust ledger — would the warnings have deserved action?</span>
+        <span className="text-xs font-bold text-mine-text">{t('trust.title')}</span>
       </div>
       <div className="px-4 py-3 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
         <div>

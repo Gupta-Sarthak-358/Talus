@@ -88,7 +88,7 @@ export default function ReplayCard() {
       <div className="p-4 bg-mine-darker border-b border-mine-border flex items-center justify-between flex-wrap gap-2">
         <div className="flex items-center gap-2">
           <History className="w-4 h-4 text-sky-400" />
-          <h3 className="text-sm font-bold text-mine-text">Temporal replay — what did TALUS know, and when?</h3>
+          <h3 className="text-sm font-bold text-mine-text">{t('replay.title')}</h3>
         </div>
         <div className="flex gap-1.5 flex-wrap">
           {bundle.cases.map((c) => (
