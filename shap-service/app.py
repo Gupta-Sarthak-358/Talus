@@ -119,6 +119,9 @@ def explain(payload: dict):
         if isinstance(sv, list):
             sv = sv[1] if len(sv) > 1 else sv[0]
         import numpy as np
+        sv = np.asarray(sv)
+        if sv.ndim == 3:
+            sv = sv[:, :, 1] if sv.shape[2] > 1 else sv[:, :, 0]
         sv = np.atleast_2d(sv)[0]
         try:
             names = [n.split("__")[-1] for n in live["encoder"].get_feature_names_out()]
