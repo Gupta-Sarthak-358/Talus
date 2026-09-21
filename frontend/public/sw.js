@@ -1,9 +1,10 @@
-/* TALUS service worker v1 — offline-first app shell for the judge-phone demo.
- * Strategy: cache-first for same-origin GET (app shell + chunks), network
- * passthrough for /api (live data must never be served stale silently).
- * Bump CACHE when shipping a new demo build.
+/* TALUS service worker v2 — network-first shell + cache-first hashed chunks.
+ * Shell (/, /index.html) is network-first so HTML always matches deployed
+ * chunk hashes (old-tab/new-deploy 404 impossible). Hashed /assets chunks are
+ * immutable: cache-first, safe forever. /api is network-only.
+ * Bump CACHE when shipping a new demo build (byte change triggers SW update).
  */
-const CACHE = 'talus-shell-v3-8state-live';
+const CACHE = 'talus-shell-v4-netfirst-shell';
 const SHELL = ['/', '/index.html', '/favicon.svg', '/manifest.webmanifest', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', (event) => {
@@ -26,17 +27,40 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(request.url);
   // Live API/data: network only (offline shows the app's own offline badge).
   if (url.pathname.startsWith('/api')) return;
-  event.respondWith(
-    caches.match(request, { ignoreSearch: true }).then(
-      (hit) =>
-        hit ||
-        fetch(request).then((res) => {
-          if (url.origin === self.location.origin && res.ok) {
+  // App shell: network-first — stale HTML referencing purged chunk hashes
+  // is what crashed old tabs on redeploy. Offline falls back to cache.
+  if (url.pathname === '/' || url.pathname === '/index.html') {
+    event.respondWith(
+      fetch(request)
+        .then((res) => {
+          if (res.ok) {
             const copy = res.clone();
             caches.open(CACHE).then((cache) => cache.put(request, copy));
           }
           return res;
         })
+        .catch(() => caches.match(request).then((hit) => {
+          if (hit) return hit;
+          return new Response('TALUS offline', { status: 503 });
+        }))
+    );
+    return;
+  }
+  // Hashed chunks + static: cache-first, then network with cache fill.
+  // Never reject: offline + miss returns 503, not a thrown promise.
+  event.respondWith(
+    caches.match(request).then(
+      (hit) =>
+        hit ||
+        fetch(request)
+          .then((res) => {
+            if (url.origin === self.location.origin && res.ok) {
+              const copy = res.clone();
+              caches.open(CACHE).then((cache) => cache.put(request, copy));
+            }
+            return res;
+          })
+          .catch(() => new Response('TALUS offline', { status: 503 }))
     )
   );
 });
