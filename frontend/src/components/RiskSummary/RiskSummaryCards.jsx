@@ -155,9 +155,6 @@ export default function RiskSummaryCards() {
           </div>
         </div>
         <div className="flex items-center gap-2 text-[11px]">
-          <span className="px-2 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 font-mono font-bold">
-            Temporal 673/73 → RF test 0.8573
-          </span>
           <span className="hidden sm:inline text-mine-muted">GroupKFold(8) spatial · 16/17 REAL/PROXY</span>
         </div>
       </div>

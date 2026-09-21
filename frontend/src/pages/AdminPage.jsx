@@ -122,7 +122,7 @@ export default function AdminPage() {
 
         <Section title="Provenance (hidden from field)" icon={MapPin}>
           <div className="text-xs space-y-1 text-mine-muted">
-            <div>Model: RF 500 trees + isotonic · 2936 rows (1468+1468) · 17 numeric + lulc · GroupKFold8 RF 0.9345 XGB 0.9421 Brier 0.0967 · Temporal 673/73 RF 0.8573</div>
+            <div>Model: RF 500 trees + isotonic · 2936 rows (1468+1468) · 17 numeric + lulc · GroupKFold8 RF 0.9345 XGB 0.9421 Brier 0.0967</div>
             <div>Rain: IMD 0.25deg 1901-2024 · Soil: ESA CCI v09.2 1978-2024 · Quakes: USGS 26 M5+ · DEM: SRTM 30m · OSM: Gangtok 1014/Lachung 226/Darjeeling 504</div>
             <div>Wound: Sentinel-2 matched Nov23 vs Nov24 (2 scars, 4/2936) · Runout: SRTM steepest-descent 85 buildings · Panchayat 100 tiles · COP30 S1 28.3→28.7</div>
             <div>Recalibration: pi_train 0.5 → pi_real 0.01 (Bayes) — score frozen, confidence_real_1pct added · SWI JMA 3-tank L1=15</div>
